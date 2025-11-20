@@ -637,10 +637,6 @@ template:
 
 ==================== START: .bmad-core/data/liascript-cheat-sheet.md ====================
 
-Sure — here’s a **complete English translation** of your document while preserving formatting, code examples, and technical accuracy:
-
----
-
 # LiaScript Guide – Syntax, Semantics & Best Practices
 
 ## Purpose
