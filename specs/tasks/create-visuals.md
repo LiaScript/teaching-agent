@@ -18,7 +18,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 
 ## Output
 
-- `visuals.md` (Markdown file)
+- `docs/visuals.md` (Markdown file)
 - Structure based on `templates/visuals.yaml`
 
 ## Steps
@@ -37,7 +37,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 9. Specify typography (headings, body text, monospace fonts) matching the course style.
 10. Create example prompts for logos, images, and diagrams based on course theme.
 11. Fill the `templates/visuals.yaml` template with the results.
-12. Save the file as `visuals.md`.
+12. Save the file as `docs/visuals.md`.
 
 ## Usage
 

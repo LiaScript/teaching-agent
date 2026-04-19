@@ -14,7 +14,7 @@ Produces a structured `course-bundle/` folder with an auto-generated index and a
 - `docs/sessions.md` — production status tracking
 - `skeletons/` — session skeletons (optional, for documentation trail)
 - `materials/` — full session materials (primary content)
-- `visuals.md` + `assets/` — visual style guide and assets (if exists)
+- `docs/visuals.md` + `assets/` — visual style guide and assets (if exists)
 - `docs/validation-report.md` — latest QA report (**required, must show PASS**)
 - `notes/` — decision records and summaries (optional)
 

@@ -307,7 +307,7 @@ agent_coordination:
 
   on_activation:
     - "Read docs/context.md to understand course type, instructor persona, and tone"
-    - "Check if visuals.md already exists and mention its status"
+    - "Check if docs/visuals.md already exists and mention its status"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + existing docs]'"
 
   suggest_back_to_teaching_when:
@@ -316,7 +316,7 @@ agent_coordination:
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
   on_agent_switch:
-    - "Before switching: summarize visual work done (e.g., visuals.md created, colors defined, logo prompt ready)"
+    - "Before switching: summarize visual work done (e.g., docs/visuals.md created, colors defined, logo prompt ready)"
     - "Format: 'I am handing back to [Agent]. Visual status: [summary]'"
 
 browser_execution:
@@ -525,7 +525,7 @@ Offers two paths for each missing core document:
 ## Inputs
 
 - `docs/context.md` (created by `/init-course`, mandatory)
-- Existing project files in the project root: `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `visuals.md`
+- Existing project files in the project root: `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `docs/visuals.md`
 - Existing folders: `skeletons/`, `materials/`
 
 ## Output
@@ -544,7 +544,7 @@ Offers two paths for each missing core document:
    | `docs/outline.md`   | always                       |
    | `docs/didactics.md` | always                       |
    | `docs/agenda.md`    | if `docs/context.md` agenda = yes |
-   | `visuals.md`   | optional                     |
+   | `docs/visuals.md`   | optional                     |
    | `skeletons/`   | if sessions expected         |
    | `materials/`   | if sessions expected         |
 
@@ -606,7 +606,7 @@ Produces a structured `course-bundle/` folder with an auto-generated index and a
 - `docs/sessions.md` — production status tracking
 - `skeletons/` — session skeletons (optional, for documentation trail)
 - `materials/` — full session materials (primary content)
-- `visuals.md` + `assets/` — visual style guide and assets (if exists)
+- `docs/visuals.md` + `assets/` — visual style guide and assets (if exists)
 - `docs/validation-report.md` — latest QA report (**required, must show PASS**)
 - `notes/` — decision records and summaries (optional)
 
@@ -852,8 +852,8 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
-- Image style guidelines from `visuals.md#image-prompt-style`
-- Website color palette from `visuals.md#website-colors`
+- Image style guidelines from `docs/visuals.md#image-prompt-style`
+- Website color palette from `docs/visuals.md#website-colors`
 - Course context from `docs/outline.md#abstract` (for thematic alignment)
 - Course language from `docs/context.md` (Language field — for in-image text language)
 
@@ -865,8 +865,8 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Steps
 
 1. Receive user description of what should be visualized.
-2. Read image style guidelines from `visuals.md#image-prompt-style`.
-3. Read color palette from `visuals.md#website-colors`.
+2. Read image style guidelines from `docs/visuals.md#image-prompt-style`.
+3. Read color palette from `docs/visuals.md#website-colors`.
 4. Read course theme from `docs/outline.md#abstract` for context.
 5. Read course language from `docs/context.md` (Language field, e.g., `de`, `en`). If `docs/context.md` is unavailable, infer the language from the user's description as fallback.
 6. Analyze user description and extract:
@@ -950,8 +950,8 @@ Creates a professional, actionable prompt that can be used with AI image generat
 
 - Title from `docs/outline.md#title`
 - Abstract from `docs/outline.md#abstract`
-- Logo style guidelines from `visuals.md#logo-style`
-- Logo color palette from `visuals.md#logo-colors`
+- Logo style guidelines from `docs/visuals.md#logo-style`
+- Logo color palette from `docs/visuals.md#logo-colors`
 
 ## Output
 
@@ -961,8 +961,8 @@ Creates a professional, actionable prompt that can be used with AI image generat
 ## Steps
 
 1. Read the course title and abstract from `docs/outline.md`.
-2. Read the logo style guidelines from `visuals.md#logo-style`.
-3. Read the logo color palette from `visuals.md#logo-colors`.
+2. Read the logo style guidelines from `docs/visuals.md#logo-style`.
+3. Read the logo color palette from `docs/visuals.md#logo-colors`.
 4. Extract key themes, concepts, or symbols from the abstract.
 5. Combine style guidelines with course theme to create a detailed prompt.
 6. Include specific elements:
@@ -1061,7 +1061,7 @@ Supports users with git operations, GitHub integration, and project publishing.
 
 ## Inputs
 
-- Colors and style from `visuals.md`
+- Colors and style from `docs/visuals.md`
 - User's git/GitHub experience (ask before proceeding)
 - External resources for workflow for LiaScript publishing:
   1. https://liascript.github.io/blog/automating-liascript-transformations-on-github/
@@ -1078,7 +1078,7 @@ Supports users with git operations, GitHub integration, and project publishing.
 0. Load external resources to understand the latest workflow and publishing best practices.
 1. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 2. Refer to the all files in the `materials/` folder or ask the user which one to embed in the materials list.
-3. Read color and style information from `visuals.md` for project.yaml styling.
+3. Read color and style information from `docs/visuals.md` for project.yaml styling.
 4. Review the external resources to learn the latest workflow and publishing best practices.
 5. Generate a `project.yaml` in the root folder, including all materials and styled according to the style guide.
 6. Create a GitHub Actions workflow for LiaScript export and publishing to GitHub Pages. The workflow must always overwrite the gh-pages branch completely (no history or previous files kept), e.g. by using `force_orphan: true` in the deployment step.
@@ -1167,7 +1167,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 
 ## Output
 
-- `visuals.md` (Markdown file)
+- `docs/visuals.md` (Markdown file)
 - Structure based on `templates/visuals.yaml`
 
 ## Steps
@@ -1186,7 +1186,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 9. Specify typography (headings, body text, monospace fonts) matching the course style.
 10. Create example prompts for logos, images, and diagrams based on course theme.
 11. Fill the `templates/visuals.yaml` template with the results.
-12. Save the file as `visuals.md`.
+12. Save the file as `docs/visuals.md`.
 
 ## Usage
 
@@ -1869,7 +1869,7 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 
 - Existing `project.yaml` in the root folder
 - User's git/GitHub experience (ask before proceeding)
-- Colors and style from `visuals.md`
+- Colors and style from `docs/visuals.md`
 
 ## Output
 
@@ -1881,7 +1881,7 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 
 1. Ask the user about their git/GitHub experience and confirm they want to update and publish.
 2. Scan the `materials/` folder for new or updated files.
-3. Update the `project.yaml` and ask the user to include all of the current materials or to import only a subset. Use colors and style from `visuals.md` for any styling updates.
+3. Update the `project.yaml` and ask the user to include all of the current materials or to import only a subset. Use colors and style from `docs/visuals.md` for any styling updates.
 4. Stage, commit, and push the updated `project.yaml` and new/changed materials to the repository.
 5. Trigger the GitHub Actions workflow to publish the updates (overwriting gh-pages as before).
 6. Explain each step to the user and confirm before making changes.
@@ -2264,7 +2264,7 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: visuals.md
+    filename: docs/visuals.md
   title: 'Visual Style Guide'
   
   sections:
@@ -3163,7 +3163,7 @@ workflow:
     - step: create_visuals
       agent: artist
       command: /create-visuals
-      output: visuals.md
+      output: docs/visuals.md
       dependencies: [create_outline, create_didactics]
       notes: |
         Create visual identity aligned with teaching persona:

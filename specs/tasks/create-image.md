@@ -8,8 +8,8 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
-- Image style guidelines from `visuals.md#image-prompt-style`
-- Website color palette from `visuals.md#website-colors`
+- Image style guidelines from `docs/visuals.md#image-prompt-style`
+- Website color palette from `docs/visuals.md#website-colors`
 - Course context from `docs/outline.md#abstract` (for thematic alignment)
 - Course language from `docs/context.md` (Language field — for in-image text language)
 
@@ -21,8 +21,8 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Steps
 
 1. Receive user description of what should be visualized.
-2. Read image style guidelines from `visuals.md#image-prompt-style`.
-3. Read color palette from `visuals.md#website-colors`.
+2. Read image style guidelines from `docs/visuals.md#image-prompt-style`.
+3. Read color palette from `docs/visuals.md#website-colors`.
 4. Read course theme from `docs/outline.md#abstract` for context.
 5. Read course language from `docs/context.md` (Language field, e.g., `de`, `en`). If `docs/context.md` is unavailable, infer the language from the user's description as fallback.
 6. Analyze user description and extract:

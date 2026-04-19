@@ -81,7 +81,7 @@ flowchart TD
     DEV["**Phase 4 · DEVELOPMENT**<br/>/create-session → skeletons/<br/>/promote-session → materials/<br/>/coauthor-materials"]
     FINAL["**Phase 5 · FINALIZATION**<br/>/validate-course<br/>/assemble-bundle"]
 
-    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ visuals.md"]
+    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ docs/visuals.md"]
     ART2["🎨 **Artist-Agent**<br/>/create-image<br/>(on demand)"]
     DEVAGT["🛠️ **Development-Agent**<br/>/manage-git · /create-project<br/>(anytime)"]
 

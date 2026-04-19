@@ -90,7 +90,7 @@ workflow:
     - step: create_visuals
       agent: artist
       command: /create-visuals
-      output: visuals.md
+      output: docs/visuals.md
       dependencies: [create_outline, create_didactics]
       notes: |
         Create visual identity aligned with teaching persona:

@@ -12,7 +12,7 @@ Offers two paths for each missing core document:
 ## Inputs
 
 - `docs/context.md` (created by `/init-course`, mandatory)
-- Existing project files in the project root: `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `visuals.md`
+- Existing project files in the project root: `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `docs/visuals.md`
 - Existing folders: `skeletons/`, `materials/`
 
 ## Output
@@ -31,7 +31,7 @@ Offers two paths for each missing core document:
    | `docs/outline.md`   | always                       |
    | `docs/didactics.md` | always                       |
    | `docs/agenda.md`    | if `docs/context.md` agenda = yes |
-   | `visuals.md`   | optional                     |
+   | `docs/visuals.md`   | optional                     |
    | `skeletons/`   | if sessions expected         |
    | `materials/`   | if sessions expected         |
 

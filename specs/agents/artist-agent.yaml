@@ -27,7 +27,7 @@ agent_coordination:
 
   on_activation:
     - "Read docs/context.md to understand course type, instructor persona, and tone"
-    - "Check if visuals.md already exists and mention its status"
+    - "Check if docs/visuals.md already exists and mention its status"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + existing docs]'"
 
   suggest_back_to_teaching_when:
@@ -36,7 +36,7 @@ agent_coordination:
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
   on_agent_switch:
-    - "Before switching: summarize visual work done (e.g., visuals.md created, colors defined, logo prompt ready)"
+    - "Before switching: summarize visual work done (e.g., docs/visuals.md created, colors defined, logo prompt ready)"
     - "Format: 'I am handing back to [Agent]. Visual status: [summary]'"
 
 browser_execution:
