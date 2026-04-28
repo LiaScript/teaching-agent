@@ -9,10 +9,7 @@ Supports users with git operations, GitHub integration, and project publishing.
 
 - Colors and style from `docs/visuals.md`
 - User's git/GitHub experience (ask before proceeding)
-- External resources for workflow for LiaScript publishing:
-  1. https://liascript.github.io/blog/automating-liascript-transformations-on-github/
-  2. https://liascript.github.io/blog/quality-checks-on-liascript-with-github-ensuring-document-excellence/
-  3. https://liascript.github.io/blog/creating-project-websites-with-liascript-exporter/
+- `data/liascript-workflows.md` — internal reference for all CLI options, `project.yaml` schema, and workflow templates (load this first)
 
 ## Output
 
@@ -21,11 +18,11 @@ Supports users with git operations, GitHub integration, and project publishing.
 
 ## Steps
 
-0. Load external resources to understand the latest workflow and publishing best practices.
+0. Load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
 1. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 2. Refer to the all files in the `materials/` folder or ask the user which one to embed in the materials list.
 3. Read color and style information from `docs/visuals.md` for project.yaml styling.
-4. Review the external resources to learn the latest workflow and publishing best practices.
+4. Review the internal reference for the latest workflow and publishing best practices.
 5. Generate a `project.yaml` in the root folder, including all materials and styled according to the style guide.
 6. Create a GitHub Actions workflow for LiaScript export and publishing to GitHub Pages. The workflow must always overwrite the gh-pages branch completely (no history or previous files kept), e.g. by using `force_orphan: true` in the deployment step.
 7. Check which files must be added to git and which need to be commited.

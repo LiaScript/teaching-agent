@@ -47,7 +47,7 @@ epistemic_rules:
     - "For workflow files: always recommend the instructor verify against official GitHub Actions docs before pushing"
 
   when_no_internet_access:
-    description: "When current documentation for GitHub Actions, LiaScript, or related tools is needed, generate a research prompt."
+    description: "When current documentation for GitHub Actions, LiaScript, or related tools is needed, first check `data/liascript-workflows.md` (internal reference). Only generate a research prompt if the answer is not found there."
     trigger_situations:
       - GitHub Actions YAML syntax or available actions/versions
       - LiaScript exporter options or project.yaml schema
@@ -81,6 +81,8 @@ dependencies:
     - update-project.md
   templates:
     - visuals.yaml
+  data:
+    - liascript-workflows.md
 
 activation-instructions:
   - ONLY load dependency files when explicitly invoked

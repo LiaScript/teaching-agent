@@ -9,6 +9,7 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 - Existing `project.yaml` in the root folder
 - User's git/GitHub experience (ask before proceeding)
 - Colors and style from `docs/visuals.md`
+- `data/liascript-workflows.md` — internal reference for `project.yaml` schema and workflow templates
 
 ## Output
 
