@@ -21,6 +21,9 @@ workflow:
     development:
       id: development-agent
       role: "Version control and publishing"
+    learner:
+      id: learner-agent
+      role: "Learner personas and perspective-based quality review"
 
   sequence:
     # Phase 0: Project Initialization
@@ -86,6 +89,21 @@ workflow:
         - Professor persona and style
         - Course type and difficulty level
 
+    # Phase 1b: Learner Personas (optional)
+    - step: create_learner_personas
+      agent: teaching
+      command: /create-learner-persona {name?}
+      output: docs/learner-personas.md
+      dependencies: [create_didactics]
+      optional: true
+      notes: |
+        Create one or more evidence-based learner personas (optional but recommended):
+        - Quick mode: derive directly from docs/outline.md + docs/didactics.md
+        - Data-driven mode: generate research prompt, then build from provided data
+        - Number of personas: flexible — 1 typical, or 2–3 for target group diversity
+        - Personas are used later by /review-as-persona to give learner-perspective feedback
+        - Run /list-learners to see existing personas at any time
+
     # Phase 2: Visual Identity
     - step: create_visuals
       agent: artist
@@ -148,7 +166,20 @@ workflow:
                 Session-level check after coauthor approval:
                 - LiaScript syntax, learning objectives, persona tone
                 - If issues found: re-open /coauthor-materials with report as context
-                - If clean: move to next session
+                - If clean: proceed to persona review
+            - agent: learner
+              command: /review-as-persona {name} {number} {type}
+              optional: true
+              condition: docs/learner-personas.md exists
+              notes: |
+                Learner-perspective review after syntax validation (optional):
+                - Agent embodies persona and reads material as that learner
+                - Reviews: language level, cognitive load, relevance, accessibility,
+                  format fit, and assumed prior knowledge gaps
+                - Saves report to docs/persona-review-{name}-{number}-{type}.md
+                - Agent stays in persona for interactive follow-up chat
+                - Run for each defined persona, or just one
+                - If issues found: fix with /coauthor-materials, then optionally re-review
             - repeat: for each session
 
         batch:
@@ -171,6 +202,12 @@ workflow:
               repeat: for all materials
             - command: /validate-course {number} {type}
               notes: "Session-level check per material after coauthor approval"
+              repeat: for all materials
+            - agent: learner
+              command: /review-as-persona {name} {number} {type}
+              optional: true
+              condition: docs/learner-personas.md exists
+              notes: "Learner-perspective review per material — see iterative approach for full notes"
               repeat: for all materials
 
       notes: |
@@ -264,6 +301,8 @@ workflow:
     - Publishing is optional and user-initiated — only when explicitly requested
     - /create-project recommended when multiple materials exist and course is ready to share
     - docs/sessions.md tracks skeleton/material/done status per session automatically
+    - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
+    - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
 
   flow_diagram: |
     ```mermaid
@@ -272,7 +311,8 @@ workflow:
         B -->|improve-existing| C[teaching: analyze-existing]
         B -->|new course| D[teaching: create-outline]
         D --> E[teaching: create-didactics]
-        E --> F[artist: create-visuals]
+        E --> EP[teaching: create-learner-persona - optional]
+        EP --> F[artist: create-visuals]
         F --> G[artist: create-logo - optional]
         G --> H[teaching: create-agenda]
         H --> I{Session Approach?}
@@ -280,14 +320,18 @@ workflow:
         I -->|Iterative| J[teaching: create-session N]
         J --> K[teaching: promote-session N]
         K --> L[teaching: coauthor-materials N]
-        L --> P{More sessions?}
+        L --> LV[teaching: validate-course N]
+        LV --> LR[learner: review-as-persona - optional]
+        LR --> P{More sessions?}
         P -->|Yes| J
-        P -->|No| VAL[teaching: validate-course]
+        P -->|No| VAL[teaching: validate-course full]
 
         I -->|Batch| Q[teaching: create all skeletons]
         Q --> R[teaching: promote all sessions]
         R --> S[teaching: coauthor all materials]
-        S --> VAL
+        S --> SV[teaching: validate-course per session]
+        SV --> SR[learner: review-as-persona per session - optional]
+        SR --> VAL
 
         C --> VAL
 
@@ -307,6 +351,12 @@ workflow:
         style I fill:#f9f,stroke:#333,stroke-width:2px
         style T fill:#f9f,stroke:#333,stroke-width:2px
         style P fill:#f9f,stroke:#333,stroke-width:2px
+        style EP fill:#e8f4f8,stroke:#0B6E75
+        style LR fill:#e8f4f8,stroke:#0B6E75
+        style SR fill:#e8f4f8,stroke:#0B6E75
+        style EP stroke-dasharray: 5 5
+        style LR stroke-dasharray: 5 5
+        style SR stroke-dasharray: 5 5
     ```
 
   decision_guidance:
@@ -375,6 +425,7 @@ workflow:
       - /analyze-existing
       - /create-outline
       - /create-didactics
+      - /create-learner-persona {name?}
       - /create-agenda
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
@@ -382,6 +433,11 @@ workflow:
       - /quick-fix {number} {type} {description}
       - /validate-course
       - /assemble-bundle
+
+    learner_agent_commands:
+      - /review-as-persona {name} {number} {type}
+      - /list-learners
+      - /agent {character}
 
     artist_agent_commands:
       - /create-visuals

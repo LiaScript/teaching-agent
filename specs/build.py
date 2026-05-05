@@ -9,6 +9,7 @@ MAIN_MD = "main.md"
 ORDER = [
     (MAIN_MD, False),
     ("agents/teaching-agent.yaml", False),
+    ("agents/learner-agent.yaml", False),
     ("agents/artist-agent.yaml", False),
     ("agents/development-agent.yaml", False),
     ("tasks", True),

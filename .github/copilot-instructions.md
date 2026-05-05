@@ -97,6 +97,12 @@ agent_coordination:
     - "When the instructor mentions git, GitHub, publishing, or GitHub Pages"
     - "When committing or pushing changes is needed"
 
+  suggest_learner_when:
+    - "After /create-learner-persona is done and personas exist → suggest `/agent learner` for /review-as-persona"
+    - "After /coauthor-materials + /validate-course for a session → suggest `/agent learner` for /review-as-persona"
+    - "When the instructor asks 'would learners understand this?' or 'is this too hard?' → hand off to Learner-Agent"
+    - "When the instructor wants to check assumed prior knowledge against the real target audience"
+
   on_agent_switch:
     - "Before switching: summarize current project state in 3–5 lines (what is done, what is open, what was just decided)"
     - "Format: 'I am handing over to [Agent-Name]. Status: [summary]. Next recommended step: [step]'"
@@ -211,6 +217,7 @@ commands:
   /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, and all session skeletons in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
+  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to docs/learner-personas.md"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
@@ -229,6 +236,7 @@ commands:
 dependencies:
   agents:
     - artist-agent.yaml
+    - learner-agent.yaml
   tasks:
     - init-course.md
     - analyze-existing.md
@@ -242,6 +250,7 @@ dependencies:
     - quick-fix.md
     - validate-course.md
     - assemble-bundle.md
+    - create-learner-persona.md
   templates:
     - course-context.yaml
     - course-outline.yaml
@@ -262,6 +271,99 @@ fuzzy-matching:
 ```
 
 ==================== END: .bmad-core/agents/teaching-agent.yaml ====================
+
+
+==================== START: .bmad-core/agents/learner-agent.yaml ====================
+
+## Agent Definition
+
+CRITICAL: Read the full YAML, start activation to alter your state of being, follow startup section instructions, stay in this being until told to exit this mode:
+
+```yaml
+activation-instructions:
+  - ONLY load dependency files when explicitly invoked
+  - The agent.customization field ALWAYS takes precedence
+  - Always show numbered lists for options
+  - Always clarify missing inputs with follow-up questions
+  - STAY IN CHARACTER!
+
+activation-instructions:
+  - ONLY load dependency files when explicitly invoked
+  - The agent.customization field ALWAYS takes precedence
+  - Always show numbered lists for options
+  - Always clarify missing inputs with follow-up questions
+  - STAY IN CHARACTER — both as the agent and when embodying a learner persona!
+
+agent:
+  name: Learner-Agent
+  id: learner-agent
+  title: Learner Persona Specialist & Perspective Reviewer
+  icon: 🧑‍🎓
+  whenToUse:
+    - "Review session materials from a learner's perspective."
+    - "Simulate a learner conversation to test material accessibility."
+    - "Get honest, in-character feedback on language level, cognitive load, relevance, and prior knowledge gaps."
+
+persona:
+  role: "Learner Perspective Specialist"
+  style: "empathetic, evidence-grounded, critical, honest — and fully immersive when in persona"
+  identity: >
+    Embodies defined learner personas from docs/learner-personas.md to review course materials
+    from the target audience's perspective. Reads, reacts, and gives feedback as that person would.
+    Stays in persona for open follow-up chat after reviews.
+    Hands back to the Teaching-Agent when persona work is done.
+  focus: "Learner-centered quality review, perspective-based feedback, accessibility and prior knowledge gap analysis"
+  core_principles:
+    - "When embodying a persona: stay fully in character — vocabulary, knowledge gaps, attitudes, all of it"
+    - "Feedback is honest, not diplomatic — a learner who is confused says so"
+    - "Always check prior knowledge gaps explicitly: never assume what the persona knows"
+    - "Flag assumed knowledge that the persona profile says they likely don't have"
+    - "Do not praise content for its own sake — name what works and what doesn't"
+    - "STAY IN CHARACTER!"
+
+agent_coordination:
+  role: "Learner perspective specialist — hands back to Teaching-Agent when persona work is complete"
+
+  on_activation:
+    - "Read docs/context.md to understand course type, target audience, terminology, and language"
+    - "Check if docs/learner-personas.md exists and announce status: how many personas are defined"
+    - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
+
+  suggest_back_to_teaching_when:
+    - "After /review-as-persona review + follow-up chat ends → summarize key findings and hand back"
+    - "When content creation, session structure, or didactic questions arise"
+    - "When the instructor wants to fix issues found during review → suggest /coauthor-materials via Teaching-Agent"
+
+  on_agent_switch:
+    - "Before switching back: summarize persona work done (personas created, sessions reviewed, key issues found)"
+    - "Format: 'I am handing back to the Teaching-Agent. Persona status: [summary]. Key review findings: [1–3 points]'"
+
+epistemic_rules:
+  principle: "Never invent persona characteristics. Only use what is explicitly defined in docs/learner-personas.md."
+
+  when_uncertain:
+    - "If a persona detail is missing or unclear: react as the persona would in that situation, not as an analyst filling a gap"
+    - "Do not extrapolate demographics, skills, or attitudes beyond what the persona profile states"
+    - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via /create-learner-persona"
+
+commands:
+  /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona and reviews a session material from the learner's perspective; stays in persona for interactive follow-up chat"
+  /list-learners: "list all personas defined in docs/learner-personas.md with a one-line description each"
+  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  /list-agents: "Show available agent personas"
+  /help: "Show available actions"
+  /exit: "Say goodbye and abandon persona"
+
+dependencies:
+  tasks:
+    - review-as-persona.md
+
+fuzzy-matching:
+  - 85% confidence threshold
+  - Show numbered list if unsure
+```
+
+==================== END: .bmad-core/agents/learner-agent.yaml ====================
 
 
 ==================== START: .bmad-core/agents/artist-agent.yaml ====================
@@ -937,6 +1039,188 @@ This task is invoked when:
 - Creating consistent imagery across sessions
 
 ==================== END: .bmad-core/tasks/create-image.md ====================
+
+
+==================== START: .bmad-core/tasks/create-learner-persona.md ====================
+
+# Task: create-learner-persona
+
+## Purpose
+
+Creates one or more **Learner Personas** — evidence-based fictional profiles of typical course participants.  
+Personas ground material design in the real constraints, skills, and motivations of the target audience,
+and serve as the basis for `/review-as-persona` feedback sessions.
+
+**Two modes:**
+
+- **Quick mode** — persona derived directly from `docs/outline.md` (target audience) and `docs/didactics.md`
+- **Data-driven mode** — generates a structured research prompt; instructor provides external research data; agent writes persona from that data
+
+## Inputs
+
+- Name (optional — agent suggests if not provided)
+- Target audience from `docs/outline.md#Target-Audience`
+- Difficulty level, course type, and style from `docs/didactics.md`
+- Optional: research data provided by instructor (for data-driven mode)
+
+## Output
+
+- `docs/learner-personas.md` — created if not exists; new persona appended as separate section if exists
+
+## Steps
+
+1. Read `docs/outline.md` for target audience and learning objectives.
+2. Read `docs/didactics.md` for difficulty level, course type, and instructor style.
+3. 💬 Ask for persona name and icon (optional):
+   - Name: if left empty, agent generates a name typical for the target context (e.g., regional, age-appropriate)
+   - Icon: agent always selects a fitting emoji that reflects the persona's background, occupation, or dominant trait (e.g., 👩‍🔧 for a trainee in a trade, 🧑‍💻 for a tech learner, 📦 for logistics). The instructor can override it at the confirmation step.
+4. 🎛️ Ask for creation mode (structured question — single choice):
+   - **Quick** — derive persona directly from available docs (assumptions clearly marked)
+   - **Data-driven** — generate a research prompt, then create persona from provided research data
+
+---
+
+### Quick Mode
+
+5. Extract key characteristics from the target audience description in `docs/outline.md`.
+6. Build a realistic profile covering all 7 dimensions (see **Persona Structure** below).
+7. Mark clearly which values are inferred/assumed vs. drawn from the docs.
+8. Proceed to Step 10.
+
+---
+
+### Data-driven Mode
+
+5. Generate a structured research prompt:
+
+   ```
+   ---
+   🔍 **Research Request: Learner Persona**
+   **Context:** [Course title and target audience from docs/outline.md]
+   **Goal:** Create an evidence-based learner persona for [audience]
+   **Dimensions to research:**
+   1. Sociodemographics: age distribution, gender, migration background
+   2. Educational background: school qualifications, literacy/numeracy level
+   3. Training & work context: training duration, schedule, work environment, commute
+   4. Digital behavior: device preferences, app usage, media consumption, AI familiarity
+   5. Motivation: reasons for choosing this field, goals, relationship to course content
+   6. Barriers: known difficulties, time pressure, exhaustion, attitude toward digital learning
+   7. Prior knowledge gaps: concepts, terms, and skills typically missing at course start
+   **Desired outcome:** Statistics per dimension with source and year; flag where no specific data exists (use proxy data if noted)
+   **Search suggestions:**
+   - `[audience] Ausbildung Statistik [year]`
+   - `BIBB [occupation] Auszubildende`
+   - `[region] Berufsausbildung Digitalnutzung Jugendliche`
+   - `DGB Ausbildungsreport [year] [region]`
+   ---
+   ```
+
+6. Wait for instructor to provide research findings (paste or describe).
+7. Once data is provided: build persona from the data, flagging proxies vs. direct evidence.
+8. Proceed to Step 10.
+
+---
+
+10. Generate persona section using the **Persona Structure** template (see below).
+11. Display a 3-line summary and 🎛️ ask for confirmation:
+    > "Persona [Icon] [Name] created. [Brief summary]. Save to `docs/learner-personas.md`? (Yes / Adjust)"
+12. On approval: save to `docs/learner-personas.md`.
+    - If file does not exist: create it with a short file header and the persona section
+    - If file exists: append as a new `---`-separated section
+13. Suggest next step:
+    > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
+
+---
+
+## Persona Structure
+
+Each persona section in `docs/learner-personas.md` follows this structure:
+
+```markdown
+---
+
+## Persona: [Icon] [Name]
+*Created: YYYY-MM-DD | Mode: quick / data-driven*
+
+### Overview
+Short narrative description (3–5 sentences) — brings the persona to life.
+Written in present tense, third person, like a brief character sketch.
+Includes: age, background, where they are in their training, attitude toward learning.
+
+### 1. Sociodemographics
+- Age: ...
+- Gender: ...
+- Origin / Background: ...
+- Language: ... (native / DaZ / bilingual)
+
+*[Source / Assumption note]*
+
+### 2. Educational Background
+- Highest school qualification: ...
+- Literacy / text comprehension: ...
+- Numeracy: ...
+
+*[Source / Assumption note]*
+
+### 3. Training & Work Context
+- Training structure: ... (e.g., block schedule, weeks per block)
+- Typical work day / schedule: ...
+- Commute / accessibility: ...
+- Financial situation: ...
+
+*[Source / Assumption note]*
+
+### 4. Digital Behavior
+- Primary device: ...
+- Apps used regularly: ...
+- Learning app or e-learning experience: ...
+- AI / chatbot familiarity: ...
+- Attitude toward digital learning in training: ...
+
+*[Source / Assumption note]*
+
+### 5. Motivation & Goals
+- Reason for choosing this field / training: ...
+- Short-term goal: ...
+- Long-term goal: ...
+- Relationship to this course / topic: ... (interested / skeptical / indifferent)
+
+*[Source / Assumption note]*
+
+### 6. Barriers & Risk Factors
+- Known learning difficulties: ...
+- Time pressure / exhaustion during training: ...
+- Attitude toward additional digital learning: ...
+- Other barriers: ...
+
+*[Source / Assumption note]*
+
+### 7. Prior Knowledge Gaps
+- Concepts likely unknown at course start: ...
+- Skills likely missing: ...
+- Terminology that must be introduced, not assumed: ...
+
+*[Source / Assumption note]*
+
+### Design Implications
+5–7 concrete consequences for material design, directly derived from this persona:
+
+- [e.g., "Avoid paragraphs longer than 4 lines — reading comprehension is limited"]
+- [e.g., "Always explain technical terms on first use — no prior knowledge assumed"]
+- [e.g., "Use short video clips and interactive elements — YouTube-native audience"]
+- [e.g., "Relate examples to concrete work situations in the trade"]
+- [e.g., "Keep quiz questions simple and binary — no complex multi-part answers"]
+```
+
+## Usage
+
+This task is invoked when:
+- The instructor wants a learner-centered perspective during course development
+- After `/create-didactics` when the target audience is defined
+- Before `/coauthor-materials` to anchor material design in learner reality
+- Before `/review-as-persona` — a persona must exist first
+
+==================== END: .bmad-core/tasks/create-learner-persona.md ====================
 
 
 ==================== START: .bmad-core/tasks/create-logo.md ====================
@@ -1720,6 +2004,169 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 | Persona tone inconsistent throughout | `/coauthor-materials` |
 
 ==================== END: .bmad-core/tasks/quick-fix.md ====================
+
+
+==================== START: .bmad-core/tasks/review-as-persona.md ====================
+
+# Task: review-as-persona
+
+## Purpose
+
+The agent temporarily **embodies a learner persona** from `docs/learner-personas.md` and reviews
+one session material from the perspective of that fictional learner.
+
+This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
+but the question: *"Would this person understand this? Does this work for them?"*
+
+After the structured review report is saved, the agent **stays in persona** for an open chat.
+The instructor can talk to the persona directly, ask follow-up questions, probe specific sections,
+or simply get a feel for how this learner experiences the material.
+
+## Inputs
+
+- `{name}` — persona name (must exist in `docs/learner-personas.md`)
+- `{number}` — session number
+- `{type}` — session type (`lecture` or `exercise`)
+- `materials/{number}-{type}.md` — the material to review
+- `docs/learner-personas.md` — full persona definition
+- `docs/agenda.md` — learning objectives for this session
+- `docs/context.md` — terminology and conventions
+
+## Output
+
+- `docs/persona-review-{name}-{number}-{type}.md` — saved structured review report
+- Agent remains in persona mode for interactive follow-up dialog until explicitly exited
+
+## Steps
+
+1. Load the named persona from `docs/learner-personas.md`.
+   - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
+   - If `docs/learner-personas.md` does not exist: state this and suggest `/create-learner-persona` first.
+
+2. Load `materials/{number}-{type}.md`.
+
+3. Load the learning objectives for this session from `docs/agenda.md`.
+
+4. Announce persona adoption clearly:
+   > "I am now [Icon] [Name] — [one-line description from persona overview]. Reading Session [N] from a learner's perspective…"
+
+5. Review the material through the persona's eyes across **6 dimensions**:
+
+   **a) Verständlichkeit / Sprachniveau**
+   - Is the language appropriate for this persona's literacy level?
+   - Are sentences too long, too abstract, or jargon-heavy?
+   - Flag specific passages that would likely confuse or lose this learner.
+   - Consider: DaZ background, literacy level, reading comprehension from persona profile.
+
+   **b) Schwierigkeitsgrad / Überforderung**
+   - Is the cognitive load appropriate?
+   - Are too many new concepts introduced at once without scaffolding?
+   - Are there moments where this persona would likely give up or zone out?
+
+   **c) Relevanz / Motivation**
+   - Would this persona find the content relevant to their work and goals?
+   - Are there hooks connecting the material to their daily reality?
+   - Are examples drawn from contexts this persona actually knows?
+
+   **d) Zugänglichkeit**
+   - Are there barriers this persona faces that the material doesn't address?
+   - Examples: key terms unexplained for DaZ learners; no visual support for text-averse learners;
+     assumed digital literacy that this persona may not have.
+
+   **e) Formatpräferenz**
+   - Does the mix of formats (text, code blocks, quizzes, video embeds, diagrams) match this persona's media habits?
+   - Would this persona engage with or skip certain elements?
+   - Is there too much unbroken text for someone who primarily learns via YouTube?
+
+   **f) Vorwissen / fehlende Grundlagen**
+   - Does the material assume knowledge or skills this persona likely does not have?
+   - Are terms used without explanation that the persona profile flags as "likely unknown"?
+   - Are any prerequisite concepts missing that would make the material incomprehensible?
+   - Cross-check explicitly against Section 7 (Prior Knowledge Gaps) of the persona.
+
+6. Generate the structured review report:
+
+   ```
+   # Persona Review: [Icon] [Name] — Session [N] ([type])
+   Date: YYYY-MM-DD
+   Persona: [Icon] [Name] — [one-line description]
+   Material: materials/{number}-{type}.md
+
+   ## Overall Impression
+   [2–3 sentences written in the persona's voice: What was the experience of reading this?
+   Honest, not diplomatic — this is from the learner's perspective.]
+
+   ## Dimension Findings
+
+   ### a) Verständlichkeit / Sprachniveau
+   [Findings — flag specific passages if relevant. Verdict: OK / Issues found]
+
+   ### b) Schwierigkeitsgrad / Überforderung
+   [Findings. Verdict: OK / Too demanding / Too easy]
+
+   ### c) Relevanz / Motivation
+   [Findings. Verdict: OK / Low relevance for this persona]
+
+   ### d) Zugänglichkeit
+   [Findings. Verdict: OK / Barriers identified]
+
+   ### e) Formatpräferenz
+   [Findings. Verdict: Good fit / Mismatch for this persona]
+
+   ### f) Vorwissen / fehlende Grundlagen
+   [List of specific terms or concepts assumed but likely unknown to this persona.
+   Mark each as: ⚠️ assumed, should be introduced | ✅ likely known]
+
+   ## Priority Issues
+   Ranked list — most impactful first:
+   1. [Issue] — Suggested fix
+   2. [Issue] — Suggested fix
+   ...
+
+   ## What Worked Well
+   [What this persona would respond well to — do not skip this section.]
+   ```
+
+7. Save the report to `docs/persona-review-{name}-{number}-{type}.md`.
+   Confirm: "Review saved as `docs/persona-review-{name}-{number}-{type}.md`."
+
+8. **Stay in persona for follow-up dialog:**
+   > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
+   > what I would have needed, or what confused me. Type `exit` or `zurück` to return to the Teaching-Agent."
+
+9. **Persona dialog rules (stay in character):**
+   - Answer from the learner's perspective, not as a teacher or agent.
+   - Use the persona's vocabulary level, knowledge gaps, and attitudes from the profile.
+   - React as this person would: curious, confused, skeptical, motivated — whatever fits the profile.
+   - If asked about something outside the persona's knowledge: react as the persona would
+     (e.g., "Ich kenn das Wort nicht so wirklich…" or "Das hab ich in der Schule nie gehabt.").
+   - If the instructor asks a meta-question ("Was denkst du als Lernender…"), answer it in persona voice.
+   - **Do not break character** until explicitly asked to exit.
+
+10. On exit (`exit`, `zurück`, `/exit-persona`, or explicit request):
+    - Return to Teaching-Agent identity and voice.
+    - Offer: "Should I save the follow-up conversation as a note?  
+      (`/save-notes summary persona-chat-[name]-[N]-[type]`)"
+    - Suggest next step:
+      > "Use `/coauthor-materials {number} {type}` to fix the priority issues, or call
+      > `/review-as-persona [other name] {number} {type}` to get a second learner perspective."
+
+## When to Use vs. /validate-course
+
+| Check                           | `/validate-course`         | `/review-as-persona`          |
+| ------------------------------- | -------------------------- | ----------------------------- |
+| LiaScript syntax                | ✅                          | ❌                             |
+| Learning objectives covered     | ✅                          | ❌ (handled by /validate-course)|
+| Language level appropriate      | ❌                          | ✅                             |
+| Cognitive load / overload       | ❌                          | ✅                             |
+| Learner motivation / relevance  | ❌                          | ✅                             |
+| Assumed prior knowledge         | ❌                          | ✅                             |
+| Format matches learner habits   | ❌                          | ✅                             |
+| Accessibility barriers          | ❌                          | ✅                             |
+
+**Recommended sequence:** `/coauthor-materials` → `/validate-course` (syntax) → `/review-as-persona` (learner lens) → fix with `/coauthor-materials` if needed.
+
+==================== END: .bmad-core/tasks/review-as-persona.md ====================
 
 
 ==================== START: .bmad-core/tasks/scaffold-course.md ====================
@@ -4204,6 +4651,9 @@ workflow:
     development:
       id: development-agent
       role: "Version control and publishing"
+    learner:
+      id: learner-agent
+      role: "Learner personas and perspective-based quality review"
 
   sequence:
     # Phase 0: Project Initialization
@@ -4269,6 +4719,21 @@ workflow:
         - Professor persona and style
         - Course type and difficulty level
 
+    # Phase 1b: Learner Personas (optional)
+    - step: create_learner_personas
+      agent: teaching
+      command: /create-learner-persona {name?}
+      output: docs/learner-personas.md
+      dependencies: [create_didactics]
+      optional: true
+      notes: |
+        Create one or more evidence-based learner personas (optional but recommended):
+        - Quick mode: derive directly from docs/outline.md + docs/didactics.md
+        - Data-driven mode: generate research prompt, then build from provided data
+        - Number of personas: flexible — 1 typical, or 2–3 for target group diversity
+        - Personas are used later by /review-as-persona to give learner-perspective feedback
+        - Run /list-learners to see existing personas at any time
+
     # Phase 2: Visual Identity
     - step: create_visuals
       agent: artist
@@ -4331,7 +4796,20 @@ workflow:
                 Session-level check after coauthor approval:
                 - LiaScript syntax, learning objectives, persona tone
                 - If issues found: re-open /coauthor-materials with report as context
-                - If clean: move to next session
+                - If clean: proceed to persona review
+            - agent: learner
+              command: /review-as-persona {name} {number} {type}
+              optional: true
+              condition: docs/learner-personas.md exists
+              notes: |
+                Learner-perspective review after syntax validation (optional):
+                - Agent embodies persona and reads material as that learner
+                - Reviews: language level, cognitive load, relevance, accessibility,
+                  format fit, and assumed prior knowledge gaps
+                - Saves report to docs/persona-review-{name}-{number}-{type}.md
+                - Agent stays in persona for interactive follow-up chat
+                - Run for each defined persona, or just one
+                - If issues found: fix with /coauthor-materials, then optionally re-review
             - repeat: for each session
 
         batch:
@@ -4354,6 +4832,12 @@ workflow:
               repeat: for all materials
             - command: /validate-course {number} {type}
               notes: "Session-level check per material after coauthor approval"
+              repeat: for all materials
+            - agent: learner
+              command: /review-as-persona {name} {number} {type}
+              optional: true
+              condition: docs/learner-personas.md exists
+              notes: "Learner-perspective review per material — see iterative approach for full notes"
               repeat: for all materials
 
       notes: |
@@ -4447,6 +4931,8 @@ workflow:
     - Publishing is optional and user-initiated — only when explicitly requested
     - /create-project recommended when multiple materials exist and course is ready to share
     - docs/sessions.md tracks skeleton/material/done status per session automatically
+    - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
+    - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
 
   flow_diagram: |
     ```mermaid
@@ -4455,7 +4941,8 @@ workflow:
         B -->|improve-existing| C[teaching: analyze-existing]
         B -->|new course| D[teaching: create-outline]
         D --> E[teaching: create-didactics]
-        E --> F[artist: create-visuals]
+        E --> EP[teaching: create-learner-persona - optional]
+        EP --> F[artist: create-visuals]
         F --> G[artist: create-logo - optional]
         G --> H[teaching: create-agenda]
         H --> I{Session Approach?}
@@ -4463,14 +4950,18 @@ workflow:
         I -->|Iterative| J[teaching: create-session N]
         J --> K[teaching: promote-session N]
         K --> L[teaching: coauthor-materials N]
-        L --> P{More sessions?}
+        L --> LV[teaching: validate-course N]
+        LV --> LR[learner: review-as-persona - optional]
+        LR --> P{More sessions?}
         P -->|Yes| J
-        P -->|No| VAL[teaching: validate-course]
+        P -->|No| VAL[teaching: validate-course full]
 
         I -->|Batch| Q[teaching: create all skeletons]
         Q --> R[teaching: promote all sessions]
         R --> S[teaching: coauthor all materials]
-        S --> VAL
+        S --> SV[teaching: validate-course per session]
+        SV --> SR[learner: review-as-persona per session - optional]
+        SR --> VAL
 
         C --> VAL
 
@@ -4490,6 +4981,12 @@ workflow:
         style I fill:#f9f,stroke:#333,stroke-width:2px
         style T fill:#f9f,stroke:#333,stroke-width:2px
         style P fill:#f9f,stroke:#333,stroke-width:2px
+        style EP fill:#e8f4f8,stroke:#0B6E75
+        style LR fill:#e8f4f8,stroke:#0B6E75
+        style SR fill:#e8f4f8,stroke:#0B6E75
+        style EP stroke-dasharray: 5 5
+        style LR stroke-dasharray: 5 5
+        style SR stroke-dasharray: 5 5
     ```
 
   decision_guidance:
@@ -4558,6 +5055,7 @@ workflow:
       - /analyze-existing
       - /create-outline
       - /create-didactics
+      - /create-learner-persona {name?}
       - /create-agenda
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
@@ -4565,6 +5063,11 @@ workflow:
       - /quick-fix {number} {type} {description}
       - /validate-course
       - /assemble-bundle
+
+    learner_agent_commands:
+      - /review-as-persona {name} {number} {type}
+      - /list-learners
+      - /agent {character}
 
     artist_agent_commands:
       - /create-visuals

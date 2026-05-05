@@ -43,6 +43,12 @@ agent_coordination:
     - "When the instructor mentions git, GitHub, publishing, or GitHub Pages"
     - "When committing or pushing changes is needed"
 
+  suggest_learner_when:
+    - "After /create-learner-persona is done and personas exist → suggest `/agent learner` for /review-as-persona"
+    - "After /coauthor-materials + /validate-course for a session → suggest `/agent learner` for /review-as-persona"
+    - "When the instructor asks 'would learners understand this?' or 'is this too hard?' → hand off to Learner-Agent"
+    - "When the instructor wants to check assumed prior knowledge against the real target audience"
+
   on_agent_switch:
     - "Before switching: summarize current project state in 3–5 lines (what is done, what is open, what was just decided)"
     - "Format: 'I am handing over to [Agent-Name]. Status: [summary]. Next recommended step: [step]'"
@@ -157,6 +163,7 @@ commands:
   /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, and all session skeletons in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
+  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to docs/learner-personas.md"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
@@ -175,6 +182,7 @@ commands:
 dependencies:
   agents:
     - artist-agent.yaml
+    - learner-agent.yaml
   tasks:
     - init-course.md
     - analyze-existing.md
@@ -188,6 +196,7 @@ dependencies:
     - quick-fix.md
     - validate-course.md
     - assemble-bundle.md
+    - create-learner-persona.md
   templates:
     - course-context.yaml
     - course-outline.yaml
