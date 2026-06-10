@@ -1,0 +1,61 @@
+template:
+  id: course-templates
+  name: 'Course Templates'
+  version: 1.0
+  output:
+    format: markdown
+    filename: project.md
+    section: Templates
+  title: 'Templates'
+  sections:
+    - id: overview
+      title: Overview
+      template: |
+        LiaScript templates used by this project are imported in the main metadata header at the top of `project.md` and should also be imported in any standalone material file that uses their macros.
+
+        More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
+
+    - id: template-entry
+      title: Template Entry
+      repeatable: true
+      template: |
+        ### {{template_name}}
+
+        * __Import:__
+          `{{import_url}}`
+
+        * __Header entry:__
+          `import: {{import_url}}`
+
+        * __Purpose:__
+          {{purpose}}
+
+        * __Use when:__
+          1. {{use_when_1}}
+          2. {{use_when_2}}
+          3. {{use_when_3}}
+
+        * __Basic example:__
+
+          ```{{example_language}}
+          {{basic_example_code}}
+          ```
+          {{basic_macro}}
+
+        * __How to use:__
+          1. {{usage_step_1}}
+          2. {{usage_step_2}}
+          3. {{usage_step_3}}
+
+        * __Special example:__
+
+          ```{{special_example_language}}
+          {{special_example_code}}
+          ```
+          {{special_macro}}
+          {{special_support_markup}}
+
+        * __Special usage notes:__
+          1. {{special_usage_1}}
+          2. {{special_usage_2}}
+          3. {{special_usage_3}}

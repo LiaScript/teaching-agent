@@ -181,6 +181,7 @@ project_memory:
     - "Outline"
     - "Didactics"
     - "Visual Identity"
+    - "Templates"
     - "Agenda"
     - "Sessions"
     - "Learner Personas"
@@ -240,6 +241,7 @@ commands:
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `project.md` → `## Learner Personas`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
+  /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `project.md` → `## Templates`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
@@ -265,6 +267,7 @@ dependencies:
     - create-outline.md
     - create-didactics.md
     - create-agenda.md
+    - manage-templates.md
     - create-session-skeleton.md
     - promote-session.md
     - coauthor-materials.md
@@ -277,6 +280,7 @@ dependencies:
     - course-outline.yaml
     - course-didactics.yaml
     - course-agenda.yaml
+    - course-templates.yaml
     - session-skeleton.yaml
     - session-material.yaml
     - session-validation.yaml
@@ -651,7 +655,7 @@ Offers two paths for each missing core section:
 ## Inputs
 
 - `project.md` → `## Course Context` (created by `/init-course`, mandatory)
-- Existing `project.md` sections: `## Outline`, `## Didactics`, `## Agenda`, `## Visual Identity`, `## Sessions`
+- Existing `project.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`
 - Existing folder: `materials/`
 
 ## Output
@@ -671,6 +675,7 @@ Offers two paths for each missing core section:
    | `project.md` → `## Didactics` | always                       |
    | `project.md` → `## Agenda`    | if `project.md` → `## Course Context` agenda = yes |
    | `project.md` → `## Visual Identity`   | optional                     |
+   | `project.md` → `## Templates` | optional; required if template imports or macros are used |
    | `project.md` → `## Sessions` | if sessions expected |
    | `materials/`   | if sessions expected         |
 
@@ -705,6 +710,7 @@ Offers two paths for each missing core section:
    - Sessions without materials
    - Materials without session subsections
    - Inconsistent terminology or persona style
+   - Template macros used without matching `import:` metadata or `## Templates` documentation
    - Missing references or learning objectives
    - Language/tone inconsistencies vs. `project.md` → `## Course Context` conventions
 
@@ -803,6 +809,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 - Professor persona & style from `project.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)
 - Agenda info (modules/sessions) from `project.md` → `## Agenda`
 - Terminology & conventions from `project.md` → `## Course Context`
+- LiaScript template usage rules from `project.md` → `## Templates` (if present)
 - Currently open document `materials/{number}-{type}.md`
 - Optionally, corresponding session subsection in `project.md` → `## Sessions`
 - Didactic inputs from `project.md` → `## Didactics`
@@ -821,14 +828,18 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **If the current session subsection in `project.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
-4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
+4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
+
+   **Critical engagement rules — always active:**
    - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
    - If a learning objective from `project.md` → `## Agenda` is not addressed: flag it before moving on
    - If the instructor's suggestion contradicts the didactic concept in `project.md` → `## Didactics`: raise it as a conflict
    - If an explanation is too long, too abstract, or not suited for the target audience: say so
+   - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing
    - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
-   - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
+   - Positive feedback only when it is genuinely earned and specific
+5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update the overview table in `project.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
 8. After approval, 🎛️ ask with structured question (single choice):
@@ -1823,6 +1834,7 @@ The course context acts as the governance layer: it defines the course type, ter
 ## Output
 
 - `project.md` → `## Course Context`
+- Optional: `project.md` main metadata header `import:` lines and `## Templates`
 - Structure based on `templates/course-context.yaml`
 
 ## Steps
@@ -1862,7 +1874,11 @@ The course context acts as the governance layer: it defines the course type, ter
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
 8. Save the generated context by creating or replacing `project.md` → `## Course Context`.
-9. Confirm completion and suggest the next step based on course type:
+9. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
+   - Add `import: {url}` to the main metadata header if missing
+   - Create or update `project.md` → `## Templates`
+   - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
+10. Confirm completion and suggest the next step based on course type:
    - **lecture-series / workshop** → `/create-outline`
    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
@@ -1923,6 +1939,73 @@ This task is invoked when:
 ==================== END: .bmad-core/tasks/manage-git.md ====================
 
 
+==================== START: .bmad-core/tasks/manage-templates.md ====================
+
+# Task: manage-templates
+
+## Purpose
+
+Creates or updates `project.md` → `## Templates` and keeps LiaScript template imports synchronized with the main metadata header.
+
+Use this task when:
+- `/init-course` captures LiaScript conventions that mention template imports
+- `/scaffold` receives template requirements during the intake interview
+- The instructor later adds, changes, or removes a LiaScript template
+- A material needs a new macro provided by a template
+
+## Inputs
+
+- `project.md` → `## Course Context` / `### Conventions & Standards`
+- Template name, import URL, purpose, and usage rules
+- Optional runnable examples and special examples
+- Template documentation or import source, if accessible
+- `templates/course-templates.yaml`
+
+## Output
+
+- `project.md` main metadata header updated with one `import: {url}` line per active template
+- `project.md` → `## Templates` created or updated
+
+## Steps
+
+1. Read `project.md` → `## Course Context`, especially `__LiaScript conventions:__`.
+2. Detect template import hints:
+   - Lines such as `Template import: https://...`
+   - Existing header lines such as `import: https://...`
+   - Explicit instructor requests such as "add the chart template"
+3. For each active template:
+   - Determine the template name (e.g. `skulpt`)
+   - Determine the import URL
+   - Inspect the template documentation, README, or import source when available
+   - Determine what macros or syntax it provides from the inspected source
+   - Determine where it must be imported (project header, material headers, or both)
+   - If the source cannot be inspected, document only confirmed usage and ask the instructor for missing macro details before inventing examples
+4. Update the main metadata header at the top of `project.md`:
+   - Add `import: {url}` if missing
+   - Do not duplicate existing imports
+   - Keep existing metadata lines unchanged
+5. Create or update `project.md` → `## Templates` using `templates/course-templates.yaml`.
+   - Keep the overview text with the link to [topics/liascript-template](https://github.com/topics/liascript-template)
+   - Create one `### {template_name}` subsection per template
+   - Replace an existing template subsection if the same template name already exists
+6. Include runnable examples where useful.
+   - For Skulpt regular Python examples, include a Python code block followed by `@Skulpt.eval`
+   - For Skulpt turtle examples, include a Python code block followed by `@Skulpt.eval(skulpt_canvas)` and a persistent canvas `<div>`
+7. When promoting or coauthoring materials, ensure any material using a documented template also includes the matching `import: {url}` in its own LiaScript header.
+8. Confirm what changed:
+   - Header imports added or already present
+   - Template sections created or updated
+   - Any material files that still need imports
+
+## Notes
+
+- `## Templates` is documentation and governance. It does not replace the actual LiaScript `import:` metadata line.
+- Keep the `## Course Context` conventions short. Put detailed examples and usage rules in `## Templates`.
+- Do not remove a template import unless no material or project section uses its macros anymore.
+
+==================== END: .bmad-core/tasks/manage-templates.md ====================
+
+
 ==================== START: .bmad-core/tasks/promote-session.md ====================
 
 # Task: promote-session
@@ -1938,6 +2021,7 @@ Converts a **Session** into a detailed **Session Material**.
 - skeleton: matching `### {number}. {title}` subsection from `project.md` → `## Sessions`
 - didactics: content from `project.md` → `## Didactics`
 - agenda: content from `project.md` → `## Agenda`
+- templates: imports and usage notes from `project.md` → `## Templates` (if present)
 - **Instructor persona from `project.md` → `## Didactics` (mandatory handoff)**
 - **Style & difficulty level from `project.md` → `## Didactics` (mandatory handoff)**
 - Terminology from `project.md` → `## Course Context`
@@ -1961,8 +2045,9 @@ Converts a **Session** into a detailed **Session Material**.
 5. Consider didactic inputs.
 6. Generate planned outline.
 7. Apply template.
-8. Save the material file as `materials/{number}-{type}.md`.
-9. Update the overview table in `project.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+8. If the material uses macros from `project.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
+9. Save the material file as `materials/{number}-{type}.md`.
+10. Update the overview table in `project.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
 
 ==================== END: .bmad-core/tasks/promote-session.md ====================
 
@@ -2226,6 +2311,7 @@ Generated in sequence without interruption inside `project.md`:
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
+- `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
 - `## Sessions` containing an overview table followed by one subsection per session
 
@@ -2260,6 +2346,7 @@ Generated in sequence without interruption inside `project.md`:
    - Agenda needed? (for self-paced / single-lesson): yes / no
    - Session approach after scaffold: iterative (one at a time) / batch (all at once)
    - Session count: 💬 free text (number + optional titles, or leave for auto-generation)
+   - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
 
 3. Present a **summary of all inputs** and ask for confirmation:
    > "Summary: [display all inputs]. Should I generate the structure now? (Yes / Adjust)"
@@ -2273,18 +2360,20 @@ Run each step silently (no approval prompts between steps):
 1. Generate or replace `project.md` → `## Course Context` from collected inputs.
 2. Generate or replace `project.md` → `## Outline`.
 3. Generate or replace `project.md` → `## Didactics` — including the **Persona Voice Sample** section.
-4. Generate or replace `project.md` → `## Agenda` (skip if agenda = no).
-5. Create or replace `project.md` → `## Sessions` with:
+4. If template imports were provided, run `tasks/manage-templates.md` and create or update `project.md` → `## Templates`.
+5. Generate or replace `project.md` → `## Agenda` (skip if agenda = no).
+6. Create or replace `project.md` → `## Sessions` with:
    - An overview table directly below `## Sessions`
    - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - One `### {number}. {title}` subsection per session below the overview table
-6. Fill each session subsection using `templates/session-skeleton.yaml`.
+7. Fill each session subsection using `templates/session-skeleton.yaml`.
 
 After each section is saved, print a brief progress line:
 ```
 ✅ project.md → ## Course Context
 ✅ project.md → ## Outline
 ✅ project.md → ## Didactics
+✅ project.md → ## Templates
 ✅ project.md → ## Agenda
 ✅ project.md → ## Sessions / overview
 ✅ project.md → ## Sessions / 1. Session title
@@ -2302,6 +2391,7 @@ After each section is saved, print a brief progress line:
    > | Course Context | ✅              |
    > | Outline        | ✅              |
    > | Didactics      | ✅              |
+   > | Templates      | ✅ / skipped    |
    > | Agenda         | ✅ / skipped    |
    > | Sessions       | ✅ overview + [N] subsections |
    >
@@ -2383,6 +2473,7 @@ Can be run in two modes:
 ## Inputs
 
 - `project.md` → `## Course Context` — course type and conventions
+- `project.md` → `## Templates` — LiaScript template imports, macros, and examples (if present)
 - `checklists/course-quality-checklist.md` — structured checklist
 - `data/liascript-cheat-sheet.md` — syntax reference for LiaScript checks
 - `templates/session-validation.yaml` — template for each stored session validation report
@@ -2436,6 +2527,12 @@ Rules:
    - [ ] All media elements have alt text
    - [ ] No unclosed `<div>` blocks
 
+   **Template checks** `[if `project.md` → `## Templates` exists or the material uses template macros]`:
+   - [ ] Every template macro used in the material is documented in `project.md` → `## Templates`
+   - [ ] The material metadata header includes the matching `import: {url}` line for every used template
+   - [ ] The project metadata header includes the matching `import: {url}` line for every documented template
+   - [ ] Template use follows the examples and constraints documented in `## Templates`
+
 5. Fill `templates/session-validation.yaml` for this session with:
    - Material path
    - Result: PASS / FAIL / PASS with concerns
@@ -2444,6 +2541,7 @@ Rules:
    - Content findings
    - Persona & style findings
    - LiaScript syntax findings
+   - Template findings, if applicable
    - Recommended actions
    - Line references where possible
 6. Create or replace the rendered `#### Validation Report` in the matching session subsection under `project.md` → `## Sessions`.
@@ -2462,6 +2560,11 @@ Rules:
    - `project.md` → `## Course Context` complete (course type, terminology, agenda flag, conventions)
    - `project.md` → `## Outline`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
    - `project.md` → `## Didactics`: instructor persona, didactic concept, style, difficulty level
+
+4b. **Check Templates** `[if `project.md` → `## Templates` exists or material files use template macros]`:
+   - Every template documented in `project.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header
+   - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header
+   - Template usage in materials follows the documented examples and constraints in `## Templates`
 
 5. **Check Agenda** `[if agenda flag = yes in project.md → ## Course Context]`:
    - All sessions have title, duration, type, learning objective, summary
@@ -2497,6 +2600,9 @@ Rules:
    #### Course-Level Findings
    ##### Foundation
    - [issue or ✅ OK]
+
+   ##### Templates
+   - [issue or ✅ OK / SKIPPED]
 
    ##### Agenda
    - [issue or ✅ OK / SKIPPED (course type)]
@@ -2608,6 +2714,7 @@ template:
 
         * __LiaScript conventions:__
           - [list project-specific rules here]
+          - [If templates are required, mention them briefly here and document details in `## Templates`]
 
     - id: notes
       title: Additional Notes
@@ -2702,6 +2809,75 @@ template:
 ```
 
 ==================== END: .bmad-core/templates/course-outline.yaml ====================
+
+
+==================== START: .bmad-core/templates/course-templates.yaml ====================
+
+```yaml
+template:
+  id: course-templates
+  name: 'Course Templates'
+  version: 1.0
+  output:
+    format: markdown
+    filename: project.md
+    section: Templates
+  title: 'Templates'
+  sections:
+    - id: overview
+      title: Overview
+      template: |
+        LiaScript templates used by this project are imported in the main metadata header at the top of `project.md` and should also be imported in any standalone material file that uses their macros.
+
+        More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
+
+    - id: template-entry
+      title: Template Entry
+      repeatable: true
+      template: |
+        ### {{template_name}}
+
+        * __Import:__
+          `{{import_url}}`
+
+        * __Header entry:__
+          `import: {{import_url}}`
+
+        * __Purpose:__
+          {{purpose}}
+
+        * __Use when:__
+          1. {{use_when_1}}
+          2. {{use_when_2}}
+          3. {{use_when_3}}
+
+        * __Basic example:__
+
+          ```{{example_language}}
+          {{basic_example_code}}
+          ```
+          {{basic_macro}}
+
+        * __How to use:__
+          1. {{usage_step_1}}
+          2. {{usage_step_2}}
+          3. {{usage_step_3}}
+
+        * __Special example:__
+
+          ```{{special_example_language}}
+          {{special_example_code}}
+          ```
+          {{special_macro}}
+          {{special_support_markup}}
+
+        * __Special usage notes:__
+          1. {{special_usage_1}}
+          2. {{special_usage_2}}
+          3. {{special_usage_3}}
+```
+
+==================== END: .bmad-core/templates/course-templates.yaml ====================
 
 
 ==================== START: .bmad-core/templates/session-material.yaml ====================
@@ -2977,6 +3153,14 @@ template:
 - [ ] Instructor persona defined (background, role, style)
 - [ ] Style & difficulty level specified
 - [ ] Course type consistent with `project.md` → `## Course Context`
+
+## Templates `[if template imports or template macros are used]`
+
+- [ ] `project.md` → `## Templates` exists
+- [ ] Every template in `## Templates` has a matching `import:` line in the main metadata header
+- [ ] Every material using a template macro has the matching `import:` line in its own metadata header
+- [ ] Template usage examples and constraints are documented in `## Templates`
+- [ ] Community discovery link included: https://github.com/topics/liascript-template
 
 ## Agenda `[if agenda flag = yes in project.md → ## Course Context]`
 
@@ -4799,6 +4983,7 @@ workflow:
       - Outline
       - Didactics
       - Visual Identity
+      - Templates
       - Agenda
       - Sessions
       - Learner Personas
@@ -4824,12 +5009,13 @@ workflow:
     - step: scaffold
       agent: teaching
       command: /scaffold {course-type?}
-      output: "project.md sections: Course Context, Outline, Didactics, Agenda, Sessions"
+      output: "project.md sections: Course Context, Outline, Didactics, Templates, Agenda, Sessions"
       alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
       notes: |
         Fast-track for instructors who know what they want:
         - Single intake interview collects all inputs upfront
         - Auto-generates all structural artefacts in one pass (no approval between steps)
+        - Adds `## Templates` and header imports if template requirements are provided
         - Stops before /coauthor-materials — content authoring remains interactive
         - Use instead of running /init-course → /create-outline → /create-didactics → /create-agenda → /create-session separately
         - Not suitable for improve-existing (use /analyze-existing instead)
@@ -4919,6 +5105,18 @@ workflow:
         - Define all sessions/modules using terminology from course-context
         - Assign learning objectives per session
         - Set duration and type (lecture/exercise)
+
+    - step: manage_templates
+      agent: teaching
+      command: /manage-templates {name?}
+      output: "project.md header imports + project.md → ## Templates"
+      optional: true
+      notes: |
+        Available whenever a LiaScript template is needed:
+        - Adds `import: {url}` lines to the main project metadata header
+        - Documents template purpose, examples, and usage rules in `## Templates`
+        - Includes the community template discovery link: https://github.com/topics/liascript-template
+        - Ensures promoted materials include required imports when they use template macros
 
     # Phase 4: Session Development (Two Approaches)
     - step: session_development
@@ -5211,6 +5409,7 @@ workflow:
       - /create-didactics
       - /create-learner-persona {name?}
       - /create-agenda
+      - /manage-templates {name?}
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
       - /coauthor-materials

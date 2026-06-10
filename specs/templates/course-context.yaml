@@ -39,6 +39,7 @@ template:
 
         * __LiaScript conventions:__
           - [list project-specific rules here]
+          - [If templates are required, mention them briefly here and document details in `## Templates`]
 
     - id: notes
       title: Additional Notes

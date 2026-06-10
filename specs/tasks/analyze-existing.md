@@ -12,7 +12,7 @@ Offers two paths for each missing core section:
 ## Inputs
 
 - `project.md` → `## Course Context` (created by `/init-course`, mandatory)
-- Existing `project.md` sections: `## Outline`, `## Didactics`, `## Agenda`, `## Visual Identity`, `## Sessions`
+- Existing `project.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`
 - Existing folder: `materials/`
 
 ## Output
@@ -32,6 +32,7 @@ Offers two paths for each missing core section:
    | `project.md` → `## Didactics` | always                       |
    | `project.md` → `## Agenda`    | if `project.md` → `## Course Context` agenda = yes |
    | `project.md` → `## Visual Identity`   | optional                     |
+   | `project.md` → `## Templates` | optional; required if template imports or macros are used |
    | `project.md` → `## Sessions` | if sessions expected |
    | `materials/`   | if sessions expected         |
 
@@ -66,6 +67,7 @@ Offers two paths for each missing core section:
    - Sessions without materials
    - Materials without session subsections
    - Inconsistent terminology or persona style
+   - Template macros used without matching `import:` metadata or `## Templates` documentation
    - Missing references or learning objectives
    - Language/tone inconsistencies vs. `project.md` → `## Course Context` conventions
 

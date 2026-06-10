@@ -32,6 +32,7 @@ Generated in sequence without interruption inside `project.md`:
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
+- `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
 - `## Sessions` containing an overview table followed by one subsection per session
 
@@ -66,6 +67,7 @@ Generated in sequence without interruption inside `project.md`:
    - Agenda needed? (for self-paced / single-lesson): yes / no
    - Session approach after scaffold: iterative (one at a time) / batch (all at once)
    - Session count: 💬 free text (number + optional titles, or leave for auto-generation)
+   - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
 
 3. Present a **summary of all inputs** and ask for confirmation:
    > "Summary: [display all inputs]. Should I generate the structure now? (Yes / Adjust)"
@@ -79,18 +81,20 @@ Run each step silently (no approval prompts between steps):
 1. Generate or replace `project.md` → `## Course Context` from collected inputs.
 2. Generate or replace `project.md` → `## Outline`.
 3. Generate or replace `project.md` → `## Didactics` — including the **Persona Voice Sample** section.
-4. Generate or replace `project.md` → `## Agenda` (skip if agenda = no).
-5. Create or replace `project.md` → `## Sessions` with:
+4. If template imports were provided, run `tasks/manage-templates.md` and create or update `project.md` → `## Templates`.
+5. Generate or replace `project.md` → `## Agenda` (skip if agenda = no).
+6. Create or replace `project.md` → `## Sessions` with:
    - An overview table directly below `## Sessions`
    - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - One `### {number}. {title}` subsection per session below the overview table
-6. Fill each session subsection using `templates/session-skeleton.yaml`.
+7. Fill each session subsection using `templates/session-skeleton.yaml`.
 
 After each section is saved, print a brief progress line:
 ```
 ✅ project.md → ## Course Context
 ✅ project.md → ## Outline
 ✅ project.md → ## Didactics
+✅ project.md → ## Templates
 ✅ project.md → ## Agenda
 ✅ project.md → ## Sessions / overview
 ✅ project.md → ## Sessions / 1. Session title
@@ -108,6 +112,7 @@ After each section is saved, print a brief progress line:
    > | Course Context | ✅              |
    > | Outline        | ✅              |
    > | Didactics      | ✅              |
+   > | Templates      | ✅ / skipped    |
    > | Agenda         | ✅ / skipped    |
    > | Sessions       | ✅ overview + [N] subsections |
    >

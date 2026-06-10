@@ -11,6 +11,7 @@ Converts a **Session** into a detailed **Session Material**.
 - skeleton: matching `### {number}. {title}` subsection from `project.md` → `## Sessions`
 - didactics: content from `project.md` → `## Didactics`
 - agenda: content from `project.md` → `## Agenda`
+- templates: imports and usage notes from `project.md` → `## Templates` (if present)
 - **Instructor persona from `project.md` → `## Didactics` (mandatory handoff)**
 - **Style & difficulty level from `project.md` → `## Didactics` (mandatory handoff)**
 - Terminology from `project.md` → `## Course Context`
@@ -34,5 +35,6 @@ Converts a **Session** into a detailed **Session Material**.
 5. Consider didactic inputs.
 6. Generate planned outline.
 7. Apply template.
-8. Save the material file as `materials/{number}-{type}.md`.
-9. Update the overview table in `project.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+8. If the material uses macros from `project.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
+9. Save the material file as `materials/{number}-{type}.md`.
+10. Update the overview table in `project.md` → `## Sessions`: set Material column to ✅ for session `{number}`.

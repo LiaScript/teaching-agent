@@ -13,6 +13,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 - Professor persona & style from `project.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)
 - Agenda info (modules/sessions) from `project.md` → `## Agenda`
 - Terminology & conventions from `project.md` → `## Course Context`
+- LiaScript template usage rules from `project.md` → `## Templates` (if present)
 - Currently open document `materials/{number}-{type}.md`
 - Optionally, corresponding session subsection in `project.md` → `## Sessions`
 - Didactic inputs from `project.md` → `## Didactics`
@@ -31,14 +32,18 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **If the current session subsection in `project.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
-4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
+4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
+
+   **Critical engagement rules — always active:**
    - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
    - If a learning objective from `project.md` → `## Agenda` is not addressed: flag it before moving on
    - If the instructor's suggestion contradicts the didactic concept in `project.md` → `## Didactics`: raise it as a conflict
    - If an explanation is too long, too abstract, or not suited for the target audience: say so
+   - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing
    - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
-   - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
+   - Positive feedback only when it is genuinely earned and specific
+5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update the overview table in `project.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
 8. After approval, 🎛️ ask with structured question (single choice):

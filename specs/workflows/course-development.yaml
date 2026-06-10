@@ -37,6 +37,7 @@ workflow:
       - Outline
       - Didactics
       - Visual Identity
+      - Templates
       - Agenda
       - Sessions
       - Learner Personas
@@ -62,12 +63,13 @@ workflow:
     - step: scaffold
       agent: teaching
       command: /scaffold {course-type?}
-      output: "project.md sections: Course Context, Outline, Didactics, Agenda, Sessions"
+      output: "project.md sections: Course Context, Outline, Didactics, Templates, Agenda, Sessions"
       alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
       notes: |
         Fast-track for instructors who know what they want:
         - Single intake interview collects all inputs upfront
         - Auto-generates all structural artefacts in one pass (no approval between steps)
+        - Adds `## Templates` and header imports if template requirements are provided
         - Stops before /coauthor-materials — content authoring remains interactive
         - Use instead of running /init-course → /create-outline → /create-didactics → /create-agenda → /create-session separately
         - Not suitable for improve-existing (use /analyze-existing instead)
@@ -157,6 +159,18 @@ workflow:
         - Define all sessions/modules using terminology from course-context
         - Assign learning objectives per session
         - Set duration and type (lecture/exercise)
+
+    - step: manage_templates
+      agent: teaching
+      command: /manage-templates {name?}
+      output: "project.md header imports + project.md → ## Templates"
+      optional: true
+      notes: |
+        Available whenever a LiaScript template is needed:
+        - Adds `import: {url}` lines to the main project metadata header
+        - Documents template purpose, examples, and usage rules in `## Templates`
+        - Includes the community template discovery link: https://github.com/topics/liascript-template
+        - Ensures promoted materials include required imports when they use template macros
 
     # Phase 4: Session Development (Two Approaches)
     - step: session_development
@@ -449,6 +463,7 @@ workflow:
       - /create-didactics
       - /create-learner-persona {name?}
       - /create-agenda
+      - /manage-templates {name?}
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
       - /coauthor-materials

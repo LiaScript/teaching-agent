@@ -16,6 +16,7 @@ The course context acts as the governance layer: it defines the course type, ter
 ## Output
 
 - `project.md` → `## Course Context`
+- Optional: `project.md` main metadata header `import:` lines and `## Templates`
 - Structure based on `templates/course-context.yaml`
 
 ## Steps
@@ -55,7 +56,11 @@ The course context acts as the governance layer: it defines the course type, ter
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
 8. Save the generated context by creating or replacing `project.md` → `## Course Context`.
-9. Confirm completion and suggest the next step based on course type:
+9. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
+   - Add `import: {url}` to the main metadata header if missing
+   - Create or update `project.md` → `## Templates`
+   - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
+10. Confirm completion and suggest the next step based on course type:
    - **lecture-series / workshop** → `/create-outline`
    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`

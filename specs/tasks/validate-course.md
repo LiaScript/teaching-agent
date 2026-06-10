@@ -11,6 +11,7 @@ Can be run in two modes:
 ## Inputs
 
 - `project.md` → `## Course Context` — course type and conventions
+- `project.md` → `## Templates` — LiaScript template imports, macros, and examples (if present)
 - `checklists/course-quality-checklist.md` — structured checklist
 - `data/liascript-cheat-sheet.md` — syntax reference for LiaScript checks
 - `templates/session-validation.yaml` — template for each stored session validation report
@@ -64,6 +65,12 @@ Rules:
    - [ ] All media elements have alt text
    - [ ] No unclosed `<div>` blocks
 
+   **Template checks** `[if `project.md` → `## Templates` exists or the material uses template macros]`:
+   - [ ] Every template macro used in the material is documented in `project.md` → `## Templates`
+   - [ ] The material metadata header includes the matching `import: {url}` line for every used template
+   - [ ] The project metadata header includes the matching `import: {url}` line for every documented template
+   - [ ] Template use follows the examples and constraints documented in `## Templates`
+
 5. Fill `templates/session-validation.yaml` for this session with:
    - Material path
    - Result: PASS / FAIL / PASS with concerns
@@ -72,6 +79,7 @@ Rules:
    - Content findings
    - Persona & style findings
    - LiaScript syntax findings
+   - Template findings, if applicable
    - Recommended actions
    - Line references where possible
 6. Create or replace the rendered `#### Validation Report` in the matching session subsection under `project.md` → `## Sessions`.
@@ -90,6 +98,11 @@ Rules:
    - `project.md` → `## Course Context` complete (course type, terminology, agenda flag, conventions)
    - `project.md` → `## Outline`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
    - `project.md` → `## Didactics`: instructor persona, didactic concept, style, difficulty level
+
+4b. **Check Templates** `[if `project.md` → `## Templates` exists or material files use template macros]`:
+   - Every template documented in `project.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header
+   - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header
+   - Template usage in materials follows the documented examples and constraints in `## Templates`
 
 5. **Check Agenda** `[if agenda flag = yes in project.md → ## Course Context]`:
    - All sessions have title, duration, type, learning objective, summary
@@ -125,6 +138,9 @@ Rules:
    #### Course-Level Findings
    ##### Foundation
    - [issue or ✅ OK]
+
+   ##### Templates
+   - [issue or ✅ OK / SKIPPED]
 
    ##### Agenda
    - [issue or ✅ OK / SKIPPED (course type)]

@@ -127,6 +127,7 @@ project_memory:
     - "Outline"
     - "Didactics"
     - "Visual Identity"
+    - "Templates"
     - "Agenda"
     - "Sessions"
     - "Learner Personas"
@@ -186,6 +187,7 @@ commands:
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `project.md` → `## Learner Personas`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
+  /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `project.md` → `## Templates`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
@@ -211,6 +213,7 @@ dependencies:
     - create-outline.md
     - create-didactics.md
     - create-agenda.md
+    - manage-templates.md
     - create-session-skeleton.md
     - promote-session.md
     - coauthor-materials.md
@@ -223,6 +226,7 @@ dependencies:
     - course-outline.yaml
     - course-didactics.yaml
     - course-agenda.yaml
+    - course-templates.yaml
     - session-skeleton.yaml
     - session-material.yaml
     - session-validation.yaml

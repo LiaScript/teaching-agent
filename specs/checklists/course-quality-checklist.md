@@ -29,6 +29,14 @@
 - [ ] Style & difficulty level specified
 - [ ] Course type consistent with `project.md` → `## Course Context`
 
+## Templates `[if template imports or template macros are used]`
+
+- [ ] `project.md` → `## Templates` exists
+- [ ] Every template in `## Templates` has a matching `import:` line in the main metadata header
+- [ ] Every material using a template macro has the matching `import:` line in its own metadata header
+- [ ] Template usage examples and constraints are documented in `## Templates`
+- [ ] Community discovery link included: https://github.com/topics/liascript-template
+
 ## Agenda `[if agenda flag = yes in project.md → ## Course Context]`
 
 - [ ] All sessions have: title, duration, type, learning objective, summary

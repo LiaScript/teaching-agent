@@ -74,14 +74,14 @@ Teaching-Agent guides you through **6 phases** — starting with project initial
 
 ```mermaid
 flowchart TD
-    INIT["**Phase 0 · INIT**<br/>/init<br/>→ context.md"]
-    OUTLINE["**Phase 1 · FOUNDATION**<br/>/create-outline<br/>→ outline.md"]
-    DIDACTICS["**Phase 2 · DIDACTICS**<br/>/create-didactics<br/>→ didactics.md"]
-    AGENDA["**Phase 3 · PLANNING**<br/>/create-agenda<br/>→ agenda.md"]
-    DEV["**Phase 4 · DEVELOPMENT**<br/>/create-session → skeletons/<br/>/promote-session → materials/<br/>/coauthor-materials"]
+    INIT["**Phase 0 · INIT**<br/>/init-course<br/>→ project.md / Course Context"]
+    OUTLINE["**Phase 1 · FOUNDATION**<br/>/create-outline<br/>→ project.md / Outline"]
+    DIDACTICS["**Phase 2 · DIDACTICS**<br/>/create-didactics<br/>→ project.md / Didactics"]
+    AGENDA["**Phase 3 · PLANNING**<br/>/create-agenda<br/>→ project.md / Agenda"]
+    DEV["**Phase 4 · DEVELOPMENT**<br/>/create-session → project.md / Session Skeletons<br/>/promote-session → materials/<br/>/coauthor-materials"]
     FINAL["**Phase 5 · FINALIZATION**<br/>/validate-course<br/>/assemble-bundle"]
 
-    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ docs/visuals.md"]
+    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ project.md / Visual Identity"]
     ART2["🎨 **Artist-Agent**<br/>/create-image<br/>(on demand)"]
     DEVAGT["🛠️ **Development-Agent**<br/>/manage-git · /create-project<br/>(anytime)"]
 
@@ -140,7 +140,7 @@ The agent will introduce itself and show available commands.
 - Writes an abstract summarizing content and benefits
 - Optionally creates a logo prompt
 
-**Output:** `docs/lecture-outline.md`
+**Output:** `project.md` → `## Outline`
 
 **Example interaction:**
 ```
@@ -169,7 +169,7 @@ Agent: Perfect! Now let's define the abstract...
 - Sets style & difficulty level (humorous, formal, practical, etc.)
 - Defines course type (introductory, advanced, hands-on, self-paced)
 
-**Output:** `docs/lecture-didactics.md`
+**Output:** `project.md` → `## Didactics`
 
 **Why this matters:**
 From this point forward, the agent **adopts your professor persona** when creating materials, ensuring consistent tone and style throughout the course.
@@ -185,7 +185,7 @@ From this point forward, the agent **adopts your professor persona** when creati
 - For each session: title, duration, type (lecture/exercise), learning objectives, summary
 - Links each session to its materials file path
 
-**Output:** `docs/lecture-agenda.md`
+**Output:** `project.md` → `## Agenda`
 
 **The agent now writes in your professor's voice!**
 
@@ -204,7 +204,7 @@ From this point forward, the agent **adopts your professor persona** when creati
 - Creates a structured framework for a session
 - Includes placeholders for content, activities, and references
 
-**Output:** `skeletons/{number}-{type}.md`
+**Output:** `project.md` → `## Session Skeletons`
 
 **Example:**
 ```
@@ -262,17 +262,17 @@ Agent: Got it! Let me suggest some content for the introduction...
 
 ---
 
-### Step 7: Validate Your Lecture
+### Step 7: Validate Your Course
 
-**Command:** `/validate-lecture`
+**Command:** `/validate-course`
 
 **What it does:**
-- Checks consistency across outline, didactics, agenda, and materials
+- Checks consistency across `project.md` sections and materials
 - Verifies all sessions have materials
 - Ensures learning objectives are met
 - Confirms numbering and structure
 
-**Output:** `docs/validation-report.md`
+**Output:** `project.md` → `## Validation`
 
 ---
 
@@ -285,7 +285,7 @@ Agent: Got it! Let me suggest some content for the introduction...
 - Creates an index file
 - Generates a distributable bundle
 
-**Output:** `lecture-bundle/` or `.zip`
+**Output:** `course-bundle/`
 
 ---
 
@@ -294,14 +294,14 @@ Agent: Got it! Let me suggest some content for the introduction...
 | Command                               | Purpose                      | Output                      |
 | ------------------------------------- | ---------------------------- | --------------------------- |
 | `/help`                               | Show available commands      | —                           |
-| `/create-outline`                     | Define course foundation     | `docs/lecture-outline.md`   |
-| `/create-didactics`                   | Design teaching approach     | `docs/lecture-didactics.md` |
-| `/create-agenda`                      | Structure sessions           | `docs/lecture-agenda.md`    |
-| `/create-session {n} {type} {title?}` | Create session skeleton      | `skeletons/{n}-{type}.md`   |
+| `/create-outline`                     | Define course foundation     | `project.md` → `## Outline` |
+| `/create-didactics`                   | Design teaching approach     | `project.md` → `## Didactics` |
+| `/create-agenda`                      | Structure sessions           | `project.md` → `## Agenda` |
+| `/create-session {n} {type} {title?}` | Create session skeleton      | `project.md` → `## Session Skeletons`   |
 | `/promote-session {n} {type}`         | Expand to full materials     | `materials/{n}-{type}.md`   |
 | `/coauthor-materials`                 | Interactive content creation | Refined materials           |
-| `/validate-lecture`                   | Check consistency            | `docs/validation-report.md` |
-| `/assemble-bundle`                    | Package everything           | `lecture-bundle/`           |
+| `/validate-course`                    | Check consistency            | `project.md` → `## Validation` |
+| `/assemble-bundle`                    | Package everything           | `course-bundle/`            |
 | `/exit`                               | End session                  | —                           |
 
 ---
@@ -330,7 +330,7 @@ Agent: Got it! Let me suggest some content for the introduction...
 6. @teaching-agent /coauthor-materials
    → Add interactive code examples and quizzes
 
-7. @teaching-agent /validate-lecture
+7. @teaching-agent /validate-course
    → Check everything is consistent
 
 8. @teaching-agent /assemble-bundle
