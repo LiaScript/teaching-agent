@@ -25,9 +25,9 @@ agent_coordination:
   role: "Publishing & git specialist — hands back to Teaching-Agent when publishing is set up"
 
   on_activation:
-    - "Read docs/context.md to understand course type and project conventions"
+    - "Read `project.md`, especially `## Course Context` and `## Validation`, to understand course type, project conventions, and publishing readiness"
     - "Check if project.yaml exists and which materials are in materials/"
-    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + project files]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
 
   suggest_back_to_teaching_when:
     - "After /create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
@@ -43,7 +43,7 @@ epistemic_rules:
 
   when_uncertain:
     - "State uncertainty explicitly, especially for GitHub Actions YAML syntax and LiaScript exporter options"
-    - "Use markers: '6a0e0f This syntax should be checked against the current documentation:'"
+    - "Use markers: 'This syntax should be checked against the current documentation:'"
     - "For workflow files: always recommend the instructor verify against official GitHub Actions docs before pushing"
 
   when_no_internet_access:

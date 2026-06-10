@@ -1,0 +1,44 @@
+template:
+  id: session-validation
+  name: 'Session Validation Report'
+  version: 1.0
+  output:
+    format: markdown
+    filename: project.md
+    section: Sessions
+    parent: "### {{number}}. {{title}}"
+    heading: "#### Validation Report"
+    replace_existing: true
+  title: 'Session {{number}} Validation'
+  sections:
+    - id: report-heading
+      title: Report Heading
+      template: |
+        #### Validation Report
+    - id: metadata
+      title: Metadata
+      template: |
+        __Date:__ {{date}}
+        __Material:__ materials/{{number}}-{{type}}.md
+        __Result:__ {{result}}
+        __Mode:__ {{mode}}
+    - id: content
+      title: Content
+      template: |
+        ##### Content
+        - {{content_findings}}
+    - id: persona-style
+      title: Persona & Style
+      template: |
+        ##### Persona & Style
+        - {{persona_style_findings}}
+    - id: liascript-syntax
+      title: LiaScript Syntax
+      template: |
+        ##### LiaScript Syntax
+        - {{liascript_syntax_findings}}
+    - id: recommended-actions
+      title: Recommended Actions
+      template: |
+        ##### Recommended Actions
+        1. {{recommended_actions}}

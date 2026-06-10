@@ -4,7 +4,8 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/agenda.md
+    filename: project.md
+    section: Agenda
   title: 'Course Agenda'
   sections:
     - id: overview

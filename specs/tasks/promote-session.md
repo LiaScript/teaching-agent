@@ -2,18 +2,18 @@
 
 ## Purpose
 
-Converts a **Session Skeleton** into a detailed **Session Material**.  
-**The agent also adopts the instructor persona and style from `docs/didactics.md` into its own persona, so all content is written in this voice.**
+Converts a **Session** into a detailed **Session Material**.  
+**The agent also adopts the instructor persona and style from `project.md` → `## Didactics` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
 - number, type
-- skeleton: file from `skeletons/`
-- didactics: content from `docs/didactics.md`
-- agenda: content from `docs/agenda.md`
-- **Instructor persona from `docs/didactics.md` (mandatory handoff)**
-- **Style & difficulty level from `docs/didactics.md` (mandatory handoff)**
-- Terminology from `docs/context.md`
+- skeleton: matching `### {number}. {title}` subsection from `project.md` → `## Sessions`
+- didactics: content from `project.md` → `## Didactics`
+- agenda: content from `project.md` → `## Agenda`
+- **Instructor persona from `project.md` → `## Didactics` (mandatory handoff)**
+- **Style & difficulty level from `project.md` → `## Didactics` (mandatory handoff)**
+- Terminology from `project.md` → `## Course Context`
 
 ## Output
 
@@ -22,8 +22,8 @@ Converts a **Session Skeleton** into a detailed **Session Material**.
 
 ## Steps
 
-1. Load skeleton.
-2. Read `docs/context.md` for terminology and conventions.
+1. Load the matching skeleton subsection from `project.md` → `## Sessions`.
+2. Read `project.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
 4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
 
@@ -34,7 +34,5 @@ Converts a **Session Skeleton** into a detailed **Session Material**.
 5. Consider didactic inputs.
 6. Generate planned outline.
 7. Apply template.
-8. Save the file.
-9. Update `docs/sessions.md`: set Material column to ✅ for session `{number}`.
-7. Apply template.
-8. Save the file.
+8. Save the material file as `materials/{number}-{type}.md`.
+9. Update the overview table in `project.md` → `## Sessions`: set Material column to ✅ for session `{number}`.

@@ -4,26 +4,26 @@
 
 Creates the **Course Agenda** as a structured schedule for the course.  
 Defines sessions/modules with title, duration, type (lecture/exercise), learning objectives, summary, and the corresponding materials files.
-**The agent also adopts the instructor persona and style from `docs/didactics.md` into its own persona, so all content is written in this voice.**
+**The agent also adopts the instructor persona and style from `project.md` → `## Didactics` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
-- Learning objectives from `docs/outline.md#Learning-Objectives`
-- Abstract from `docs/outline.md#Abstract`
-- Time commitment from `docs/outline.md#Time-Commitment`
-- Didactic concept from `docs/didactics.md#Didactic-Concept`
-- **Instructor persona from `docs/didactics.md#Professor-Persona` (mandatory handoff)**
-- **Style & difficulty level from `docs/didactics.md` (mandatory handoff)**
-- Course type from `docs/context.md`
+- Learning objectives from `project.md` → `## Outline` / `### Learning Objectives`
+- Abstract from `project.md` → `## Outline` / `### Abstract`
+- Time commitment from `project.md` → `## Outline` / `### Time Commitment`
+- Didactic concept from `project.md` → `## Didactics` / `### Didactic Concept`
+- **Instructor persona from `project.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)**
+- **Style & difficulty level from `project.md` → `## Didactics` (mandatory handoff)**
+- Course type from `project.md` → `## Course Context`
 
 ## Output
 
-- `docs/agenda.md` (Markdown file)
+- `project.md` → `## Agenda`
 - Structure based on `templates/course-agenda.yaml`
 
 ## Steps
 
-1. Read `docs/context.md`:
+1. Read `project.md` → `## Course Context`:
    - Check `agenda` field in the profile:
      - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `/create-session 1 {type}`. Stop here.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
@@ -40,11 +40,11 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 - From this step, the agent writes in the tone of the instructor persona.
 - All agenda descriptions reflect this style.
 
-5. Define sessions/modules using the terminology from `docs/context.md`.
+5. Define sessions/modules using the terminology from `project.md` → `## Course Context`.
 6. Build the agenda in a structured form adapted to the pacing model:
    - **lecture-series**: sessions with time slots and weekly schedule
    - **workshop**: blocks with approximate time per block
    - **self-paced**: modules without fixed time slots, estimated duration only
    - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
 7. Fill the `templates/course-agenda.yaml` template with the results.
-8. Save the file as `docs/agenda.md`.
+8. Save the generated agenda by creating or replacing `project.md` → `## Agenda`.

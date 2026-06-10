@@ -25,24 +25,44 @@ workflow:
       id: learner-agent
       role: "Learner personas and perspective-based quality review"
 
+  project_memory:
+    canonical_file: project.md
+    rule: >-
+      All generated planning/state/review artifacts are stored as sections in `project.md`.
+      Keep final LiaScript materials in `materials/`, generated visual assets and prompts in
+      `assets/`, and publishing/runtime files such as `project.yaml` and `.github/workflows/`
+      as separate files.
+    sections:
+      - Course Context
+      - Outline
+      - Didactics
+      - Visual Identity
+      - Agenda
+      - Sessions
+      - Learner Personas
+      - Persona Reviews
+      - Validation
+      - Analysis Status
+      - Notes Backup
+
   sequence:
     # Phase 0: Project Initialization
     - step: init
       agent: teaching
       command: /init-course
-      output: docs/context.md
+      output: "project.md → ## Course Context"
       notes: |
         First mandatory step for every new course:
         - Choose course type (lecture-series / self-paced / workshop / single-lesson / improve-existing)
         - Set terminology, persona type, pacing, assessment defaults
         - Define project-level conventions (language, tone, accessibility)
-        - All subsequent steps read this file as their governance layer
+        - All subsequent steps read `project.md`, especially `## Course Context`, as their governance layer
 
     # Phase 0-alt: Scaffold Fast-Track (replaces Phase 0–3 in one pass)
     - step: scaffold
       agent: teaching
       command: /scaffold {course-type?}
-      output: docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, skeletons/, docs/sessions.md
+      output: "project.md sections: Course Context, Outline, Didactics, Agenda, Sessions"
       alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
       notes: |
         Fast-track for instructors who know what they want:
@@ -56,21 +76,21 @@ workflow:
     - step: analyze_existing
       agent: teaching
       command: /analyze-existing
-      output: docs-status.md
+      output: "project.md → ## Analysis Status"
       dependencies: [init]
       condition: course_type == improve-existing
       notes: |
-        Scan project for existing docs and fill gaps:
-        - Check docs/outline.md, docs/didactics.md, docs/agenda.md, skeletons/, materials/
-        - For missing core docs: offer auto-generate or interactive creation
+        Scan project for existing sections and fill gaps:
+        - Check `project.md` sections `## Outline`, `## Didactics`, `## Agenda`, `## Sessions`, plus `materials/`
+        - For missing core sections: offer auto-generate or interactive creation
         - List improvement opportunities and suggest next steps
-        - Skip all of Phase 1–3 if docs already exist
+        - Skip all of Phase 1–3 if sections already exist
 
     # Phase 1: Foundation
     - step: create_outline
       agent: teaching
       command: /create-outline
-      output: docs/outline.md
+      output: "project.md → ## Outline"
       dependencies: [init]
       notes: |
         Define the course foundation:
@@ -81,7 +101,7 @@ workflow:
     - step: create_didactics
       agent: teaching
       command: /create-didactics
-      output: docs/didactics.md
+      output: "project.md → ## Didactics"
       dependencies: [create_outline]
       notes: |
         Define teaching approach:
@@ -93,12 +113,12 @@ workflow:
     - step: create_learner_personas
       agent: teaching
       command: /create-learner-persona {name?}
-      output: docs/learner-personas.md
+      output: "project.md → ## Learner Personas"
       dependencies: [create_didactics]
       optional: true
       notes: |
         Create one or more evidence-based learner personas (optional but recommended):
-        - Quick mode: derive directly from docs/outline.md + docs/didactics.md
+        - Quick mode: derive directly from `## Outline` and `## Didactics`
         - Data-driven mode: generate research prompt, then build from provided data
         - Number of personas: flexible — 1 typical, or 2–3 for target group diversity
         - Personas are used later by /review-as-persona to give learner-perspective feedback
@@ -108,7 +128,7 @@ workflow:
     - step: create_visuals
       agent: artist
       command: /create-visuals
-      output: docs/visuals.md
+      output: "project.md → ## Visual Identity"
       dependencies: [create_outline, create_didactics]
       notes: |
         Create visual identity aligned with teaching persona:
@@ -130,7 +150,7 @@ workflow:
     - step: create_agenda
       agent: teaching
       command: /create-agenda
-      output: docs/agenda.md
+      output: "project.md → ## Agenda"
       dependencies: [create_didactics, create_visuals]
       notes: |
         Build session structure (skipped for single-lesson):
@@ -146,8 +166,8 @@ workflow:
           description: "Create one session at a time, fully develop it, then move to next"
           sequence:
             - command: /create-session {number} {type} {title}
-              output: skeletons/{number}-{type}.md
-              notes: "Create skeleton for session N"
+              output: "project.md → ## Sessions"
+              notes: "Create skeleton subsection for session N and update the Sessions overview table"
             - command: /promote-session {number} {type}
               output: materials/{number}-{type}.md
               notes: "Convert skeleton to full material"
@@ -170,13 +190,13 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: docs/learner-personas.md exists
+              condition: "project.md contains ## Learner Personas"
               notes: |
                 Learner-perspective review after syntax validation (optional):
                 - Agent embodies persona and reads material as that learner
                 - Reviews: language level, cognitive load, relevance, accessibility,
                   format fit, and assumed prior knowledge gaps
-                - Saves report to docs/persona-review-{name}-{number}-{type}.md
+                - Saves report to `project.md` → `## Persona Reviews`
                 - Agent stays in persona for interactive follow-up chat
                 - Run for each defined persona, or just one
                 - If issues found: fix with /coauthor-materials, then optionally re-review
@@ -186,8 +206,8 @@ workflow:
           description: "Create all skeletons first, then promote all, then coauthor all"
           sequence:
             - command: /create-session {number} {type} {title}
-              output: skeletons/{number}-{type}.md
-              notes: "Create all session skeletons"
+              output: "project.md → ## Sessions"
+              notes: "Create all session skeleton subsections and update the Sessions overview table"
               repeat: for all sessions
             - command: /promote-session {number} {type}
               output: materials/{number}-{type}.md
@@ -206,7 +226,7 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: docs/learner-personas.md exists
+              condition: "project.md contains ## Learner Personas"
               notes: "Learner-perspective review per material — see iterative approach for full notes"
               repeat: for all materials
 
@@ -219,23 +239,24 @@ workflow:
     - step: validate_course
       agent: teaching
       command: /validate-course
-      output: docs/validation-report.md
+      output: "project.md → ## Sessions plus project.md → ## Validation"
       dependencies: [session_development]
       notes: |
         Full course check before publishing:
-        - Cross-document consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
-        - All sessions Fertig ✅ in docs/sessions.md
+        - Project-memory consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
+        - All sessions Fertig ✅ in `project.md` → `## Sessions`
         - LiaScript syntax check on all material files
-        - Produces docs/validation-report.md with PASS/FAIL + issues list
+        - Creates or replaces one `#### Validation Report` per material inside the matching `project.md` → `## Sessions` session subsection
+        - Replaces `project.md` → `## Validation` → `### Latest Validation Summary` with `Mode: course`, PASS/FAIL, and issue count
 
         Feedback loop if issues found:
         - Open /coauthor-materials {number} {type} for affected sessions
-        - Agent loads docs/validation-report.md and works through issues
+        - Agent loads the matching session's `#### Validation Report` and works through issues
         - Re-run /validate-course after fixes until report is clean
         - Instructor confirms "Report ist akzeptabel" to exit loop
 
         Publishing Gate (enforced):
-        - PASS → proceed to /create-project or /assemble-bundle
+        - `Mode: course` + PASS → proceed to /create-project or /assemble-bundle
         - FAIL → publishing commands blocked until re-validation passes
         - PASS with concerns → instructor decides explicitly
 
@@ -257,9 +278,9 @@ workflow:
       command: /create-project
       output: project.yaml + .github/workflows/
       optional: true
-      condition: user_requests_publishing AND first_time_setup AND validation_report == PASS
+      condition: user_requests_publishing AND first_time_setup AND project_validation == PASS
       notes: |
-        Only when the instructor explicitly wants to publish AND docs/validation-report.md shows PASS.
+        Only when the instructor explicitly wants to publish AND `project.md` → `## Validation` → `### Latest Validation Summary` shows `Mode: course` and `Result: PASS`.
         Recommended when multiple materials exist and the course is ready to share.
         - Generate project.yaml with all materials from materials/
         - Apply visuals colors to project.yaml
@@ -284,12 +305,13 @@ workflow:
       command: /assemble-bundle
       output: course-bundle/
       optional: true
-      condition: validation_report == PASS
+      condition: project_validation == PASS
       notes: |
-        Create complete distributable package (requires PASS in docs/validation-report.md):
-        - Pre-flight check: blocks if docs/validation-report.md is missing or FAIL
-        - Collects docs/context.md, docs/outline.md, docs/didactics.md, docs/sessions.md, all materials/
-        - Conditionally includes docs/agenda.md, skeletons/, assets/, notes/
+        Create complete distributable package (requires `Mode: course` and `Result: PASS` in `project.md` → `## Validation` → `### Latest Validation Summary`):
+        - Pre-flight check: blocks if `### Latest Validation Summary` is missing, not `Mode: course`, or not `Result: PASS`
+        - Collects `project.md` plus all materials/
+        - Ensures optional sections (`## Agenda`, `## Sessions`, `## Notes Backup`) are represented if present
+        - Includes assets/ if present
         - Generates bundle-index.md with content table and quick-start guide
 
   usage_notes: |
@@ -300,7 +322,7 @@ workflow:
     - Choose iterative or batch approach for sessions
     - Publishing is optional and user-initiated — only when explicitly requested
     - /create-project recommended when multiple materials exist and course is ready to share
-    - docs/sessions.md tracks skeleton/material/done status per session automatically
+    - `project.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Fertig status automatically
     - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
     - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
 
@@ -416,7 +438,7 @@ workflow:
         publishing: "usually not needed for a single lesson"
       improve-existing:
         sequence: [/init-course, /analyze-existing, /coauthor-materials, /validate-course]
-        note: "/analyze-existing scans for missing docs and offers to auto-generate or create them interactively"
+        note: "/analyze-existing scans for missing `project.md` sections and offers to auto-generate or create them interactively"
         publishing: "optional: /update-project if project.yaml already exists"
 
     teaching_agent_commands:

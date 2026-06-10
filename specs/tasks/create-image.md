@@ -8,10 +8,10 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
-- Image style guidelines from `docs/visuals.md#image-prompt-style`
-- Website color palette from `docs/visuals.md#website-colors`
-- Course context from `docs/outline.md#abstract` (for thematic alignment)
-- Course language from `docs/context.md` (Language field — for in-image text language)
+- Image style guidelines from `project.md` → `## Visual Identity` / `### Course Image Generation Guidelines`
+- Website color palette from `project.md` → `## Visual Identity` / `### Website Color Palette`
+- Course context from `project.md` → `## Outline` / `### Abstract` (for thematic alignment)
+- Course language from `project.md` → `## Course Context` (Language field — for in-image text language)
 
 ## Output
 
@@ -21,10 +21,10 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Steps
 
 1. Receive user description of what should be visualized.
-2. Read image style guidelines from `docs/visuals.md#image-prompt-style`.
-3. Read color palette from `docs/visuals.md#website-colors`.
-4. Read course theme from `docs/outline.md#abstract` for context.
-5. Read course language from `docs/context.md` (Language field, e.g., `de`, `en`). If `docs/context.md` is unavailable, infer the language from the user's description as fallback.
+2. Read image style guidelines from `project.md` → `## Visual Identity` / `### Course Image Generation Guidelines`.
+3. Read color palette from `project.md` → `## Visual Identity` / `### Website Color Palette`.
+4. Read course theme from `project.md` → `## Outline` / `### Abstract` for context.
+5. Read course language from `project.md` → `## Course Context` (Language field, e.g., `de`, `en`). If `project.md` → `## Course Context` is unavailable, infer the language from the user's description as fallback.
 6. Analyze user description and extract:
    - Main subject/concept
    - Required elements or details
@@ -61,7 +61,7 @@ Visual Parameters:
 - Composition: [layout approach]
 - Lighting: [lighting style]
 - Mood: [atmosphere]
-- In-image text language: [language from docs/context.md, e.g., "German" / "English"]
+- In-image text language: [language from `project.md` → `## Course Context`, e.g., "German" / "English"]
 
 Complete Prompt:
 "[Full detailed prompt ready for image generator. If the image contains visible text, end with: 'All text visible in the image (labels, headings, UI elements) must be written in [language].']" 

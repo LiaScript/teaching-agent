@@ -8,24 +8,24 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 **Two modes:**
 
-- **Quick mode** — persona derived directly from `docs/outline.md` (target audience) and `docs/didactics.md`
+- **Quick mode** — persona derived directly from `project.md` → `## Outline` (target audience) and `project.md` → `## Didactics`
 - **Data-driven mode** — generates a structured research prompt; instructor provides external research data; agent writes persona from that data
 
 ## Inputs
 
 - Name (optional — agent suggests if not provided)
-- Target audience from `docs/outline.md#Target-Audience`
-- Difficulty level, course type, and style from `docs/didactics.md`
+- Target audience from `project.md` → `## Outline` / `### Target Audience`
+- Difficulty level, course type, and style from `project.md` → `## Didactics`
 - Optional: research data provided by instructor (for data-driven mode)
 
 ## Output
 
-- `docs/learner-personas.md` — created if not exists; new persona appended as separate section if exists
+- `project.md` → `## Learner Personas` — created if missing; new persona appended as a separate entry if it exists
 
 ## Steps
 
-1. Read `docs/outline.md` for target audience and learning objectives.
-2. Read `docs/didactics.md` for difficulty level, course type, and instructor style.
+1. Read `project.md` → `## Outline` for target audience and learning objectives.
+2. Read `project.md` → `## Didactics` for difficulty level, course type, and instructor style.
 3. 💬 Ask for persona name and icon (optional):
    - Name: if left empty, agent generates a name typical for the target context (e.g., regional, age-appropriate)
    - Icon: agent always selects a fitting emoji that reflects the persona's background, occupation, or dominant trait (e.g., 👩‍🔧 for a trainee in a trade, 🧑‍💻 for a tech learner, 📦 for logistics). The instructor can override it at the confirmation step.
@@ -37,7 +37,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 ### Quick Mode
 
-5. Extract key characteristics from the target audience description in `docs/outline.md`.
+5. Extract key characteristics from the target audience description in `project.md` → `## Outline`.
 6. Build a realistic profile covering all 7 dimensions (see **Persona Structure** below).
 7. Mark clearly which values are inferred/assumed vs. drawn from the docs.
 8. Proceed to Step 10.
@@ -51,7 +51,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
    ```
    ---
    🔍 **Research Request: Learner Persona**
-   **Context:** [Course title and target audience from docs/outline.md]
+   **Context:** [Course title and target audience from `project.md` → `## Outline`]
    **Goal:** Create an evidence-based learner persona for [audience]
    **Dimensions to research:**
    1. Sociodemographics: age distribution, gender, migration background
@@ -78,10 +78,10 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 10. Generate persona section using the **Persona Structure** template (see below).
 11. Display a 3-line summary and 🎛️ ask for confirmation:
-    > "Persona [Icon] [Name] created. [Brief summary]. Save to `docs/learner-personas.md`? (Yes / Adjust)"
-12. On approval: save to `docs/learner-personas.md`.
-    - If file does not exist: create it with a short file header and the persona section
-    - If file exists: append as a new `---`-separated section
+    > "Persona [Icon] [Name] created. [Brief summary]. Save to `project.md` → `## Learner Personas`? (Yes / Adjust)"
+12. On approval: save to `project.md` → `## Learner Personas`.
+    - If `## Learner Personas` does not exist: create it with a short section intro and the persona entry
+    - If it exists: append as a new `---`-separated entry
 13. Suggest next step:
     > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
@@ -89,7 +89,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 ## Persona Structure
 
-Each persona section in `docs/learner-personas.md` follows this structure:
+Each persona section in `project.md` → `## Learner Personas` follows this structure:
 
 ```markdown
 ---

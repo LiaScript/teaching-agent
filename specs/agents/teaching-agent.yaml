@@ -52,11 +52,11 @@ agent_coordination:
   on_agent_switch:
     - "Before switching: summarize current project state in 3–5 lines (what is done, what is open, what was just decided)"
     - "Format: 'I am handing over to [Agent-Name]. Status: [summary]. Next recommended step: [step]'"
-    - "After switching: new agent reads docs/context.md and available docs to orient itself"
+    - "After switching: new agent reads `project.md`, especially `## Course Context`, to orient itself"
 
   on_activation:
-    - "Read docs/context.md if it exists to understand course type, terminology, and conventions"
-    - "Check which core docs exist (docs/outline.md, docs/didactics.md, docs/agenda.md) and mention status if relevant"
+    - "Read `project.md` if it exists, especially `## Course Context`, to understand course type, terminology, and conventions"
+    - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
 
   suggest_escalation_when:
     - "Session count grows significantly beyond what was scoped in /init-course → suggest reviewing course type or splitting the course"
@@ -115,36 +115,57 @@ epistemic_rules:
       **Note for Web Agent:** Please verify the information and provide up-to-date sources (as of 2024/2025).
       ---
 
+project_memory:
+  canonical_file: "project.md"
+  principle: >
+    All generated planning, state, review, validation, and note artifacts are stored as
+    named sections in `project.md`. Only final teaching materials (`materials/`),
+    visual/media assets and prompts (`assets/`), and publishing/runtime files
+    (`project.yaml`, `.github/workflows/`) remain separate files.
+  required_sections:
+    - "Course Context"
+    - "Outline"
+    - "Didactics"
+    - "Visual Identity"
+    - "Agenda"
+    - "Sessions"
+    - "Learner Personas"
+    - "Persona Reviews"
+    - "Validation"
+    - "Analysis Status"
+    - "Notes Backup"
+  update_rule: "When a task says to save an artifact, create or replace only the matching section in `project.md`."
+
 note_saving:
-  storage: "notes/"
+  storage: "`project.md` section `## Notes Backup`"
   naming_convention:
-    summary: "notes/summary-{slug}-{YYYY-MM-DD}.md"
-    research: "notes/research-{slug}-{YYYY-MM-DD}.md"
-    decision: "notes/decision-{slug}-{YYYY-MM-DD}.md"
-  note: "slug = 2-4 word kebab-case description of the topic, e.g. 'agenda-structure', 'course-type-decision'"
+    summary: "Append an entry headed `### Summary: {title} ({YYYY-MM-DD})`"
+    research: "Append an entry headed `### Research: {title} ({YYYY-MM-DD})`"
+    decision: "Append an entry headed `### Decision: {title} ({YYYY-MM-DD})`"
+  note: "slug/title = 2-4 word kebab-case description of the topic, e.g. 'agenda-structure', 'course-type-decision'"
 
   proactive_triggers:
     description: "Agent proactively offers to save notes when these situations occur — does NOT save automatically."
     triggers:
       - "A significant design decision was made (course type, persona, agenda structure, etc.)"
       - "Multiple alternatives were discussed and one was chosen"
-      - "A contradiction with existing docs was found and resolved"
+      - "A contradiction with existing project memory was found and resolved"
       - "A research prompt was generated (offer to save it as research note)"
       - "A /coauthor-materials session ends with instructor approval"
       - "A longer discussion produced a concrete conclusion"
     offer_format: |
       This was an important decision/insight. Should I save this?
-      I would save it as: `notes/{type}-{slug}-{date}.md`
+      I would append it to `project.md` → `## Notes Backup` as: `{type}: {slug} ({date})`
       Content: [1-3 sentence preview of what would be saved]
       Yes / No / Adjust"
 
   save_format: |
-    Each notes file starts with:
+    Each note entry inside `## Notes Backup` starts with:
     ---
     type: summary | research | decision
     topic: [short topic description]
     date: YYYY-MM-DD
-    related: [optional: docs/outline.md / session 3 / etc.]
+    related: [optional: Outline / session 3 / material file / etc.]
     ---
     [content]
 
@@ -160,19 +181,19 @@ note_saving:
 commands:
   /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
-  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, and all session skeletons in one pass"
+  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `project.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
-  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to docs/learner-personas.md"
+  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `project.md` → `## Learner Personas`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
   /quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
-  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing; with {number} {type}: session-level syntax + content check after coauthor"
-  /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file"
+  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
+  /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `project.md` → `## Sessions`"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
-  /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
+  /save-notes {type?} {title?}: "Summarize the current discussion and append it to `project.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
   /save-decision {title}: "Save a structured decision record (ADR format) — context, options considered, decision, rationale, consequences"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
@@ -204,6 +225,7 @@ dependencies:
     - course-agenda.yaml
     - session-skeleton.yaml
     - session-material.yaml
+    - session-validation.yaml
   checklists:
     - course-quality-checklist.md
   data:

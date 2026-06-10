@@ -4,24 +4,34 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/outline.md
+    filename: project.md
+    section: Outline
   title: 'Course Outline'
   sections:
     - id: title
       title: Title
-      template: 'Name of the lecture or course'
+      template: |
+        * __Title:__
+          [Name of the lecture or course]
     - id: target-audience
       title: Target Audience
-      template: 'Who is this course/lecture for?'
+      template: |
+        * __Target Audience:__
+          [Who is this course/lecture for?]
     - id: time-commitment
       title: Time Commitment
-      template: 'Estimated time commitment (e.g., semester hours per week, total hours)'
+      template: |
+        * __Time Commitment:__
+          [Estimated time commitment, e.g., semester hours per week or total hours]
     - id: abstract
       title: Abstract
-      template: >
-        Detailed abstract with all topics,
-        clarifies benefits & application.
+      template: |
+        * __Abstract:__
+          [Detailed abstract with all topics, benefits, and application.]
     - id: learning-goals
       title: Learning Objectives
-      template: >
-        List of 3–5 clear learning objectives with application scenarios.
+      template: |
+        * __Learning Objectives:__
+          1. [Clear learning objective with application scenario]
+          2. [Clear learning objective with application scenario]
+          3. [Clear learning objective with application scenario]

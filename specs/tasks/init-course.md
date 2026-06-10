@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Initializes a new course project by creating `docs/context.md`.
+Initializes a new course project by creating or updating the `## Course Context` section in `project.md`.
 
 This is the **first mandatory step** for every new course project.
 The course context acts as the governance layer: it defines the course type, terminology, persona style, conventions, and LiaScript rules that all subsequent tasks will load and follow.
@@ -15,7 +15,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
 ## Output
 
-- `docs/context.md` (Markdown file)
+- `project.md` → `## Course Context`
 - Structure based on `templates/course-context.yaml`
 
 ## Steps
@@ -54,15 +54,15 @@ The course context acts as the governance layer: it defines the course type, ter
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
-8. Save the file as `docs/context.md`.
+8. Save the generated context by creating or replacing `project.md` → `## Course Context`.
 9. Confirm completion and suggest the next step based on course type:
    - **lecture-series / workshop** → `/create-outline`
    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
-   - **improve-existing** → `/analyze-existing` (scans existing docs, offers to fill gaps)
+   - **improve-existing** → `/analyze-existing` (scans existing project memory and materials, offers to fill gaps)
 
 ## Notes
 
-- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `docs/context.md` and adapt their behavior accordingly.
+- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `project.md` → `## Course Context` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
-- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing docs before improvement work begins.
+- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `project.md` sections before improvement work begins.

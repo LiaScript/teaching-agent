@@ -7,10 +7,10 @@ Creates a professional, actionable prompt that can be used with AI image generat
 
 ## Inputs
 
-- Title from `docs/outline.md#title`
-- Abstract from `docs/outline.md#abstract`
-- Logo style guidelines from `docs/visuals.md#logo-style`
-- Logo color palette from `docs/visuals.md#logo-colors`
+- Title from `project.md` → `## Outline` / `### Title`
+- Abstract from `project.md` → `## Outline` / `### Abstract`
+- Logo style guidelines from `project.md` → `## Visual Identity` / `### Logo Generation Guidelines`
+- Logo color palette from `project.md` → `## Visual Identity` / `### Logo Color Palette`
 
 ## Output
 
@@ -19,9 +19,9 @@ Creates a professional, actionable prompt that can be used with AI image generat
 
 ## Steps
 
-1. Read the course title and abstract from `docs/outline.md`.
-2. Read the logo style guidelines from `docs/visuals.md#logo-style`.
-3. Read the logo color palette from `docs/visuals.md#logo-colors`.
+1. Read the course title and abstract from `project.md` → `## Outline`.
+2. Read the logo style guidelines from `project.md` → `## Visual Identity` / `### Logo Generation Guidelines`.
+3. Read the logo color palette from `project.md` → `## Visual Identity` / `### Logo Color Palette`.
 4. Extract key themes, concepts, or symbols from the abstract.
 5. Combine style guidelines with course theme to create a detailed prompt.
 6. Include specific elements:

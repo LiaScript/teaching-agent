@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The agent temporarily **embodies a learner persona** from `docs/learner-personas.md` and reviews
+The agent temporarily **embodies a learner persona** from `project.md` → `## Learner Personas` and reviews
 one session material from the perspective of that fictional learner.
 
 This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
@@ -14,28 +14,28 @@ or simply get a feel for how this learner experiences the material.
 
 ## Inputs
 
-- `{name}` — persona name (must exist in `docs/learner-personas.md`)
+- `{name}` — persona name (must exist in `project.md` → `## Learner Personas`)
 - `{number}` — session number
 - `{type}` — session type (`lecture` or `exercise`)
 - `materials/{number}-{type}.md` — the material to review
-- `docs/learner-personas.md` — full persona definition
-- `docs/agenda.md` — learning objectives for this session
-- `docs/context.md` — terminology and conventions
+- `project.md` → `## Learner Personas` — full persona definition
+- `project.md` → `## Agenda` — learning objectives for this session
+- `project.md` → `## Course Context` — terminology and conventions
 
 ## Output
 
-- `docs/persona-review-{name}-{number}-{type}.md` — saved structured review report
+- `project.md` → `## Persona Reviews` — saved structured review report
 - Agent remains in persona mode for interactive follow-up dialog until explicitly exited
 
 ## Steps
 
-1. Load the named persona from `docs/learner-personas.md`.
+1. Load the named persona from `project.md` → `## Learner Personas`.
    - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
-   - If `docs/learner-personas.md` does not exist: state this and suggest `/create-learner-persona` first.
+   - If `project.md` → `## Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
 
 2. Load `materials/{number}-{type}.md`.
 
-3. Load the learning objectives for this session from `docs/agenda.md`.
+3. Load the learning objectives for this session from `project.md` → `## Agenda`.
 
 4. Announce persona adoption clearly:
    > "I am now [Icon] [Name] — [one-line description from persona overview]. Reading Session [N] from a learner's perspective…"
@@ -117,8 +117,8 @@ or simply get a feel for how this learner experiences the material.
    [What this persona would respond well to — do not skip this section.]
    ```
 
-7. Save the report to `docs/persona-review-{name}-{number}-{type}.md`.
-   Confirm: "Review saved as `docs/persona-review-{name}-{number}-{type}.md`."
+7. Append the report to `project.md` → `## Persona Reviews` under a heading like `### {name} — {number}-{type} — YYYY-MM-DD`.
+   Confirm: "Review saved in `project.md` → `## Persona Reviews`."
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,

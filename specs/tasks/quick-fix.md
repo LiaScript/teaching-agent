@@ -12,7 +12,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 - `type`: session type (`lecture` or `exercise`)
 - `description`: what to fix (brief, e.g., "Typo in section 3", "Fix quiz syntax in slide 5", "Replace example for learning objective 2")
 - `materials/{number}-{type}.md` — the file to change
-- `docs/context.md` — for conventions and terminology
+- `project.md` → `## Course Context` — for conventions and terminology
 - `data/liascript-cheat-sheet.md` — for syntax reference if the fix involves LiaScript
 
 ## Output
@@ -29,7 +29,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 3. **Mini-validation of the affected section:**
    - LiaScript syntax correct in the changed area?
-   - Persona/tone consistent with `docs/didactics.md`?
+   - Persona/tone consistent with `project.md` → `## Didactics`?
    - No unintended regression in surrounding content?
 
 4. **Report result:**

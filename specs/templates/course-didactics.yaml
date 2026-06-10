@@ -4,7 +4,8 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/didactics.md
+    filename: project.md
+    section: Didactics
   title: 'Course Didactics'
   sections:
     - id: didactic-concept

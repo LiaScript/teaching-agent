@@ -2,72 +2,73 @@
 
 ## Purpose
 
-Analyzes an existing course project to identify which documentation is present and which is missing.
+Analyzes an existing course project to identify which `project.md` sections and material files are present and which are missing.
 Used as the **second step after `/init-course`** when the course type is `improve-existing`.
 
-Offers two paths for each missing core document:
+Offers two paths for each missing core section:
 - **Auto-generate** — agent reads existing materials and reverse-engineers a draft
 - **Interactive creation** — agent guides the instructor through the relevant creation task
 
 ## Inputs
 
-- `docs/context.md` (created by `/init-course`, mandatory)
-- Existing project files in the project root: `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `docs/visuals.md`
-- Existing folders: `skeletons/`, `materials/`
+- `project.md` → `## Course Context` (created by `/init-course`, mandatory)
+- Existing `project.md` sections: `## Outline`, `## Didactics`, `## Agenda`, `## Visual Identity`, `## Sessions`
+- Existing folder: `materials/`
 
 ## Output
 
-- `docs-status.md` — status overview with recommended actions
-- Optionally: auto-generated drafts for missing core docs (marked as draft)
+- `project.md` → `## Analysis Status` — status overview with recommended actions
+- Optionally: auto-generated drafts for missing core sections (marked as draft)
 
 ## Steps
 
-1. Load `docs/context.md` for course type, terminology, and conventions.
+1. Load `project.md` → `## Course Context` for course type, terminology, and conventions.
 
 2. Scan the project root and relevant folders:
 
-   | Document       | Required                     |
+   | Section / Folder | Required                   |
    | -------------- | ---------------------------- |
-   | `docs/outline.md`   | always                       |
-   | `docs/didactics.md` | always                       |
-   | `docs/agenda.md`    | if `docs/context.md` agenda = yes |
-   | `docs/visuals.md`   | optional                     |
-   | `skeletons/`   | if sessions expected         |
+   | `project.md` → `## Outline`   | always                       |
+   | `project.md` → `## Didactics` | always                       |
+   | `project.md` → `## Agenda`    | if `project.md` → `## Course Context` agenda = yes |
+   | `project.md` → `## Visual Identity`   | optional                     |
+   | `project.md` → `## Sessions` | if sessions expected |
    | `materials/`   | if sessions expected         |
 
-3. Display a **Course Doc Status** table:
+3. Display a **Course Memory Status** table:
    - ✅ exists
    - ⚠️ exists but likely incomplete (e.g., missing sections)
    - ❌ missing
 
-4. For each **missing** core document (`docs/outline.md`, `docs/didactics.md`), 🎛️ ask with structured question (single choice):
+4. For each **missing** core section (`## Outline`, `## Didactics`), 🎛️ ask with structured question (single choice):
    - **Auto-generate** — I will read your existing materials and create a draft
    - **Interactive creation** — I will guide you through the appropriate creation command
    - **Skip** — proceed without this document
 
 5. If **auto-generate** is chosen:
-   - Read all available files in `skeletons/` and `materials/`
+   - Read any available session subsections in `project.md` → `## Sessions` and all files in `materials/`
    - Extract: title, target audience, topics, recurring structure, learning objectives
-   - Generate a draft and save it (e.g., `docs/outline.md`)
+   - Generate a draft and save it to the matching section (e.g., `project.md` → `## Outline`)
    - Add a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
 
 6. If **interactive creation** is chosen, run the relevant task:
-   - `docs/outline.md` → `/create-outline`
-   - `docs/didactics.md` → `/create-didactics`
-   - `docs/agenda.md` → `/create-agenda`
+   - `project.md` → `## Outline` → `/create-outline`
+   - `project.md` → `## Didactics` → `/create-didactics`
+   - `project.md` → `## Agenda` → `/create-agenda`
 
-6b. Reconstruct or create `docs/sessions.md` from the existing file system:
-   - Scan `skeletons/` and `materials/` for files matching `{number}-{type}.md`
-   - For each session found: set Skeleton ✅ if file exists in `skeletons/`, Material ✅ if file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
-   - Save as `docs/sessions.md` in the project root
+6b. Reconstruct or create `project.md` → `## Sessions` from project memory and the existing file system:
+   - Scan `project.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
+   - If a legacy `project.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
+   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
+   - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
 
-7. After all missing docs are handled, list **improvement opportunities** in the existing content:
+7. After all missing sections are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials
-   - Materials without skeletons
+   - Materials without session subsections
    - Inconsistent terminology or persona style
    - Missing references or learning objectives
-   - Language/tone inconsistencies vs. `docs/context.md` conventions
+   - Language/tone inconsistencies vs. `project.md` → `## Course Context` conventions
 
 8. Suggest a prioritized action list and the recommended next step (usually `/coauthor-materials`).
 
-9. Save the full status overview as `docs-status.md`.
+9. Save the full status overview as `project.md` → `## Analysis Status`.

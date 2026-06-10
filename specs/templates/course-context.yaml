@@ -4,36 +4,44 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/context.md
+    filename: project.md
+    section: Course Context
   title: 'Course Context'
   sections:
     - id: course-type
       title: Course Type
       template: |
-        Type: [lecture-series | self-paced | workshop | single-lesson | improve-existing]
-        Working Title: [optional working title]
+        * __Course Type:__
+          1. Type: [lecture-series | self-paced | workshop | single-lesson | improve-existing]
+          2. Working Title: [optional working title]
 
     - id: profile
       title: Course Profile
       template: |
-        Terminology:
-          sessions-called: [session | unit | block | lesson]
-          lectures-called: [lecture | module | chapter | lesson]
-        Persona type: [professor | coach | facilitator | tutor]
-        Agenda required: [yes | optional | no]
-        Pacing: [scheduled | learner-driven | event-based]
-        Assessment defaults: [quizzes | reflection | assignments | none]
+        * __Terminology:__
+          1. sessions-called: [session | unit | block | lesson]
+          2. lectures-called: [lecture | module | chapter | lesson]
+
+        * __Course Profile:__
+          1. Persona type: [professor | coach | facilitator | tutor]
+          2. Agenda required: [yes | optional | no]
+          3. Pacing: [scheduled | learner-driven | event-based]
+          4. Assessment defaults: [quizzes | reflection | assignments | none]
 
     - id: conventions
       title: Conventions & Standards
       template: |
-        Language: [de | en | other]
-        Tone: [formal | informal | conversational]
-        Person: [Sie | Du | you]
-        Accessibility: [required | optional]
-        LiaScript conventions:
+        * __Conventions & Standards:__
+          1. Language: [de | en | other]
+          2. Tone: [formal | informal | conversational]
+          3. Person: [Sie | Du | you]
+          4. Accessibility: [required | optional]
+
+        * __LiaScript conventions:__
           - [list project-specific rules here]
 
     - id: notes
       title: Additional Notes
-      template: 'Any project-specific rules, constraints, or reminders.'
+      template: |
+        * __Additional Notes:__
+          - [Any project-specific rules, constraints, or reminders.]

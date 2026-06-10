@@ -16,12 +16,12 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 
 ## Output
 
-- `docs/outline.md` (Markdown file)
+- `project.md` → `## Outline`
 - Structure based on `templates/course-outline.yaml`
 
 ## Steps
 
-1. Read `docs/context.md` to determine course type and conventions.
+1. Read `project.md` → `## Course Context` to determine course type and conventions.
 2. Collect title and target audience.
 3. Collect time commitment — adapted by course type:
    - **lecture-series**: required (e.g., semester hours/week, total hours)
@@ -32,4 +32,4 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 5. Define 3–5 concrete learning objectives.
 6. Optionally add a logo prompt.
 7. Fill the `templates/course-outline.yaml` with the inputs.
-8. Save the file as `docs/outline.md`.
+8. Save the generated outline by creating or replacing `project.md` → `## Outline`.

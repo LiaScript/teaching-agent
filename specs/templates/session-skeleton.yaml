@@ -1,24 +1,47 @@
 template:
-  id: session-skeleton
-  name: 'Session Skeleton'
+  id: session
+  name: 'Session'
   version: 1.0
   output:
     format: markdown
-    filename: skeletons/{{number}}-{{type}}.md
-  title: 'Session {{number}} ({{type | title}})'
+    filename: project.md
+    section: Sessions
+    entry: "{{number}}"
+    section_layout:
+      overview: "Overview table directly below `## Sessions`"
+      entries: "Session skeletons as `### {{number}}. {{title}}` subsections below the overview table"
+  title: 'Session {{number}}'
   sections:
     - id: title
       title: Title
-      template: 'Session {{number}} – {{title}} ({{type | title}})'
+      template: |
+        ### {{number}}. {{title}}
+    - id: type
+      title: Type
+      template: |
+        **Type:** {{type}}
     - id: summary
       title: Summary
-      template: 'Short overview, reference to agenda, relevance, didactics.'
+      template: |
+        **Summary:**
+
+        [Short overview, reference to agenda, relevance, didactics. May contain more than one paragraph.]
     - id: content
       title: Content
-      template: 'Placeholder for main topics or assignments.'
+      template: |
+        **Content:**
+
+        [Placeholder for main topics or assignments. May contain more than one paragraph.]
     - id: activities
       title: Activities
-      template: 'Placeholder for exercises, discussions, reflection.'
+      template: |
+        **Activities:**
+
+        1. [Exercise, discussion, reflection, or learner action]
+        2. [Exercise, discussion, reflection, or learner action]
     - id: references
       title: References & Sources
-      template: 'List of relevant sources and materials.'
+      template: |
+        **References:**
+
+        1. [Relevant source or material]

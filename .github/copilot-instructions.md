@@ -106,11 +106,11 @@ agent_coordination:
   on_agent_switch:
     - "Before switching: summarize current project state in 3–5 lines (what is done, what is open, what was just decided)"
     - "Format: 'I am handing over to [Agent-Name]. Status: [summary]. Next recommended step: [step]'"
-    - "After switching: new agent reads docs/context.md and available docs to orient itself"
+    - "After switching: new agent reads `project.md`, especially `## Course Context`, to orient itself"
 
   on_activation:
-    - "Read docs/context.md if it exists to understand course type, terminology, and conventions"
-    - "Check which core docs exist (docs/outline.md, docs/didactics.md, docs/agenda.md) and mention status if relevant"
+    - "Read `project.md` if it exists, especially `## Course Context`, to understand course type, terminology, and conventions"
+    - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
 
   suggest_escalation_when:
     - "Session count grows significantly beyond what was scoped in /init-course → suggest reviewing course type or splitting the course"
@@ -169,36 +169,57 @@ epistemic_rules:
       **Note for Web Agent:** Please verify the information and provide up-to-date sources (as of 2024/2025).
       ---
 
+project_memory:
+  canonical_file: "project.md"
+  principle: >
+    All generated planning, state, review, validation, and note artifacts are stored as
+    named sections in `project.md`. Only final teaching materials (`materials/`),
+    visual/media assets and prompts (`assets/`), and publishing/runtime files
+    (`project.yaml`, `.github/workflows/`) remain separate files.
+  required_sections:
+    - "Course Context"
+    - "Outline"
+    - "Didactics"
+    - "Visual Identity"
+    - "Agenda"
+    - "Sessions"
+    - "Learner Personas"
+    - "Persona Reviews"
+    - "Validation"
+    - "Analysis Status"
+    - "Notes Backup"
+  update_rule: "When a task says to save an artifact, create or replace only the matching section in `project.md`."
+
 note_saving:
-  storage: "notes/"
+  storage: "`project.md` section `## Notes Backup`"
   naming_convention:
-    summary: "notes/summary-{slug}-{YYYY-MM-DD}.md"
-    research: "notes/research-{slug}-{YYYY-MM-DD}.md"
-    decision: "notes/decision-{slug}-{YYYY-MM-DD}.md"
-  note: "slug = 2-4 word kebab-case description of the topic, e.g. 'agenda-structure', 'course-type-decision'"
+    summary: "Append an entry headed `### Summary: {title} ({YYYY-MM-DD})`"
+    research: "Append an entry headed `### Research: {title} ({YYYY-MM-DD})`"
+    decision: "Append an entry headed `### Decision: {title} ({YYYY-MM-DD})`"
+  note: "slug/title = 2-4 word kebab-case description of the topic, e.g. 'agenda-structure', 'course-type-decision'"
 
   proactive_triggers:
     description: "Agent proactively offers to save notes when these situations occur — does NOT save automatically."
     triggers:
       - "A significant design decision was made (course type, persona, agenda structure, etc.)"
       - "Multiple alternatives were discussed and one was chosen"
-      - "A contradiction with existing docs was found and resolved"
+      - "A contradiction with existing project memory was found and resolved"
       - "A research prompt was generated (offer to save it as research note)"
       - "A /coauthor-materials session ends with instructor approval"
       - "A longer discussion produced a concrete conclusion"
     offer_format: |
       This was an important decision/insight. Should I save this?
-      I would save it as: `notes/{type}-{slug}-{date}.md`
+      I would append it to `project.md` → `## Notes Backup` as: `{type}: {slug} ({date})`
       Content: [1-3 sentence preview of what would be saved]
       Yes / No / Adjust"
 
   save_format: |
-    Each notes file starts with:
+    Each note entry inside `## Notes Backup` starts with:
     ---
     type: summary | research | decision
     topic: [short topic description]
     date: YYYY-MM-DD
-    related: [optional: docs/outline.md / session 3 / etc.]
+    related: [optional: Outline / session 3 / material file / etc.]
     ---
     [content]
 
@@ -214,19 +235,19 @@ note_saving:
 commands:
   /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
   /analyze-existing: "run task `tasks/analyze-existing.md`"
-  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, and all session skeletons in one pass"
+  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `project.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
-  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to docs/learner-personas.md"
+  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `project.md` → `## Learner Personas`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
   /quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
-  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing; with {number} {type}: session-level syntax + content check after coauthor"
-  /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file"
+  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
+  /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `project.md` → `## Sessions`"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
-  /save-notes {type?} {title?}: "Summarize the current discussion and save to notes/ — type: summary | research | decision (default: summary)"
+  /save-notes {type?} {title?}: "Summarize the current discussion and append it to `project.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
   /save-decision {title}: "Save a structured decision record (ADR format) — context, options considered, decision, rationale, consequences"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
@@ -258,6 +279,7 @@ dependencies:
     - course-agenda.yaml
     - session-skeleton.yaml
     - session-material.yaml
+    - session-validation.yaml
   checklists:
     - course-quality-checklist.md
   data:
@@ -308,7 +330,7 @@ persona:
   role: "Learner Perspective Specialist"
   style: "empathetic, evidence-grounded, critical, honest — and fully immersive when in persona"
   identity: >
-    Embodies defined learner personas from docs/learner-personas.md to review course materials
+    Embodies defined learner personas from `project.md` → `## Learner Personas` to review course materials
     from the target audience's perspective. Reads, reacts, and gives feedback as that person would.
     Stays in persona for open follow-up chat after reviews.
     Hands back to the Teaching-Agent when persona work is done.
@@ -325,8 +347,8 @@ agent_coordination:
   role: "Learner perspective specialist — hands back to Teaching-Agent when persona work is complete"
 
   on_activation:
-    - "Read docs/context.md to understand course type, target audience, terminology, and language"
-    - "Check if docs/learner-personas.md exists and announce status: how many personas are defined"
+    - "Read `project.md`, especially `## Course Context`, to understand course type, target audience, terminology, and language"
+    - "Check if `project.md` contains `## Learner Personas` and announce status: how many personas are defined"
     - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
 
   suggest_back_to_teaching_when:
@@ -339,7 +361,7 @@ agent_coordination:
     - "Format: 'I am handing back to the Teaching-Agent. Persona status: [summary]. Key review findings: [1–3 points]'"
 
 epistemic_rules:
-  principle: "Never invent persona characteristics. Only use what is explicitly defined in docs/learner-personas.md."
+  principle: "Never invent persona characteristics. Only use what is explicitly defined in `project.md` → `## Learner Personas`."
 
   when_uncertain:
     - "If a persona detail is missing or unclear: react as the persona would in that situation, not as an analyst filling a gap"
@@ -348,7 +370,7 @@ epistemic_rules:
 
 commands:
   /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona and reviews a session material from the learner's perspective; stays in persona for interactive follow-up chat"
-  /list-learners: "list all personas defined in docs/learner-personas.md with a one-line description each"
+  /list-learners: "list all personas defined in `project.md` → `## Learner Personas` with a one-line description each"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
   /help: "Show available actions"
@@ -408,9 +430,9 @@ agent_coordination:
   role: "Visual specialist — hands back to Teaching-Agent when visual work is complete"
 
   on_activation:
-    - "Read docs/context.md to understand course type, instructor persona, and tone"
-    - "Check if docs/visuals.md already exists and mention its status"
-    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + existing docs]'"
+    - "Read `project.md`, especially `## Course Context`, to understand course type, instructor persona, and tone"
+    - "Check if `project.md` contains `## Visual Identity` and mention its status"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
 
   suggest_back_to_teaching_when:
     - "After /create-visuals and /create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step: /create-agenda'"
@@ -418,7 +440,7 @@ agent_coordination:
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
   on_agent_switch:
-    - "Before switching: summarize visual work done (e.g., docs/visuals.md created, colors defined, logo prompt ready)"
+    - "Before switching: summarize visual work done (e.g., `## Visual Identity` created, colors defined, logo prompt ready)"
     - "Format: 'I am handing back to [Agent]. Visual status: [summary]'"
 
 browser_execution:
@@ -539,9 +561,9 @@ agent_coordination:
   role: "Publishing & git specialist — hands back to Teaching-Agent when publishing is set up"
 
   on_activation:
-    - "Read docs/context.md to understand course type and project conventions"
+    - "Read `project.md`, especially `## Course Context` and `## Validation`, to understand course type, project conventions, and publishing readiness"
     - "Check if project.yaml exists and which materials are in materials/"
-    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from context + project files]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
 
   suggest_back_to_teaching_when:
     - "After /create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
@@ -557,7 +579,7 @@ epistemic_rules:
 
   when_uncertain:
     - "State uncertainty explicitly, especially for GitHub Actions YAML syntax and LiaScript exporter options"
-    - "Use markers: '6a0e0f This syntax should be checked against the current documentation:'"
+    - "Use markers: 'This syntax should be checked against the current documentation:'"
     - "For workflow files: always recommend the instructor verify against official GitHub Actions docs before pushing"
 
   when_no_internet_access:
@@ -619,75 +641,76 @@ fuzzy-matching:
 
 ## Purpose
 
-Analyzes an existing course project to identify which documentation is present and which is missing.
+Analyzes an existing course project to identify which `project.md` sections and material files are present and which are missing.
 Used as the **second step after `/init-course`** when the course type is `improve-existing`.
 
-Offers two paths for each missing core document:
+Offers two paths for each missing core section:
 - **Auto-generate** — agent reads existing materials and reverse-engineers a draft
 - **Interactive creation** — agent guides the instructor through the relevant creation task
 
 ## Inputs
 
-- `docs/context.md` (created by `/init-course`, mandatory)
-- Existing project files in the project root: `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `docs/visuals.md`
-- Existing folders: `skeletons/`, `materials/`
+- `project.md` → `## Course Context` (created by `/init-course`, mandatory)
+- Existing `project.md` sections: `## Outline`, `## Didactics`, `## Agenda`, `## Visual Identity`, `## Sessions`
+- Existing folder: `materials/`
 
 ## Output
 
-- `docs-status.md` — status overview with recommended actions
-- Optionally: auto-generated drafts for missing core docs (marked as draft)
+- `project.md` → `## Analysis Status` — status overview with recommended actions
+- Optionally: auto-generated drafts for missing core sections (marked as draft)
 
 ## Steps
 
-1. Load `docs/context.md` for course type, terminology, and conventions.
+1. Load `project.md` → `## Course Context` for course type, terminology, and conventions.
 
 2. Scan the project root and relevant folders:
 
-   | Document       | Required                     |
+   | Section / Folder | Required                   |
    | -------------- | ---------------------------- |
-   | `docs/outline.md`   | always                       |
-   | `docs/didactics.md` | always                       |
-   | `docs/agenda.md`    | if `docs/context.md` agenda = yes |
-   | `docs/visuals.md`   | optional                     |
-   | `skeletons/`   | if sessions expected         |
+   | `project.md` → `## Outline`   | always                       |
+   | `project.md` → `## Didactics` | always                       |
+   | `project.md` → `## Agenda`    | if `project.md` → `## Course Context` agenda = yes |
+   | `project.md` → `## Visual Identity`   | optional                     |
+   | `project.md` → `## Sessions` | if sessions expected |
    | `materials/`   | if sessions expected         |
 
-3. Display a **Course Doc Status** table:
+3. Display a **Course Memory Status** table:
    - ✅ exists
    - ⚠️ exists but likely incomplete (e.g., missing sections)
    - ❌ missing
 
-4. For each **missing** core document (`docs/outline.md`, `docs/didactics.md`), 🎛️ ask with structured question (single choice):
+4. For each **missing** core section (`## Outline`, `## Didactics`), 🎛️ ask with structured question (single choice):
    - **Auto-generate** — I will read your existing materials and create a draft
    - **Interactive creation** — I will guide you through the appropriate creation command
    - **Skip** — proceed without this document
 
 5. If **auto-generate** is chosen:
-   - Read all available files in `skeletons/` and `materials/`
+   - Read any available session subsections in `project.md` → `## Sessions` and all files in `materials/`
    - Extract: title, target audience, topics, recurring structure, learning objectives
-   - Generate a draft and save it (e.g., `docs/outline.md`)
+   - Generate a draft and save it to the matching section (e.g., `project.md` → `## Outline`)
    - Add a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
 
 6. If **interactive creation** is chosen, run the relevant task:
-   - `docs/outline.md` → `/create-outline`
-   - `docs/didactics.md` → `/create-didactics`
-   - `docs/agenda.md` → `/create-agenda`
+   - `project.md` → `## Outline` → `/create-outline`
+   - `project.md` → `## Didactics` → `/create-didactics`
+   - `project.md` → `## Agenda` → `/create-agenda`
 
-6b. Reconstruct or create `docs/sessions.md` from the existing file system:
-   - Scan `skeletons/` and `materials/` for files matching `{number}-{type}.md`
-   - For each session found: set Skeleton ✅ if file exists in `skeletons/`, Material ✅ if file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
-   - Save as `docs/sessions.md` in the project root
+6b. Reconstruct or create `project.md` → `## Sessions` from project memory and the existing file system:
+   - Scan `project.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
+   - If a legacy `project.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
+   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
+   - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
 
-7. After all missing docs are handled, list **improvement opportunities** in the existing content:
+7. After all missing sections are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials
-   - Materials without skeletons
+   - Materials without session subsections
    - Inconsistent terminology or persona style
    - Missing references or learning objectives
-   - Language/tone inconsistencies vs. `docs/context.md` conventions
+   - Language/tone inconsistencies vs. `project.md` → `## Course Context` conventions
 
 8. Suggest a prioritized action list and the recommended next step (usually `/coauthor-materials`).
 
-9. Save the full status overview as `docs-status.md`.
+9. Save the full status overview as `project.md` → `## Analysis Status`.
 
 ==================== END: .bmad-core/tasks/analyze-existing.md ====================
 
@@ -698,51 +721,37 @@ Offers two paths for each missing core document:
 
 ## Purpose
 
-Combines all course documents into a complete, distributable package for handoff, archiving, or offline use.
+Combines the project memory, materials, and assets into a complete, distributable package for handoff, archiving, or offline use.
 Produces a structured `course-bundle/` folder with an auto-generated index and all relevant artifacts.
 
 ## Inputs
 
-- `docs/context.md` — course metadata and conventions
-- `docs/outline.md` — course title and abstract (used in bundle index)
-- `docs/didactics.md` — teaching approach and persona documentation
-- `docs/agenda.md` — session schedule (if exists)
-- `docs/sessions.md` — production status tracking
-- `skeletons/` — session skeletons (optional, for documentation trail)
+- `project.md` — canonical project memory containing course context, outline, didactics, agenda, sessions, session status, validation, reviews, and notes backup
 - `materials/` — full session materials (primary content)
-- `docs/visuals.md` + `assets/` — visual style guide and assets (if exists)
-- `docs/validation-report.md` — latest QA report (**required, must show PASS**)
-- `notes/` — decision records and summaries (optional)
+- `assets/` — visual assets and prompts (if exists)
+- `project.md` → `## Validation` → `### Latest Validation Summary` — latest QA gate (**required, must show `Mode: course` and `Result: PASS`**)
 
 ## Output
 
 ```
 course-bundle/
 ├── bundle-index.md          ← auto-generated index
-├── docs/context.md
-├── docs/outline.md
-├── docs/didactics.md
-├── docs/agenda.md                ← if exists
-├── docs/sessions.md
-├── docs/validation-report.md
+├── project.md               ← canonical project memory
 ├── materials/
 │   └── {n}-{type}.md
-├── skeletons/               ← optional
-│   └── {n}-{type}.md
-├── assets/                  ← if exists
-└── notes/                   ← if exists
+└── assets/                  ← if exists
 ```
 
 ## Steps
 
-1. **Pre-flight check:** Confirm `docs/validation-report.md` exists and shows PASS.
-   - If missing or FAIL: block bundling. State: "⛔ Please run `/validate-course` first and resolve all issues before creating the bundle."
+1. **Pre-flight check:** Confirm `project.md` → `## Validation` → `### Latest Validation Summary` exists and shows `Mode: course` and `Result: PASS`.
+   - If missing, not `Mode: course`, or not `Result: PASS`: block bundling. State: "⛔ Please run `/validate-course` first and resolve all issues before creating the bundle."
 
-2. Read course title and abstract from `docs/outline.md`.
+2. Read course title and abstract from `project.md` → `## Outline`.
 
 3. Scan all source folders and collect files:
-   - **Required:** `docs/context.md`, `docs/outline.md`, `docs/didactics.md`, `docs/sessions.md`, all files in `materials/`, `docs/validation-report.md`
-   - **Conditional:** `docs/agenda.md` (if exists), `skeletons/` (if exists), `assets/` (if exists), `notes/` (if exists)
+   - **Required:** `project.md`, all files in `materials/`
+   - **Conditional:** `assets/` (if exists)
 
 4. Generate `bundle-index.md`:
 
@@ -750,32 +759,28 @@ course-bundle/
    # Course Bundle: [Course Title]
 
    Generated: YYYY-MM-DD
-   Course type: [type from docs/context.md]
-   Validation: PASS (see docs/validation-report.md)
+   Course type: [type from `project.md` → `## Course Context`]
+   Validation: PASS (see `project.md` → `## Validation` → `### Latest Validation Summary`)
 
    ## Contents
 
    | File                    | Description                              |
    |-------------------------|------------------------------------------|
-   | docs/context.md              | Course governance and conventions        |
-   | docs/outline.md              | Title, audience, learning objectives     |
-   | docs/didactics.md            | Teaching approach and instructor persona |
-   | docs/agenda.md               | Session schedule and structure           |
-   | docs/sessions.md             | Production status per session            |
-   | docs/validation-report.md    | Quality validation results               |
-   | materials/{n}-{type}.md | Session N: [title from docs/agenda.md]        |
+   | project.md              | Project memory: context, outline, didactics, agenda, skeletons, sessions, validation, reviews, notes |
+   | materials/{n}-{type}.md | Session N: [title from `project.md` → `## Agenda`] |
+   | assets/                 | Visual assets and prompts, if present |
 
    ## Quick Start
 
-   - **Instructor handoff:** Start with `docs/outline.md` and `docs/didactics.md`
+   - **Instructor handoff:** Start with `project.md` → `## Outline` and `project.md` → `## Didactics`
    - **LiaScript publish:** Use files in `materials/` directly
-   - **Quality audit:** See `docs/validation-report.md`
+   - **Quality audit:** See `project.md` → `## Validation`
    ```
 
-5. Copy all collected files into `course-bundle/` preserving subfolder structure.
+5. Copy `project.md`, `materials/`, and optional `assets/` into `course-bundle/` preserving subfolder structure.
 
 6. Confirm completion:
-   > "Bundle created in `course-bundle/`. Contains [N] material files, [docs/agenda.md ✅ / no agenda], [assets/ ✅ / no assets]."
+   > "Bundle created in `course-bundle/`. Contains `project.md`, [N] material files, and [assets/ ✅ / no assets]."
    > "Next step: `/agent development` → `/create-project` to publish the course."
 
 ==================== END: .bmad-core/tasks/assemble-bundle.md ====================
@@ -795,12 +800,12 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Inputs
 
-- Professor persona & style from `docs/didactics.md#Professor-Persona` (mandatory handoff)
-- Agenda info (modules/sessions) from `docs/agenda.md`
-- Terminology & conventions from `docs/context.md`
+- Professor persona & style from `project.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)
+- Agenda info (modules/sessions) from `project.md` → `## Agenda`
+- Terminology & conventions from `project.md` → `## Course Context`
 - Currently open document `materials/{number}-{type}.md`
-- Optionally, corresponding skeleton `skeletons/{number}-{type}.md`
-- Didactic inputs from `docs/didactics.md`
+- Optionally, corresponding session subsection in `project.md` → `## Sessions`
+- Didactic inputs from `project.md` → `## Didactics`
 - Open questions or ideas from instructors (discussion points)
 
 ## Output
@@ -813,19 +818,19 @@ Suggest images for visualization, either as a search term or as a concrete image
 ## Steps
 
 1. Agent loads agenda info, skeleton, and didactics persona.
-   - **If `docs/validation-report.md` exists and contains issues for this session:** load it and work through the reported issues first before starting free co-authoring. State which issues were found: "I have loaded the validation report. For session {N}, the following points were found: [...]. Let's start with these."
+   - **If the current session subsection in `project.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.   **Critical engagement rules — always active:**
    - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
-   - If a learning objective from `docs/agenda.md` is not addressed: flag it before moving on
-   - If the instructor's suggestion contradicts the didactic concept in `docs/didactics.md`: raise it as a conflict
+   - If a learning objective from `project.md` → `## Agenda` is not addressed: flag it before moving on
+   - If the instructor's suggestion contradicts the didactic concept in `project.md` → `## Didactics`: raise it as a conflict
    - If an explanation is too long, too abstract, or not suited for the target audience: say so
    - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
    - Positive feedback only when it is genuinely earned and specific5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
-7. When the instructor **approves** the material for this session: update `docs/sessions.md`, set the Done column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column.
+7. When the instructor **approves** the material for this session: update the overview table in `project.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
 8. After approval, 🎛️ ask with structured question (single choice):
    - **Yes, validate now** — run `/validate-course {number} {type}`
    - **Later** — skip validation, proceed directly to the next session
@@ -853,26 +858,26 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 Creates the **Course Agenda** as a structured schedule for the course.  
 Defines sessions/modules with title, duration, type (lecture/exercise), learning objectives, summary, and the corresponding materials files.
-**The agent also adopts the instructor persona and style from `docs/didactics.md` into its own persona, so all content is written in this voice.**
+**The agent also adopts the instructor persona and style from `project.md` → `## Didactics` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
-- Learning objectives from `docs/outline.md#Learning-Objectives`
-- Abstract from `docs/outline.md#Abstract`
-- Time commitment from `docs/outline.md#Time-Commitment`
-- Didactic concept from `docs/didactics.md#Didactic-Concept`
-- **Instructor persona from `docs/didactics.md#Professor-Persona` (mandatory handoff)**
-- **Style & difficulty level from `docs/didactics.md` (mandatory handoff)**
-- Course type from `docs/context.md`
+- Learning objectives from `project.md` → `## Outline` / `### Learning Objectives`
+- Abstract from `project.md` → `## Outline` / `### Abstract`
+- Time commitment from `project.md` → `## Outline` / `### Time Commitment`
+- Didactic concept from `project.md` → `## Didactics` / `### Didactic Concept`
+- **Instructor persona from `project.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)**
+- **Style & difficulty level from `project.md` → `## Didactics` (mandatory handoff)**
+- Course type from `project.md` → `## Course Context`
 
 ## Output
 
-- `docs/agenda.md` (Markdown file)
+- `project.md` → `## Agenda`
 - Structure based on `templates/course-agenda.yaml`
 
 ## Steps
 
-1. Read `docs/context.md`:
+1. Read `project.md` → `## Course Context`:
    - Check `agenda` field in the profile:
      - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `/create-session 1 {type}`. Stop here.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
@@ -889,14 +894,14 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 - From this step, the agent writes in the tone of the instructor persona.
 - All agenda descriptions reflect this style.
 
-5. Define sessions/modules using the terminology from `docs/context.md`.
+5. Define sessions/modules using the terminology from `project.md` → `## Course Context`.
 6. Build the agenda in a structured form adapted to the pacing model:
    - **lecture-series**: sessions with time slots and weekly schedule
    - **workshop**: blocks with approximate time per block
    - **self-paced**: modules without fixed time slots, estimated duration only
    - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
 7. Fill the `templates/course-agenda.yaml` template with the results.
-8. Save the file as `docs/agenda.md`.
+8. Save the generated agenda by creating or replacing `project.md` → `## Agenda`.
 
 ==================== END: .bmad-core/tasks/create-agenda.md ====================
 
@@ -909,24 +914,24 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 
 Creates the document **Course Didactics & Style**.  
 Defines the didactic concept, instructor persona, style, and course type.  
-Builds on the outline to ensure a consistent teaching strategy aligned with the course type from `docs/context.md`.
+Builds on the outline to ensure a consistent teaching strategy aligned with the course type from `project.md` → `## Course Context`.
 
 ## Inputs
 
-- Abstract from `docs/outline.md`
-- Target audience from `docs/outline.md`
-- Learning objectives from `docs/outline.md`
-- Course type & conventions from `docs/context.md`
+- Abstract from `project.md` → `## Outline`
+- Target audience from `project.md` → `## Outline`
+- Learning objectives from `project.md` → `## Outline`
+- Course type & conventions from `project.md` → `## Course Context`
 
 ## Output
 
-- `docs/didactics.md` (Markdown file)
+- `project.md` → `## Didactics`
 - Structure based on `templates/course-didactics.yaml`
 
 ## Steps
 
-1. Read `docs/context.md` for course type, persona type, and conventions.
-2. Read abstract, target audience, and learning objectives from `docs/outline.md`.
+1. Read `project.md` → `## Course Context` for course type, persona type, and conventions.
+2. Read abstract, target audience, and learning objectives from `project.md` → `## Outline`.
 3. 💬 Design a suitable didactic concept (teaching methods, learning phases) adapted to the course type — discuss with instructor if unclear:
    - **lecture-series**: structured phases, presenter-driven, attendance-based
    - **self-paced**: modular, learner-driven, self-check oriented
@@ -939,7 +944,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - beginner / intermediate / advanced
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
-9. Save the file as `docs/didactics.md`.
+9. Save the generated didactics by creating or replacing `project.md` → `## Didactics`.
 
 ==================== END: .bmad-core/tasks/create-didactics.md ====================
 
@@ -956,10 +961,10 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
-- Image style guidelines from `docs/visuals.md#image-prompt-style`
-- Website color palette from `docs/visuals.md#website-colors`
-- Course context from `docs/outline.md#abstract` (for thematic alignment)
-- Course language from `docs/context.md` (Language field — for in-image text language)
+- Image style guidelines from `project.md` → `## Visual Identity` / `### Course Image Generation Guidelines`
+- Website color palette from `project.md` → `## Visual Identity` / `### Website Color Palette`
+- Course context from `project.md` → `## Outline` / `### Abstract` (for thematic alignment)
+- Course language from `project.md` → `## Course Context` (Language field — for in-image text language)
 
 ## Output
 
@@ -969,10 +974,10 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Steps
 
 1. Receive user description of what should be visualized.
-2. Read image style guidelines from `docs/visuals.md#image-prompt-style`.
-3. Read color palette from `docs/visuals.md#website-colors`.
-4. Read course theme from `docs/outline.md#abstract` for context.
-5. Read course language from `docs/context.md` (Language field, e.g., `de`, `en`). If `docs/context.md` is unavailable, infer the language from the user's description as fallback.
+2. Read image style guidelines from `project.md` → `## Visual Identity` / `### Course Image Generation Guidelines`.
+3. Read color palette from `project.md` → `## Visual Identity` / `### Website Color Palette`.
+4. Read course theme from `project.md` → `## Outline` / `### Abstract` for context.
+5. Read course language from `project.md` → `## Course Context` (Language field, e.g., `de`, `en`). If `project.md` → `## Course Context` is unavailable, infer the language from the user's description as fallback.
 6. Analyze user description and extract:
    - Main subject/concept
    - Required elements or details
@@ -1009,7 +1014,7 @@ Visual Parameters:
 - Composition: [layout approach]
 - Lighting: [lighting style]
 - Mood: [atmosphere]
-- In-image text language: [language from docs/context.md, e.g., "German" / "English"]
+- In-image text language: [language from `project.md` → `## Course Context`, e.g., "German" / "English"]
 
 Complete Prompt:
 "[Full detailed prompt ready for image generator. If the image contains visible text, end with: 'All text visible in the image (labels, headings, UI elements) must be written in [language].']" 
@@ -1053,24 +1058,24 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 **Two modes:**
 
-- **Quick mode** — persona derived directly from `docs/outline.md` (target audience) and `docs/didactics.md`
+- **Quick mode** — persona derived directly from `project.md` → `## Outline` (target audience) and `project.md` → `## Didactics`
 - **Data-driven mode** — generates a structured research prompt; instructor provides external research data; agent writes persona from that data
 
 ## Inputs
 
 - Name (optional — agent suggests if not provided)
-- Target audience from `docs/outline.md#Target-Audience`
-- Difficulty level, course type, and style from `docs/didactics.md`
+- Target audience from `project.md` → `## Outline` / `### Target Audience`
+- Difficulty level, course type, and style from `project.md` → `## Didactics`
 - Optional: research data provided by instructor (for data-driven mode)
 
 ## Output
 
-- `docs/learner-personas.md` — created if not exists; new persona appended as separate section if exists
+- `project.md` → `## Learner Personas` — created if missing; new persona appended as a separate entry if it exists
 
 ## Steps
 
-1. Read `docs/outline.md` for target audience and learning objectives.
-2. Read `docs/didactics.md` for difficulty level, course type, and instructor style.
+1. Read `project.md` → `## Outline` for target audience and learning objectives.
+2. Read `project.md` → `## Didactics` for difficulty level, course type, and instructor style.
 3. 💬 Ask for persona name and icon (optional):
    - Name: if left empty, agent generates a name typical for the target context (e.g., regional, age-appropriate)
    - Icon: agent always selects a fitting emoji that reflects the persona's background, occupation, or dominant trait (e.g., 👩‍🔧 for a trainee in a trade, 🧑‍💻 for a tech learner, 📦 for logistics). The instructor can override it at the confirmation step.
@@ -1082,7 +1087,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 ### Quick Mode
 
-5. Extract key characteristics from the target audience description in `docs/outline.md`.
+5. Extract key characteristics from the target audience description in `project.md` → `## Outline`.
 6. Build a realistic profile covering all 7 dimensions (see **Persona Structure** below).
 7. Mark clearly which values are inferred/assumed vs. drawn from the docs.
 8. Proceed to Step 10.
@@ -1096,7 +1101,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
    ```
    ---
    🔍 **Research Request: Learner Persona**
-   **Context:** [Course title and target audience from docs/outline.md]
+   **Context:** [Course title and target audience from `project.md` → `## Outline`]
    **Goal:** Create an evidence-based learner persona for [audience]
    **Dimensions to research:**
    1. Sociodemographics: age distribution, gender, migration background
@@ -1123,10 +1128,10 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 10. Generate persona section using the **Persona Structure** template (see below).
 11. Display a 3-line summary and 🎛️ ask for confirmation:
-    > "Persona [Icon] [Name] created. [Brief summary]. Save to `docs/learner-personas.md`? (Yes / Adjust)"
-12. On approval: save to `docs/learner-personas.md`.
-    - If file does not exist: create it with a short file header and the persona section
-    - If file exists: append as a new `---`-separated section
+    > "Persona [Icon] [Name] created. [Brief summary]. Save to `project.md` → `## Learner Personas`? (Yes / Adjust)"
+12. On approval: save to `project.md` → `## Learner Personas`.
+    - If `## Learner Personas` does not exist: create it with a short section intro and the persona entry
+    - If it exists: append as a new `---`-separated entry
 13. Suggest next step:
     > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
@@ -1134,7 +1139,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 ## Persona Structure
 
-Each persona section in `docs/learner-personas.md` follows this structure:
+Each persona section in `project.md` → `## Learner Personas` follows this structure:
 
 ```markdown
 ---
@@ -1234,10 +1239,10 @@ Creates a professional, actionable prompt that can be used with AI image generat
 
 ## Inputs
 
-- Title from `docs/outline.md#title`
-- Abstract from `docs/outline.md#abstract`
-- Logo style guidelines from `docs/visuals.md#logo-style`
-- Logo color palette from `docs/visuals.md#logo-colors`
+- Title from `project.md` → `## Outline` / `### Title`
+- Abstract from `project.md` → `## Outline` / `### Abstract`
+- Logo style guidelines from `project.md` → `## Visual Identity` / `### Logo Generation Guidelines`
+- Logo color palette from `project.md` → `## Visual Identity` / `### Logo Color Palette`
 
 ## Output
 
@@ -1246,9 +1251,9 @@ Creates a professional, actionable prompt that can be used with AI image generat
 
 ## Steps
 
-1. Read the course title and abstract from `docs/outline.md`.
-2. Read the logo style guidelines from `docs/visuals.md#logo-style`.
-3. Read the logo color palette from `docs/visuals.md#logo-colors`.
+1. Read the course title and abstract from `project.md` → `## Outline`.
+2. Read the logo style guidelines from `project.md` → `## Visual Identity` / `### Logo Generation Guidelines`.
+3. Read the logo color palette from `project.md` → `## Visual Identity` / `### Logo Color Palette`.
 4. Extract key themes, concepts, or symbols from the abstract.
 5. Combine style guidelines with course theme to create a detailed prompt.
 6. Include specific elements:
@@ -1315,12 +1320,12 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 
 ## Output
 
-- `docs/outline.md` (Markdown file)
+- `project.md` → `## Outline`
 - Structure based on `templates/course-outline.yaml`
 
 ## Steps
 
-1. Read `docs/context.md` to determine course type and conventions.
+1. Read `project.md` → `## Course Context` to determine course type and conventions.
 2. Collect title and target audience.
 3. Collect time commitment — adapted by course type:
    - **lecture-series**: required (e.g., semester hours/week, total hours)
@@ -1331,7 +1336,7 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 5. Define 3–5 concrete learning objectives.
 6. Optionally add a logo prompt.
 7. Fill the `templates/course-outline.yaml` with the inputs.
-8. Save the file as `docs/outline.md`.
+8. Save the generated outline by creating or replacing `project.md` → `## Outline`.
 
 ==================== END: .bmad-core/tasks/create-outline.md ====================
 
@@ -1347,7 +1352,8 @@ Supports users with git operations, GitHub integration, and project publishing.
 
 ## Inputs
 
-- Colors and style from `docs/visuals.md`
+- Colors and style from `project.md` → `## Visual Identity`
+- `project.md` → `## Validation` → `### Latest Validation Summary` (**must show `Mode: course` and `Result: PASS`**)
 - User's git/GitHub experience (ask before proceeding)
 - `data/liascript-workflows.md` — internal reference for all CLI options, `project.yaml` schema, and workflow templates (load this first)
 
@@ -1359,15 +1365,17 @@ Supports users with git operations, GitHub integration, and project publishing.
 ## Steps
 
 0. Load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
-1. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
-2. Refer to the all files in the `materials/` folder or ask the user which one to embed in the materials list.
-3. Read color and style information from `docs/visuals.md` for project.yaml styling.
-4. Review the internal reference for the latest workflow and publishing best practices.
-5. Generate a `project.yaml` in the root folder, including all materials and styled according to the style guide.
-6. Create a GitHub Actions workflow for LiaScript export and publishing to GitHub Pages. The workflow must always overwrite the gh-pages branch completely (no history or previous files kept), e.g. by using `force_orphan: true` in the deployment step.
-7. Check which files must be added to git and which need to be commited.
-8. Explain each step to the user and confirm before making changes.
-9. Offer to commit and push changes and to GitHub if the user agrees.
+1. Check `project.md` → `## Validation` → `### Latest Validation Summary`.
+   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `/validate-course`.
+2. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
+3. Refer to the all files in the `materials/` folder or ask the user which one to embed in the materials list.
+4. Read color and style information from `project.md` → `## Visual Identity` for project.yaml styling.
+5. Review the internal reference for the latest workflow and publishing best practices.
+6. Generate a `project.yaml` in the root folder, including all materials and styled according to the style guide.
+7. Create a GitHub Actions workflow for LiaScript export and publishing to GitHub Pages. The workflow must always overwrite the gh-pages branch completely (no history or previous files kept), e.g. by using `force_orphan: true` in the deployment step.
+8. Check which files must be added to git and which need to be commited.
+9. Explain each step to the user and confirm before making changes.
+10. Offer to commit and push changes and to GitHub if the user agrees.
 
 ## Usage
 
@@ -1381,49 +1389,57 @@ This task is invoked when:
 
 ==================== START: .bmad-core/tasks/create-session-skeleton.md ====================
 
-# Task: create-session-skeleton
+# Task: create-session
 
 ## Purpose
 
-Creates a **skeleton** for one session (or unit/block/lesson — see `docs/context.md` for terminology) as a structured framework.  
-**The agent also adopts the instructor persona and style from `docs/didactics.md` into its own persona, so all content is written in this voice.**
+Creates a **skeleton** for one session (or unit/block/lesson — see `project.md` → `## Course Context` for terminology) as a structured framework.
+**The agent also adopts the instructor persona and style from `project.md` → `## Didactics` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
 - number: session number
 - type: type of session (`lecture` or `exercise`)
 - title (optional)
-- Didactic concept from `docs/didactics.md`
-- **Instructor persona from `docs/didactics.md` (mandatory handoff)**
-- **Style & difficulty level from `docs/didactics.md` (mandatory handoff)**
-- Terminology from `docs/context.md` (sessions-called, lectures-called)
+- Didactic concept from `project.md` → `## Didactics`
+- **Instructor persona from `project.md` → `## Didactics` (mandatory handoff)**
+- **Style & difficulty level from `project.md` → `## Didactics` (mandatory handoff)**
+- Terminology from `project.md` → `## Course Context` (sessions-called, lectures-called)
 
 ## Output
 
-- `skeletons/{number}-{type}.md` (Markdown file)
+- `project.md` → `## Sessions`
 - Structure based on `templates/session-skeleton.yaml`
 
 ## Steps
 
 1. Collect session number, type, and optional title.
-2. Read `docs/context.md` for terminology and conventions.
+2. Read `project.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
 4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
+   - From this step, the agent writes in the tone of the professor persona.
+   - All agenda descriptions reflect this style.
+5. Generate the basic structure for the session.
+6. Fill out template `templates/session-skeleton.yaml`.
+7. Save the skeleton as a `### {number}. {title}` subsection under `project.md` → `## Sessions`.
+   The `## Sessions` section has one canonical structure:
+   1. An overview table directly below `## Sessions`
+   2. One `### {number}. {title}` subsection per session below the overview table
 
-- From this step, the agent writes in the tone of the professor persona.
-- All agenda descriptions reflect this style.
-
-4. Generate the basic structure for the session.
-5. Fill out template `templates/session-skeleton.yaml`.
-6. Save the file.
-7. Update `docs/sessions.md`:
-   - If `docs/sessions.md` does not exist yet, create it with the header:
+   - Store the session type as its own line: `**Type:** {type}`.
+   - Do not include the type in the subsection heading.
+   - `**Summary:**` and `**Content:**` are free text blocks and may contain more than one paragraph.
+   - `**Activities:**` must be a numbered list.
+   - `**References:**` must be a numbered list.
+8. Update the overview table inside `project.md` → `## Sessions`:
+   - If `project.md` → `## Sessions` does not exist yet, create it with the overview table first:
      ```
-     | # | Titel | Typ | Skeleton | Material | Fertig | Notizen |
+     | # | Titel | Typ | Skeleton | Material | Ready | Notes |
      |---|---|---|---|---|---|---|
      ```
    - Add a new row: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - If a row for this session already exists, update the Skeleton column to ✅.
+   - Keep the overview table before all `### {number}. {title}` subsections.
 
 ==================== END: .bmad-core/tasks/create-session-skeleton.md ====================
 
@@ -1440,36 +1456,43 @@ Ensures all visual materials across courses maintain a consistent brand identity
 
 ## Inputs
 
-- Title from `docs/outline.md#title`
-- Abstract from `docs/outline.md#abstract`
-- Professor persona from `docs/didactics.md#professor-persona`
-- Teaching style from `docs/didactics.md#teaching-style`
-- Difficulty level from `docs/didactics.md#difficulty-level`
-- Course type from `docs/didactics.md#course-type`
+- Title from `project.md` → `## Outline` / `### Title`
+- Abstract from `project.md` → `## Outline` / `### Abstract`
+- Professor persona from `project.md` → `## Didactics` / `### Professor Persona`
+- Teaching style from `project.md` → `## Didactics` / `### Teaching Style`
+- Difficulty level from `project.md` → `## Didactics` / `### Difficulty Level`
+- Course type from `project.md` → `## Didactics` / `### Course Type`
 - Additional preferences (optional): color schemes, visual style, brand guidelines
 
 ## Output
 
-- `docs/visuals.md` (Markdown file)
+- `project.md` → `## Visual Identity`
 - Structure based on `templates/visuals.yaml`
 
 ## Steps
 
-1. Read title and abstract from `docs/outline.md`.
-2. Read professor persona, teaching style, difficulty level, and course type from `docs/didactics.md`.
+1. Read title and abstract from `project.md` → `## Outline`.
+2. Read professor persona, teaching style, difficulty level, and course type from `project.md` → `## Didactics`.
 3. Align visual identity with professor persona and teaching style.
    - Example: Playful persona → colorful, informal visuals
    - Example: Academic persona → formal, professional tones
    - Example: Technical style → clean, minimalist design
-4. Define logo generation guidelines (style, format, elements, mood) aligned with persona.
-5. Establish logo color palette (primary, secondary, accent, background with HEX codes).
-6. Design course image generation guidelines (visual style, composition, lighting, mood).
-7. Set image consistency rules to maintain visual coherence.
-8. Define website color palette (primary, secondary, accent, neutral, semantic colors).
-9. Specify typography (headings, body text, monospace fonts) matching the course style.
-10. Create example prompts for logos, images, and diagrams based on course theme.
-11. Fill the `templates/visuals.yaml` template with the results.
-12. Save the file as `docs/visuals.md`.
+4. Ensure `project.md` contains the LiaScript `@color` macro in the header comment before `# ...`:
+   ```
+   <!--
+   color: <span style="display:inline-block;width:1.5rem;height:1.5rem;background-color:@0;border:1px solid #ccc;border-radius:2px;vertical-align:middle;"></span> `@0`
+   -->
+   ```
+   If the macro is missing, add it to the header. If it already exists, leave it unchanged.
+5. Define logo generation guidelines (style, format, elements, mood) aligned with persona.
+6. Establish logo color palette (primary, secondary, accent, background). Every HEX color shown in `## Visual Identity` must be wrapped as `@color(#HEXCODE)`, for example `@color(#129987)`.
+7. Design course image generation guidelines (visual style, composition, lighting, mood).
+8. Set image consistency rules to maintain visual coherence.
+9. Define website color palette (primary, secondary, accent, neutral, semantic colors). Every HEX color shown in this palette must also use `@color(#HEXCODE)`.
+10. Specify typography (headings, body text, monospace fonts) matching the course style.
+11. Create example prompts for logos, images, and diagrams based on course theme.
+12. Fill the `templates/visuals.yaml` template with the results.
+13. Save the visual style guide by creating or replacing `project.md` → `## Visual Identity`.
 
 ## Usage
 
@@ -1502,7 +1525,7 @@ Requires the **chrome-devtools MCP server** to be active and Chrome running with
 - **Single mode:** `assets/prompts/image-{slug}.md`
 - **Batch mode:** all `assets/prompts/image-*.md` files (skips slugs that already have a matching image)
 - Chrome DevTools MCP availability (checked at task start)
-- Course language from `docs/context.md` (safety-net: appended to prompt if no language instruction is already present)
+- Course language from `project.md` → `## Course Context` (safety-net: appended to prompt if no language instruction is already present)
 
 ## Output
 
@@ -1575,7 +1598,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ### Automated Batch
 
-8. Read all pending prompt files, extract `Complete Prompt:` strings. Read course language from `docs/context.md`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
+8. Read all pending prompt files, extract `Complete Prompt:` strings. Read course language from `project.md` → `## Course Context`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 9. Inject the following self-contained JS loop into the browser:
 
    ```js
@@ -1675,7 +1698,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 ## Phase 3: Submit to ChatGPT *(single + sequential batch)*
 
 - **First image only:** Navigate to `https://chatgpt.com/`. For subsequent images in sequential batch, stay on the same page — just insert the next prompt.
-- **Language safety-net:** Read course language from `docs/context.md`. If the prompt does not already contain a language instruction for in-image text (i.e., does not mention "text visible in the image"), append to the prompt:  
+- **Language safety-net:** Read course language from `project.md` → `## Course Context`. If the prompt does not already contain a language instruction for in-image text (i.e., does not mention "text visible in the image"), append to the prompt:
   `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 - Insert prompt and submit — poll for send-button at 200ms intervals (it only renders when textarea has content):
   ```js
@@ -1786,7 +1809,7 @@ If any failures: list slugs, suggest `/generate-image {slug}` to retry individua
 
 ## Purpose
 
-Initializes a new course project by creating `docs/context.md`.
+Initializes a new course project by creating or updating the `## Course Context` section in `project.md`.
 
 This is the **first mandatory step** for every new course project.
 The course context acts as the governance layer: it defines the course type, terminology, persona style, conventions, and LiaScript rules that all subsequent tasks will load and follow.
@@ -1799,7 +1822,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
 ## Output
 
-- `docs/context.md` (Markdown file)
+- `project.md` → `## Course Context`
 - Structure based on `templates/course-context.yaml`
 
 ## Steps
@@ -1838,18 +1861,18 @@ The course context acts as the governance layer: it defines the course type, ter
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
-8. Save the file as `docs/context.md`.
+8. Save the generated context by creating or replacing `project.md` → `## Course Context`.
 9. Confirm completion and suggest the next step based on course type:
    - **lecture-series / workshop** → `/create-outline`
    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
-   - **improve-existing** → `/analyze-existing` (scans existing docs, offers to fill gaps)
+   - **improve-existing** → `/analyze-existing` (scans existing project memory and materials, offers to fill gaps)
 
 ## Notes
 
-- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `docs/context.md` and adapt their behavior accordingly.
+- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `project.md` → `## Course Context` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
-- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing docs before improvement work begins.
+- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `project.md` sections before improvement work begins.
 
 ==================== END: .bmad-core/tasks/init-course.md ====================
 
@@ -1906,18 +1929,18 @@ This task is invoked when:
 
 ## Purpose
 
-Converts a **Session Skeleton** into a detailed **Session Material**.  
-**The agent also adopts the instructor persona and style from `docs/didactics.md` into its own persona, so all content is written in this voice.**
+Converts a **Session** into a detailed **Session Material**.  
+**The agent also adopts the instructor persona and style from `project.md` → `## Didactics` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
 - number, type
-- skeleton: file from `skeletons/`
-- didactics: content from `docs/didactics.md`
-- agenda: content from `docs/agenda.md`
-- **Instructor persona from `docs/didactics.md` (mandatory handoff)**
-- **Style & difficulty level from `docs/didactics.md` (mandatory handoff)**
-- Terminology from `docs/context.md`
+- skeleton: matching `### {number}. {title}` subsection from `project.md` → `## Sessions`
+- didactics: content from `project.md` → `## Didactics`
+- agenda: content from `project.md` → `## Agenda`
+- **Instructor persona from `project.md` → `## Didactics` (mandatory handoff)**
+- **Style & difficulty level from `project.md` → `## Didactics` (mandatory handoff)**
+- Terminology from `project.md` → `## Course Context`
 
 ## Output
 
@@ -1926,8 +1949,8 @@ Converts a **Session Skeleton** into a detailed **Session Material**.
 
 ## Steps
 
-1. Load skeleton.
-2. Read `docs/context.md` for terminology and conventions.
+1. Load the matching skeleton subsection from `project.md` → `## Sessions`.
+2. Read `project.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
 4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
 
@@ -1938,10 +1961,8 @@ Converts a **Session Skeleton** into a detailed **Session Material**.
 5. Consider didactic inputs.
 6. Generate planned outline.
 7. Apply template.
-8. Save the file.
-9. Update `docs/sessions.md`: set Material column to ✅ for session `{number}`.
-7. Apply template.
-8. Save the file.
+8. Save the material file as `materials/{number}-{type}.md`.
+9. Update the overview table in `project.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
 
 ==================== END: .bmad-core/tasks/promote-session.md ====================
 
@@ -1962,7 +1983,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 - `type`: session type (`lecture` or `exercise`)
 - `description`: what to fix (brief, e.g., "Typo in section 3", "Fix quiz syntax in slide 5", "Replace example for learning objective 2")
 - `materials/{number}-{type}.md` — the file to change
-- `docs/context.md` — for conventions and terminology
+- `project.md` → `## Course Context` — for conventions and terminology
 - `data/liascript-cheat-sheet.md` — for syntax reference if the fix involves LiaScript
 
 ## Output
@@ -1979,7 +2000,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 3. **Mini-validation of the affected section:**
    - LiaScript syntax correct in the changed area?
-   - Persona/tone consistent with `docs/didactics.md`?
+   - Persona/tone consistent with `project.md` → `## Didactics`?
    - No unintended regression in surrounding content?
 
 4. **Report result:**
@@ -2012,7 +2033,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 ## Purpose
 
-The agent temporarily **embodies a learner persona** from `docs/learner-personas.md` and reviews
+The agent temporarily **embodies a learner persona** from `project.md` → `## Learner Personas` and reviews
 one session material from the perspective of that fictional learner.
 
 This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
@@ -2024,28 +2045,28 @@ or simply get a feel for how this learner experiences the material.
 
 ## Inputs
 
-- `{name}` — persona name (must exist in `docs/learner-personas.md`)
+- `{name}` — persona name (must exist in `project.md` → `## Learner Personas`)
 - `{number}` — session number
 - `{type}` — session type (`lecture` or `exercise`)
 - `materials/{number}-{type}.md` — the material to review
-- `docs/learner-personas.md` — full persona definition
-- `docs/agenda.md` — learning objectives for this session
-- `docs/context.md` — terminology and conventions
+- `project.md` → `## Learner Personas` — full persona definition
+- `project.md` → `## Agenda` — learning objectives for this session
+- `project.md` → `## Course Context` — terminology and conventions
 
 ## Output
 
-- `docs/persona-review-{name}-{number}-{type}.md` — saved structured review report
+- `project.md` → `## Persona Reviews` — saved structured review report
 - Agent remains in persona mode for interactive follow-up dialog until explicitly exited
 
 ## Steps
 
-1. Load the named persona from `docs/learner-personas.md`.
+1. Load the named persona from `project.md` → `## Learner Personas`.
    - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
-   - If `docs/learner-personas.md` does not exist: state this and suggest `/create-learner-persona` first.
+   - If `project.md` → `## Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
 
 2. Load `materials/{number}-{type}.md`.
 
-3. Load the learning objectives for this session from `docs/agenda.md`.
+3. Load the learning objectives for this session from `project.md` → `## Agenda`.
 
 4. Announce persona adoption clearly:
    > "I am now [Icon] [Name] — [one-line description from persona overview]. Reading Session [N] from a learner's perspective…"
@@ -2127,8 +2148,8 @@ or simply get a feel for how this learner experiences the material.
    [What this persona would respond well to — do not skip this section.]
    ```
 
-7. Save the report to `docs/persona-review-{name}-{number}-{type}.md`.
-   Confirm: "Review saved as `docs/persona-review-{name}-{number}-{type}.md`."
+7. Append the report to `project.md` → `## Persona Reviews` under a heading like `### {name} — {number}-{type} — YYYY-MM-DD`.
+   Confirm: "Review saved in `project.md` → `## Persona Reviews`."
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
@@ -2177,7 +2198,7 @@ or simply get a feel for how this learner experiences the material.
 
 Runs all structural setup steps in one automated pass — without stopping for approval after each step.
 
-The instructor answers all questions **upfront in a single intake interview**. The agent then generates `docs/context.md`, `docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, and all session skeletons automatically. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
+The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `project.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
 
 This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init-course` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
 
@@ -2201,13 +2222,12 @@ All collected in a single intake interview at the start:
 
 ## Output
 
-Generated in sequence without interruption:
-- `docs/context.md`
-- `docs/outline.md`
-- `docs/didactics.md`
-- `docs/agenda.md` (if applicable)
-- `skeletons/{n}-{type}.md` for each session
-- `docs/sessions.md` (tracking table)
+Generated in sequence without interruption inside `project.md`:
+- `## Course Context`
+- `## Outline`
+- `## Didactics`
+- `## Agenda` (if applicable)
+- `## Sessions` containing an overview table followed by one subsection per session
 
 ## Steps
 
@@ -2250,38 +2270,40 @@ Generated in sequence without interruption:
 
 Run each step silently (no approval prompts between steps):
 
-1. Generate and save `docs/context.md` from collected inputs.
-2. Generate and save `docs/outline.md`.
-3. Generate and save `docs/didactics.md` — including the **Persona Voice Sample** section.
-4. Generate and save `docs/agenda.md` (skip if agenda = no).
-5. For each session: generate and save `skeletons/{n}-{type}.md`.
-6. Create `docs/sessions.md` with all sessions listed, Skeleton ✅, Material ❌, Complete ❌.
+1. Generate or replace `project.md` → `## Course Context` from collected inputs.
+2. Generate or replace `project.md` → `## Outline`.
+3. Generate or replace `project.md` → `## Didactics` — including the **Persona Voice Sample** section.
+4. Generate or replace `project.md` → `## Agenda` (skip if agenda = no).
+5. Create or replace `project.md` → `## Sessions` with:
+   - An overview table directly below `## Sessions`
+   - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
+   - One `### {number}. {title}` subsection per session below the overview table
+6. Fill each session subsection using `templates/session-skeleton.yaml`.
 
-After each file is saved, print a brief progress line:
+After each section is saved, print a brief progress line:
 ```
-✅ docs/context.md
-✅ docs/outline.md
-✅ docs/didactics.md
-✅ docs/agenda.md
-✅ skeletons/1-lecture.md
-✅ skeletons/2-lecture.md
+✅ project.md → ## Course Context
+✅ project.md → ## Outline
+✅ project.md → ## Didactics
+✅ project.md → ## Agenda
+✅ project.md → ## Sessions / overview
+✅ project.md → ## Sessions / 1. Session title
+✅ project.md → ## Sessions / 2. Session title
 ...
-✅ docs/sessions.md
 ```
 
 ### Phase 3: Handoff
 
 7. Print completion summary:
-   > "Scaffold completed. [N] files created."
+   > "Scaffold completed. `project.md` updated with [N] sections/entries."
    >
-   > | File         | Status            |
+   > | Section      | Status            |
    > |--------------|-------------------|
-   > | docs/context.md   | ✅                |
-   > | docs/outline.md   | ✅                |
-   > | docs/didactics.md | ✅                |
-   > | docs/agenda.md    | ✅ / skipped      |
-   > | skeletons/   | ✅ [N] files      |
-   > | docs/sessions.md  | ✅                |
+   > | Course Context | ✅              |
+   > | Outline        | ✅              |
+   > | Didactics      | ✅              |
+   > | Agenda         | ✅ / skipped    |
+   > | Sessions       | ✅ overview + [N] subsections |
    >
    > "Next step: `/coauthor-materials` to start with Session 1."
 
@@ -2297,8 +2319,8 @@ After each file is saved, print a brief progress line:
 ## Notes
 
 - Scaffold mode does NOT run `/promote-session` or `/coauthor-materials` — those remain interactive.
-- All generated files are drafts. The instructor reviews and refines them during co-authoring.
-- The Persona Voice Sample in `docs/didactics.md` is especially important — it anchors tone for all future co-authoring sessions.
+- All generated `project.md` sections are drafts. The instructor reviews and refines them during co-authoring.
+- The Persona Voice Sample in `project.md` → `## Didactics` is especially important — it anchors tone for all future co-authoring sessions.
 
 ==================== END: .bmad-core/tasks/scaffold-course.md ====================
 
@@ -2314,8 +2336,9 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 ## Inputs
 
 - Existing `project.yaml` in the root folder
+- `project.md` → `## Validation` → `### Latest Validation Summary` (**must show `Mode: course` and `Result: PASS`**)
 - User's git/GitHub experience (ask before proceeding)
-- Colors and style from `docs/visuals.md`
+- Colors and style from `project.md` → `## Visual Identity`
 - `data/liascript-workflows.md` — internal reference for `project.yaml` schema and workflow templates
 
 ## Output
@@ -2326,12 +2349,14 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 
 ## Steps
 
-1. Ask the user about their git/GitHub experience and confirm they want to update and publish.
-2. Scan the `materials/` folder for new or updated files.
-3. Update the `project.yaml` and ask the user to include all of the current materials or to import only a subset. Use colors and style from `docs/visuals.md` for any styling updates.
-4. Stage, commit, and push the updated `project.yaml` and new/changed materials to the repository.
-5. Trigger the GitHub Actions workflow to publish the updates (overwriting gh-pages as before).
-6. Explain each step to the user and confirm before making changes.
+1. Check `project.md` → `## Validation` → `### Latest Validation Summary`.
+   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `/validate-course`.
+2. Ask the user about their git/GitHub experience and confirm they want to update and publish.
+3. Scan the `materials/` folder for new or updated files.
+4. Update the `project.yaml` and ask the user to include all of the current materials or to import only a subset. Use colors and style from `project.md` → `## Visual Identity` for any styling updates.
+5. Stage, commit, and push the updated `project.yaml` and new/changed materials to the repository.
+6. Trigger the GitHub Actions workflow to publish the updates (overwriting gh-pages as before).
+7. Explain each step to the user and confirm before making changes.
 
 ## Usage
 
@@ -2349,7 +2374,7 @@ This task is invoked when:
 
 ## Purpose
 
-Checks the consistency, completeness, and LiaScript syntax correctness of course documents.
+Checks the consistency, completeness, and LiaScript syntax correctness of the project memory and course materials.
 Can be run in two modes:
 
 - **Session mode** (`/validate-course {number} {type}`) — checks a single material file after co-authoring
@@ -2357,34 +2382,50 @@ Can be run in two modes:
 
 ## Inputs
 
-- `docs/context.md` — course type and conventions
+- `project.md` → `## Course Context` — course type and conventions
 - `checklists/course-quality-checklist.md` — structured checklist
 - `data/liascript-cheat-sheet.md` — syntax reference for LiaScript checks
-- For session mode: `materials/{number}-{type}.md` and matching row in `docs/sessions.md`
-- For course mode: all docs (`docs/outline.md`, `docs/didactics.md`, `docs/agenda.md`, `docs/sessions.md`, `skeletons/`, `materials/`)
+- `templates/session-validation.yaml` — template for each stored session validation report
+- For session mode: `materials/{number}-{type}.md`, matching overview row in `project.md` → `## Sessions`, and matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
+- For course mode: `project.md` sections (`## Outline`, `## Didactics`, `## Agenda`, `## Sessions`) and `materials/`
 
 ## Output
 
-- **Session mode**: short inline report (printed, not saved) with issues for this session
-- **Course mode**: `docs/validation-report.md` — structured report with pass/fail per section and a list of issues
+- **Session mode**: create or replace `#### Validation Report` inside the matching session subsection in `project.md` → `## Sessions`
+- **Course mode**: validate all material files and create or replace `#### Validation Report` inside each matching session subsection in `project.md` → `## Sessions`
+
+## Validation Storage
+
+Per-session validation is stored directly with the matching session in `project.md` → `## Sessions`.
+Each session has at most one current validation report, rendered from `templates/session-validation.yaml`.
+
+Rules:
+- Store the report under the matching `### {number}. {title}` session subsection.
+- The report heading is always `#### Validation Report`.
+- If the session already has a `#### Validation Report`, replace it completely.
+- Do not keep historical session validation reports.
+- Session mode does not update `project.md` → `## Validation`.
+- Full course validation replaces `project.md` → `## Validation` → `### Latest Validation Summary` for publishing decisions.
+- For publishing decisions, use `### Latest Validation Summary` as the authoritative course-level gate state.
+- Publishing requires `Mode: course` and `Result: PASS`; a passing session-mode validation never unlocks publishing by itself.
 
 ---
 
 ## Session Mode Steps (`/validate-course {number} {type}`)
 
-1. Load `docs/context.md` for course type and conventions.
-2. Load `docs/agenda.md` to get the learning objectives for this session.
+1. Load `project.md` → `## Course Context` for course type and conventions.
+2. Load `project.md` → `## Agenda` to get the learning objectives for this session.
 3. Load `data/liascript-cheat-sheet.md` as syntax reference.
 4. Open `materials/{number}-{type}.md` and check:
 
    **Content checks:**
-   - [ ] All learning objectives from `docs/agenda.md` for this session are addressed
+   - [ ] All learning objectives from `project.md` → `## Agenda` for this session are addressed
    - [ ] No section is vague, content-free, or placeholder-only
    - [ ] References present where content claims are made
 
    **Persona & style checks:**
-   - [ ] Tone matches the instructor persona from `docs/didactics.md`
-   - [ ] Terminology matches `docs/context.md` (sessions-called, etc.)
+   - [ ] Tone matches the instructor persona from `project.md` → `## Didactics`
+   - [ ] Terminology matches `project.md` → `## Course Context` (sessions-called, etc.)
 
    **LiaScript syntax checks** (against `data/liascript-cheat-sheet.md`):
    - [ ] Exactly one `#` heading in the file (course title)
@@ -2395,74 +2436,85 @@ Can be run in two modes:
    - [ ] All media elements have alt text
    - [ ] No unclosed `<div>` blocks
 
-5. Report issues clearly with line references where possible.
-6. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified."
-7. If issues found: list them and ask the instructor whether to open `/coauthor-materials` to fix them.
+5. Fill `templates/session-validation.yaml` for this session with:
+   - Material path
+   - Result: PASS / FAIL / PASS with concerns
+   - Mode: session
+   - Date
+   - Content findings
+   - Persona & style findings
+   - LiaScript syntax findings
+   - Recommended actions
+   - Line references where possible
+6. Create or replace the rendered `#### Validation Report` in the matching session subsection under `project.md` → `## Sessions`.
+7. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `project.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
+8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `/coauthor-materials` to fix them.
 
 ---
 
 ## Course Mode Steps (`/validate-course`)
 
-1. Load `docs/context.md` to understand course type and applicable conventions.
+1. Load `project.md` → `## Course Context` to understand course type and applicable conventions.
 2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply).
 3. Load `data/liascript-cheat-sheet.md` as syntax reference.
 
 4. **Check Context & Foundation:**
-   - `docs/context.md` complete (course type, terminology, agenda flag, conventions)
-   - `docs/outline.md`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
-   - `docs/didactics.md`: instructor persona, didactic concept, style, difficulty level
+   - `project.md` → `## Course Context` complete (course type, terminology, agenda flag, conventions)
+   - `project.md` → `## Outline`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
+   - `project.md` → `## Didactics`: instructor persona, didactic concept, style, difficulty level
 
-5. **Check Agenda** `[if agenda flag = yes in docs/context.md]`:
+5. **Check Agenda** `[if agenda flag = yes in project.md → ## Course Context]`:
    - All sessions have title, duration, type, learning objective, summary
-   - Learning objectives align with `docs/outline.md`
+   - Learning objectives align with `project.md` → `## Outline`
 
 6. **Check Session Progress:**
-   - Load `docs/sessions.md` as primary source
-   - All expected sessions have a row
-   - Cross-check: every ✅ Skeleton row has a file in `skeletons/`
+   - Load `project.md` → `## Sessions` as primary source
+   - Confirm the overview table appears directly below `## Sessions`
+   - All expected sessions have a row in the overview table
+   - Cross-check: every ✅ Skeleton row has a matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
    - Cross-check: every ✅ Material row has a file in `materials/`
-   - All sessions marked ✅ Ready `[required before publishing]`
+   - All sessions marked ✅ Fertig `[required before publishing]`
 
 7. **Check each material file** in `materials/` (same LiaScript + content checks as Session Mode Step 4).
+   For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching `#### Validation Report` in that session subsection under `project.md` → `## Sessions`.
 
-8. **Consistency check across all documents:**
-   - Terminology consistent (sessions-called from `docs/context.md` used throughout)
+8. **Consistency check across project memory and materials:**
+   - Terminology consistent (sessions-called from `project.md` → `## Course Context` used throughout)
    - Persona tone consistent across all materials
-   - Learning objectives from `docs/outline.md` traceable through `docs/agenda.md` into materials
+   - Learning objectives from `project.md` → `## Outline` traceable through `project.md` → `## Agenda` into materials
    - Numbering correct and no gaps
 
-9. **Create `docs/validation-report.md`:**
+9. **Replace `project.md` → `## Validation` → `### Latest Validation Summary`:**
 
    ```
-   # Validation Report — [Course Title]
    Date: YYYY-MM-DD
+   Mode: course
    Course type: [type]
+   Result: PASS / FAIL / PASS with concerns
+   Issues found: N
+   Sessions checked: N
 
-   ## Summary
-   PASS / FAIL — [N issues found]
-
-   ## Issues by Section
-   ### Foundation
+   #### Course-Level Findings
+   ##### Foundation
    - [issue or ✅ OK]
 
-   ### Agenda
+   ##### Agenda
    - [issue or ✅ OK / SKIPPED (course type)]
 
-   ### Session Progress
+   ##### Session Progress
    - [issue or ✅ OK]
 
-   ### Materials
-   #### Session {N} — {title}
+   ##### Materials
+   - Session {N} — {title}: [issue or ✅ OK]
+
+   ##### Consistency
    - [issue or ✅ OK]
 
-   ### Consistency
-   - [issue or ✅ OK]
-
-   ## Recommended Actions
+   #### Recommended Actions
    1. [Concrete action with file reference]
    ```
 
-10. After report is created: suggest next step.
+10. After all session validation reports and the latest summary are created: suggest next step.
     - If issues exist: "Open `/coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `/validate-course`."
     - If no issues: "Course is ready for publishing. Next step: `/agent development` → `/create-project`"
 
@@ -2474,11 +2526,11 @@ Can be run in two modes:
 
 | Result                 | Agent behavior                                                                                                                                                                                                          |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `docs/validation-report.md` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
+| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `project.md` → `## Validation` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
 | 🟡 PASS with concerns | Ask: "There are open points, but no critical blockers. Do you want to proceed to publishing anyway? (Yes / No / Resolve issues first)"                                                                            |
-| 🟢 PASS               | Suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `/agent development` → `/create-project`"                                                                                          |
+| 🟢 PASS               | Only if `Mode: course`: suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `/agent development` → `/create-project`"                                                                                          |
 
-**Rule:** Never suggest or assist with `/create-project` or `/update-project` if the most recent `docs/validation-report.md` contains FAIL — regardless of how the instructor asks.
+**Rule:** Never suggest or assist with `/create-project` or `/update-project` unless `project.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.
 
 ==================== END: .bmad-core/tasks/validate-course.md ====================
 
@@ -2492,7 +2544,8 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/agenda.md
+    filename: project.md
+    section: Agenda
   title: 'Course Agenda'
   sections:
     - id: overview
@@ -2520,39 +2573,47 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/context.md
+    filename: project.md
+    section: Course Context
   title: 'Course Context'
   sections:
     - id: course-type
       title: Course Type
       template: |
-        Type: [lecture-series | self-paced | workshop | single-lesson | improve-existing]
-        Working Title: [optional working title]
+        * __Course Type:__
+          1. Type: [lecture-series | self-paced | workshop | single-lesson | improve-existing]
+          2. Working Title: [optional working title]
 
     - id: profile
       title: Course Profile
       template: |
-        Terminology:
-          sessions-called: [session | unit | block | lesson]
-          lectures-called: [lecture | module | chapter | lesson]
-        Persona type: [professor | coach | facilitator | tutor]
-        Agenda required: [yes | optional | no]
-        Pacing: [scheduled | learner-driven | event-based]
-        Assessment defaults: [quizzes | reflection | assignments | none]
+        * __Terminology:__
+          1. sessions-called: [session | unit | block | lesson]
+          2. lectures-called: [lecture | module | chapter | lesson]
+
+        * __Course Profile:__
+          1. Persona type: [professor | coach | facilitator | tutor]
+          2. Agenda required: [yes | optional | no]
+          3. Pacing: [scheduled | learner-driven | event-based]
+          4. Assessment defaults: [quizzes | reflection | assignments | none]
 
     - id: conventions
       title: Conventions & Standards
       template: |
-        Language: [de | en | other]
-        Tone: [formal | informal | conversational]
-        Person: [Sie | Du | you]
-        Accessibility: [required | optional]
-        LiaScript conventions:
+        * __Conventions & Standards:__
+          1. Language: [de | en | other]
+          2. Tone: [formal | informal | conversational]
+          3. Person: [Sie | Du | you]
+          4. Accessibility: [required | optional]
+
+        * __LiaScript conventions:__
           - [list project-specific rules here]
 
     - id: notes
       title: Additional Notes
-      template: 'Any project-specific rules, constraints, or reminders.'
+      template: |
+        * __Additional Notes:__
+          - [Any project-specific rules, constraints, or reminders.]
 ```
 
 ==================== END: .bmad-core/templates/course-context.yaml ====================
@@ -2567,7 +2628,8 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/didactics.md
+    filename: project.md
+    section: Didactics
   title: 'Course Didactics'
   sections:
     - id: didactic-concept
@@ -2606,27 +2668,37 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/outline.md
+    filename: project.md
+    section: Outline
   title: 'Course Outline'
   sections:
     - id: title
       title: Title
-      template: 'Name of the lecture or course'
+      template: |
+        * __Title:__
+          [Name of the lecture or course]
     - id: target-audience
       title: Target Audience
-      template: 'Who is this course/lecture for?'
+      template: |
+        * __Target Audience:__
+          [Who is this course/lecture for?]
     - id: time-commitment
       title: Time Commitment
-      template: 'Estimated time commitment (e.g., semester hours per week, total hours)'
+      template: |
+        * __Time Commitment:__
+          [Estimated time commitment, e.g., semester hours per week or total hours]
     - id: abstract
       title: Abstract
-      template: >
-        Detailed abstract with all topics,
-        clarifies benefits & application.
+      template: |
+        * __Abstract:__
+          [Detailed abstract with all topics, benefits, and application.]
     - id: learning-goals
       title: Learning Objectives
-      template: >
-        List of 3–5 clear learning objectives with application scenarios.
+      template: |
+        * __Learning Objectives:__
+          1. [Clear learning objective with application scenario]
+          2. [Clear learning objective with application scenario]
+          3. [Clear learning objective with application scenario]
 ```
 
 ==================== END: .bmad-core/templates/course-outline.yaml ====================
@@ -2674,32 +2746,107 @@ template:
 
 ```yaml
 template:
-  id: session-skeleton
-  name: 'Session Skeleton'
+  id: session
+  name: 'Session'
   version: 1.0
   output:
     format: markdown
-    filename: skeletons/{{number}}-{{type}}.md
-  title: 'Session {{number}} ({{type | title}})'
+    filename: project.md
+    section: Sessions
+    entry: "{{number}}"
+    section_layout:
+      overview: "Overview table directly below `## Sessions`"
+      entries: "Session skeletons as `### {{number}}. {{title}}` subsections below the overview table"
+  title: 'Session {{number}}'
   sections:
     - id: title
       title: Title
-      template: 'Session {{number}} – {{title}} ({{type | title}})'
+      template: |
+        ### {{number}}. {{title}}
+    - id: type
+      title: Type
+      template: |
+        **Type:** {{type}}
     - id: summary
       title: Summary
-      template: 'Short overview, reference to agenda, relevance, didactics.'
+      template: |
+        **Summary:**
+
+        [Short overview, reference to agenda, relevance, didactics. May contain more than one paragraph.]
     - id: content
       title: Content
-      template: 'Placeholder for main topics or assignments.'
+      template: |
+        **Content:**
+
+        [Placeholder for main topics or assignments. May contain more than one paragraph.]
     - id: activities
       title: Activities
-      template: 'Placeholder for exercises, discussions, reflection.'
+      template: |
+        **Activities:**
+
+        1. [Exercise, discussion, reflection, or learner action]
+        2. [Exercise, discussion, reflection, or learner action]
     - id: references
       title: References & Sources
-      template: 'List of relevant sources and materials.'
+      template: |
+        **References:**
+
+        1. [Relevant source or material]
 ```
 
 ==================== END: .bmad-core/templates/session-skeleton.yaml ====================
+
+
+==================== START: .bmad-core/templates/session-validation.yaml ====================
+
+```yaml
+template:
+  id: session-validation
+  name: 'Session Validation Report'
+  version: 1.0
+  output:
+    format: markdown
+    filename: project.md
+    section: Sessions
+    parent: "### {{number}}. {{title}}"
+    heading: "#### Validation Report"
+    replace_existing: true
+  title: 'Session {{number}} Validation'
+  sections:
+    - id: report-heading
+      title: Report Heading
+      template: |
+        #### Validation Report
+    - id: metadata
+      title: Metadata
+      template: |
+        __Date:__ {{date}}
+        __Material:__ materials/{{number}}-{{type}}.md
+        __Result:__ {{result}}
+        __Mode:__ {{mode}}
+    - id: content
+      title: Content
+      template: |
+        ##### Content
+        - {{content_findings}}
+    - id: persona-style
+      title: Persona & Style
+      template: |
+        ##### Persona & Style
+        - {{persona_style_findings}}
+    - id: liascript-syntax
+      title: LiaScript Syntax
+      template: |
+        ##### LiaScript Syntax
+        - {{liascript_syntax_findings}}
+    - id: recommended-actions
+      title: Recommended Actions
+      template: |
+        ##### Recommended Actions
+        1. {{recommended_actions}}
+```
+
+==================== END: .bmad-core/templates/session-validation.yaml ====================
 
 
 ==================== START: .bmad-core/templates/visuals.yaml ====================
@@ -2711,106 +2858,88 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: docs/visuals.md
+    filename: project.md
+    section: Visual Identity
   title: 'Visual Style Guide'
-  
+
   sections:
     - id: logo-style
       title: Logo Generation Guidelines
       template: |
-        General prompt template for logos:
-        
-        Style: [modern/minimalist/academic/playful/technical]
-        Format: [flat design/line art/geometric/illustrative]
-        Elements: [symbols, icons, or abstract shapes to include]
-        Mood: [professional/approachable/innovative/traditional]
-        Additional notes: [any specific requirements]
-        
-        Default logo prompt base:
-        "A [style] logo for an educational course, [format] style, 
-        featuring [elements], conveying a [mood] atmosphere, 
-        clean and scalable design, suitable for digital and print use."
-    
+        * __Logo Generation Guidelines:__
+          1. Style: [modern/minimalist/academic/playful/technical]
+          2. Format: [flat design/line art/geometric/illustrative]
+          3. Elements: [symbols, icons, or abstract shapes to include]
+          4. Mood: [professional/approachable/innovative/traditional]
+          5. Additional notes: [any specific requirements]
+
+        * __Default Logo Prompt Base:__
+          "A [style] logo for an educational course, [format] style, featuring [elements], conveying a [mood] atmosphere, clean and scalable design, suitable for digital and print use."
+
     - id: logo-colors
       title: Logo Color Palette
       template: |
-        Primary color: [HEX code] - [color name/description]
-        Secondary color: [HEX code] - [color name/description]
-        Accent color: [HEX code] - [color name/description]
-        Background: [HEX code] - [color name/description]
-        
-        Color usage:
-        - Primary: Main logo elements, headings
-        - Secondary: Supporting elements, borders
-        - Accent: Highlights, call-to-action elements
-        - Background: Canvas, backgrounds
-    
+        * __Logo Color Palette:__
+          1. Primary color: @color([HEX code]) - [color name/description]
+          2. Secondary color: @color([HEX code]) - [color name/description]
+          3. Accent color: @color([HEX code]) - [color name/description]
+          4. Background: @color([HEX code]) - [color name/description]
+
+        * __Color Usage:__
+          - Primary: Main logo elements, headings
+          - Secondary: Supporting elements, borders
+          - Accent: Highlights, call-to-action elements
+          - Background: Canvas, backgrounds
+
     - id: image-prompt-style
       title: Course Image Generation Guidelines
       template: |
-        General image style template for course materials:
-        
-        Visual style: [photorealistic/illustrated/flat/isometric/hand-drawn]
-        Color scheme: [vibrant/muted/monochromatic/complementary]
-        Composition: [centered/rule-of-thirds/minimalist/detailed]
-        Lighting: [bright/soft/dramatic/natural]
-        Mood: [educational/professional/friendly/inspiring]
-        
-        Default image prompt base:
-        "A [visual style] image showing [subject], [composition] composition,
-        [color scheme] colors, [lighting] lighting, [mood] atmosphere,
-        suitable for educational materials, clean and professional."
-        
-        Image specifications:
-        - Aspect ratio: [16:9/4:3/1:1/custom]
-        - Resolution: [recommended dimensions]
-        - Format: [PNG/JPG/SVG]
-        - Accessibility: Include meaningful alt text descriptions
-    
+        * __Course Image Generation Guidelines:__
+          1. Visual style: [photorealistic/illustrated/flat/isometric/hand-drawn]
+          2. Color scheme: [vibrant/muted/monochromatic/complementary]
+          3. Composition: [centered/rule-of-thirds/minimalist/detailed]
+          4. Lighting: [bright/soft/dramatic/natural]
+          5. Mood: [educational/professional/friendly/inspiring]
+          6. In-image text language: [course language]
+
+        * __Default Image Prompt Base:__
+          "A [visual style] image showing [subject], [composition] composition, [color scheme] colors, [lighting] lighting, [mood] atmosphere, suitable for educational materials, clean and professional."
+
+        * __Image Specifications:__
+          - Aspect ratio: [16:9/4:3/1:1/custom]
+          - Resolution: [recommended dimensions]
+          - Format: [PNG/JPG/SVG]
+          - Accessibility: Include meaningful alt text descriptions
+
     - id: image-consistency
       title: Image Consistency Rules
       template: |
-        To maintain visual consistency across all course images:
-        
-        1. Color palette: Use the same color scheme as logo colors
-        2. Style: Keep the same visual style throughout (see above)
-        3. Characters: If using people/characters, maintain consistent style
-        4. Icons: Use consistent icon set (outline/filled/flat)
-        5. Typography in images: Use consistent fonts and sizes
-        6. Spacing: Maintain consistent padding and margins
-        7. Background: Use consistent background treatment
-    
+        * __Image Consistency Rules:__
+          1. Color palette: Use the same color scheme as logo colors
+          2. Style: Keep the same visual style throughout
+          3. Characters: If using people/characters, maintain consistent style
+          4. Icons: Use consistent icon set (outline/filled/flat)
+          5. Typography in images: Use consistent fonts and sizes
+          6. Spacing: Maintain consistent padding and margins
+          7. Background: Use consistent background treatment
+
     - id: website-colors
       title: Website Color Palette
       template: |
-        Primary color:
-        - Main: [HEX code] - [usage: headings, section headers, primary UI elements]
-        - Light variant: [HEX with alpha/rgba] - [usage: tinted backgrounds, hover states]
-        
-        Accent color:
-        - Main: [HEX code] - [usage: highlights, call-to-action, important elements]
-        - Light variant: [HEX with alpha/rgba] - [usage: accent backgrounds, info boxes]
-        
-        Text colors:
-        - Primary text: [HEX code] - [usage: main body text]
-        - Secondary text: [HEX code] - [usage: captions, metadata, less important text]
-        - Text on colored background: [HEX code] - [usage: text on primary/accent backgrounds]
-        
-        Background colors:
-        - Main background: [HEX code] - [usage: page background]
-        - Surface/card background: [HEX code] - [usage: content boxes, cards]
+        * __Website Color Palette:__
+          1. Primary: @color([HEX code]) - [usage: headings, section headers, primary UI elements]
+          2. Accent: @color([HEX code]) - [usage: highlights, call-to-action, important elements]
+          3. Text: @color([HEX code]) - [usage: main body text]
+          4. Background: @color([HEX code]) - [usage: page background]
+          5. Surface: @color([HEX code]) - [usage: content boxes, cards]
 
     - id: example-prompts
       title: Example Prompts
       template: |
-        Logo example:
-        "[Your complete logo prompt example]"
-        
-        Course image example:
-        "[Your complete image prompt example]"
-        
-        Diagram example:
-        "[Your complete diagram prompt example]"
+        * __Example Prompts:__
+          1. Logo: "[Your complete logo prompt example]"
+          2. Course image: "[Your complete image prompt example]"
+          3. Diagram: "[Your complete diagram prompt example]"
 ```
 
 ==================== END: .bmad-core/templates/visuals.yaml ====================
@@ -2820,11 +2949,11 @@ template:
 
 # Checklist: Course Quality
 
-> **Usage note:** Read `docs/context.md` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
+> **Usage note:** Read `project.md` → `## Course Context` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
 
 ## Context
 
-- [ ] `docs/context.md` exists
+- [ ] `project.md` → `## Course Context` exists
 - [ ] Course type defined
 - [ ] Terminology set (sessions-called, lectures-called)
 - [ ] Language & tone conventions set
@@ -2847,34 +2976,37 @@ template:
 - [ ] Didactic concept clear
 - [ ] Instructor persona defined (background, role, style)
 - [ ] Style & difficulty level specified
-- [ ] Course type consistent with `docs/context.md`
+- [ ] Course type consistent with `project.md` → `## Course Context`
 
-## Agenda `[if agenda flag = yes in docs/context.md]`
+## Agenda `[if agenda flag = yes in project.md → ## Course Context]`
 
 - [ ] All sessions have: title, duration, type, learning objective, summary
-- [ ] Session learning objectives align with `docs/outline.md` learning objectives
+- [ ] Session learning objectives align with `project.md` → `## Outline` learning objectives
 - [ ] Materials file reference present per session
 
-## Session Progress (docs/sessions.md)
+## Session Progress (`project.md` → `## Sessions`)
 
-- [ ] `docs/sessions.md` exists `[not single-lesson]`
-- [ ] All expected sessions have a row
-- [ ] No session marked ✅ Skeleton without a file in `skeletons/`
+- [ ] `project.md` → `## Sessions` exists `[not single-lesson]`
+- [ ] Overview table appears directly below `## Sessions`
+- [ ] All expected sessions have a row in the overview table
+- [ ] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
 - [ ] No session marked ✅ Material without a file in `materials/`
 - [ ] All sessions marked ✅ Fertig before publishing
 
-## Session Skeletons
+## Session Subsections (`project.md` → `## Sessions`)
 
 - [ ] Exist for all sessions
-- [ ] All mandatory sections present (title, summary, content, activities, references)
+- [ ] All mandatory fields present (heading/title, type, summary, content, activities, references)
+- [ ] Activities are numbered lists
+- [ ] References are numbered lists
 
 ## Session Materials
 
 - [ ] All skeletons promoted to materials
 - [ ] Outline with subchapters present
 - [ ] References included per section where claims are made
-- [ ] Didactic inputs from `docs/didactics.md` reflected (methods, learning phases)
-- [ ] Learning objectives from `docs/agenda.md` addressed in content
+- [ ] Didactic inputs from `project.md` → `## Didactics` reflected (methods, learning phases)
+- [ ] Learning objectives from `project.md` → `## Agenda` addressed in content
 
 ## LiaScript Syntax (per material file)
 
@@ -2889,9 +3021,9 @@ template:
 
 ## Overall Consistency
 
-- [ ] Terminology from `docs/context.md` used consistently throughout all docs
+- [ ] Terminology from `project.md` → `## Course Context` used consistently throughout project memory and materials
 - [ ] Instructor persona tone consistent across all materials
-- [ ] Learning objectives from `docs/outline.md` traceable into `docs/agenda.md` and materials
+- [ ] Learning objectives from `project.md` → `## Outline` traceable into `project.md` → `## Agenda` and materials
 - [ ] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] Numbering correct, no gaps
 - [ ] No sessions without materials
@@ -4655,24 +4787,44 @@ workflow:
       id: learner-agent
       role: "Learner personas and perspective-based quality review"
 
+  project_memory:
+    canonical_file: project.md
+    rule: >-
+      All generated planning/state/review artifacts are stored as sections in `project.md`.
+      Keep final LiaScript materials in `materials/`, generated visual assets and prompts in
+      `assets/`, and publishing/runtime files such as `project.yaml` and `.github/workflows/`
+      as separate files.
+    sections:
+      - Course Context
+      - Outline
+      - Didactics
+      - Visual Identity
+      - Agenda
+      - Sessions
+      - Learner Personas
+      - Persona Reviews
+      - Validation
+      - Analysis Status
+      - Notes Backup
+
   sequence:
     # Phase 0: Project Initialization
     - step: init
       agent: teaching
       command: /init-course
-      output: docs/context.md
+      output: "project.md → ## Course Context"
       notes: |
         First mandatory step for every new course:
         - Choose course type (lecture-series / self-paced / workshop / single-lesson / improve-existing)
         - Set terminology, persona type, pacing, assessment defaults
         - Define project-level conventions (language, tone, accessibility)
-        - All subsequent steps read this file as their governance layer
+        - All subsequent steps read `project.md`, especially `## Course Context`, as their governance layer
 
     # Phase 0-alt: Scaffold Fast-Track (replaces Phase 0–3 in one pass)
     - step: scaffold
       agent: teaching
       command: /scaffold {course-type?}
-      output: docs/context.md, docs/outline.md, docs/didactics.md, docs/agenda.md, skeletons/, docs/sessions.md
+      output: "project.md sections: Course Context, Outline, Didactics, Agenda, Sessions"
       alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
       notes: |
         Fast-track for instructors who know what they want:
@@ -4686,21 +4838,21 @@ workflow:
     - step: analyze_existing
       agent: teaching
       command: /analyze-existing
-      output: docs-status.md
+      output: "project.md → ## Analysis Status"
       dependencies: [init]
       condition: course_type == improve-existing
       notes: |
-        Scan project for existing docs and fill gaps:
-        - Check docs/outline.md, docs/didactics.md, docs/agenda.md, skeletons/, materials/
-        - For missing core docs: offer auto-generate or interactive creation
+        Scan project for existing sections and fill gaps:
+        - Check `project.md` sections `## Outline`, `## Didactics`, `## Agenda`, `## Sessions`, plus `materials/`
+        - For missing core sections: offer auto-generate or interactive creation
         - List improvement opportunities and suggest next steps
-        - Skip all of Phase 1–3 if docs already exist
+        - Skip all of Phase 1–3 if sections already exist
 
     # Phase 1: Foundation
     - step: create_outline
       agent: teaching
       command: /create-outline
-      output: docs/outline.md
+      output: "project.md → ## Outline"
       dependencies: [init]
       notes: |
         Define the course foundation:
@@ -4711,7 +4863,7 @@ workflow:
     - step: create_didactics
       agent: teaching
       command: /create-didactics
-      output: docs/didactics.md
+      output: "project.md → ## Didactics"
       dependencies: [create_outline]
       notes: |
         Define teaching approach:
@@ -4723,12 +4875,12 @@ workflow:
     - step: create_learner_personas
       agent: teaching
       command: /create-learner-persona {name?}
-      output: docs/learner-personas.md
+      output: "project.md → ## Learner Personas"
       dependencies: [create_didactics]
       optional: true
       notes: |
         Create one or more evidence-based learner personas (optional but recommended):
-        - Quick mode: derive directly from docs/outline.md + docs/didactics.md
+        - Quick mode: derive directly from `## Outline` and `## Didactics`
         - Data-driven mode: generate research prompt, then build from provided data
         - Number of personas: flexible — 1 typical, or 2–3 for target group diversity
         - Personas are used later by /review-as-persona to give learner-perspective feedback
@@ -4738,7 +4890,7 @@ workflow:
     - step: create_visuals
       agent: artist
       command: /create-visuals
-      output: docs/visuals.md
+      output: "project.md → ## Visual Identity"
       dependencies: [create_outline, create_didactics]
       notes: |
         Create visual identity aligned with teaching persona:
@@ -4760,7 +4912,7 @@ workflow:
     - step: create_agenda
       agent: teaching
       command: /create-agenda
-      output: docs/agenda.md
+      output: "project.md → ## Agenda"
       dependencies: [create_didactics, create_visuals]
       notes: |
         Build session structure (skipped for single-lesson):
@@ -4776,8 +4928,8 @@ workflow:
           description: "Create one session at a time, fully develop it, then move to next"
           sequence:
             - command: /create-session {number} {type} {title}
-              output: skeletons/{number}-{type}.md
-              notes: "Create skeleton for session N"
+              output: "project.md → ## Sessions"
+              notes: "Create skeleton subsection for session N and update the Sessions overview table"
             - command: /promote-session {number} {type}
               output: materials/{number}-{type}.md
               notes: "Convert skeleton to full material"
@@ -4800,13 +4952,13 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: docs/learner-personas.md exists
+              condition: "project.md contains ## Learner Personas"
               notes: |
                 Learner-perspective review after syntax validation (optional):
                 - Agent embodies persona and reads material as that learner
                 - Reviews: language level, cognitive load, relevance, accessibility,
                   format fit, and assumed prior knowledge gaps
-                - Saves report to docs/persona-review-{name}-{number}-{type}.md
+                - Saves report to `project.md` → `## Persona Reviews`
                 - Agent stays in persona for interactive follow-up chat
                 - Run for each defined persona, or just one
                 - If issues found: fix with /coauthor-materials, then optionally re-review
@@ -4816,8 +4968,8 @@ workflow:
           description: "Create all skeletons first, then promote all, then coauthor all"
           sequence:
             - command: /create-session {number} {type} {title}
-              output: skeletons/{number}-{type}.md
-              notes: "Create all session skeletons"
+              output: "project.md → ## Sessions"
+              notes: "Create all session skeleton subsections and update the Sessions overview table"
               repeat: for all sessions
             - command: /promote-session {number} {type}
               output: materials/{number}-{type}.md
@@ -4836,7 +4988,7 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: docs/learner-personas.md exists
+              condition: "project.md contains ## Learner Personas"
               notes: "Learner-perspective review per material — see iterative approach for full notes"
               repeat: for all materials
 
@@ -4849,23 +5001,24 @@ workflow:
     - step: validate_course
       agent: teaching
       command: /validate-course
-      output: docs/validation-report.md
+      output: "project.md → ## Sessions plus project.md → ## Validation"
       dependencies: [session_development]
       notes: |
         Full course check before publishing:
-        - Cross-document consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
-        - All sessions Fertig ✅ in docs/sessions.md
+        - Project-memory consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
+        - All sessions Fertig ✅ in `project.md` → `## Sessions`
         - LiaScript syntax check on all material files
-        - Produces docs/validation-report.md with PASS/FAIL + issues list
+        - Creates or replaces one `#### Validation Report` per material inside the matching `project.md` → `## Sessions` session subsection
+        - Replaces `project.md` → `## Validation` → `### Latest Validation Summary` with `Mode: course`, PASS/FAIL, and issue count
 
         Feedback loop if issues found:
         - Open /coauthor-materials {number} {type} for affected sessions
-        - Agent loads docs/validation-report.md and works through issues
+        - Agent loads the matching session's `#### Validation Report` and works through issues
         - Re-run /validate-course after fixes until report is clean
         - Instructor confirms "Report ist akzeptabel" to exit loop
 
         Publishing Gate (enforced):
-        - PASS → proceed to /create-project or /assemble-bundle
+        - `Mode: course` + PASS → proceed to /create-project or /assemble-bundle
         - FAIL → publishing commands blocked until re-validation passes
         - PASS with concerns → instructor decides explicitly
 
@@ -4887,9 +5040,9 @@ workflow:
       command: /create-project
       output: project.yaml + .github/workflows/
       optional: true
-      condition: user_requests_publishing AND first_time_setup AND validation_report == PASS
+      condition: user_requests_publishing AND first_time_setup AND project_validation == PASS
       notes: |
-        Only when the instructor explicitly wants to publish AND docs/validation-report.md shows PASS.
+        Only when the instructor explicitly wants to publish AND `project.md` → `## Validation` → `### Latest Validation Summary` shows `Mode: course` and `Result: PASS`.
         Recommended when multiple materials exist and the course is ready to share.
         - Generate project.yaml with all materials from materials/
         - Apply visuals colors to project.yaml
@@ -4914,12 +5067,13 @@ workflow:
       command: /assemble-bundle
       output: course-bundle/
       optional: true
-      condition: validation_report == PASS
+      condition: project_validation == PASS
       notes: |
-        Create complete distributable package (requires PASS in docs/validation-report.md):
-        - Pre-flight check: blocks if docs/validation-report.md is missing or FAIL
-        - Collects docs/context.md, docs/outline.md, docs/didactics.md, docs/sessions.md, all materials/
-        - Conditionally includes docs/agenda.md, skeletons/, assets/, notes/
+        Create complete distributable package (requires `Mode: course` and `Result: PASS` in `project.md` → `## Validation` → `### Latest Validation Summary`):
+        - Pre-flight check: blocks if `### Latest Validation Summary` is missing, not `Mode: course`, or not `Result: PASS`
+        - Collects `project.md` plus all materials/
+        - Ensures optional sections (`## Agenda`, `## Sessions`, `## Notes Backup`) are represented if present
+        - Includes assets/ if present
         - Generates bundle-index.md with content table and quick-start guide
 
   usage_notes: |
@@ -4930,7 +5084,7 @@ workflow:
     - Choose iterative or batch approach for sessions
     - Publishing is optional and user-initiated — only when explicitly requested
     - /create-project recommended when multiple materials exist and course is ready to share
-    - docs/sessions.md tracks skeleton/material/done status per session automatically
+    - `project.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Fertig status automatically
     - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
     - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
 
@@ -5046,7 +5200,7 @@ workflow:
         publishing: "usually not needed for a single lesson"
       improve-existing:
         sequence: [/init-course, /analyze-existing, /coauthor-materials, /validate-course]
-        note: "/analyze-existing scans for missing docs and offers to auto-generate or create them interactively"
+        note: "/analyze-existing scans for missing `project.md` sections and offers to auto-generate or create them interactively"
         publishing: "optional: /update-project if project.yaml already exists"
 
     teaching_agent_commands:

@@ -1,10 +1,10 @@
 # Checklist: Course Quality
 
-> **Usage note:** Read `docs/context.md` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
+> **Usage note:** Read `project.md` → `## Course Context` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
 
 ## Context
 
-- [ ] `docs/context.md` exists
+- [ ] `project.md` → `## Course Context` exists
 - [ ] Course type defined
 - [ ] Terminology set (sessions-called, lectures-called)
 - [ ] Language & tone conventions set
@@ -27,34 +27,37 @@
 - [ ] Didactic concept clear
 - [ ] Instructor persona defined (background, role, style)
 - [ ] Style & difficulty level specified
-- [ ] Course type consistent with `docs/context.md`
+- [ ] Course type consistent with `project.md` → `## Course Context`
 
-## Agenda `[if agenda flag = yes in docs/context.md]`
+## Agenda `[if agenda flag = yes in project.md → ## Course Context]`
 
 - [ ] All sessions have: title, duration, type, learning objective, summary
-- [ ] Session learning objectives align with `docs/outline.md` learning objectives
+- [ ] Session learning objectives align with `project.md` → `## Outline` learning objectives
 - [ ] Materials file reference present per session
 
-## Session Progress (docs/sessions.md)
+## Session Progress (`project.md` → `## Sessions`)
 
-- [ ] `docs/sessions.md` exists `[not single-lesson]`
-- [ ] All expected sessions have a row
-- [ ] No session marked ✅ Skeleton without a file in `skeletons/`
+- [ ] `project.md` → `## Sessions` exists `[not single-lesson]`
+- [ ] Overview table appears directly below `## Sessions`
+- [ ] All expected sessions have a row in the overview table
+- [ ] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
 - [ ] No session marked ✅ Material without a file in `materials/`
 - [ ] All sessions marked ✅ Fertig before publishing
 
-## Session Skeletons
+## Session Subsections (`project.md` → `## Sessions`)
 
 - [ ] Exist for all sessions
-- [ ] All mandatory sections present (title, summary, content, activities, references)
+- [ ] All mandatory fields present (heading/title, type, summary, content, activities, references)
+- [ ] Activities are numbered lists
+- [ ] References are numbered lists
 
 ## Session Materials
 
 - [ ] All skeletons promoted to materials
 - [ ] Outline with subchapters present
 - [ ] References included per section where claims are made
-- [ ] Didactic inputs from `docs/didactics.md` reflected (methods, learning phases)
-- [ ] Learning objectives from `docs/agenda.md` addressed in content
+- [ ] Didactic inputs from `project.md` → `## Didactics` reflected (methods, learning phases)
+- [ ] Learning objectives from `project.md` → `## Agenda` addressed in content
 
 ## LiaScript Syntax (per material file)
 
@@ -69,9 +72,9 @@
 
 ## Overall Consistency
 
-- [ ] Terminology from `docs/context.md` used consistently throughout all docs
+- [ ] Terminology from `project.md` → `## Course Context` used consistently throughout project memory and materials
 - [ ] Instructor persona tone consistent across all materials
-- [ ] Learning objectives from `docs/outline.md` traceable into `docs/agenda.md` and materials
+- [ ] Learning objectives from `project.md` → `## Outline` traceable into `project.md` → `## Agenda` and materials
 - [ ] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] Numbering correct, no gaps
 - [ ] No sessions without materials
