@@ -177,6 +177,7 @@ project_memory:
     visual/media assets and prompts (`assets/`), and publishing/runtime files
     (`project.yaml`, `.github/workflows/`) remain separate files.
   required_sections:
+    - "Dashboard"
     - "Course Context"
     - "Outline"
     - "Didactics"
@@ -185,7 +186,6 @@ project_memory:
     - "Agenda"
     - "Sessions"
     - "Learner Personas"
-    - "Persona Reviews"
     - "Validation"
     - "Analysis Status"
     - "Notes Backup"
@@ -242,6 +242,7 @@ commands:
   /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `project.md` → `## Learner Personas`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `project.md` → `## Templates`"
+  /update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `project.md` → `## Dashboard` after project state changes"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
@@ -268,6 +269,7 @@ dependencies:
     - create-didactics.md
     - create-agenda.md
     - manage-templates.md
+    - update-dashboard.md
     - create-session-skeleton.md
     - promote-session.md
     - coauthor-materials.md
@@ -281,6 +283,7 @@ dependencies:
     - course-didactics.yaml
     - course-agenda.yaml
     - course-templates.yaml
+    - project-dashboard.yaml
     - session-skeleton.yaml
     - session-material.yaml
     - session-validation.yaml
@@ -373,7 +376,7 @@ epistemic_rules:
     - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via /create-learner-persona"
 
 commands:
-  /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona and reviews a session material from the learner's perspective; stays in persona for interactive follow-up chat"
+  /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
   /list-learners: "list all personas defined in `project.md` → `## Learner Personas` with a one-line description each"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
@@ -826,6 +829,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 1. Agent loads agenda info, skeleton, and didactics persona.
    - **If the current session subsection in `project.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
+   - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
@@ -2137,11 +2141,24 @@ or simply get a feel for how this learner experiences the material.
 - `project.md` → `## Learner Personas` — full persona definition
 - `project.md` → `## Agenda` — learning objectives for this session
 - `project.md` → `## Course Context` — terminology and conventions
+- Matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
 
 ## Output
 
-- `project.md` → `## Persona Reviews` — saved structured review report
+- `project.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` — saved structured review report
 - Agent remains in persona mode for interactive follow-up dialog until explicitly exited
+
+## Review Storage
+
+Persona reviews are stored directly with the matching session in `project.md` → `## Sessions`.
+Each session can contain one current review per learner persona.
+
+Rules:
+- Store the report under the matching `### {number}. {title}` session subsection.
+- The container heading is always `#### Persona Reviews`.
+- Each persona report is headed `##### {icon} {name}`.
+- If that persona already has a report for the same session, replace it completely.
+- Do not use a global `project.md` → `## Persona Reviews` section for new reviews.
 
 ## Steps
 
@@ -2152,6 +2169,7 @@ or simply get a feel for how this learner experiences the material.
 2. Load `materials/{number}-{type}.md`.
 
 3. Load the learning objectives for this session from `project.md` → `## Agenda`.
+   Also find the matching `### {number}. {title}` subsection in `project.md` → `## Sessions`.
 
 4. Announce persona adoption clearly:
    > "I am now [Icon] [Name] — [one-line description from persona overview]. Reading Session [N] from a learner's perspective…"
@@ -2193,48 +2211,53 @@ or simply get a feel for how this learner experiences the material.
 6. Generate the structured review report:
 
    ```
-   # Persona Review: [Icon] [Name] — Session [N] ([type])
-   Date: YYYY-MM-DD
-   Persona: [Icon] [Name] — [one-line description]
-   Material: materials/{number}-{type}.md
+   ##### [Icon] [Name]
 
-   ## Overall Impression
+   __Date:__ YYYY-MM-DD
+   __Persona:__ [Icon] [Name] — [one-line description]
+   __Material:__ materials/{number}-{type}.md
+   __Result:__ OK / Issues found / Major concerns
+
+   ###### Overall Impression
    [2–3 sentences written in the persona's voice: What was the experience of reading this?
    Honest, not diplomatic — this is from the learner's perspective.]
 
-   ## Dimension Findings
+   ###### Dimension Findings
 
-   ### a) Verständlichkeit / Sprachniveau
+   **a) Verständlichkeit / Sprachniveau**
    [Findings — flag specific passages if relevant. Verdict: OK / Issues found]
 
-   ### b) Schwierigkeitsgrad / Überforderung
+   **b) Schwierigkeitsgrad / Überforderung**
    [Findings. Verdict: OK / Too demanding / Too easy]
 
-   ### c) Relevanz / Motivation
+   **c) Relevanz / Motivation**
    [Findings. Verdict: OK / Low relevance for this persona]
 
-   ### d) Zugänglichkeit
+   **d) Zugänglichkeit**
    [Findings. Verdict: OK / Barriers identified]
 
-   ### e) Formatpräferenz
+   **e) Formatpräferenz**
    [Findings. Verdict: Good fit / Mismatch for this persona]
 
-   ### f) Vorwissen / fehlende Grundlagen
+   **f) Vorwissen / fehlende Grundlagen**
    [List of specific terms or concepts assumed but likely unknown to this persona.
    Mark each as: ⚠️ assumed, should be introduced | ✅ likely known]
 
-   ## Priority Issues
+   ###### Priority Issues
    Ranked list — most impactful first:
    1. [Issue] — Suggested fix
    2. [Issue] — Suggested fix
    ...
 
-   ## What Worked Well
+   ###### What Worked Well
    [What this persona would respond well to — do not skip this section.]
    ```
 
-7. Append the report to `project.md` → `## Persona Reviews` under a heading like `### {name} — {number}-{type} — YYYY-MM-DD`.
-   Confirm: "Review saved in `project.md` → `## Persona Reviews`."
+7. Create or update `#### Persona Reviews` inside the matching session subsection in `project.md` → `## Sessions`.
+   - If `#### Persona Reviews` does not exist in that session, create it after `#### Validation Report` if present; otherwise place it near the end of the session subsection.
+   - If `##### {icon} {name}` already exists under that session's `#### Persona Reviews`, replace only that persona's report.
+   - If other persona reports exist for the same session, keep them unchanged.
+   Confirm: "Review saved in `project.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → `##### {icon} {name}`."
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
@@ -2413,6 +2436,162 @@ After each section is saved, print a brief progress line:
 - The Persona Voice Sample in `project.md` → `## Didactics` is especially important — it anchors tone for all future co-authoring sessions.
 
 ==================== END: .bmad-core/tasks/scaffold-course.md ====================
+
+
+==================== START: .bmad-core/tasks/update-dashboard.md ====================
+
+# Task: update-dashboard
+
+## Purpose
+
+Creates or replaces the generated `project.md` → `## Dashboard` section.
+The dashboard gives the instructor a compact, visual entry point into the project state.
+
+The dashboard is **derived state**. It is never the source of truth.
+
+## Inputs
+
+- `project.md` main metadata header, especially `@style` and template `import:` lines
+- `project.md` → `## Course Context`
+- `project.md` → `## Templates`
+- `project.md` → `## Outline`
+- `project.md` → `## Didactics`
+- `project.md` → `## Agenda`
+- `project.md` → `## Sessions`, including overview table, `#### Validation Report`, and `#### Persona Reviews`
+- `project.md` → `## Validation` → `### Latest Validation Summary`, if present
+- `templates/project-dashboard.yaml`
+
+## Output
+
+- `project.md` → `## Dashboard`
+- Optional minimal `@style` block in the main metadata header if dashboard classes are missing
+
+## Automatic Trigger
+
+Run this task automatically after any task that changes project state:
+
+- `/init-course`
+- `/scaffold`
+- `/create-outline`
+- `/create-didactics`
+- `/manage-templates`
+- `/create-agenda`
+- `/create-session`
+- `/promote-session`
+- `/coauthor-materials` after approval
+- `/quick-fix`
+- `/validate-course`
+- `/review-as-persona`
+- `/assemble-bundle`
+- `/create-project` or `/update-project`
+
+## Steps
+
+1. Read the source sections listed above.
+2. Derive the current project status:
+   - Current step
+   - Next useful commands
+   - Course validation state
+   - Publishing gate state
+   - Session progress
+   - Open blockers
+   - Optional learner persona review status
+3. Ensure the main metadata header contains the imports required by the dashboard:
+   - If the Mermaid LiaScript template is imported, render workflow diagrams as fenced code blocks with `@mermaid`.
+   - If Mermaid is not imported, either use plain Mermaid syntax supported by the target renderer or suggest `/manage-templates mermaid`.
+4. Ensure the main metadata header contains only minimal dashboard CSS:
+   - Prefer one reusable `<article class="dashboard">`.
+   - Use simple `<div class="dashboard-card">` sections.
+   - Use compact status classes such as `dashboard-status-done`, `dashboard-status-current`, and `dashboard-status-blocked`.
+   - Keep CSS generic and short; do not encode course-specific colors, text, or session names in CSS.
+5. Replace only `project.md` → `## Dashboard`.
+6. Do not modify the source sections used to derive the dashboard.
+7. Confirm the dashboard was updated and name the next recommended command.
+
+## Dashboard Structure
+
+Use this structure unless the instructor asks for a different layout:
+
+````markdown
+## Dashboard
+
+<article class="dashboard">
+
+_Generated from the project sections below. Do not edit manually._
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+### Current State
+
+...
+
+</div>
+
+<div class="dashboard-card">
+
+### Next Commands
+
+...
+
+</div>
+
+<div class="dashboard-card">
+
+### Quality State
+
+...
+
+</div>
+
+<div class="dashboard-card dashboard-card-wide">
+
+### Workflow Map
+
+```mermaid @mermaid
+...
+```
+
+</div>
+
+<div class="dashboard-card dashboard-card-wide">
+
+### Session Progress
+
+...
+
+</div>
+
+<div class="dashboard-card">
+
+### Open Blockers
+
+...
+
+</div>
+
+<div class="dashboard-card">
+
+### Quick Links
+
+...
+
+</div>
+
+</div>
+</article>
+````
+
+## Rules
+
+- Never ask the instructor to update the dashboard manually.
+- Never use dashboard values as authority for workflow decisions.
+- If dashboard and source sections disagree, trust the source sections and regenerate the dashboard.
+- Mermaid `click` links are helpful but renderer-dependent; always include regular Markdown quick links as fallback.
+- Keep the dashboard near the top of `project.md`, directly after the main course title.
+
+==================== END: .bmad-core/tasks/update-dashboard.md ====================
 
 
 ==================== START: .bmad-core/tasks/update-project.md ====================
@@ -2878,6 +3057,106 @@ template:
 ```
 
 ==================== END: .bmad-core/templates/course-templates.yaml ====================
+
+
+==================== START: .bmad-core/templates/project-dashboard.yaml ====================
+
+```yaml
+template:
+  id: project-dashboard
+  name: 'Project Dashboard'
+  version: 1.0
+  output:
+    format: markdown
+    filename: project.md
+    section: Dashboard
+    replace_existing: true
+  title: 'Dashboard'
+  notes:
+    - 'Derived state only; source sections remain authoritative.'
+    - 'Use the Mermaid LiaScript template with `@mermaid` when imported.'
+    - 'Keep CSS minimal and reusable in the main metadata header.'
+  sections:
+    - id: dashboard
+      title: Dashboard
+      template: |
+        ## Dashboard
+
+        <article class="dashboard">
+
+        _Generated from the project sections below. Do not edit manually._
+
+        <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+        ### Current State
+
+        __Current step:__ <span class="dashboard-status dashboard-status-current">{{current_step}}</span>
+
+        __Course validation:__ <span class="dashboard-status {{validation_status_class}}">{{validation_status}}</span>
+
+        __Sessions complete:__ {{sessions_complete}} / {{sessions_total}}
+
+        __Last updated:__ {{date}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Next Commands
+
+        {{next_commands}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Quality State
+
+        {{quality_state}}
+
+        </div>
+
+        <div class="dashboard-card dashboard-card-wide">
+
+        ### Workflow Map
+
+        ```mermaid @mermaid
+        {{workflow_map}}
+        ```
+
+        </div>
+
+        <div class="dashboard-card dashboard-card-wide">
+
+        ### Session Progress
+
+        {{session_progress}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Open Blockers
+
+        {{open_blockers}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Quick Links
+
+        {{quick_links}}
+
+        </div>
+
+        </div>
+        </article>
+```
+
+==================== END: .bmad-core/templates/project-dashboard.yaml ====================
 
 
 ==================== START: .bmad-core/templates/session-material.yaml ====================
@@ -4979,6 +5258,7 @@ workflow:
       `assets/`, and publishing/runtime files such as `project.yaml` and `.github/workflows/`
       as separate files.
     sections:
+      - Dashboard
       - Course Context
       - Outline
       - Didactics
@@ -4987,7 +5267,6 @@ workflow:
       - Agenda
       - Sessions
       - Learner Personas
-      - Persona Reviews
       - Validation
       - Analysis Status
       - Notes Backup
@@ -5156,7 +5435,7 @@ workflow:
                 - Agent embodies persona and reads material as that learner
                 - Reviews: language level, cognitive load, relevance, accessibility,
                   format fit, and assumed prior knowledge gaps
-                - Saves report to `project.md` → `## Persona Reviews`
+                - Saves report to the matching `project.md` → `## Sessions` session subsection under `#### Persona Reviews`
                 - Agent stays in persona for interactive follow-up chat
                 - Run for each defined persona, or just one
                 - If issues found: fix with /coauthor-materials, then optionally re-review
@@ -5187,7 +5466,7 @@ workflow:
               command: /review-as-persona {name} {number} {type}
               optional: true
               condition: "project.md contains ## Learner Personas"
-              notes: "Learner-perspective review per material — see iterative approach for full notes"
+              notes: "Learner-perspective review per material; saves each report under that session's `#### Persona Reviews`"
               repeat: for all materials
 
       notes: |
@@ -5285,6 +5564,7 @@ workflow:
     - `project.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Fertig status automatically
     - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
     - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
+    - `project.md` → `## Dashboard` is derived state and should be regenerated automatically with /update-dashboard after state-changing tasks
 
   flow_diagram: |
     ```mermaid
@@ -5410,6 +5690,7 @@ workflow:
       - /create-learner-persona {name?}
       - /create-agenda
       - /manage-templates {name?}
+      - /update-dashboard
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
       - /coauthor-materials

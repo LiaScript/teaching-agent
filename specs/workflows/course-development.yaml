@@ -33,6 +33,7 @@ workflow:
       `assets/`, and publishing/runtime files such as `project.yaml` and `.github/workflows/`
       as separate files.
     sections:
+      - Dashboard
       - Course Context
       - Outline
       - Didactics
@@ -338,6 +339,7 @@ workflow:
     - `project.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Fertig status automatically
     - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
     - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
+    - `project.md` → `## Dashboard` is derived state and should be regenerated automatically with /update-dashboard after state-changing tasks
 
   flow_diagram: |
     ```mermaid
@@ -463,6 +465,7 @@ workflow:
       - /create-learner-persona {name?}
       - /create-agenda
       - /manage-templates {name?}
+      - /update-dashboard
       - /create-session {number} {type} {title}
       - /promote-session {number} {type}
       - /coauthor-materials

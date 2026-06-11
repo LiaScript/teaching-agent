@@ -1,0 +1,92 @@
+template:
+  id: project-dashboard
+  name: 'Project Dashboard'
+  version: 1.0
+  output:
+    format: markdown
+    filename: project.md
+    section: Dashboard
+    replace_existing: true
+  title: 'Dashboard'
+  notes:
+    - 'Derived state only; source sections remain authoritative.'
+    - 'Use the Mermaid LiaScript template with `@mermaid` when imported.'
+    - 'Keep CSS minimal and reusable in the main metadata header.'
+  sections:
+    - id: dashboard
+      title: Dashboard
+      template: |
+        ## Dashboard
+
+        <article class="dashboard">
+
+        _Generated from the project sections below. Do not edit manually._
+
+        <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+        ### Current State
+
+        __Current step:__ <span class="dashboard-status dashboard-status-current">{{current_step}}</span>
+
+        __Course validation:__ <span class="dashboard-status {{validation_status_class}}">{{validation_status}}</span>
+
+        __Sessions complete:__ {{sessions_complete}} / {{sessions_total}}
+
+        __Last updated:__ {{date}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Next Commands
+
+        {{next_commands}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Quality State
+
+        {{quality_state}}
+
+        </div>
+
+        <div class="dashboard-card dashboard-card-wide">
+
+        ### Workflow Map
+
+        ```mermaid @mermaid
+        {{workflow_map}}
+        ```
+
+        </div>
+
+        <div class="dashboard-card dashboard-card-wide">
+
+        ### Session Progress
+
+        {{session_progress}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Open Blockers
+
+        {{open_blockers}}
+
+        </div>
+
+        <div class="dashboard-card">
+
+        ### Quick Links
+
+        {{quick_links}}
+
+        </div>
+
+        </div>
+        </article>

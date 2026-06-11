@@ -123,6 +123,7 @@ project_memory:
     visual/media assets and prompts (`assets/`), and publishing/runtime files
     (`project.yaml`, `.github/workflows/`) remain separate files.
   required_sections:
+    - "Dashboard"
     - "Course Context"
     - "Outline"
     - "Didactics"
@@ -187,6 +188,7 @@ commands:
   /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `project.md` → `## Learner Personas`"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `project.md` → `## Templates`"
+  /update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `project.md` → `## Dashboard` after project state changes"
   /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   /coauthor-materials: "run task `tasks/coauthor-materials.md`"
@@ -213,6 +215,7 @@ dependencies:
     - create-didactics.md
     - create-agenda.md
     - manage-templates.md
+    - update-dashboard.md
     - create-session-skeleton.md
     - promote-session.md
     - coauthor-materials.md
@@ -226,6 +229,7 @@ dependencies:
     - course-didactics.yaml
     - course-agenda.yaml
     - course-templates.yaml
+    - project-dashboard.yaml
     - session-skeleton.yaml
     - session-material.yaml
     - session-validation.yaml
