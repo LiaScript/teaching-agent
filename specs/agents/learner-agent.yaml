@@ -58,7 +58,7 @@ epistemic_rules:
     - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via /create-learner-persona"
 
 commands:
-  /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona and reviews a session material from the learner's perspective; stays in persona for interactive follow-up chat"
+  /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
   /list-learners: "list all personas defined in `project.md` → `## Learner Personas` with a one-line description each"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"

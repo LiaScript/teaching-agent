@@ -41,7 +41,6 @@ workflow:
       - Agenda
       - Sessions
       - Learner Personas
-      - Persona Reviews
       - Validation
       - Analysis Status
       - Notes Backup
@@ -210,7 +209,7 @@ workflow:
                 - Agent embodies persona and reads material as that learner
                 - Reviews: language level, cognitive load, relevance, accessibility,
                   format fit, and assumed prior knowledge gaps
-                - Saves report to `project.md` → `## Persona Reviews`
+                - Saves report to the matching `project.md` → `## Sessions` session subsection under `#### Persona Reviews`
                 - Agent stays in persona for interactive follow-up chat
                 - Run for each defined persona, or just one
                 - If issues found: fix with /coauthor-materials, then optionally re-review
@@ -241,7 +240,7 @@ workflow:
               command: /review-as-persona {name} {number} {type}
               optional: true
               condition: "project.md contains ## Learner Personas"
-              notes: "Learner-perspective review per material — see iterative approach for full notes"
+              notes: "Learner-perspective review per material; saves each report under that session's `#### Persona Reviews`"
               repeat: for all materials
 
       notes: |

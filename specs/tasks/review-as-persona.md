@@ -21,11 +21,24 @@ or simply get a feel for how this learner experiences the material.
 - `project.md` → `## Learner Personas` — full persona definition
 - `project.md` → `## Agenda` — learning objectives for this session
 - `project.md` → `## Course Context` — terminology and conventions
+- Matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
 
 ## Output
 
-- `project.md` → `## Persona Reviews` — saved structured review report
+- `project.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` — saved structured review report
 - Agent remains in persona mode for interactive follow-up dialog until explicitly exited
+
+## Review Storage
+
+Persona reviews are stored directly with the matching session in `project.md` → `## Sessions`.
+Each session can contain one current review per learner persona.
+
+Rules:
+- Store the report under the matching `### {number}. {title}` session subsection.
+- The container heading is always `#### Persona Reviews`.
+- Each persona report is headed `##### {icon} {name}`.
+- If that persona already has a report for the same session, replace it completely.
+- Do not use a global `project.md` → `## Persona Reviews` section for new reviews.
 
 ## Steps
 
@@ -36,6 +49,7 @@ or simply get a feel for how this learner experiences the material.
 2. Load `materials/{number}-{type}.md`.
 
 3. Load the learning objectives for this session from `project.md` → `## Agenda`.
+   Also find the matching `### {number}. {title}` subsection in `project.md` → `## Sessions`.
 
 4. Announce persona adoption clearly:
    > "I am now [Icon] [Name] — [one-line description from persona overview]. Reading Session [N] from a learner's perspective…"
@@ -77,48 +91,53 @@ or simply get a feel for how this learner experiences the material.
 6. Generate the structured review report:
 
    ```
-   # Persona Review: [Icon] [Name] — Session [N] ([type])
-   Date: YYYY-MM-DD
-   Persona: [Icon] [Name] — [one-line description]
-   Material: materials/{number}-{type}.md
+   ##### [Icon] [Name]
 
-   ## Overall Impression
+   __Date:__ YYYY-MM-DD
+   __Persona:__ [Icon] [Name] — [one-line description]
+   __Material:__ materials/{number}-{type}.md
+   __Result:__ OK / Issues found / Major concerns
+
+   ###### Overall Impression
    [2–3 sentences written in the persona's voice: What was the experience of reading this?
    Honest, not diplomatic — this is from the learner's perspective.]
 
-   ## Dimension Findings
+   ###### Dimension Findings
 
-   ### a) Verständlichkeit / Sprachniveau
+   **a) Verständlichkeit / Sprachniveau**
    [Findings — flag specific passages if relevant. Verdict: OK / Issues found]
 
-   ### b) Schwierigkeitsgrad / Überforderung
+   **b) Schwierigkeitsgrad / Überforderung**
    [Findings. Verdict: OK / Too demanding / Too easy]
 
-   ### c) Relevanz / Motivation
+   **c) Relevanz / Motivation**
    [Findings. Verdict: OK / Low relevance for this persona]
 
-   ### d) Zugänglichkeit
+   **d) Zugänglichkeit**
    [Findings. Verdict: OK / Barriers identified]
 
-   ### e) Formatpräferenz
+   **e) Formatpräferenz**
    [Findings. Verdict: Good fit / Mismatch for this persona]
 
-   ### f) Vorwissen / fehlende Grundlagen
+   **f) Vorwissen / fehlende Grundlagen**
    [List of specific terms or concepts assumed but likely unknown to this persona.
    Mark each as: ⚠️ assumed, should be introduced | ✅ likely known]
 
-   ## Priority Issues
+   ###### Priority Issues
    Ranked list — most impactful first:
    1. [Issue] — Suggested fix
    2. [Issue] — Suggested fix
    ...
 
-   ## What Worked Well
+   ###### What Worked Well
    [What this persona would respond well to — do not skip this section.]
    ```
 
-7. Append the report to `project.md` → `## Persona Reviews` under a heading like `### {name} — {number}-{type} — YYYY-MM-DD`.
-   Confirm: "Review saved in `project.md` → `## Persona Reviews`."
+7. Create or update `#### Persona Reviews` inside the matching session subsection in `project.md` → `## Sessions`.
+   - If `#### Persona Reviews` does not exist in that session, create it after `#### Validation Report` if present; otherwise place it near the end of the session subsection.
+   - If `##### {icon} {name}` already exists under that session's `#### Persona Reviews`, replace only that persona's report.
+   - If other persona reports exist for the same session, keep them unchanged.
+   Confirm: "Review saved in `project.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → `##### {icon} {name}`."
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
