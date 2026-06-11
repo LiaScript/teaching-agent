@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Creates or updates `project.md` → `## Templates` and keeps LiaScript template imports synchronized with the main metadata header.
+Creates or updates `journal.md` → `## Templates` and keeps LiaScript template imports synchronized with the main metadata header.
 
 Use this task when:
 - `/init-course` captures LiaScript conventions that mention template imports
@@ -12,7 +12,7 @@ Use this task when:
 
 ## Inputs
 
-- `project.md` → `## Course Context` / `### Conventions & Standards`
+- `journal.md` → `## Course Context` / `### Conventions & Standards`
 - Template name, import URL, purpose, and usage rules
 - Optional runnable examples and special examples
 - Template documentation or import source, if accessible
@@ -20,12 +20,12 @@ Use this task when:
 
 ## Output
 
-- `project.md` main metadata header updated with one `import: {url}` line per active template
-- `project.md` → `## Templates` created or updated
+- `journal.md` main metadata header updated with one `import: {url}` line per active template
+- `journal.md` → `## Templates` created or updated
 
 ## Steps
 
-1. Read `project.md` → `## Course Context`, especially `__LiaScript conventions:__`.
+1. Read `journal.md` → `## Course Context`, especially `__LiaScript conventions:__`.
 2. Detect template import hints:
    - Lines such as `Template import: https://...`
    - Existing header lines such as `import: https://...`
@@ -37,11 +37,11 @@ Use this task when:
    - Determine what macros or syntax it provides from the inspected source
    - Determine where it must be imported (project header, material headers, or both)
    - If the source cannot be inspected, document only confirmed usage and ask the instructor for missing macro details before inventing examples
-4. Update the main metadata header at the top of `project.md`:
+4. Update the main metadata header at the top of `journal.md`:
    - Add `import: {url}` if missing
    - Do not duplicate existing imports
    - Keep existing metadata lines unchanged
-5. Create or update `project.md` → `## Templates` using `templates/course-templates.yaml`.
+5. Create or update `journal.md` → `## Templates` using `templates/course-templates.yaml`.
    - Keep the overview text with the link to [topics/liascript-template](https://github.com/topics/liascript-template)
    - Create one `### {template_name}` subsection per template
    - Replace an existing template subsection if the same template name already exists

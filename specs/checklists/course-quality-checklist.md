@@ -1,10 +1,10 @@
 # Checklist: Course Quality
 
-> **Usage note:** Read `project.md` → `## Course Context` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
+> **Usage note:** Read `journal.md` → `## Course Context` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
 
 ## Context
 
-- [ ] `project.md` → `## Course Context` exists
+- [ ] `journal.md` → `## Course Context` exists
 - [ ] Course type defined
 - [ ] Terminology set (sessions-called, lectures-called)
 - [ ] Language & tone conventions set
@@ -27,32 +27,32 @@
 - [ ] Didactic concept clear
 - [ ] Instructor persona defined (background, role, style)
 - [ ] Style & difficulty level specified
-- [ ] Course type consistent with `project.md` → `## Course Context`
+- [ ] Course type consistent with `journal.md` → `## Course Context`
 
 ## Templates `[if template imports or template macros are used]`
 
-- [ ] `project.md` → `## Templates` exists
+- [ ] `journal.md` → `## Templates` exists
 - [ ] Every template in `## Templates` has a matching `import:` line in the main metadata header
 - [ ] Every material using a template macro has the matching `import:` line in its own metadata header
 - [ ] Template usage examples and constraints are documented in `## Templates`
 - [ ] Community discovery link included: https://github.com/topics/liascript-template
 
-## Agenda `[if agenda flag = yes in project.md → ## Course Context]`
+## Agenda `[if agenda flag = yes in journal.md → ## Course Context]`
 
 - [ ] All sessions have: title, duration, type, learning objective, summary
-- [ ] Session learning objectives align with `project.md` → `## Outline` learning objectives
+- [ ] Session learning objectives align with `journal.md` → `## Outline` learning objectives
 - [ ] Materials file reference present per session
 
-## Session Progress (`project.md` → `## Sessions`)
+## Session Progress (`journal.md` → `## Sessions`)
 
-- [ ] `project.md` → `## Sessions` exists `[not single-lesson]`
+- [ ] `journal.md` → `## Sessions` exists `[not single-lesson]`
 - [ ] Overview table appears directly below `## Sessions`
 - [ ] All expected sessions have a row in the overview table
-- [ ] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
+- [ ] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - [ ] No session marked ✅ Material without a file in `materials/`
 - [ ] All sessions marked ✅ Fertig before publishing
 
-## Session Subsections (`project.md` → `## Sessions`)
+## Session Subsections (`journal.md` → `## Sessions`)
 
 - [ ] Exist for all sessions
 - [ ] All mandatory fields present (heading/title, type, summary, content, activities, references)
@@ -64,8 +64,8 @@
 - [ ] All skeletons promoted to materials
 - [ ] Outline with subchapters present
 - [ ] References included per section where claims are made
-- [ ] Didactic inputs from `project.md` → `## Didactics` reflected (methods, learning phases)
-- [ ] Learning objectives from `project.md` → `## Agenda` addressed in content
+- [ ] Didactic inputs from `journal.md` → `## Didactics` reflected (methods, learning phases)
+- [ ] Learning objectives from `journal.md` → `## Agenda` addressed in content
 
 ## LiaScript Syntax (per material file)
 
@@ -80,9 +80,9 @@
 
 ## Overall Consistency
 
-- [ ] Terminology from `project.md` → `## Course Context` used consistently throughout project memory and materials
+- [ ] Terminology from `journal.md` → `## Course Context` used consistently throughout project memory and materials
 - [ ] Instructor persona tone consistent across all materials
-- [ ] Learning objectives from `project.md` → `## Outline` traceable into `project.md` → `## Agenda` and materials
+- [ ] Learning objectives from `journal.md` → `## Outline` traceable into `journal.md` → `## Agenda` and materials
 - [ ] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] Numbering correct, no gaps
 - [ ] No sessions without materials

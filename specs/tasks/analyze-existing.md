@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Analyzes an existing course project to identify which `project.md` sections and material files are present and which are missing.
+Analyzes an existing course project to identify which `journal.md` sections and material files are present and which are missing.
 Used as the **second step after `/init-course`** when the course type is `improve-existing`.
 
 Offers two paths for each missing core section:
@@ -11,29 +11,29 @@ Offers two paths for each missing core section:
 
 ## Inputs
 
-- `project.md` → `## Course Context` (created by `/init-course`, mandatory)
-- Existing `project.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`
+- `journal.md` → `## Course Context` (created by `/init-course`, mandatory)
+- Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`
 - Existing folder: `materials/`
 
 ## Output
 
-- `project.md` → `## Analysis Status` — status overview with recommended actions
+- `journal.md` → `## Analysis Status` — status overview with recommended actions
 - Optionally: auto-generated drafts for missing core sections (marked as draft)
 
 ## Steps
 
-1. Load `project.md` → `## Course Context` for course type, terminology, and conventions.
+1. Load `journal.md` → `## Course Context` for course type, terminology, and conventions.
 
 2. Scan the project root and relevant folders:
 
    | Section / Folder | Required                   |
    | -------------- | ---------------------------- |
-   | `project.md` → `## Outline`   | always                       |
-   | `project.md` → `## Didactics` | always                       |
-   | `project.md` → `## Agenda`    | if `project.md` → `## Course Context` agenda = yes |
-   | `project.md` → `## Visual Identity`   | optional                     |
-   | `project.md` → `## Templates` | optional; required if template imports or macros are used |
-   | `project.md` → `## Sessions` | if sessions expected |
+   | `journal.md` → `## Outline`   | always                       |
+   | `journal.md` → `## Didactics` | always                       |
+   | `journal.md` → `## Agenda`    | if `journal.md` → `## Course Context` agenda = yes |
+   | `journal.md` → `## Visual Identity`   | optional                     |
+   | `journal.md` → `## Templates` | optional; required if template imports or macros are used |
+   | `journal.md` → `## Sessions` | if sessions expected |
    | `materials/`   | if sessions expected         |
 
 3. Display a **Course Memory Status** table:
@@ -47,19 +47,19 @@ Offers two paths for each missing core section:
    - **Skip** — proceed without this document
 
 5. If **auto-generate** is chosen:
-   - Read any available session subsections in `project.md` → `## Sessions` and all files in `materials/`
+   - Read any available session subsections in `journal.md` → `## Sessions` and all files in `materials/`
    - Extract: title, target audience, topics, recurring structure, learning objectives
-   - Generate a draft and save it to the matching section (e.g., `project.md` → `## Outline`)
+   - Generate a draft and save it to the matching section (e.g., `journal.md` → `## Outline`)
    - Add a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
 
 6. If **interactive creation** is chosen, run the relevant task:
-   - `project.md` → `## Outline` → `/create-outline`
-   - `project.md` → `## Didactics` → `/create-didactics`
-   - `project.md` → `## Agenda` → `/create-agenda`
+   - `journal.md` → `## Outline` → `/create-outline`
+   - `journal.md` → `## Didactics` → `/create-didactics`
+   - `journal.md` → `## Agenda` → `/create-agenda`
 
-6b. Reconstruct or create `project.md` → `## Sessions` from project memory and the existing file system:
-   - Scan `project.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
-   - If a legacy `project.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
+6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
+   - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
+   - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
    - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
    - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
 
@@ -69,8 +69,8 @@ Offers two paths for each missing core section:
    - Inconsistent terminology or persona style
    - Template macros used without matching `import:` metadata or `## Templates` documentation
    - Missing references or learning objectives
-   - Language/tone inconsistencies vs. `project.md` → `## Course Context` conventions
+   - Language/tone inconsistencies vs. `journal.md` → `## Course Context` conventions
 
 8. Suggest a prioritized action list and the recommended next step (usually `/coauthor-materials`).
 
-9. Save the full status overview as `project.md` → `## Analysis Status`.
+9. Save the full status overview as `journal.md` → `## Analysis Status`.

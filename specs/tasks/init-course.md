@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Initializes a new course project by creating or updating the `## Course Context` section in `project.md`.
+Initializes a new course project by creating or updating the `## Course Context` section in `journal.md`.
 
 This is the **first mandatory step** for every new course project.
 The course context acts as the governance layer: it defines the course type, terminology, persona style, conventions, and LiaScript rules that all subsequent tasks will load and follow.
@@ -15,8 +15,8 @@ The course context acts as the governance layer: it defines the course type, ter
 
 ## Output
 
-- `project.md` → `## Course Context`
-- Optional: `project.md` main metadata header `import:` lines and `## Templates`
+- `journal.md` → `## Course Context`
+- Optional: `journal.md` main metadata header `import:` lines and `## Templates`
 - Structure based on `templates/course-context.yaml`
 
 ## Steps
@@ -55,10 +55,10 @@ The course context acts as the governance layer: it defines the course type, ter
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 7. Fill the `templates/course-context.yaml` template with the collected inputs.
-8. Save the generated context by creating or replacing `project.md` → `## Course Context`.
+8. Save the generated context by creating or replacing `journal.md` → `## Course Context`.
 9. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
    - Add `import: {url}` to the main metadata header if missing
-   - Create or update `project.md` → `## Templates`
+   - Create or update `journal.md` → `## Templates`
    - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
 10. Confirm completion and suggest the next step based on course type:
    - **lecture-series / workshop** → `/create-outline`
@@ -68,6 +68,6 @@ The course context acts as the governance layer: it defines the course type, ter
 
 ## Notes
 
-- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `project.md` → `## Course Context` and adapt their behavior accordingly.
+- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `journal.md` → `## Course Context` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
-- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `project.md` sections before improvement work begins.
+- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.

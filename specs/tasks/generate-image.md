@@ -16,7 +16,7 @@ Requires the **chrome-devtools MCP server** to be active and Chrome running with
 - **Single mode:** `assets/prompts/image-{slug}.md`
 - **Batch mode:** all `assets/prompts/image-*.md` files (skips slugs that already have a matching image)
 - Chrome DevTools MCP availability (checked at task start)
-- Course language from `project.md` → `## Course Context` (safety-net: appended to prompt if no language instruction is already present)
+- Course language from `journal.md` → `## Course Context` (safety-net: appended to prompt if no language instruction is already present)
 
 ## Output
 
@@ -89,7 +89,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ### Automated Batch
 
-8. Read all pending prompt files, extract `Complete Prompt:` strings. Read course language from `project.md` → `## Course Context`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
+8. Read all pending prompt files, extract `Complete Prompt:` strings. Read course language from `journal.md` → `## Course Context`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 9. Inject the following self-contained JS loop into the browser:
 
    ```js
@@ -189,7 +189,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 ## Phase 3: Submit to ChatGPT *(single + sequential batch)*
 
 - **First image only:** Navigate to `https://chatgpt.com/`. For subsequent images in sequential batch, stay on the same page — just insert the next prompt.
-- **Language safety-net:** Read course language from `project.md` → `## Course Context`. If the prompt does not already contain a language instruction for in-image text (i.e., does not mention "text visible in the image"), append to the prompt:
+- **Language safety-net:** Read course language from `journal.md` → `## Course Context`. If the prompt does not already contain a language instruction for in-image text (i.e., does not mention "text visible in the image"), append to the prompt:
   `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 - Insert prompt and submit — poll for send-button at 200ms intervals (it only renders when textarea has content):
   ```js

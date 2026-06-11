@@ -10,13 +10,13 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Inputs
 
-- Professor persona & style from `project.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)
-- Agenda info (modules/sessions) from `project.md` → `## Agenda`
-- Terminology & conventions from `project.md` → `## Course Context`
-- LiaScript template usage rules from `project.md` → `## Templates` (if present)
+- Professor persona & style from `journal.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)
+- Agenda info (modules/sessions) from `journal.md` → `## Agenda`
+- Terminology & conventions from `journal.md` → `## Course Context`
+- LiaScript template usage rules from `journal.md` → `## Templates` (if present)
 - Currently open document `materials/{number}-{type}.md`
-- Optionally, corresponding session subsection in `project.md` → `## Sessions`
-- Didactic inputs from `project.md` → `## Didactics`
+- Optionally, corresponding session subsection in `journal.md` → `## Sessions`
+- Didactic inputs from `journal.md` → `## Didactics`
 - Open questions or ideas from instructors (discussion points)
 
 ## Output
@@ -29,7 +29,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 ## Steps
 
 1. Agent loads agenda info, skeleton, and didactics persona.
-   - **If the current session subsection in `project.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
+   - **If the current session subsection in `journal.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
    - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
 2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
@@ -37,8 +37,8 @@ Suggest images for visualization, either as a search term or as a concrete image
 
    **Critical engagement rules — always active:**
    - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
-   - If a learning objective from `project.md` → `## Agenda` is not addressed: flag it before moving on
-   - If the instructor's suggestion contradicts the didactic concept in `project.md` → `## Didactics`: raise it as a conflict
+   - If a learning objective from `journal.md` → `## Agenda` is not addressed: flag it before moving on
+   - If the instructor's suggestion contradicts the didactic concept in `journal.md` → `## Didactics`: raise it as a conflict
    - If an explanation is too long, too abstract, or not suited for the target audience: say so
    - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing
    - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
@@ -46,7 +46,7 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
-7. When the instructor **approves** the material for this session: update the overview table in `project.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
+7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
 8. After approval, 🎛️ ask with structured question (single choice):
    - **Yes, validate now** — run `/validate-course {number} {type}`
    - **Later** — skip validation, proceed directly to the next session

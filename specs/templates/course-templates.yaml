@@ -4,14 +4,14 @@ template:
   version: 1.0
   output:
     format: markdown
-    filename: project.md
+    filename: journal.md
     section: Templates
   title: 'Templates'
   sections:
     - id: overview
       title: Overview
       template: |
-        LiaScript templates used by this project are imported in the main metadata header at the top of `project.md` and should also be imported in any standalone material file that uses their macros.
+        LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
         More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
 

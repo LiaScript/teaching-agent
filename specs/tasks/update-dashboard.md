@@ -2,26 +2,26 @@
 
 ## Purpose
 
-Creates or replaces the generated `project.md` → `## Dashboard` section.
+Creates or replaces the generated `journal.md` → `## Dashboard` section.
 The dashboard gives the instructor a compact, visual entry point into the project state.
 
 The dashboard is **derived state**. It is never the source of truth.
 
 ## Inputs
 
-- `project.md` main metadata header, especially `@style` and template `import:` lines
-- `project.md` → `## Course Context`
-- `project.md` → `## Templates`
-- `project.md` → `## Outline`
-- `project.md` → `## Didactics`
-- `project.md` → `## Agenda`
-- `project.md` → `## Sessions`, including overview table, `#### Validation Report`, and `#### Persona Reviews`
-- `project.md` → `## Validation` → `### Latest Validation Summary`, if present
+- `journal.md` main metadata header, especially `@style` and template `import:` lines
+- `journal.md` → `## Course Context`
+- `journal.md` → `## Templates`
+- `journal.md` → `## Outline`
+- `journal.md` → `## Didactics`
+- `journal.md` → `## Agenda`
+- `journal.md` → `## Sessions`, including overview table, `#### Validation Report`, and `#### Persona Reviews`
+- `journal.md` → `## Validation` → `### Latest Validation Summary`, if present
 - `templates/project-dashboard.yaml`
 
 ## Output
 
-- `project.md` → `## Dashboard`
+- `journal.md` → `## Dashboard`
 - Optional minimal `@style` block in the main metadata header if dashboard classes are missing
 
 ## Automatic Trigger
@@ -62,7 +62,7 @@ Run this task automatically after any task that changes project state:
    - Use simple `<div class="dashboard-card">` sections.
    - Use compact status classes such as `dashboard-status-done`, `dashboard-status-current`, and `dashboard-status-blocked`.
    - Keep CSS generic and short; do not encode course-specific colors, text, or session names in CSS.
-5. Replace only `project.md` → `## Dashboard`.
+5. Replace only `journal.md` → `## Dashboard`.
 6. Do not modify the source sections used to derive the dashboard.
 7. Confirm the dashboard was updated and name the next recommended command.
 
@@ -147,4 +147,4 @@ _Generated from the project sections below. Do not edit manually._
 - Never use dashboard values as authority for workflow decisions.
 - If dashboard and source sections disagree, trust the source sections and regenerate the dashboard.
 - Mermaid `click` links are helpful but renderer-dependent; always include regular Markdown quick links as fallback.
-- Keep the dashboard near the top of `project.md`, directly after the main course title.
+- Keep the dashboard near the top of `journal.md`, directly after the main course title.

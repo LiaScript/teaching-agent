@@ -74,14 +74,14 @@ Teaching-Agent guides you through **6 phases** — starting with project initial
 
 ```mermaid
 flowchart TD
-    INIT["**Phase 0 · INIT**<br/>/init-course<br/>→ project.md / Course Context"]
-    OUTLINE["**Phase 1 · FOUNDATION**<br/>/create-outline<br/>→ project.md / Outline"]
-    DIDACTICS["**Phase 2 · DIDACTICS**<br/>/create-didactics<br/>→ project.md / Didactics"]
-    AGENDA["**Phase 3 · PLANNING**<br/>/create-agenda<br/>→ project.md / Agenda"]
-    DEV["**Phase 4 · DEVELOPMENT**<br/>/create-session → project.md / Session Skeletons<br/>/promote-session → materials/<br/>/coauthor-materials"]
+    INIT["**Phase 0 · INIT**<br/>/init-course<br/>→ journal.md / Course Context"]
+    OUTLINE["**Phase 1 · FOUNDATION**<br/>/create-outline<br/>→ journal.md / Outline"]
+    DIDACTICS["**Phase 2 · DIDACTICS**<br/>/create-didactics<br/>→ journal.md / Didactics"]
+    AGENDA["**Phase 3 · PLANNING**<br/>/create-agenda<br/>→ journal.md / Agenda"]
+    DEV["**Phase 4 · DEVELOPMENT**<br/>/create-session → journal.md / Session Skeletons<br/>/promote-session → materials/<br/>/coauthor-materials"]
     FINAL["**Phase 5 · FINALIZATION**<br/>/validate-course<br/>/assemble-bundle"]
 
-    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ project.md / Visual Identity"]
+    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ journal.md / Visual Identity"]
     ART2["🎨 **Artist-Agent**<br/>/create-image<br/>(on demand)"]
     DEVAGT["🛠️ **Development-Agent**<br/>/manage-git · /create-project<br/>(anytime)"]
 
@@ -140,7 +140,7 @@ The agent will introduce itself and show available commands.
 - Writes an abstract summarizing content and benefits
 - Optionally creates a logo prompt
 
-**Output:** `project.md` → `## Outline`
+**Output:** `journal.md` → `## Outline`
 
 **Example interaction:**
 ```
@@ -169,7 +169,7 @@ Agent: Perfect! Now let's define the abstract...
 - Sets style & difficulty level (humorous, formal, practical, etc.)
 - Defines course type (introductory, advanced, hands-on, self-paced)
 
-**Output:** `project.md` → `## Didactics`
+**Output:** `journal.md` → `## Didactics`
 
 **Why this matters:**
 From this point forward, the agent **adopts your professor persona** when creating materials, ensuring consistent tone and style throughout the course.
@@ -185,7 +185,7 @@ From this point forward, the agent **adopts your professor persona** when creati
 - For each session: title, duration, type (lecture/exercise), learning objectives, summary
 - Links each session to its materials file path
 
-**Output:** `project.md` → `## Agenda`
+**Output:** `journal.md` → `## Agenda`
 
 **The agent now writes in your professor's voice!**
 
@@ -204,7 +204,7 @@ From this point forward, the agent **adopts your professor persona** when creati
 - Creates a structured framework for a session
 - Includes placeholders for content, activities, and references
 
-**Output:** `project.md` → `## Session Skeletons`
+**Output:** `journal.md` → `## Session Skeletons`
 
 **Example:**
 ```
@@ -267,12 +267,12 @@ Agent: Got it! Let me suggest some content for the introduction...
 **Command:** `/validate-course`
 
 **What it does:**
-- Checks consistency across `project.md` sections and materials
+- Checks consistency across `journal.md` sections and materials
 - Verifies all sessions have materials
 - Ensures learning objectives are met
 - Confirms numbering and structure
 
-**Output:** `project.md` → `## Validation`
+**Output:** `journal.md` → `## Validation`
 
 ---
 
@@ -294,13 +294,13 @@ Agent: Got it! Let me suggest some content for the introduction...
 | Command                               | Purpose                      | Output                      |
 | ------------------------------------- | ---------------------------- | --------------------------- |
 | `/help`                               | Show available commands      | —                           |
-| `/create-outline`                     | Define course foundation     | `project.md` → `## Outline` |
-| `/create-didactics`                   | Design teaching approach     | `project.md` → `## Didactics` |
-| `/create-agenda`                      | Structure sessions           | `project.md` → `## Agenda` |
-| `/create-session {n} {type} {title?}` | Create session skeleton      | `project.md` → `## Session Skeletons`   |
+| `/create-outline`                     | Define course foundation     | `journal.md` → `## Outline` |
+| `/create-didactics`                   | Design teaching approach     | `journal.md` → `## Didactics` |
+| `/create-agenda`                      | Structure sessions           | `journal.md` → `## Agenda` |
+| `/create-session {n} {type} {title?}` | Create session skeleton      | `journal.md` → `## Session Skeletons`   |
 | `/promote-session {n} {type}`         | Expand to full materials     | `materials/{n}-{type}.md`   |
 | `/coauthor-materials`                 | Interactive content creation | Refined materials           |
-| `/validate-course`                    | Check consistency            | `project.md` → `## Validation` |
+| `/validate-course`                    | Check consistency            | `journal.md` → `## Validation` |
 | `/assemble-bundle`                    | Package everything           | `course-bundle/`            |
 | `/exit`                               | End session                  | —                           |
 

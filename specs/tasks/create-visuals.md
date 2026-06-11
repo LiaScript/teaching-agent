@@ -8,28 +8,28 @@ Ensures all visual materials across courses maintain a consistent brand identity
 
 ## Inputs
 
-- Title from `project.md` → `## Outline` / `### Title`
-- Abstract from `project.md` → `## Outline` / `### Abstract`
-- Professor persona from `project.md` → `## Didactics` / `### Professor Persona`
-- Teaching style from `project.md` → `## Didactics` / `### Teaching Style`
-- Difficulty level from `project.md` → `## Didactics` / `### Difficulty Level`
-- Course type from `project.md` → `## Didactics` / `### Course Type`
+- Title from `journal.md` → `## Outline` / `### Title`
+- Abstract from `journal.md` → `## Outline` / `### Abstract`
+- Professor persona from `journal.md` → `## Didactics` / `### Professor Persona`
+- Teaching style from `journal.md` → `## Didactics` / `### Teaching Style`
+- Difficulty level from `journal.md` → `## Didactics` / `### Difficulty Level`
+- Course type from `journal.md` → `## Didactics` / `### Course Type`
 - Additional preferences (optional): color schemes, visual style, brand guidelines
 
 ## Output
 
-- `project.md` → `## Visual Identity`
+- `journal.md` → `## Visual Identity`
 - Structure based on `templates/visuals.yaml`
 
 ## Steps
 
-1. Read title and abstract from `project.md` → `## Outline`.
-2. Read professor persona, teaching style, difficulty level, and course type from `project.md` → `## Didactics`.
+1. Read title and abstract from `journal.md` → `## Outline`.
+2. Read professor persona, teaching style, difficulty level, and course type from `journal.md` → `## Didactics`.
 3. Align visual identity with professor persona and teaching style.
    - Example: Playful persona → colorful, informal visuals
    - Example: Academic persona → formal, professional tones
    - Example: Technical style → clean, minimalist design
-4. Ensure `project.md` contains the LiaScript `@color` macro in the header comment before `# ...`:
+4. Ensure `journal.md` contains the LiaScript `@color` macro in the header comment before `# ...`:
    ```
    <!--
    color: <span style="display:inline-block;width:1.5rem;height:1.5rem;background-color:@0;border:1px solid #ccc;border-radius:2px;vertical-align:middle;"></span> `@0`
@@ -44,7 +44,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 10. Specify typography (headings, body text, monospace fonts) matching the course style.
 11. Create example prompts for logos, images, and diagrams based on course theme.
 12. Fill the `templates/visuals.yaml` template with the results.
-13. Save the visual style guide by creating or replacing `project.md` → `## Visual Identity`.
+13. Save the visual style guide by creating or replacing `journal.md` → `## Visual Identity`.
 
 ## Usage
 

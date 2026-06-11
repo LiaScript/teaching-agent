@@ -4,7 +4,7 @@
 
 Runs all structural setup steps in one automated pass — without stopping for approval after each step.
 
-The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `project.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
+The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `journal.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
 
 This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init-course` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
 
@@ -28,7 +28,7 @@ All collected in a single intake interview at the start:
 
 ## Output
 
-Generated in sequence without interruption inside `project.md`:
+Generated in sequence without interruption inside `journal.md`:
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
@@ -78,12 +78,12 @@ Generated in sequence without interruption inside `project.md`:
 
 Run each step silently (no approval prompts between steps):
 
-1. Generate or replace `project.md` → `## Course Context` from collected inputs.
-2. Generate or replace `project.md` → `## Outline`.
-3. Generate or replace `project.md` → `## Didactics` — including the **Persona Voice Sample** section.
-4. If template imports were provided, run `tasks/manage-templates.md` and create or update `project.md` → `## Templates`.
-5. Generate or replace `project.md` → `## Agenda` (skip if agenda = no).
-6. Create or replace `project.md` → `## Sessions` with:
+1. Generate or replace `journal.md` → `## Course Context` from collected inputs.
+2. Generate or replace `journal.md` → `## Outline`.
+3. Generate or replace `journal.md` → `## Didactics` — including the **Persona Voice Sample** section.
+4. If template imports were provided, run `tasks/manage-templates.md` and create or update `journal.md` → `## Templates`.
+5. Generate or replace `journal.md` → `## Agenda` (skip if agenda = no).
+6. Create or replace `journal.md` → `## Sessions` with:
    - An overview table directly below `## Sessions`
    - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - One `### {number}. {title}` subsection per session below the overview table
@@ -91,21 +91,21 @@ Run each step silently (no approval prompts between steps):
 
 After each section is saved, print a brief progress line:
 ```
-✅ project.md → ## Course Context
-✅ project.md → ## Outline
-✅ project.md → ## Didactics
-✅ project.md → ## Templates
-✅ project.md → ## Agenda
-✅ project.md → ## Sessions / overview
-✅ project.md → ## Sessions / 1. Session title
-✅ project.md → ## Sessions / 2. Session title
+✅ journal.md → ## Course Context
+✅ journal.md → ## Outline
+✅ journal.md → ## Didactics
+✅ journal.md → ## Templates
+✅ journal.md → ## Agenda
+✅ journal.md → ## Sessions / overview
+✅ journal.md → ## Sessions / 1. Session title
+✅ journal.md → ## Sessions / 2. Session title
 ...
 ```
 
 ### Phase 3: Handoff
 
 7. Print completion summary:
-   > "Scaffold completed. `project.md` updated with [N] sections/entries."
+   > "Scaffold completed. `journal.md` updated with [N] sections/entries."
    >
    > | Section      | Status            |
    > |--------------|-------------------|
@@ -130,5 +130,5 @@ After each section is saved, print a brief progress line:
 ## Notes
 
 - Scaffold mode does NOT run `/promote-session` or `/coauthor-materials` — those remain interactive.
-- All generated `project.md` sections are drafts. The instructor reviews and refines them during co-authoring.
-- The Persona Voice Sample in `project.md` → `## Didactics` is especially important — it anchors tone for all future co-authoring sessions.
+- All generated `journal.md` sections are drafts. The instructor reviews and refines them during co-authoring.
+- The Persona Voice Sample in `journal.md` → `## Didactics` is especially important — it anchors tone for all future co-authoring sessions.

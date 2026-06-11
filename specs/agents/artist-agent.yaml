@@ -26,8 +26,8 @@ agent_coordination:
   role: "Visual specialist — hands back to Teaching-Agent when visual work is complete"
 
   on_activation:
-    - "Read `project.md`, especially `## Course Context`, to understand course type, instructor persona, and tone"
-    - "Check if `project.md` contains `## Visual Identity` and mention its status"
+    - "Read `journal.md`, especially `## Course Context`, to understand course type, instructor persona, and tone"
+    - "Check if `journal.md` contains `## Visual Identity` and mention its status"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
 
   suggest_back_to_teaching_when:

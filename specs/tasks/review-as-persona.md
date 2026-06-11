@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The agent temporarily **embodies a learner persona** from `project.md` → `## Learner Personas` and reviews
+The agent temporarily **embodies a learner persona** from `journal.md` → `## Learner Personas` and reviews
 one session material from the perspective of that fictional learner.
 
 This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
@@ -14,23 +14,23 @@ or simply get a feel for how this learner experiences the material.
 
 ## Inputs
 
-- `{name}` — persona name (must exist in `project.md` → `## Learner Personas`)
+- `{name}` — persona name (must exist in `journal.md` → `## Learner Personas`)
 - `{number}` — session number
 - `{type}` — session type (`lecture` or `exercise`)
 - `materials/{number}-{type}.md` — the material to review
-- `project.md` → `## Learner Personas` — full persona definition
-- `project.md` → `## Agenda` — learning objectives for this session
-- `project.md` → `## Course Context` — terminology and conventions
-- Matching `### {number}. {title}` subsection in `project.md` → `## Sessions`
+- `journal.md` → `## Learner Personas` — full persona definition
+- `journal.md` → `## Agenda` — learning objectives for this session
+- `journal.md` → `## Course Context` — terminology and conventions
+- Matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 
 ## Output
 
-- `project.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` — saved structured review report
+- `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` — saved structured review report
 - Agent remains in persona mode for interactive follow-up dialog until explicitly exited
 
 ## Review Storage
 
-Persona reviews are stored directly with the matching session in `project.md` → `## Sessions`.
+Persona reviews are stored directly with the matching session in `journal.md` → `## Sessions`.
 Each session can contain one current review per learner persona.
 
 Rules:
@@ -38,18 +38,18 @@ Rules:
 - The container heading is always `#### Persona Reviews`.
 - Each persona report is headed `##### {icon} {name}`.
 - If that persona already has a report for the same session, replace it completely.
-- Do not use a global `project.md` → `## Persona Reviews` section for new reviews.
+- Do not use a global `journal.md` → `## Persona Reviews` section for new reviews.
 
 ## Steps
 
-1. Load the named persona from `project.md` → `## Learner Personas`.
+1. Load the named persona from `journal.md` → `## Learner Personas`.
    - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
-   - If `project.md` → `## Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
+   - If `journal.md` → `## Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
 
 2. Load `materials/{number}-{type}.md`.
 
-3. Load the learning objectives for this session from `project.md` → `## Agenda`.
-   Also find the matching `### {number}. {title}` subsection in `project.md` → `## Sessions`.
+3. Load the learning objectives for this session from `journal.md` → `## Agenda`.
+   Also find the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
 
 4. Announce persona adoption clearly:
    > "I am now [Icon] [Name] — [one-line description from persona overview]. Reading Session [N] from a learner's perspective…"
@@ -133,11 +133,11 @@ Rules:
    [What this persona would respond well to — do not skip this section.]
    ```
 
-7. Create or update `#### Persona Reviews` inside the matching session subsection in `project.md` → `## Sessions`.
+7. Create or update `#### Persona Reviews` inside the matching session subsection in `journal.md` → `## Sessions`.
    - If `#### Persona Reviews` does not exist in that session, create it after `#### Validation Report` if present; otherwise place it near the end of the session subsection.
    - If `##### {icon} {name}` already exists under that session's `#### Persona Reviews`, replace only that persona's report.
    - If other persona reports exist for the same session, keep them unchanged.
-   Confirm: "Review saved in `project.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → `##### {icon} {name}`."
+   Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → `##### {icon} {name}`."
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
