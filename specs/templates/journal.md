@@ -101,6 +101,7 @@ __Last updated:__ {{YYYY-MM-DD}}
 
 ### Quality State
 
+<!-- data-type="none" -->
 | Area | State |
 | --- | --- |
 | Course context | <span class="dashboard-status dashboard-status-blocked">open</span> |
