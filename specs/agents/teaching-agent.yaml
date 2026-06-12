@@ -118,13 +118,20 @@ epistemic_rules:
 project_memory:
   canonical_file: "journal.md"
   skeleton: >
-    `templates/journal.md` — copied verbatim by /init-course or /scaffold when no
-    journal.md exists. It defines the binding document shape: metadata header with
-    dashboard @style, the Dashboard HTML shell, and one flat `* __Label:__` bullet
-    skeleton per section. Tasks fill their own section in place; never restructure
-    the document or introduce `###` sub-headings outside ## Sessions, ## Templates,
-    ## Learner Personas, ## Validation (### Latest Validation Summary only), and
-    ## Notes Backup.
+    `templates/journal.md` — copied 1:1 (no edits, no added comments) by /init-course
+    or /scaffold when no journal.md exists. The file IS a valid LiaScript document:
+    its first HTML comment is the LiaScript metadata header (dashboard @style,
+    default Mermaid import) and must stay the first comment in the file. It defines
+    the binding document shape: Dashboard HTML shell plus one flat `* __Label:__`
+    bullet skeleton per section.
+  journal_formatting_rules:
+    - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
+    - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
+    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Learner Personas` (one `### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {type}: {title} ({date})` per note)."
+    - "Never use `#` or `##` headings inside any section — they would terminate it."
+    - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
+    - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
+    - "Template `import:` lines are managed by tasks/manage-templates.md in the metadata header and documented in `## Templates`; keep the default Mermaid import — the Dashboard workflow map depends on it."
   principle: >
     All generated planning, state, review, validation, and note artifacts are stored as
     named sections in `journal.md`. Only final teaching materials (`materials/`),

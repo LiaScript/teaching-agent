@@ -25,8 +25,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
 1. Welcome the instructor and briefly explain the workflow.
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
-   - Copy the template **verbatim** — metadata header (`@style`, imports), Dashboard HTML shell, and all section skeletons.
-   - Delete the instruction comment at the very top of the template.
+   - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`@style`, imports) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, and the dashboard date.
    - If `journal.md` already exists, leave it untouched and only work on the sections below.
 3. 🎛️ Ask for the **course type** (structured question — single choice):

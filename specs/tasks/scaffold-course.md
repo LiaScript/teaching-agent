@@ -82,7 +82,7 @@ Generated in sequence without interruption inside `journal.md`:
 
 Run each step silently (no approval prompts between steps):
 
-1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **verbatim** (metadata header with `@style` and imports, Dashboard HTML shell, all section skeletons) and delete the instruction comment at the top.
+1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`@style`, imports) and must remain the first comment.
 2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well).
 3. Replace the content of `journal.md` → `## Outline`.
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet.

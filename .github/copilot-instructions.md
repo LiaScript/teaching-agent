@@ -10,14 +10,14 @@ You are now operating as a specialized AI agent from the BMad-Method framework. 
 
 2. **Resource Navigation**: This bundle contains all resources you need. Resources are marked with tags like:
 
-- `==================== START: .bmad-core/folder/filename.md ====================`
-- `==================== END: .bmad-core/folder/filename.md ====================`
+- `==================== START: specs/folder/filename.md ====================`
+- `==================== END: specs/folder/filename.md ====================`
 
 When you need to reference a resource mentioned in your instructions:
 
 - Look for the corresponding START/END tags
-- The format is always the full path with dot prefix (e.g., `.bmad-core/agents/teaching-agent.md`, `.bmad-core/tasks/create-outline.md`)
-- If a section is specified (e.g., `.bmad-core/tasks/create-outline.md#section-name`), navigate to that section within the file
+- The format is always the full path with dot prefix (e.g., `specs/agents/teaching-agent.md`, `specs/tasks/create-outline.md`)
+- If a section is specified (e.g., `specs/tasks/create-outline.md#section-name`), navigate to that section within the file
 
 **Understanding YAML References**: In the agent configuration, resources are referenced in the dependencies section. For example:
 
@@ -31,14 +31,14 @@ dependencies:
 
 These references map directly to bundle sections:
 
-- `templates: outline` → Look for `==================== START: .bmad-core/templates/outline.yaml ====================`
-- `tasks: create-outline` → Look for `==================== START: .bmad-core/tasks/create-outline.md ====================`
+- `templates: outline` → Look for `==================== START: specs/templates/outline.yaml ====================`
+- `tasks: create-outline` → Look for `==================== START: specs/tasks/create-outline.md ====================`
 
 3. **Execution Context**: You are operating in a web environment. All your capabilities and knowledge are contained within this bundle. Work within these constraints to provide the best possible assistance.
 
 4. **Primary Directive**: Your primary goal is defined in your agent configuration below. Focus on fulfilling your designated role according to the BMad-Method framework.
 
-==================== START: .bmad-core/agents/teaching-agent.yaml ====================
+==================== START: specs/agents/teaching-agent.yaml ====================
 
 ## Agent Definition
 
@@ -172,13 +172,20 @@ epistemic_rules:
 project_memory:
   canonical_file: "journal.md"
   skeleton: >
-    `templates/journal.md` — copied verbatim by /init-course or /scaffold when no
-    journal.md exists. It defines the binding document shape: metadata header with
-    dashboard @style, the Dashboard HTML shell, and one flat `* __Label:__` bullet
-    skeleton per section. Tasks fill their own section in place; never restructure
-    the document or introduce `###` sub-headings outside ## Sessions, ## Templates,
-    ## Learner Personas, ## Validation (### Latest Validation Summary only), and
-    ## Notes Backup.
+    `templates/journal.md` — copied 1:1 (no edits, no added comments) by /init-course
+    or /scaffold when no journal.md exists. The file IS a valid LiaScript document:
+    its first HTML comment is the LiaScript metadata header (dashboard @style,
+    default Mermaid import) and must stay the first comment in the file. It defines
+    the binding document shape: Dashboard HTML shell plus one flat `* __Label:__`
+    bullet skeleton per section.
+  journal_formatting_rules:
+    - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
+    - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
+    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Learner Personas` (one `### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {type}: {title} ({date})` per note)."
+    - "Never use `#` or `##` headings inside any section — they would terminate it."
+    - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
+    - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
+    - "Template `import:` lines are managed by tasks/manage-templates.md in the metadata header and documented in `## Templates`; keep the default Mermaid import — the Dashboard workflow map depends on it."
   principle: >
     All generated planning, state, review, validation, and note artifacts are stored as
     named sections in `journal.md`. Only final teaching materials (`materials/`),
@@ -308,10 +315,10 @@ fuzzy-matching:
   - Show numbered list if unsure
 ```
 
-==================== END: .bmad-core/agents/teaching-agent.yaml ====================
+==================== END: specs/agents/teaching-agent.yaml ====================
 
 
-==================== START: .bmad-core/agents/learner-agent.yaml ====================
+==================== START: specs/agents/learner-agent.yaml ====================
 
 ## Agent Definition
 
@@ -401,10 +408,10 @@ fuzzy-matching:
   - Show numbered list if unsure
 ```
 
-==================== END: .bmad-core/agents/learner-agent.yaml ====================
+==================== END: specs/agents/learner-agent.yaml ====================
 
 
-==================== START: .bmad-core/agents/artist-agent.yaml ====================
+==================== START: specs/agents/artist-agent.yaml ====================
 
 ## Agent Definition
 
@@ -533,10 +540,10 @@ fuzzy-matching:
   - Show numbered list if unsure
 ```
 
-==================== END: .bmad-core/agents/artist-agent.yaml ====================
+==================== END: specs/agents/artist-agent.yaml ====================
 
 
-==================== START: .bmad-core/agents/development-agent.yaml ====================
+==================== START: specs/agents/development-agent.yaml ====================
 
 ## Agent Definition
 
@@ -648,10 +655,10 @@ fuzzy-matching:
   - Show numbered list if unsure
 ```
 
-==================== END: .bmad-core/agents/development-agent.yaml ====================
+==================== END: specs/agents/development-agent.yaml ====================
 
 
-==================== START: .bmad-core/tasks/analyze-existing.md ====================
+==================== START: specs/tasks/analyze-existing.md ====================
 
 # Task: analyze-existing
 
@@ -730,10 +737,10 @@ Offers two paths for each missing core section:
 
 9. Save the full status overview as `journal.md` → `## Analysis Status`.
 
-==================== END: .bmad-core/tasks/analyze-existing.md ====================
+==================== END: specs/tasks/analyze-existing.md ====================
 
 
-==================== START: .bmad-core/tasks/assemble-bundle.md ====================
+==================== START: specs/tasks/assemble-bundle.md ====================
 
 # Task: assemble-bundle
 
@@ -803,10 +810,10 @@ course-bundle/
    > "Bundle created in `course-bundle/`. Contains `journal.md`, [N] material files, and [assets/ ✅ / no assets]."
    > "Next step: `/agent development` → `/create-project` to publish the course."
 
-==================== END: .bmad-core/tasks/assemble-bundle.md ====================
+==================== END: specs/tasks/assemble-bundle.md ====================
 
 
-==================== START: .bmad-core/tasks/coauthor-materials.md ====================
+==================== START: specs/tasks/coauthor-materials.md ====================
 
 # Task: coauthor-materials
 
@@ -873,10 +880,10 @@ Suggest images for visualization, either as a search term or as a concrete image
 - Always ask if information is missing
 - STAY IN CHARACTER!
 
-==================== END: .bmad-core/tasks/coauthor-materials.md ====================
+==================== END: specs/tasks/coauthor-materials.md ====================
 
 
-==================== START: .bmad-core/tasks/create-agenda.md ====================
+==================== START: specs/tasks/create-agenda.md ====================
 
 # Task: create-agenda
 
@@ -930,10 +937,10 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 8. Save the generated agenda by replacing the content of `journal.md` → `## Agenda` — flat `* __Label:__` bullets plus the sessions table, no sub-headings.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
-==================== END: .bmad-core/tasks/create-agenda.md ====================
+==================== END: specs/tasks/create-agenda.md ====================
 
 
-==================== START: .bmad-core/tasks/create-didactics.md ====================
+==================== START: specs/tasks/create-didactics.md ====================
 
 # Task: create-didactics
 
@@ -974,10 +981,10 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 9. Save the generated didactics by replacing the content of `journal.md` → `## Didactics` — flat `* __Label:__` bullets only (including `* __Persona Voice Sample:__`), no sub-headings.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
-==================== END: .bmad-core/tasks/create-didactics.md ====================
+==================== END: specs/tasks/create-didactics.md ====================
 
 
-==================== START: .bmad-core/tasks/create-image.md ====================
+==================== START: specs/tasks/create-image.md ====================
 
 # Task: create-image
 
@@ -1071,10 +1078,10 @@ This task is invoked when:
 - Generating visual aids for specific concepts
 - Creating consistent imagery across sessions
 
-==================== END: .bmad-core/tasks/create-image.md ====================
+==================== END: specs/tasks/create-image.md ====================
 
 
-==================== START: .bmad-core/tasks/create-learner-persona.md ====================
+==================== START: specs/tasks/create-learner-persona.md ====================
 
 # Task: create-learner-persona
 
@@ -1254,10 +1261,10 @@ This task is invoked when:
 - Before `/coauthor-materials` to anchor material design in learner reality
 - Before `/review-as-persona` — a persona must exist first
 
-==================== END: .bmad-core/tasks/create-learner-persona.md ====================
+==================== END: specs/tasks/create-learner-persona.md ====================
 
 
-==================== START: .bmad-core/tasks/create-logo.md ====================
+==================== START: specs/tasks/create-logo.md ====================
 
 # Task: create-logo
 
@@ -1326,10 +1333,10 @@ This task is invoked when:
 - The style guide has been updated
 - Multiple logo variations are being explored
 
-==================== END: .bmad-core/tasks/create-logo.md ====================
+==================== END: specs/tasks/create-logo.md ====================
 
 
-==================== START: .bmad-core/tasks/create-outline.md ====================
+==================== START: specs/tasks/create-outline.md ====================
 
 # Task: create-outline
 
@@ -1368,10 +1375,10 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 8. Save the generated outline by replacing the content of `journal.md` → `## Outline` — flat `* __Label:__` bullets only, no sub-headings.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
-==================== END: .bmad-core/tasks/create-outline.md ====================
+==================== END: specs/tasks/create-outline.md ====================
 
 
-==================== START: .bmad-core/tasks/create-project.md ====================
+==================== START: specs/tasks/create-project.md ====================
 
 # Task: create-project
 
@@ -1415,10 +1422,10 @@ This task is invoked when:
 - Automating project.yaml and workflow creation
 - Assisting users with git/GitHub operations and publishing
 
-==================== END: .bmad-core/tasks/create-project.md ====================
+==================== END: specs/tasks/create-project.md ====================
 
 
-==================== START: .bmad-core/tasks/create-session-skeleton.md ====================
+==================== START: specs/tasks/create-session-skeleton.md ====================
 
 # Task: create-session
 
@@ -1473,10 +1480,10 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - Keep the overview table before all `### {number}. {title}` subsections.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
-==================== END: .bmad-core/tasks/create-session-skeleton.md ====================
+==================== END: specs/tasks/create-session-skeleton.md ====================
 
 
-==================== START: .bmad-core/tasks/create-visuals.md ====================
+==================== START: specs/tasks/create-visuals.md ====================
 
 # Task: create-visuals
 
@@ -1534,10 +1541,10 @@ This style guide will be referenced by the Teaching-Agent when:
 - Designing visual elements for the course bundle
 - Ensuring consistent branding across all course materials
 
-==================== END: .bmad-core/tasks/create-visuals.md ====================
+==================== END: specs/tasks/create-visuals.md ====================
 
 
-==================== START: .bmad-core/tasks/generate-image.md ====================
+==================== START: specs/tasks/generate-image.md ====================
 
 # Task: generate-image
 
@@ -1832,10 +1839,10 @@ If any failures: list slugs, suggest `/generate-image {slug}` to retry individua
 | Save to project folder   | ❌              | ✅                         | ✅                         |
 | Requires chrome-devtools | ❌              | ✅                         | ✅                         |
 
-==================== END: .bmad-core/tasks/generate-image.md ====================
+==================== END: specs/tasks/generate-image.md ====================
 
 
-==================== START: .bmad-core/tasks/init-course.md ====================
+==================== START: specs/tasks/init-course.md ====================
 
 # Task: init
 
@@ -1864,8 +1871,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
 1. Welcome the instructor and briefly explain the workflow.
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
-   - Copy the template **verbatim** — metadata header (`@style`, imports), Dashboard HTML shell, and all section skeletons.
-   - Delete the instruction comment at the very top of the template.
+   - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`@style`, imports) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, and the dashboard date.
    - If `journal.md` already exists, leave it untouched and only work on the sections below.
 3. 🎛️ Ask for the **course type** (structured question — single choice):
@@ -1920,10 +1926,10 @@ The course context acts as the governance layer: it defines the course type, ter
 - For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.
 - The skeleton's formatting rules are binding: flat bullet sections, no `###` sub-headings outside `## Sessions` / `## Templates` / `## Learner Personas` / `## Validation` / `## Notes Backup`, and the Dashboard is only ever updated via `tasks/update-dashboard.md`.
 
-==================== END: .bmad-core/tasks/init-course.md ====================
+==================== END: specs/tasks/init-course.md ====================
 
 
-==================== START: .bmad-core/tasks/manage-git.md ====================
+==================== START: specs/tasks/manage-git.md ====================
 
 # Task: manage-git
 
@@ -1966,10 +1972,10 @@ This task is invoked when:
 - Beginners need step-by-step guidance
 - There are errors, conflicts, or uncertainty about version control
 
-==================== END: .bmad-core/tasks/manage-git.md ====================
+==================== END: specs/tasks/manage-git.md ====================
 
 
-==================== START: .bmad-core/tasks/manage-templates.md ====================
+==================== START: specs/tasks/manage-templates.md ====================
 
 # Task: manage-templates
 
@@ -2034,10 +2040,10 @@ Use this task when:
 - Keep the `## Course Context` conventions short. Put detailed examples and usage rules in `## Templates`.
 - Do not remove a template import unless no material or project section uses its macros anymore.
 
-==================== END: .bmad-core/tasks/manage-templates.md ====================
+==================== END: specs/tasks/manage-templates.md ====================
 
 
-==================== START: .bmad-core/tasks/promote-session.md ====================
+==================== START: specs/tasks/promote-session.md ====================
 
 # Task: promote-session
 
@@ -2081,10 +2087,10 @@ Converts a **Session** into a detailed **Session Material**.
 10. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
 11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
-==================== END: .bmad-core/tasks/promote-session.md ====================
+==================== END: specs/tasks/promote-session.md ====================
 
 
-==================== START: .bmad-core/tasks/quick-fix.md ====================
+==================== START: specs/tasks/quick-fix.md ====================
 
 # Task: quick-fix
 
@@ -2142,10 +2148,10 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 | Structural or content change         | `/coauthor-materials` |
 | Persona tone inconsistent throughout | `/coauthor-materials` |
 
-==================== END: .bmad-core/tasks/quick-fix.md ====================
+==================== END: specs/tasks/quick-fix.md ====================
 
 
-==================== START: .bmad-core/tasks/review-as-persona.md ====================
+==================== START: specs/tasks/review-as-persona.md ====================
 
 # Task: review-as-persona
 
@@ -2325,10 +2331,10 @@ Rules:
 
 **Recommended sequence:** `/coauthor-materials` → `/validate-course` (syntax) → `/review-as-persona` (learner lens) → fix with `/coauthor-materials` if needed.
 
-==================== END: .bmad-core/tasks/review-as-persona.md ====================
+==================== END: specs/tasks/review-as-persona.md ====================
 
 
-==================== START: .bmad-core/tasks/scaffold-course.md ====================
+==================== START: specs/tasks/scaffold-course.md ====================
 
 # Task: scaffold-course
 
@@ -2414,7 +2420,7 @@ Generated in sequence without interruption inside `journal.md`:
 
 Run each step silently (no approval prompts between steps):
 
-1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **verbatim** (metadata header with `@style` and imports, Dashboard HTML shell, all section skeletons) and delete the instruction comment at the top.
+1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`@style`, imports) and must remain the first comment.
 2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well).
 3. Replace the content of `journal.md` → `## Outline`.
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet.
@@ -2476,10 +2482,10 @@ After each section is saved, print a brief progress line:
 - All generated `journal.md` sections are drafts. The instructor reviews and refines them during co-authoring.
 - The Persona Voice Sample in `journal.md` → `## Didactics` is especially important — it anchors tone for all future co-authoring sessions.
 
-==================== END: .bmad-core/tasks/scaffold-course.md ====================
+==================== END: specs/tasks/scaffold-course.md ====================
 
 
-==================== START: .bmad-core/tasks/update-dashboard.md ====================
+==================== START: specs/tasks/update-dashboard.md ====================
 
 # Task: update-dashboard
 
@@ -2633,10 +2639,10 @@ _Generated from the project sections below. Do not edit manually._
 - Mermaid `click` links are helpful but renderer-dependent; always include regular Markdown quick links as fallback.
 - Keep the dashboard near the top of `journal.md`, directly after the main course title.
 
-==================== END: .bmad-core/tasks/update-dashboard.md ====================
+==================== END: specs/tasks/update-dashboard.md ====================
 
 
-==================== START: .bmad-core/tasks/update-project.md ====================
+==================== START: specs/tasks/update-project.md ====================
 
 # Task: update-project
 
@@ -2677,10 +2683,10 @@ This task is invoked when:
 - The user wants to update the published project on GitHub Pages
 - Keeping `project.yaml` and published content in sync with the latest materials
 
-==================== END: .bmad-core/tasks/update-project.md ====================
+==================== END: specs/tasks/update-project.md ====================
 
 
-==================== START: .bmad-core/tasks/validate-course.md ====================
+==================== START: specs/tasks/validate-course.md ====================
 
 # Task: validate-course
 
@@ -2862,10 +2868,10 @@ Rules:
 
 **Rule:** Never suggest or assist with `/create-project` or `/update-project` unless `journal.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.
 
-==================== END: .bmad-core/tasks/validate-course.md ====================
+==================== END: specs/tasks/validate-course.md ====================
 
 
-==================== START: .bmad-core/templates/course-agenda.yaml ====================
+==================== START: specs/templates/course-agenda.yaml ====================
 
 ```yaml
 template:
@@ -2891,10 +2897,10 @@ template:
         - Automatic materials file (materials/{n}-{type}.md)
 ```
 
-==================== END: .bmad-core/templates/course-agenda.yaml ====================
+==================== END: specs/templates/course-agenda.yaml ====================
 
 
-==================== START: .bmad-core/templates/course-context.yaml ====================
+==================== START: specs/templates/course-context.yaml ====================
 
 ```yaml
 template:
@@ -2947,10 +2953,10 @@ template:
           - [Any project-specific rules, constraints, or reminders.]
 ```
 
-==================== END: .bmad-core/templates/course-context.yaml ====================
+==================== END: specs/templates/course-context.yaml ====================
 
 
-==================== START: .bmad-core/templates/course-didactics.yaml ====================
+==================== START: specs/templates/course-didactics.yaml ====================
 
 ```yaml
 template:
@@ -3000,10 +3006,10 @@ template:
           reviewing materials.]
 ```
 
-==================== END: .bmad-core/templates/course-didactics.yaml ====================
+==================== END: specs/templates/course-didactics.yaml ====================
 
 
-==================== START: .bmad-core/templates/course-outline.yaml ====================
+==================== START: specs/templates/course-outline.yaml ====================
 
 ```yaml
 template:
@@ -3045,10 +3051,10 @@ template:
           3. [Clear learning objective with application scenario]
 ```
 
-==================== END: .bmad-core/templates/course-outline.yaml ====================
+==================== END: specs/templates/course-outline.yaml ====================
 
 
-==================== START: .bmad-core/templates/course-templates.yaml ====================
+==================== START: specs/templates/course-templates.yaml ====================
 
 ```yaml
 template:
@@ -3114,49 +3120,10 @@ template:
           3. {{special_usage_3}}
 ```
 
-==================== END: .bmad-core/templates/course-templates.yaml ====================
+==================== END: specs/templates/course-templates.yaml ====================
 
 
-==================== START: .bmad-core/templates/journal.md ====================
-
-<!--
-═════════════════════════════════════════════════════════════════════════════
-SKELETON TEMPLATE — templates/journal.md
-
-Instantiation (done by /init-course or /scaffold when no journal.md exists):
-
-1. Copy this file verbatim to the project root as `journal.md`.
-2. DELETE this instruction comment — the metadata header below then becomes
-   the first comment of the file.
-3. Replace the `{{...}}` placeholders with real values as tasks run; keep all
-   other markup (HTML, tables, bullet labels) exactly as it is.
-4. Sections whose task has not run yet KEEP their bullet skeleton with
-   `{{...}}` placeholders. Each task replaces ONLY the content of its own
-   `## Section`.
-
-Formatting rules — binding for every task that writes to journal.md:
-
-- Every `## Section` stays FLAT: `* __Label:__` bullets only. Never introduce
-  `###` sub-headings inside a section — in LiaScript every heading becomes
-  its own slide. Exceptions: `## Sessions` (one `### {n}. {title}` per
-  session, optional `#### Validation Report` / `#### Persona Reviews` inside
-  it), `## Templates` (one `### {template-name}` per template),
-  `## Learner Personas` (one `### Persona: {icon} {name}` per persona),
-  `## Validation` (a single `### Latest Validation Summary` — the publishing
-  gate anchor), and `## Notes Backup` (one `### {type}: {title} ({date})`
-  per note). Never use `#` or `##` headings inside any section — they would
-  terminate it.
-- The `title:` fields of sections inside the YAML templates are internal
-  structure only — do NOT render them as headings.
-- `## Dashboard` is DERIVED state: after every project state change, update
-  the existing HTML structure in place (tasks/update-dashboard.md +
-  templates/project-dashboard.yaml). Never replace it with a plain table,
-  never edit it manually, never copy a chat progress summary into it.
-- Template `import:` lines are managed by tasks/manage-templates.md in the
-  metadata header below and documented in `## Templates`. The Mermaid import
-  is included by default because the Dashboard workflow map depends on it.
-═════════════════════════════════════════════════════════════════════════════
--->
+==================== START: specs/templates/journal.md ====================
 
 <!--
 color: <span style="display:inline-block;width:1.5rem;height:1.5rem;background-color:@0;border:1px solid #ccc;border-radius:2px;vertical-align:middle;"></span> `@0`
@@ -3567,10 +3534,10 @@ _Only used for improve-existing courses — filled by `/analyze-existing`._
 
 _Appended to by `/save-notes` and `/save-decision` as `### {type}: {title} ({date})` entries._
 
-==================== END: .bmad-core/templates/journal.md ====================
+==================== END: specs/templates/journal.md ====================
 
 
-==================== START: .bmad-core/templates/project-dashboard.yaml ====================
+==================== START: specs/templates/project-dashboard.yaml ====================
 
 ```yaml
 template:
@@ -3667,10 +3634,10 @@ template:
         </article>
 ```
 
-==================== END: .bmad-core/templates/project-dashboard.yaml ====================
+==================== END: specs/templates/project-dashboard.yaml ====================
 
 
-==================== START: .bmad-core/templates/session-material.yaml ====================
+==================== START: specs/templates/session-material.yaml ====================
 
 ```yaml
 template:
@@ -3705,10 +3672,10 @@ template:
         References
 ```
 
-==================== END: .bmad-core/templates/session-material.yaml ====================
+==================== END: specs/templates/session-material.yaml ====================
 
 
-==================== START: .bmad-core/templates/session-skeleton.yaml ====================
+==================== START: specs/templates/session-skeleton.yaml ====================
 
 ```yaml
 template:
@@ -3760,10 +3727,10 @@ template:
         1. [Relevant source or material]
 ```
 
-==================== END: .bmad-core/templates/session-skeleton.yaml ====================
+==================== END: specs/templates/session-skeleton.yaml ====================
 
 
-==================== START: .bmad-core/templates/session-validation.yaml ====================
+==================== START: specs/templates/session-validation.yaml ====================
 
 ```yaml
 template:
@@ -3812,10 +3779,10 @@ template:
         1. {{recommended_actions}}
 ```
 
-==================== END: .bmad-core/templates/session-validation.yaml ====================
+==================== END: specs/templates/session-validation.yaml ====================
 
 
-==================== START: .bmad-core/templates/visuals.yaml ====================
+==================== START: specs/templates/visuals.yaml ====================
 
 ```yaml
 template:
@@ -3908,10 +3875,10 @@ template:
           3. Diagram: "[Your complete diagram prompt example]"
 ```
 
-==================== END: .bmad-core/templates/visuals.yaml ====================
+==================== END: specs/templates/visuals.yaml ====================
 
 
-==================== START: .bmad-core/checklists/course-quality-checklist.md ====================
+==================== START: specs/checklists/course-quality-checklist.md ====================
 
 # Checklist: Course Quality
 
@@ -4002,10 +3969,10 @@ template:
 - [ ] Numbering correct, no gaps
 - [ ] No sessions without materials
 
-==================== END: .bmad-core/checklists/course-quality-checklist.md ====================
+==================== END: specs/checklists/course-quality-checklist.md ====================
 
 
-==================== START: .bmad-core/data/liascript-cheet-sheet.md ====================
+==================== START: specs/data/liascript-cheet-sheet.md ====================
 
 # LiaScript Guide – Syntax, Semantics & Best Practices
 
@@ -4717,10 +4684,10 @@ console.log("Basso continuo = foundation");
 </script>
 ````
 
-==================== END: .bmad-core/data/liascript-cheet-sheet.md ====================
+==================== END: specs/data/liascript-cheet-sheet.md ====================
 
 
-==================== START: .bmad-core/data/liascript-workflows.md ====================
+==================== START: specs/data/liascript-workflows.md ====================
 
 # LiaScript Workflows Reference
 
@@ -5728,10 +5695,10 @@ collection:
 
 *Sources: [Automating LiaScript Transformations](https://liascript.github.io/blog/automating-liascript-transformations-on-github/), [Quality Checks](https://liascript.github.io/blog/quality-checks-on-liascript-with-github-ensuring-document-excellence/), [Creating Project Websites](https://liascript.github.io/blog/creating-project-websites-with-liascript-exporter/), [@liascript/exporter on npm](https://www.npmjs.com/package/@liascript/exporter) — Retrieved April 2026*
 
-==================== END: .bmad-core/data/liascript-workflows.md ====================
+==================== END: specs/data/liascript-workflows.md ====================
 
 
-==================== START: .bmad-core/workflows/course-development.yaml ====================
+==================== START: specs/workflows/course-development.yaml ====================
 
 ```yaml
 workflow:
@@ -6225,4 +6192,4 @@ workflow:
       - /update-project
 ```
 
-==================== END: .bmad-core/workflows/course-development.yaml ====================
+==================== END: specs/workflows/course-development.yaml ====================

@@ -1,43 +1,4 @@
 <!--
-═════════════════════════════════════════════════════════════════════════════
-SKELETON TEMPLATE — templates/journal.md
-
-Instantiation (done by /init-course or /scaffold when no journal.md exists):
-
-1. Copy this file verbatim to the project root as `journal.md`.
-2. DELETE this instruction comment — the metadata header below then becomes
-   the first comment of the file.
-3. Replace the `{{...}}` placeholders with real values as tasks run; keep all
-   other markup (HTML, tables, bullet labels) exactly as it is.
-4. Sections whose task has not run yet KEEP their bullet skeleton with
-   `{{...}}` placeholders. Each task replaces ONLY the content of its own
-   `## Section`.
-
-Formatting rules — binding for every task that writes to journal.md:
-
-- Every `## Section` stays FLAT: `* __Label:__` bullets only. Never introduce
-  `###` sub-headings inside a section — in LiaScript every heading becomes
-  its own slide. Exceptions: `## Sessions` (one `### {n}. {title}` per
-  session, optional `#### Validation Report` / `#### Persona Reviews` inside
-  it), `## Templates` (one `### {template-name}` per template),
-  `## Learner Personas` (one `### Persona: {icon} {name}` per persona),
-  `## Validation` (a single `### Latest Validation Summary` — the publishing
-  gate anchor), and `## Notes Backup` (one `### {type}: {title} ({date})`
-  per note). Never use `#` or `##` headings inside any section — they would
-  terminate it.
-- The `title:` fields of sections inside the YAML templates are internal
-  structure only — do NOT render them as headings.
-- `## Dashboard` is DERIVED state: after every project state change, update
-  the existing HTML structure in place (tasks/update-dashboard.md +
-  templates/project-dashboard.yaml). Never replace it with a plain table,
-  never edit it manually, never copy a chat progress summary into it.
-- Template `import:` lines are managed by tasks/manage-templates.md in the
-  metadata header below and documented in `## Templates`. The Mermaid import
-  is included by default because the Dashboard workflow map depends on it.
-═════════════════════════════════════════════════════════════════════════════
--->
-
-<!--
 color: <span style="display:inline-block;width:1.5rem;height:1.5rem;background-color:@0;border:1px solid #ccc;border-radius:2px;vertical-align:middle;"></span> `@0`
 
 import: https://raw.githubusercontent.com/liaScript/mermaid_template/master/README.md

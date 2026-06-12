@@ -2,7 +2,7 @@ from pathlib import Path
 
 BUNDLE_NAME = "../.github/copilot-instructions.md"
 BASE_DIR = Path(__file__).parent
-ROOT_DIR = ".bmad-core"
+ROOT_DIR = "specs"
 MAIN_MD = "main.md"
 
 # Order of folders/files to bundle
