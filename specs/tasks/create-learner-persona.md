@@ -14,7 +14,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 ## Inputs
 
 - Name (optional — agent suggests if not provided)
-- Target audience from `journal.md` → `## Outline` / `### Target Audience`
+- Target audience from `journal.md` → `## Outline` (`__Target Audience:__` bullet)
 - Difficulty level, course type, and style from `journal.md` → `## Didactics`
 - Optional: research data provided by instructor (for data-driven mode)
 
@@ -81,28 +81,29 @@ and serve as the basis for `/review-as-persona` feedback sessions.
     > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Learner Personas`? (Yes / Adjust)"
 12. On approval: save to `journal.md` → `## Learner Personas`.
     - If `## Learner Personas` does not exist: create it with a short section intro and the persona entry
-    - If it exists: append as a new `---`-separated entry
-13. Suggest next step:
+    - If it exists: append as a new `### Persona: {icon} {name}` subsection
+13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+14. Suggest next step:
     > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
 ---
 
 ## Persona Structure
 
-Each persona section in `journal.md` → `## Learner Personas` follows this structure:
+Each persona is one `###` subsection inside `journal.md` → `## Learner Personas` — never use `##` here (it would terminate the section) and never go deeper than `####`:
 
 ```markdown
----
+### Persona: [Icon] [Name]
 
-## Persona: [Icon] [Name]
 *Created: YYYY-MM-DD | Mode: quick / data-driven*
 
-### Overview
+#### Overview
+
 Short narrative description (3–5 sentences) — brings the persona to life.
 Written in present tense, third person, like a brief character sketch.
 Includes: age, background, where they are in their training, attitude toward learning.
 
-### 1. Sociodemographics
+#### 1. Sociodemographics
 - Age: ...
 - Gender: ...
 - Origin / Background: ...
@@ -110,14 +111,14 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 2. Educational Background
+#### 2. Educational Background
 - Highest school qualification: ...
 - Literacy / text comprehension: ...
 - Numeracy: ...
 
 *[Source / Assumption note]*
 
-### 3. Training & Work Context
+#### 3. Training & Work Context
 - Training structure: ... (e.g., block schedule, weeks per block)
 - Typical work day / schedule: ...
 - Commute / accessibility: ...
@@ -125,7 +126,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 4. Digital Behavior
+#### 4. Digital Behavior
 - Primary device: ...
 - Apps used regularly: ...
 - Learning app or e-learning experience: ...
@@ -134,7 +135,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 5. Motivation & Goals
+#### 5. Motivation & Goals
 - Reason for choosing this field / training: ...
 - Short-term goal: ...
 - Long-term goal: ...
@@ -142,7 +143,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 6. Barriers & Risk Factors
+#### 6. Barriers & Risk Factors
 - Known learning difficulties: ...
 - Time pressure / exhaustion during training: ...
 - Attitude toward additional digital learning: ...
@@ -150,14 +151,14 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 7. Prior Knowledge Gaps
+#### 7. Prior Knowledge Gaps
 - Concepts likely unknown at course start: ...
 - Skills likely missing: ...
 - Terminology that must be introduced, not assumed: ...
 
 *[Source / Assumption note]*
 
-### Design Implications
+#### Design Implications
 5–7 concrete consequences for material design, directly derived from this persona:
 
 - [e.g., "Avoid paragraphs longer than 4 lines — reading comprehension is limited"]

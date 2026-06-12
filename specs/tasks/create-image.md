@@ -8,9 +8,9 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
-- Image style guidelines from `journal.md` → `## Visual Identity` / `### Course Image Generation Guidelines`
-- Website color palette from `journal.md` → `## Visual Identity` / `### Website Color Palette`
-- Course context from `journal.md` → `## Outline` / `### Abstract` (for thematic alignment)
+- Image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet)
+- Website color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet)
+- Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)
 - Course language from `journal.md` → `## Course Context` (Language field — for in-image text language)
 
 ## Output
@@ -21,9 +21,9 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Steps
 
 1. Receive user description of what should be visualized.
-2. Read image style guidelines from `journal.md` → `## Visual Identity` / `### Course Image Generation Guidelines`.
-3. Read color palette from `journal.md` → `## Visual Identity` / `### Website Color Palette`.
-4. Read course theme from `journal.md` → `## Outline` / `### Abstract` for context.
+2. Read image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet).
+3. Read color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet).
+4. Read course theme from `journal.md` → `## Outline` (`__Abstract:__` bullet) for context.
 5. Read course language from `journal.md` → `## Course Context` (Language field, e.g., `de`, `en`). If `journal.md` → `## Course Context` is unavailable, infer the language from the user's description as fallback.
 6. Analyze user description and extract:
    - Main subject/concept

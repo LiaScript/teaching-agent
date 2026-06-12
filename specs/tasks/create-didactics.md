@@ -34,4 +34,5 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - beginner / intermediate / advanced
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
-9. Save the generated didactics by creating or replacing `journal.md` → `## Didactics`.
+9. Save the generated didactics by replacing the content of `journal.md` → `## Didactics` — flat `* __Label:__` bullets only (including `* __Persona Voice Sample:__`), no sub-headings.
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

@@ -8,12 +8,12 @@ Ensures all visual materials across courses maintain a consistent brand identity
 
 ## Inputs
 
-- Title from `journal.md` → `## Outline` / `### Title`
-- Abstract from `journal.md` → `## Outline` / `### Abstract`
-- Professor persona from `journal.md` → `## Didactics` / `### Professor Persona`
-- Teaching style from `journal.md` → `## Didactics` / `### Teaching Style`
-- Difficulty level from `journal.md` → `## Didactics` / `### Difficulty Level`
-- Course type from `journal.md` → `## Didactics` / `### Course Type`
+- Title from `journal.md` → `## Outline` (`__Title:__` bullet)
+- Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
+- Professor persona from `journal.md` → `## Didactics` (`__Professor Persona:__` bullet)
+- Teaching style from `journal.md` → `## Didactics` (`__Teaching Style:__` bullet)
+- Difficulty level from `journal.md` → `## Didactics` (`__Difficulty Level:__` bullet)
+- Course type from `journal.md` → `## Didactics` (`__Course Type:__` bullet)
 - Additional preferences (optional): color schemes, visual style, brand guidelines
 
 ## Output

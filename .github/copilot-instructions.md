@@ -171,6 +171,14 @@ epistemic_rules:
 
 project_memory:
   canonical_file: "journal.md"
+  skeleton: >
+    `templates/journal.md` — copied verbatim by /init-course or /scaffold when no
+    journal.md exists. It defines the binding document shape: metadata header with
+    dashboard @style, the Dashboard HTML shell, and one flat `* __Label:__` bullet
+    skeleton per section. Tasks fill their own section in place; never restructure
+    the document or introduce `###` sub-headings outside ## Sessions, ## Templates,
+    ## Learner Personas, ## Validation (### Latest Validation Summary only), and
+    ## Notes Backup.
   principle: >
     All generated planning, state, review, validation, and note artifacts are stored as
     named sections in `journal.md`. Only final teaching materials (`materials/`),
@@ -278,6 +286,7 @@ dependencies:
     - assemble-bundle.md
     - create-learner-persona.md
   templates:
+    - journal.md
     - course-context.yaml
     - course-outline.yaml
     - course-didactics.yaml
@@ -788,7 +797,9 @@ course-bundle/
 
 5. Copy `journal.md`, `materials/`, and optional `assets/` into `course-bundle/` preserving subfolder structure.
 
-6. Confirm completion:
+6. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+
+7. Confirm completion:
    > "Bundle created in `course-bundle/`. Contains `journal.md`, [N] material files, and [assets/ ✅ / no assets]."
    > "Next step: `/agent development` → `/create-project` to publish the course."
 
@@ -809,7 +820,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Inputs
 
-- Professor persona & style from `journal.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)
+- Professor persona & style from `journal.md` → `## Didactics` (`__Professor Persona:__` and `__Persona Voice Sample:__` bullets — mandatory handoff)
 - Agenda info (modules/sessions) from `journal.md` → `## Agenda`
 - Terminology & conventions from `journal.md` → `## Course Context`
 - LiaScript template usage rules from `journal.md` → `## Templates` (if present)
@@ -845,7 +856,7 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
-7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column.
+7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 8. After approval, 🎛️ ask with structured question (single choice):
    - **Yes, validate now** — run `/validate-course {number} {type}`
    - **Later** — skip validation, proceed directly to the next session
@@ -877,11 +888,11 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 
 ## Inputs
 
-- Learning objectives from `journal.md` → `## Outline` / `### Learning Objectives`
-- Abstract from `journal.md` → `## Outline` / `### Abstract`
-- Time commitment from `journal.md` → `## Outline` / `### Time Commitment`
-- Didactic concept from `journal.md` → `## Didactics` / `### Didactic Concept`
-- **Instructor persona from `journal.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)**
+- Learning objectives from `journal.md` → `## Outline` (`__Learning Objectives:__` bullet)
+- Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
+- Time commitment from `journal.md` → `## Outline` (`__Time Commitment:__` bullet)
+- Didactic concept from `journal.md` → `## Didactics` (`__Didactic Concept:__` bullet)
+- **Instructor persona from `journal.md` → `## Didactics` (`__Professor Persona:__` bullet — mandatory handoff)**
 - **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
 - Course type from `journal.md` → `## Course Context`
 
@@ -916,7 +927,8 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
    - **self-paced**: modules without fixed time slots, estimated duration only
    - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
 7. Fill the `templates/course-agenda.yaml` template with the results.
-8. Save the generated agenda by creating or replacing `journal.md` → `## Agenda`.
+8. Save the generated agenda by replacing the content of `journal.md` → `## Agenda` — flat `* __Label:__` bullets plus the sessions table, no sub-headings.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: .bmad-core/tasks/create-agenda.md ====================
 
@@ -959,7 +971,8 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - beginner / intermediate / advanced
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
-9. Save the generated didactics by creating or replacing `journal.md` → `## Didactics`.
+9. Save the generated didactics by replacing the content of `journal.md` → `## Didactics` — flat `* __Label:__` bullets only (including `* __Persona Voice Sample:__`), no sub-headings.
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: .bmad-core/tasks/create-didactics.md ====================
 
@@ -976,9 +989,9 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
-- Image style guidelines from `journal.md` → `## Visual Identity` / `### Course Image Generation Guidelines`
-- Website color palette from `journal.md` → `## Visual Identity` / `### Website Color Palette`
-- Course context from `journal.md` → `## Outline` / `### Abstract` (for thematic alignment)
+- Image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet)
+- Website color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet)
+- Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)
 - Course language from `journal.md` → `## Course Context` (Language field — for in-image text language)
 
 ## Output
@@ -989,9 +1002,9 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Steps
 
 1. Receive user description of what should be visualized.
-2. Read image style guidelines from `journal.md` → `## Visual Identity` / `### Course Image Generation Guidelines`.
-3. Read color palette from `journal.md` → `## Visual Identity` / `### Website Color Palette`.
-4. Read course theme from `journal.md` → `## Outline` / `### Abstract` for context.
+2. Read image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet).
+3. Read color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet).
+4. Read course theme from `journal.md` → `## Outline` (`__Abstract:__` bullet) for context.
 5. Read course language from `journal.md` → `## Course Context` (Language field, e.g., `de`, `en`). If `journal.md` → `## Course Context` is unavailable, infer the language from the user's description as fallback.
 6. Analyze user description and extract:
    - Main subject/concept
@@ -1079,7 +1092,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 ## Inputs
 
 - Name (optional — agent suggests if not provided)
-- Target audience from `journal.md` → `## Outline` / `### Target Audience`
+- Target audience from `journal.md` → `## Outline` (`__Target Audience:__` bullet)
 - Difficulty level, course type, and style from `journal.md` → `## Didactics`
 - Optional: research data provided by instructor (for data-driven mode)
 
@@ -1146,28 +1159,29 @@ and serve as the basis for `/review-as-persona` feedback sessions.
     > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Learner Personas`? (Yes / Adjust)"
 12. On approval: save to `journal.md` → `## Learner Personas`.
     - If `## Learner Personas` does not exist: create it with a short section intro and the persona entry
-    - If it exists: append as a new `---`-separated entry
-13. Suggest next step:
+    - If it exists: append as a new `### Persona: {icon} {name}` subsection
+13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+14. Suggest next step:
     > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
 ---
 
 ## Persona Structure
 
-Each persona section in `journal.md` → `## Learner Personas` follows this structure:
+Each persona is one `###` subsection inside `journal.md` → `## Learner Personas` — never use `##` here (it would terminate the section) and never go deeper than `####`:
 
 ```markdown
----
+### Persona: [Icon] [Name]
 
-## Persona: [Icon] [Name]
 *Created: YYYY-MM-DD | Mode: quick / data-driven*
 
-### Overview
+#### Overview
+
 Short narrative description (3–5 sentences) — brings the persona to life.
 Written in present tense, third person, like a brief character sketch.
 Includes: age, background, where they are in their training, attitude toward learning.
 
-### 1. Sociodemographics
+#### 1. Sociodemographics
 - Age: ...
 - Gender: ...
 - Origin / Background: ...
@@ -1175,14 +1189,14 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 2. Educational Background
+#### 2. Educational Background
 - Highest school qualification: ...
 - Literacy / text comprehension: ...
 - Numeracy: ...
 
 *[Source / Assumption note]*
 
-### 3. Training & Work Context
+#### 3. Training & Work Context
 - Training structure: ... (e.g., block schedule, weeks per block)
 - Typical work day / schedule: ...
 - Commute / accessibility: ...
@@ -1190,7 +1204,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 4. Digital Behavior
+#### 4. Digital Behavior
 - Primary device: ...
 - Apps used regularly: ...
 - Learning app or e-learning experience: ...
@@ -1199,7 +1213,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 5. Motivation & Goals
+#### 5. Motivation & Goals
 - Reason for choosing this field / training: ...
 - Short-term goal: ...
 - Long-term goal: ...
@@ -1207,7 +1221,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 6. Barriers & Risk Factors
+#### 6. Barriers & Risk Factors
 - Known learning difficulties: ...
 - Time pressure / exhaustion during training: ...
 - Attitude toward additional digital learning: ...
@@ -1215,14 +1229,14 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-### 7. Prior Knowledge Gaps
+#### 7. Prior Knowledge Gaps
 - Concepts likely unknown at course start: ...
 - Skills likely missing: ...
 - Terminology that must be introduced, not assumed: ...
 
 *[Source / Assumption note]*
 
-### Design Implications
+#### Design Implications
 5–7 concrete consequences for material design, directly derived from this persona:
 
 - [e.g., "Avoid paragraphs longer than 4 lines — reading comprehension is limited"]
@@ -1254,10 +1268,10 @@ Creates a professional, actionable prompt that can be used with AI image generat
 
 ## Inputs
 
-- Title from `journal.md` → `## Outline` / `### Title`
-- Abstract from `journal.md` → `## Outline` / `### Abstract`
-- Logo style guidelines from `journal.md` → `## Visual Identity` / `### Logo Generation Guidelines`
-- Logo color palette from `journal.md` → `## Visual Identity` / `### Logo Color Palette`
+- Title from `journal.md` → `## Outline` (`__Title:__` bullet)
+- Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
+- Logo style guidelines from `journal.md` → `## Visual Identity` (`__Logo Generation Guidelines:__` bullet)
+- Logo color palette from `journal.md` → `## Visual Identity` (`__Logo Color Palette:__` bullet)
 
 ## Output
 
@@ -1267,8 +1281,8 @@ Creates a professional, actionable prompt that can be used with AI image generat
 ## Steps
 
 1. Read the course title and abstract from `journal.md` → `## Outline`.
-2. Read the logo style guidelines from `journal.md` → `## Visual Identity` / `### Logo Generation Guidelines`.
-3. Read the logo color palette from `journal.md` → `## Visual Identity` / `### Logo Color Palette`.
+2. Read the logo style guidelines from `journal.md` → `## Visual Identity` (`__Logo Generation Guidelines:__` bullet).
+3. Read the logo color palette from `journal.md` → `## Visual Identity` (`__Logo Color Palette:__` bullet).
 4. Extract key themes, concepts, or symbols from the abstract.
 5. Combine style guidelines with course theme to create a detailed prompt.
 6. Include specific elements:
@@ -1351,7 +1365,8 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 5. Define 3–5 concrete learning objectives.
 6. Optionally add a logo prompt.
 7. Fill the `templates/course-outline.yaml` with the inputs.
-8. Save the generated outline by creating or replacing `journal.md` → `## Outline`.
+8. Save the generated outline by replacing the content of `journal.md` → `## Outline` — flat `* __Label:__` bullets only, no sub-headings.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: .bmad-core/tasks/create-outline.md ====================
 
@@ -1391,6 +1406,7 @@ Supports users with git operations, GitHub integration, and project publishing.
 8. Check which files must be added to git and which need to be commited.
 9. Explain each step to the user and confirm before making changes.
 10. Offer to commit and push changes and to GitHub if the user agrees.
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state).
 
 ## Usage
 
@@ -1455,6 +1471,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - Add a new row: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - If a row for this session already exists, update the Skeleton column to ✅.
    - Keep the overview table before all `### {number}. {title}` subsections.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: .bmad-core/tasks/create-session-skeleton.md ====================
 
@@ -1471,12 +1488,12 @@ Ensures all visual materials across courses maintain a consistent brand identity
 
 ## Inputs
 
-- Title from `journal.md` → `## Outline` / `### Title`
-- Abstract from `journal.md` → `## Outline` / `### Abstract`
-- Professor persona from `journal.md` → `## Didactics` / `### Professor Persona`
-- Teaching style from `journal.md` → `## Didactics` / `### Teaching Style`
-- Difficulty level from `journal.md` → `## Didactics` / `### Difficulty Level`
-- Course type from `journal.md` → `## Didactics` / `### Course Type`
+- Title from `journal.md` → `## Outline` (`__Title:__` bullet)
+- Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
+- Professor persona from `journal.md` → `## Didactics` (`__Professor Persona:__` bullet)
+- Teaching style from `journal.md` → `## Didactics` (`__Teaching Style:__` bullet)
+- Difficulty level from `journal.md` → `## Didactics` (`__Difficulty Level:__` bullet)
+- Course type from `journal.md` → `## Didactics` (`__Course Type:__` bullet)
 - Additional preferences (optional): color schemes, visual style, brand guidelines
 
 ## Output
@@ -1824,19 +1841,21 @@ If any failures: list slugs, suggest `/generate-image {slug}` to retry individua
 
 ## Purpose
 
-Initializes a new course project by creating or updating the `## Course Context` section in `journal.md`.
+Initializes a new course project by instantiating `journal.md` from the skeleton template and creating or updating its `## Course Context` section.
 
 This is the **first mandatory step** for every new course project.
 The course context acts as the governance layer: it defines the course type, terminology, persona style, conventions, and LiaScript rules that all subsequent tasks will load and follow.
 
 ## Inputs
 
+- `templates/journal.md` (skeleton for a new `journal.md`)
 - Course type (asked interactively)
 - Working title (optional at this stage)
 - Instructor preferences (optional)
 
 ## Output
 
+- `journal.md` created from `templates/journal.md` if it does not exist yet
 - `journal.md` → `## Course Context`
 - Optional: `journal.md` main metadata header `import:` lines and `## Templates`
 - Structure based on `templates/course-context.yaml`
@@ -1844,15 +1863,20 @@ The course context acts as the governance layer: it defines the course type, ter
 ## Steps
 
 1. Welcome the instructor and briefly explain the workflow.
-2. 🎛️ Ask for the **course type** (structured question — single choice):
+2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
+   - Copy the template **verbatim** — metadata header (`@style`, imports), Dashboard HTML shell, and all section skeletons.
+   - Delete the instruction comment at the very top of the template.
+   - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, and the dashboard date.
+   - If `journal.md` already exists, leave it untouched and only work on the sections below.
+3. 🎛️ Ask for the **course type** (structured question — single choice):
    1. **lecture-series** – Semester course / lecture series with instructor
    2. **self-paced** – Self-learning course, asynchronous, no live sessions
    3. **workshop** – Intensive, interactive, time-boxed (1–3 days)
    4. **single-lesson** – One standalone lesson or tutorial
    5. **improve-existing** – Analyze and improve an existing course
-3. 💬 Ask for a working title (optional, free text).
-4. 🎛️ Ask about the target platform (structured question — single choice: LiaScript / Other).
-5. Based on the course type, set the profile defaults:
+4. 💬 Ask for a working title (optional, free text).
+5. 🎛️ Ask about the target platform (structured question — single choice: LiaScript / Other).
+6. Based on the course type, set the profile defaults:
 
    | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
    | ---------------- | ----------------- | --------------- | -------------- | --------------- | ----------------------- |
@@ -1869,30 +1893,32 @@ The course context acts as the governance layer: it defines the course type, ter
    Set `agenda` in the profile to `yes` or `no` based on the answer.
    For **lecture-series** and **workshop**, agenda is always `yes` (required, no question needed).
 
-6. 🎛️ Ask about project-level conventions in one structured pass (multi-select where applicable):
+7. 🎛️ Ask about project-level conventions in one structured pass (multi-select where applicable):
    - Language: de / en / other (+ free text if other)
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you
    - Accessibility: required / optional / not needed
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
-7. Fill the `templates/course-context.yaml` template with the collected inputs.
-8. Save the generated context by creating or replacing `journal.md` → `## Course Context`.
-9. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
-   - Add `import: {url}` to the main metadata header if missing
-   - Create or update `journal.md` → `## Templates`
-   - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
-10. Confirm completion and suggest the next step based on course type:
-   - **lecture-series / workshop** → `/create-outline`
-   - **self-paced** → `/create-outline` (agenda depends on instructor answer)
-   - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
-   - **improve-existing** → `/analyze-existing` (scans existing project memory and materials, offers to fill gaps)
+8. Fill the `templates/course-context.yaml` template with the collected inputs.
+9. Save the generated context by replacing the content of `journal.md` → `## Course Context` — keep it **flat** (`* __Label:__` bullets only, no sub-headings), exactly as the skeleton prescribes.
+10. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
+    - Add `import: {url}` to the main metadata header if missing
+    - Create or update `journal.md` → `## Templates`
+    - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, date).
+12. Confirm completion and suggest the next step based on course type:
+    - **lecture-series / workshop** → `/create-outline`
+    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
+    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
+    - **improve-existing** → `/analyze-existing` (scans existing project memory and materials, offers to fill gaps)
 
 ## Notes
 
 - All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `journal.md` → `## Course Context` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
 - For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.
+- The skeleton's formatting rules are binding: flat bullet sections, no `###` sub-headings outside `## Sessions` / `## Templates` / `## Learner Personas` / `## Validation` / `## Notes Backup`, and the Dashboard is only ever updated via `tasks/update-dashboard.md`.
 
 ==================== END: .bmad-core/tasks/init-course.md ====================
 
@@ -1959,7 +1985,7 @@ Use this task when:
 
 ## Inputs
 
-- `journal.md` → `## Course Context` / `### Conventions & Standards`
+- `journal.md` → `## Course Context` (`__Conventions & Standards:__` and `__LiaScript conventions:__` bullets)
 - Template name, import URL, purpose, and usage rules
 - Optional runnable examples and special examples
 - Template documentation or import source, if accessible
@@ -1996,7 +2022,8 @@ Use this task when:
    - For Skulpt regular Python examples, include a Python code block followed by `@Skulpt.eval`
    - For Skulpt turtle examples, include a Python code block followed by `@Skulpt.eval(skulpt_canvas)` and a persistent canvas `<div>`
 7. When promoting or coauthoring materials, ensure any material using a documented template also includes the matching `import: {url}` in its own LiaScript header.
-8. Confirm what changed:
+8. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+9. Confirm what changed:
    - Header imports added or already present
    - Template sections created or updated
    - Any material files that still need imports
@@ -2052,6 +2079,7 @@ Converts a **Session** into a detailed **Session Material**.
 8. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
 9. Save the material file as `materials/{number}-{type}.md`.
 10. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: .bmad-core/tasks/promote-session.md ====================
 
@@ -2095,6 +2123,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 4. **Report result:**
    - ✅ "Fix applied and validated — done."
    - ⚠️ "The problem is larger than expected: [describe]. Should I open `/coauthor-materials {number} {type}`?"
+   - If the fix changed session state (e.g., a Notes entry in the `## Sessions` overview table): run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 5. **Escalate if scope grows:** If the fix reveals structural issues or multiple sections need rework, stop and escalate to `/coauthor-materials` — do NOT proceed silently.
 
@@ -2258,6 +2287,7 @@ Rules:
    - If `##### {icon} {name}` already exists under that session's `#### Persona Reviews`, replace only that persona's report.
    - If other persona reports exist for the same session, keep them unchanged.
    Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → `##### {icon} {name}`."
+   Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
@@ -2312,6 +2342,8 @@ This is the "scaffold mode" — fast-track for instructors who know what they wa
 
 ## Inputs
 
+- `templates/journal.md` (skeleton for a new `journal.md`)
+
 All collected in a single intake interview at the start:
 
 - Course type
@@ -2331,12 +2363,14 @@ All collected in a single intake interview at the start:
 ## Output
 
 Generated in sequence without interruption inside `journal.md`:
+- `journal.md` created from `templates/journal.md` if it does not exist yet
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
 - `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
 - `## Sessions` containing an overview table followed by one subsection per session
+- `## Dashboard` updated in place via `tasks/update-dashboard.md`
 
 ## Steps
 
@@ -2380,19 +2414,22 @@ Generated in sequence without interruption inside `journal.md`:
 
 Run each step silently (no approval prompts between steps):
 
-1. Generate or replace `journal.md` → `## Course Context` from collected inputs.
-2. Generate or replace `journal.md` → `## Outline`.
-3. Generate or replace `journal.md` → `## Didactics` — including the **Persona Voice Sample** section.
-4. If template imports were provided, run `tasks/manage-templates.md` and create or update `journal.md` → `## Templates`.
-5. Generate or replace `journal.md` → `## Agenda` (skip if agenda = no).
-6. Create or replace `journal.md` → `## Sessions` with:
+1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **verbatim** (metadata header with `@style` and imports, Dashboard HTML shell, all section skeletons) and delete the instruction comment at the top.
+2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well).
+3. Replace the content of `journal.md` → `## Outline`.
+4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet.
+5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
+6. Replace the content of `journal.md` → `## Agenda` (skip if agenda = no).
+7. Replace the content of `journal.md` → `## Sessions` with:
    - An overview table directly below `## Sessions`
    - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - One `### {number}. {title}` subsection per session below the overview table
-7. Fill each session subsection using `templates/session-skeleton.yaml`.
+8. Fill each session subsection using `templates/session-skeleton.yaml`.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, session progress, workflow map states, date).
 
 After each section is saved, print a brief progress line:
 ```
+✅ journal.md instantiated from templates/journal.md
 ✅ journal.md → ## Course Context
 ✅ journal.md → ## Outline
 ✅ journal.md → ## Didactics
@@ -2402,9 +2439,13 @@ After each section is saved, print a brief progress line:
 ✅ journal.md → ## Sessions / 1. Session title
 ✅ journal.md → ## Sessions / 2. Session title
 ...
+✅ journal.md → ## Dashboard (regenerated)
 ```
 
 ### Phase 3: Handoff
+
+> ⚠️ The summary below is **chat output only** — never write it into `journal.md`.
+> The journal's `## Dashboard` section is maintained exclusively by `tasks/update-dashboard.md` (already run in Phase 2, step 9).
 
 7. Print completion summary:
    > "Scaffold completed. `journal.md` updated with [N] sections/entries."
@@ -2585,6 +2626,7 @@ _Generated from the project sections below. Do not edit manually._
 
 ## Rules
 
+- The dashboard HTML shell already exists in `journal.md` (instantiated from `templates/journal.md`) — update its values **in place**; do not invent a new layout and never downgrade it to a plain Markdown table.
 - Never ask the instructor to update the dashboard manually.
 - Never use dashboard values as authority for workflow decisions.
 - If dashboard and source sections disagree, trust the source sections and regenerate the dashboard.
@@ -2626,6 +2668,7 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 5. Stage, commit, and push the updated `project.yaml` and new/changed materials to the repository.
 6. Trigger the GitHub Actions workflow to publish the updates (overwriting gh-pages as before).
 7. Explain each step to the user and confirm before making changes.
+8. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state).
 
 ## Usage
 
@@ -2724,6 +2767,7 @@ Rules:
    - Recommended actions
    - Line references where possible
 6. Create or replace the rendered `#### Validation Report` in the matching session subsection under `journal.md` → `## Sessions`.
+   Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `/coauthor-materials` to fix them.
 
@@ -2799,7 +2843,8 @@ Rules:
    1. [Concrete action with file reference]
    ```
 
-10. After all session validation reports and the latest summary are created: suggest next step.
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
+11. After all session validation reports and the latest summary are created: suggest next step.
     - If issues exist: "Open `/coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `/validate-course`."
     - If no issues: "Course is ready for publishing. Next step: `/agent development` → `/create-project`"
 
@@ -2911,35 +2956,48 @@ template:
 template:
   id: course-didactics
   name: 'Course Didactics'
-  version: 1.0
+  version: 1.1
   output:
     format: markdown
     filename: journal.md
     section: Didactics
   title: 'Course Didactics'
+  notes:
+    - 'Render as ONE flat bullet list under `## Didactics` — the section titles below are internal structure, never headings.'
   sections:
     - id: didactic-concept
       title: Didactic Concept
-      template: 'Teaching methods, learning phases, didactic considerations.'
+      template: |
+        * __Didactic Concept:__
+          [Teaching methods, learning phases, didactic considerations — e.g. lesson rhythm (hook → example → explanation → task → self-check), scaffolding strategy, error culture.]
     - id: professor-persona
       title: Professor Persona
-      template: 'Description of the professor (background, expertise, role).'
+      template: |
+        * __Professor Persona:__
+          [Name, background, expertise, and role of the instructor persona — 3–5 sentences, written so other agents can adopt the character.]
     - id: teaching-style
       title: Teaching Style
-      template: 'Description (e.g., humorous, scientific, practical).'
+      template: |
+        * __Teaching Style:__
+          [e.g. humorous, academic, practical, conversational — and how it shows concretely in the material.]
     - id: course-type
       title: Course Type
-      template: 'Type of course (introductory, advanced, practice-oriented, group work, self-learning).'
+      template: |
+        * __Course Type:__
+          [Type of course: introductory, advanced, practice-oriented, group work, self-learning — and what that means for pacing and learner autonomy.]
     - id: difficulty-level
       title: Difficulty Level
-      template: 'Intended difficulty level (beginner, intermediate, advanced).'
+      template: |
+        * __Difficulty Level:__
+          [beginner | intermediate | advanced] — [what this implies for explanations, prerequisites, and complexity progression.]
     - id: persona-sample
       title: Persona Voice Sample
       template: |
-        A short example paragraph (3–5 sentences) written in the exact voice of this persona.
-        Used by agents as a concrete reference when co-authoring or reviewing materials.
-        Matches the persona's register, tone, typical phrasing, and level of formality.
-        Example: [Write a brief passage explaining a core course concept as this persona would]
+        * __Persona Voice Sample:__
+          [A short example paragraph (3–5 sentences) written in the EXACT voice of this persona,
+          explaining a core course concept. Matches the persona's register, tone, typical phrasing,
+          and level of formality. Used by agents as a concrete reference when co-authoring or
+          reviewing materials.]
 ```
 
 ==================== END: .bmad-core/templates/course-didactics.yaml ====================
@@ -3057,6 +3115,459 @@ template:
 ```
 
 ==================== END: .bmad-core/templates/course-templates.yaml ====================
+
+
+==================== START: .bmad-core/templates/journal.md ====================
+
+<!--
+═════════════════════════════════════════════════════════════════════════════
+SKELETON TEMPLATE — templates/journal.md
+
+Instantiation (done by /init-course or /scaffold when no journal.md exists):
+
+1. Copy this file verbatim to the project root as `journal.md`.
+2. DELETE this instruction comment — the metadata header below then becomes
+   the first comment of the file.
+3. Replace the `{{...}}` placeholders with real values as tasks run; keep all
+   other markup (HTML, tables, bullet labels) exactly as it is.
+4. Sections whose task has not run yet KEEP their bullet skeleton with
+   `{{...}}` placeholders. Each task replaces ONLY the content of its own
+   `## Section`.
+
+Formatting rules — binding for every task that writes to journal.md:
+
+- Every `## Section` stays FLAT: `* __Label:__` bullets only. Never introduce
+  `###` sub-headings inside a section — in LiaScript every heading becomes
+  its own slide. Exceptions: `## Sessions` (one `### {n}. {title}` per
+  session, optional `#### Validation Report` / `#### Persona Reviews` inside
+  it), `## Templates` (one `### {template-name}` per template),
+  `## Learner Personas` (one `### Persona: {icon} {name}` per persona),
+  `## Validation` (a single `### Latest Validation Summary` — the publishing
+  gate anchor), and `## Notes Backup` (one `### {type}: {title} ({date})`
+  per note). Never use `#` or `##` headings inside any section — they would
+  terminate it.
+- The `title:` fields of sections inside the YAML templates are internal
+  structure only — do NOT render them as headings.
+- `## Dashboard` is DERIVED state: after every project state change, update
+  the existing HTML structure in place (tasks/update-dashboard.md +
+  templates/project-dashboard.yaml). Never replace it with a plain table,
+  never edit it manually, never copy a chat progress summary into it.
+- Template `import:` lines are managed by tasks/manage-templates.md in the
+  metadata header below and documented in `## Templates`. The Mermaid import
+  is included by default because the Dashboard workflow map depends on it.
+═════════════════════════════════════════════════════════════════════════════
+-->
+
+<!--
+color: <span style="display:inline-block;width:1.5rem;height:1.5rem;background-color:@0;border:1px solid #ccc;border-radius:2px;vertical-align:middle;"></span> `@0`
+
+import: https://raw.githubusercontent.com/liaScript/mermaid_template/master/README.md
+
+@style
+.dashboard {
+  margin: 1.5rem 0 2rem;
+  padding: 1rem;
+  border: 1px solid #d7e0ea;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.dashboard-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard-card {
+  flex: 1 1 260px;
+  min-width: 240px;
+  padding: 1rem;
+  border: 1px solid #d7e0ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.dashboard-card-wide {
+  flex-basis: 100%;
+}
+
+.dashboard-status {
+  display: inline-block;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.dashboard-status-done { background: #d8f5d0; color: #1b5e20; }
+.dashboard-status-current { background: #fff3bf; color: #7a4d00; }
+.dashboard-status-blocked { background: #ffe3e3; color: #8a1f1f; }
+
+.dashboard table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard th,
+.dashboard td {
+  padding: 0.35rem 0.45rem;
+  border-bottom: 1px solid #e5edf5;
+  text-align: left;
+}
+
+@media (max-width: 600px) {
+  .dashboard-card {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+}
+@end
+-->
+
+# {{Course Working Title}}
+
+## Dashboard
+
+<article class="dashboard">
+
+_Generated from the project sections below. Do not edit manually._
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+### Current State
+
+__Current step:__ <span class="dashboard-status dashboard-status-current">Project initialized</span>
+
+__Course validation:__ <span class="dashboard-status dashboard-status-blocked">not run</span>
+
+__Sessions complete:__ 0 / 0
+
+__Last updated:__ {{YYYY-MM-DD}}
+
+</div>
+
+<div class="dashboard-card">
+
+### Next Commands
+
+1. `/init-course`
+2. `/create-outline`
+3. `/scaffold` (fast-track alternative)
+
+</div>
+
+<div class="dashboard-card">
+
+### Quality State
+
+| Area | State |
+| --- | --- |
+| Course context | <span class="dashboard-status dashboard-status-blocked">open</span> |
+| Templates | <span class="dashboard-status dashboard-status-blocked">open</span> |
+| Materials | <span class="dashboard-status dashboard-status-blocked">0 / 0</span> |
+| Course validation | <span class="dashboard-status dashboard-status-blocked">not run</span> |
+| Persona reviews | <span class="dashboard-status dashboard-status-current">optional</span> |
+
+</div>
+
+<div class="dashboard-card dashboard-card-wide">
+
+### Workflow Map
+
+```mermaid @mermaid
+flowchart LR
+  context[Course Context] --> outline[Outline]
+  outline --> didactics[Didactics]
+  didactics --> templates[Templates]
+  templates --> agenda[Agenda]
+  agenda --> sessions[Sessions]
+  sessions --> materials[Materials]
+  materials --> validation[Validation]
+  validation --> persona[Persona Reviews]
+  persona --> revision[Revision]
+  revision --> materials
+  validation --> publishing[Publishing]
+
+  class context current
+
+  classDef done fill:#d8f5d0,stroke:#2f8f46,color:#111
+  classDef current fill:#fff3bf,stroke:#d9480f,color:#111
+  classDef optional fill:#e7f5ff,stroke:#1971c2,color:#111
+
+  click context "#course-context" "Open Course Context"
+  click outline "#outline" "Open Outline"
+  click didactics "#didactics" "Open Didactics"
+  click templates "#templates" "Open Templates"
+  click agenda "#agenda" "Open Agenda"
+  click sessions "#sessions" "Open Sessions"
+  click validation "#validation" "Open Validation"
+```
+
+</div>
+
+<div class="dashboard-card dashboard-card-wide">
+
+### Session Progress
+
+_No sessions yet._
+
+</div>
+
+<div class="dashboard-card">
+
+### Open Blockers
+
+Course Context missing — run `/init-course`.
+
+</div>
+
+<div class="dashboard-card">
+
+### Quick Links
+
+[Course Context](#course-context) · [Outline](#outline) · [Didactics](#didactics) · [Templates](#templates) · [Agenda](#agenda) · [Sessions](#sessions) · [Validation](#validation)
+
+</div>
+
+</div>
+</article>
+
+---
+
+## Course Context
+
+_Filled by `/init-course` from `templates/course-context.yaml`._
+
+* __Course Type:__
+  1. Type: {{lecture-series | self-paced | workshop | single-lesson | improve-existing}}
+  2. Working Title: {{working title}}
+
+* __Terminology:__
+  1. sessions-called: {{session | unit | block | lesson | ...}}
+  2. lectures-called: {{lecture | module | chapter | lesson | ...}}
+
+* __Course Profile:__
+  1. Persona type: {{professor | coach | facilitator | tutor}}
+  2. Agenda required: {{yes | optional | no}}
+  3. Pacing: {{scheduled | learner-driven | event-based}}
+  4. Assessment defaults: {{quizzes | reflection | assignments | none}}
+
+* __Conventions & Standards:__
+  1. Language: {{de | en | other}}
+  2. Tone: {{formal | informal | conversational}}
+  3. Person: {{Sie | Du | you}}
+  4. Accessibility: {{required | optional}}
+
+* __LiaScript conventions:__
+  - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
+
+* __Additional Notes:__
+  - {{project-specific rules, constraints, or reminders — remove if none}}
+
+---
+
+## Outline
+
+_Filled by `/create-outline` from `templates/course-outline.yaml`._
+
+* __Title:__
+  {{name of the lecture or course}}
+
+* __Target Audience:__
+  {{who is this course for? prior knowledge, age group, equipment}}
+
+* __Time Commitment:__
+  {{estimated commitment, e.g. hours per week or total hours}}
+
+* __Abstract:__
+  {{detailed abstract with all topics, benefits, and application}}
+
+* __Learning Objectives:__
+  1. {{clear learning objective with application scenario}}
+  2. {{clear learning objective with application scenario}}
+  3. {{clear learning objective with application scenario}}
+
+---
+
+## Didactics
+
+_Filled by `/create-didactics` from `templates/course-didactics.yaml`._
+
+* __Didactic Concept:__
+  {{teaching methods, learning phases, didactic considerations — e.g. lesson rhythm, scaffolding, error culture}}
+
+* __Professor Persona:__
+  {{name, background, expertise, and role of the instructor persona}}
+
+* __Teaching Style:__
+  {{e.g. humorous, academic, practical, conversational — and how it shows in the material}}
+
+* __Course Type:__
+  {{introductory, advanced, practice-oriented, group work, self-learning}}
+
+* __Difficulty Level:__
+  {{beginner | intermediate | advanced}}
+
+* __Persona Voice Sample:__
+  {{3–5 sentences written in the exact voice of the persona, explaining a core course concept — anchors tone for all co-authoring}}
+
+---
+
+## Visual Identity
+
+_Filled by `/create-visuals` (optional) from `templates/visuals.yaml`._
+
+* __Logo Generation Guidelines:__
+  1. Style: {{...}}
+  2. Format: {{...}}
+  3. Elements: {{...}}
+  4. Mood: {{...}}
+
+* __Logo Color Palette:__
+  1. Primary: @color(#000000) — {{name}}
+  2. Secondary: @color(#000000) — {{name}}
+  3. Accent: @color(#000000) — {{name}}
+  4. Background: @color(#FFFFFF) — {{name}}
+
+* __Course Image Generation Guidelines:__
+  1. Style: {{...}}
+  2. Color scheme: {{...}}
+  3. Composition: {{...}}
+  4. Mood: {{...}}
+  5. In-image text language: {{...}}
+
+* __Image Consistency Rules:__
+  - {{palette, character design, backgrounds, fonts}}
+
+* __Website Color Palette:__
+  1. Primary: @color(#000000) — {{usage}}
+  2. Accent: @color(#000000) — {{usage}}
+  3. Text: @color(#000000) — {{usage}}
+  4. Background: @color(#FFFFFF) — {{usage}}
+  5. Surface: @color(#FFFFFF) — {{usage}}
+
+* __Example Prompts:__
+  1. Logo: "{{full image-generation prompt}}"
+
+---
+
+## Templates
+
+_Managed by `/manage-templates` from `templates/course-templates.yaml`._
+
+LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
+
+More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
+
+### {{template-name}}
+
+* __Import:__
+  `{{raw README URL}}`
+
+* __Header entry:__
+  `import: {{raw README URL}}`
+
+* __Purpose:__
+  {{what the template enables and why this project needs it}}
+
+* __Use when:__
+  1. {{situation}}
+  2. {{situation}}
+
+* __Basic example:__
+
+  ```text
+  {{minimal working example}}
+  ```
+
+* __How to use:__
+  1. {{step}}
+  2. {{step}}
+
+* __Special usage notes:__
+  1. {{caveats, e.g. unique canvas ids, macro variants}}
+
+---
+
+## Agenda
+
+_Filled by `/create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
+
+* __Overview:__
+  {{number of sessions, duration, pacing, platform — 2–4 sentences}}
+
+* __Modules / Sessions:__
+
+  | # | Title | Type | Duration | Learning Objective | Material |
+  |---|-------|------|----------|--------------------|----------|
+  | 1 | {{title}} | {{lecture | exercise | ...}} | {{duration}} | {{objective}} | materials/1-{{type}}.md |
+
+---
+
+## Sessions
+
+_Managed by `/create-session`, `/promote-session`, `/coauthor-materials`, and `/validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
+
+| # | Title | Type | Skeleton | Material | Done | Notes |
+|---|-------|------|----------|----------|------|-------|
+
+<!-- One subsection per session, structured like this:
+
+### {{n}}. {{Session Title}}
+
+**Type:** {{lecture | exercise | ...}}
+
+**Summary:**
+
+{{2–4 sentences: focus, didactic intent, known stumbling blocks}}
+
+**Content:**
+
+{{topic list / content skeleton per templates/session-skeleton.yaml}}
+
+**Activities:**
+
+1. {{activity}}
+
+**References:**
+
+1. {{reference}}
+
+After /validate-course in session mode, a `#### Validation Report` block is
+inserted at the top of the subsection. After /review-as-persona, a
+`#### Persona Reviews` block is appended.
+-->
+
+---
+
+## Learner Personas
+
+_Optional — filled by `/create-learner-persona`. One `### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
+
+---
+
+## Validation
+
+_Replaced by `/validate-course` (course mode). The `### Latest Validation Summary` below is the authoritative publishing gate — publishing requires `Mode: course` and `Result: PASS`. Per-session reports live in `## Sessions` → `#### Validation Report`, not here._
+
+### Latest Validation Summary
+
+_Not yet run — run `/validate-course`. Format defined in `tasks/validate-course.md`, course mode step 9 (Date, Mode, Course type, Result, findings, recommended actions)._
+
+---
+
+## Analysis Status
+
+_Only used for improve-existing courses — filled by `/analyze-existing`._
+
+---
+
+## Notes Backup
+
+_Appended to by `/save-notes` and `/save-decision` as `### {type}: {title} ({date})` entries._
+
+==================== END: .bmad-core/templates/journal.md ====================
 
 
 ==================== START: .bmad-core/templates/project-dashboard.yaml ====================

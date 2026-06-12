@@ -83,6 +83,7 @@ Rules:
    - Recommended actions
    - Line references where possible
 6. Create or replace the rendered `#### Validation Report` in the matching session subsection under `journal.md` → `## Sessions`.
+   Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `/coauthor-materials` to fix them.
 
@@ -158,7 +159,8 @@ Rules:
    1. [Concrete action with file reference]
    ```
 
-10. After all session validation reports and the latest summary are created: suggest next step.
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
+11. After all session validation reports and the latest summary are created: suggest next step.
     - If issues exist: "Open `/coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `/validate-course`."
     - If no issues: "Course is ready for publishing. Next step: `/agent development` → `/create-project`"
 

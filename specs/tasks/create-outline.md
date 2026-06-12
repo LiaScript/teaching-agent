@@ -32,4 +32,5 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 5. Define 3–5 concrete learning objectives.
 6. Optionally add a logo prompt.
 7. Fill the `templates/course-outline.yaml` with the inputs.
-8. Save the generated outline by creating or replacing `journal.md` → `## Outline`.
+8. Save the generated outline by replacing the content of `journal.md` → `## Outline` — flat `* __Label:__` bullets only, no sub-headings.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

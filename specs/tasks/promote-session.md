@@ -38,3 +38,4 @@ Converts a **Session** into a detailed **Session Material**.
 8. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
 9. Save the material file as `materials/{number}-{type}.md`.
 10. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

@@ -49,3 +49,4 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - Add a new row: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - If a row for this session already exists, update the Skeleton column to ✅.
    - Keep the overview table before all `### {number}. {title}` subsections.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

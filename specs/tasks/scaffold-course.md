@@ -10,6 +10,8 @@ This is the "scaffold mode" — fast-track for instructors who know what they wa
 
 ## Inputs
 
+- `templates/journal.md` (skeleton for a new `journal.md`)
+
 All collected in a single intake interview at the start:
 
 - Course type
@@ -29,12 +31,14 @@ All collected in a single intake interview at the start:
 ## Output
 
 Generated in sequence without interruption inside `journal.md`:
+- `journal.md` created from `templates/journal.md` if it does not exist yet
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
 - `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
 - `## Sessions` containing an overview table followed by one subsection per session
+- `## Dashboard` updated in place via `tasks/update-dashboard.md`
 
 ## Steps
 
@@ -78,19 +82,22 @@ Generated in sequence without interruption inside `journal.md`:
 
 Run each step silently (no approval prompts between steps):
 
-1. Generate or replace `journal.md` → `## Course Context` from collected inputs.
-2. Generate or replace `journal.md` → `## Outline`.
-3. Generate or replace `journal.md` → `## Didactics` — including the **Persona Voice Sample** section.
-4. If template imports were provided, run `tasks/manage-templates.md` and create or update `journal.md` → `## Templates`.
-5. Generate or replace `journal.md` → `## Agenda` (skip if agenda = no).
-6. Create or replace `journal.md` → `## Sessions` with:
+1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **verbatim** (metadata header with `@style` and imports, Dashboard HTML shell, all section skeletons) and delete the instruction comment at the top.
+2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well).
+3. Replace the content of `journal.md` → `## Outline`.
+4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet.
+5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
+6. Replace the content of `journal.md` → `## Agenda` (skip if agenda = no).
+7. Replace the content of `journal.md` → `## Sessions` with:
    - An overview table directly below `## Sessions`
    - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - One `### {number}. {title}` subsection per session below the overview table
-7. Fill each session subsection using `templates/session-skeleton.yaml`.
+8. Fill each session subsection using `templates/session-skeleton.yaml`.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, session progress, workflow map states, date).
 
 After each section is saved, print a brief progress line:
 ```
+✅ journal.md instantiated from templates/journal.md
 ✅ journal.md → ## Course Context
 ✅ journal.md → ## Outline
 ✅ journal.md → ## Didactics
@@ -100,9 +107,13 @@ After each section is saved, print a brief progress line:
 ✅ journal.md → ## Sessions / 1. Session title
 ✅ journal.md → ## Sessions / 2. Session title
 ...
+✅ journal.md → ## Dashboard (regenerated)
 ```
 
 ### Phase 3: Handoff
+
+> ⚠️ The summary below is **chat output only** — never write it into `journal.md`.
+> The journal's `## Dashboard` section is maintained exclusively by `tasks/update-dashboard.md` (already run in Phase 2, step 9).
 
 7. Print completion summary:
    > "Scaffold completed. `journal.md` updated with [N] sections/entries."

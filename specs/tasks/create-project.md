@@ -31,6 +31,7 @@ Supports users with git operations, GitHub integration, and project publishing.
 8. Check which files must be added to git and which need to be commited.
 9. Explain each step to the user and confirm before making changes.
 10. Offer to commit and push changes and to GitHub if the user agrees.
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state).
 
 ## Usage
 

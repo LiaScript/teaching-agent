@@ -28,6 +28,7 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 5. Stage, commit, and push the updated `project.yaml` and new/changed materials to the repository.
 6. Trigger the GitHub Actions workflow to publish the updates (overwriting gh-pages as before).
 7. Explain each step to the user and confirm before making changes.
+8. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state).
 
 ## Usage
 

@@ -143,6 +143,7 @@ _Generated from the project sections below. Do not edit manually._
 
 ## Rules
 
+- The dashboard HTML shell already exists in `journal.md` (instantiated from `templates/journal.md`) — update its values **in place**; do not invent a new layout and never downgrade it to a plain Markdown table.
 - Never ask the instructor to update the dashboard manually.
 - Never use dashboard values as authority for workflow decisions.
 - If dashboard and source sections disagree, trust the source sections and regenerate the dashboard.

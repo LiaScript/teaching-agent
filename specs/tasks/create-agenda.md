@@ -8,11 +8,11 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 
 ## Inputs
 
-- Learning objectives from `journal.md` → `## Outline` / `### Learning Objectives`
-- Abstract from `journal.md` → `## Outline` / `### Abstract`
-- Time commitment from `journal.md` → `## Outline` / `### Time Commitment`
-- Didactic concept from `journal.md` → `## Didactics` / `### Didactic Concept`
-- **Instructor persona from `journal.md` → `## Didactics` / `### Professor Persona` (mandatory handoff)**
+- Learning objectives from `journal.md` → `## Outline` (`__Learning Objectives:__` bullet)
+- Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
+- Time commitment from `journal.md` → `## Outline` (`__Time Commitment:__` bullet)
+- Didactic concept from `journal.md` → `## Didactics` (`__Didactic Concept:__` bullet)
+- **Instructor persona from `journal.md` → `## Didactics` (`__Professor Persona:__` bullet — mandatory handoff)**
 - **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
 - Course type from `journal.md` → `## Course Context`
 
@@ -47,4 +47,5 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
    - **self-paced**: modules without fixed time slots, estimated duration only
    - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
 7. Fill the `templates/course-agenda.yaml` template with the results.
-8. Save the generated agenda by creating or replacing `journal.md` → `## Agenda`.
+8. Save the generated agenda by replacing the content of `journal.md` → `## Agenda` — flat `* __Label:__` bullets plus the sessions table, no sub-headings.
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

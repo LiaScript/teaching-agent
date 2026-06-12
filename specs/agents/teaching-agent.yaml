@@ -117,6 +117,14 @@ epistemic_rules:
 
 project_memory:
   canonical_file: "journal.md"
+  skeleton: >
+    `templates/journal.md` — copied verbatim by /init-course or /scaffold when no
+    journal.md exists. It defines the binding document shape: metadata header with
+    dashboard @style, the Dashboard HTML shell, and one flat `* __Label:__` bullet
+    skeleton per section. Tasks fill their own section in place; never restructure
+    the document or introduce `###` sub-headings outside ## Sessions, ## Templates,
+    ## Learner Personas, ## Validation (### Latest Validation Summary only), and
+    ## Notes Backup.
   principle: >
     All generated planning, state, review, validation, and note artifacts are stored as
     named sections in `journal.md`. Only final teaching materials (`materials/`),
@@ -224,6 +232,7 @@ dependencies:
     - assemble-bundle.md
     - create-learner-persona.md
   templates:
+    - journal.md
     - course-context.yaml
     - course-outline.yaml
     - course-didactics.yaml

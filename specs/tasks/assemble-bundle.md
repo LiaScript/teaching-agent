@@ -60,6 +60,8 @@ course-bundle/
 
 5. Copy `journal.md`, `materials/`, and optional `assets/` into `course-bundle/` preserving subfolder structure.
 
-6. Confirm completion:
+6. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+
+7. Confirm completion:
    > "Bundle created in `course-bundle/`. Contains `journal.md`, [N] material files, and [assets/ ✅ / no assets]."
    > "Next step: `/agent development` → `/create-project` to publish the course."

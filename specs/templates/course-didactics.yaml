@@ -1,32 +1,45 @@
 template:
   id: course-didactics
   name: 'Course Didactics'
-  version: 1.0
+  version: 1.1
   output:
     format: markdown
     filename: journal.md
     section: Didactics
   title: 'Course Didactics'
+  notes:
+    - 'Render as ONE flat bullet list under `## Didactics` — the section titles below are internal structure, never headings.'
   sections:
     - id: didactic-concept
       title: Didactic Concept
-      template: 'Teaching methods, learning phases, didactic considerations.'
+      template: |
+        * __Didactic Concept:__
+          [Teaching methods, learning phases, didactic considerations — e.g. lesson rhythm (hook → example → explanation → task → self-check), scaffolding strategy, error culture.]
     - id: professor-persona
       title: Professor Persona
-      template: 'Description of the professor (background, expertise, role).'
+      template: |
+        * __Professor Persona:__
+          [Name, background, expertise, and role of the instructor persona — 3–5 sentences, written so other agents can adopt the character.]
     - id: teaching-style
       title: Teaching Style
-      template: 'Description (e.g., humorous, scientific, practical).'
+      template: |
+        * __Teaching Style:__
+          [e.g. humorous, academic, practical, conversational — and how it shows concretely in the material.]
     - id: course-type
       title: Course Type
-      template: 'Type of course (introductory, advanced, practice-oriented, group work, self-learning).'
+      template: |
+        * __Course Type:__
+          [Type of course: introductory, advanced, practice-oriented, group work, self-learning — and what that means for pacing and learner autonomy.]
     - id: difficulty-level
       title: Difficulty Level
-      template: 'Intended difficulty level (beginner, intermediate, advanced).'
+      template: |
+        * __Difficulty Level:__
+          [beginner | intermediate | advanced] — [what this implies for explanations, prerequisites, and complexity progression.]
     - id: persona-sample
       title: Persona Voice Sample
       template: |
-        A short example paragraph (3–5 sentences) written in the exact voice of this persona.
-        Used by agents as a concrete reference when co-authoring or reviewing materials.
-        Matches the persona's register, tone, typical phrasing, and level of formality.
-        Example: [Write a brief passage explaining a core course concept as this persona would]
+        * __Persona Voice Sample:__
+          [A short example paragraph (3–5 sentences) written in the EXACT voice of this persona,
+          explaining a core course concept. Matches the persona's register, tone, typical phrasing,
+          and level of formality. Used by agents as a concrete reference when co-authoring or
+          reviewing materials.]
