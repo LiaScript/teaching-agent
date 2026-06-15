@@ -27,15 +27,13 @@ Converts a **Session** into a detailed **Session Material**.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
 4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
-
-- From this step, the agent writes in the tone of the professor persona.
-- All agenda descriptions reflect this style.
-
-4. Insert agenda information.
-5. Consider didactic inputs.
-6. Generate planned outline.
-7. Apply template.
-8. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
-9. Save the material file as `materials/{number}-{type}.md`.
-10. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
-11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+   - From this step, the agent writes in the tone of the professor persona.
+   - All agenda descriptions reflect this style.
+5. Insert agenda information.
+6. Consider didactic inputs.
+7. Generate planned outline.
+8. Apply template.
+9. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
+10. Save the material file as `materials/{number}-{type}.md`.
+11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

@@ -50,7 +50,7 @@
 - [ ] All expected sessions have a row in the overview table
 - [ ] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - [ ] No session marked ✅ Material without a file in `materials/`
-- [ ] All sessions marked ✅ Fertig before publishing
+- [ ] All sessions marked ✅ Done before publishing
 
 ## Session Subsections (`journal.md` → `## Sessions`)
 

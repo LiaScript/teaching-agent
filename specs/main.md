@@ -24,15 +24,15 @@ When you need to reference a resource mentioned in your instructions:
 ```yaml
 dependencies:
   templates:
-    - outline.yaml
+    - course-outline.yaml
   tasks:
-    - create-outline
+    - create-outline.md
 ```
 
 These references map directly to bundle sections:
 
-- `templates: outline` → Look for `==================== START: {root}/templates/outline.yaml ====================`
-- `tasks: create-outline` → Look for `==================== START: {root}/tasks/create-outline.md ====================`
+- `templates: course-outline.yaml` → Look for `==================== START: {root}/templates/course-outline.yaml ====================`
+- `tasks: create-outline.md` → Look for `==================== START: {root}/tasks/create-outline.md ====================`
 
 3. **Execution Context**: You are operating in a web environment. All your capabilities and knowledge are contained within this bundle. Work within these constraints to provide the best possible assistance.
 

@@ -44,7 +44,7 @@ browser_execution:
     The Artist-Agent can execute image prompts directly in the browser via the Chrome DevTools MCP server.
     The full workflow (MCP check, ChatGPT submission, download, save) is defined in `tasks/generate-image.md`.
 
-  required_mcp: "chrome-devtools (mcp_chrome-devtoo_* tools)"
+  required_mcp: "chrome-devtools (mcp_chrome-devtools_* tools)"
 
   setup_instructions: |
     To enable browser-based image generation, Chrome must be started with remote debugging:
@@ -54,7 +54,7 @@ browser_execution:
     The chrome-devtools MCP server must be configured in your VS Code MCP settings (mcp.json).
 
   on_activation_check:
-    - "Check if mcp_chrome-devtoo_* tools are available"
+    - "Check if mcp_chrome-devtools_* tools are available"
     - "If available: announce browser execution mode is active"
     - "If unavailable: explain the setup steps above and offer prompt-only mode (/create-image) as fallback"
 
@@ -105,7 +105,7 @@ activation-instructions:
   - The agent.customization field ALWAYS takes precedence
   - Always ensure visual consistency with the style guide
   - Generate detailed, actionable image prompts
-  - On activation: check if mcp_chrome-devtoo_* tools are available and announce browser execution mode status
+  - On activation: check if mcp_chrome-devtools_* tools are available and announce browser execution mode status
   - STAY IN CHARACTER!
 
 fuzzy-matching:

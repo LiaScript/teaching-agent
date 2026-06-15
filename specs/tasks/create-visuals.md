@@ -45,6 +45,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 11. Create example prompts for logos, images, and diagrams based on course theme.
 12. Fill the `templates/visuals.yaml` template with the results.
 13. Save the visual style guide by creating or replacing `journal.md` → `## Visual Identity`.
+14. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Usage
 

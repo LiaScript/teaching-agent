@@ -258,7 +258,7 @@ workflow:
       notes: |
         Full course check before publishing:
         - Project-memory consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
-        - All sessions Fertig ✅ in `journal.md` → `## Sessions`
+        - All sessions Done ✅ in `journal.md` → `## Sessions`
         - LiaScript syntax check on all material files
         - Creates or replaces one `#### Validation Report` per material inside the matching `journal.md` → `## Sessions` session subsection
         - Replaces `journal.md` → `## Validation` → `### Latest Validation Summary` with `Mode: course`, PASS/FAIL, and issue count
@@ -336,7 +336,7 @@ workflow:
     - Choose iterative or batch approach for sessions
     - Publishing is optional and user-initiated — only when explicitly requested
     - /create-project recommended when multiple materials exist and course is ready to share
-    - `journal.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Fertig status automatically
+    - `journal.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Done status automatically
     - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
     - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
     - `journal.md` → `## Dashboard` is derived state and should be regenerated automatically with /update-dashboard after state-changing tasks

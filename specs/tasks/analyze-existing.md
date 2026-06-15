@@ -60,7 +60,7 @@ Offers two paths for each missing core section:
 6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
    - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
    - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
-   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
+   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
    - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
 
 7. After all missing sections are handled, list **improvement opportunities** in the existing content:
@@ -74,3 +74,4 @@ Offers two paths for each missing core section:
 8. Suggest a prioritized action list and the recommended next step (usually `/coauthor-materials`).
 
 9. Save the full status overview as `journal.md` → `## Analysis Status`.
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

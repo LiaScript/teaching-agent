@@ -35,19 +35,19 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 
 ## Phase 1: Entry Point
 
-1. Check if `mcp_chrome-devtoo_*` tools are available.
+1. Check if `mcp_chrome-devtools_*` tools are available.
    - **Not available** → explain setup, stop. Suggest `/create-image` for prompt-only mode.
 
-2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtoo_list_pages`.
+2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtools_list_pages`.
    - **Fails or returns empty** → start Chrome in the background:
      ```bash
      google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug &
      ```
-     Wait ~3 seconds, then retry `mcp_chrome-devtoo_list_pages` to confirm connection.
+     Wait ~3 seconds, then retry `mcp_chrome-devtools_list_pages` to confirm connection.
      If it still fails: inform the instructor and stop.
    - **Succeeds** → continue.
 
-3. Resize the browser viewport: use `mcp_chrome-devtoo_resize_page` → width: 1280, height: 900.
+3. Resize the browser viewport: use `mcp_chrome-devtools_resize_page` → width: 1280, height: 900.
    This ensures stop-button and send-button are rendered (they may be hidden on narrow viewports).
 
 4. Determine mode:
@@ -171,7 +171,6 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
        const newUrls = getNewImageUrls(urlsBefore);
        if (!newUrls.length) { console.warn(`[batch] ❌ No image found: ${slug}`); continue; }
        const size = await downloadBlob(newUrls[0], `${slug}.png`); // newUrls[0] = finished image; others are still-loading previews
-       console.log(`[batch] ✅ Done: ${slug} (${Math.round(size/1024)} KB)`);
        console.log(`[batch] ✅ Done: ${slug} (${Math.round(size/1024)} KB)`);
        await sleep(1000);
      }

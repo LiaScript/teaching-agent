@@ -43,7 +43,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 8. Update the overview table inside `journal.md` → `## Sessions`:
    - If `journal.md` → `## Sessions` does not exist yet, create it with the overview table first:
      ```
-     | # | Titel | Typ | Skeleton | Material | Ready | Notes |
+     | # | Title | Type | Skeleton | Material | Done | Notes |
      |---|---|---|---|---|---|---|
      ```
    - Add a new row: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
