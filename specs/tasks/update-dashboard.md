@@ -40,6 +40,7 @@ Run this task automatically after any task that changes project state:
 - `/quick-fix`
 - `/validate-course`
 - `/review-as-persona`
+- `/save-notes` or `/save-decision`
 - `/assemble-bundle`
 - `/create-project` or `/update-project`
 

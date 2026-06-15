@@ -1,0 +1,95 @@
+template:
+  id: note-backup
+  name: 'Notes Backup Entry'
+  version: 1.0
+  output:
+    format: markdown
+    filename: journal.md
+    section: Notes Backup
+    append: true
+    heading: '### {{type_label}}: {{descriptive_title}} ({{date}})'
+  title: 'Notes Backup Entry'
+  notes:
+    - 'Append rendered entries to `journal.md` -> `## Notes Backup`; never replace existing entries.'
+    - 'The `descriptive_title` must be human-readable and specific, not just a generic slug.'
+    - 'Use exactly one content block: summary, research, or decision.'
+  fields:
+    type:
+      allowed:
+        - summary
+        - research
+        - decision
+    type_label:
+      summary: Summary
+      research: Research
+      decision: Decision
+    descriptive_title:
+      rule: '4-8 meaningful words when possible; expand command slugs into readable titles.'
+      examples:
+        - 'Agenda Structure And Session Rhythm'
+        - 'Learner Persona Research Prompt'
+        - 'Course Type Scope Decision'
+    date:
+      format: YYYY-MM-DD
+  sections:
+    - id: heading
+      title: Note Heading
+      template: |
+        ### {{type_label}}: {{descriptive_title}} ({{date}})
+
+    - id: metadata
+      title: Metadata
+      template: |
+        * __Type:__ {{summary | research | decision}}
+        * __Topic:__ {{topic}}
+        * __Related:__ {{related | optional}}
+        * __Source:__ {{chat discussion | instructor decision | research prompt | external research | material review}}
+
+    - id: summary-content
+      title: Summary Content
+      applies_to: summary
+      template: |
+        * __Summary:__
+          {{1-3 paragraphs summarizing the insight, conclusion, or useful context.}}
+
+        * __Why it matters:__
+          {{Short explanation of how this affects the course, materials, workflow, or future decisions.}}
+
+        * __Follow-up:__
+          1. {{next useful action, or "None"}}
+
+    - id: research-content
+      title: Research Content
+      applies_to: research
+      template: |
+        * __Research Question:__
+          {{question or prompt that was generated, discussed, or answered}}
+
+        * __Findings:__
+          {{brief findings, or "Pending - research request saved for later"}}
+
+        * __Sources / Search Suggestions:__
+          1. {{source, URL, or search term}}
+
+        * __Follow-up:__
+          1. {{next verification or integration step}}
+
+    - id: decision-content
+      title: Decision Content
+      applies_to: decision
+      template: |
+        * __Context:__
+          {{What situation or constraint led to this decision?}}
+
+        * __Options considered:__
+          1. {{Option A}} - {{brief pros/cons}}
+          2. {{Option B}} - {{brief pros/cons}}
+
+        * __Decision:__
+          {{What was chosen}}
+
+        * __Rationale:__
+          {{Why this option over the alternatives}}
+
+        * __Consequences:__
+          {{What this implies for future steps, constraints, or other documents}}

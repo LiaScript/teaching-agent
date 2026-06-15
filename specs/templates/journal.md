@@ -406,4 +406,5 @@ _Only used for improve-existing courses — filled by `/analyze-existing`._
 
 ## Notes Backup
 
-_Appended to by `/save-notes` and `/save-decision` as `### {type}: {title} ({date})` entries._
+_Appended to by `/save-notes` and `/save-decision` from `templates/note-backup.yaml`._
+_Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._

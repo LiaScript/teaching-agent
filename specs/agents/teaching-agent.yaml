@@ -127,7 +127,7 @@ project_memory:
   journal_formatting_rules:
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
     - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
-    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Learner Personas` (one `### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {type}: {title} ({date})` per note)."
+    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Learner Personas` (one `### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
@@ -154,11 +154,17 @@ project_memory:
 
 note_saving:
   storage: "`journal.md` section `## Notes Backup`"
+  template: "`templates/note-backup.yaml`"
+  task: "`tasks/save-notes.md`"
   naming_convention:
-    summary: "Append an entry headed `### Summary: {title} ({YYYY-MM-DD})`"
-    research: "Append an entry headed `### Research: {title} ({YYYY-MM-DD})`"
-    decision: "Append an entry headed `### Decision: {title} ({YYYY-MM-DD})`"
-  note: "slug/title = 2-4 word kebab-case description of the topic, e.g. 'agenda-structure', 'course-type-decision'"
+    summary: "Append an entry headed `### Summary: {Descriptive Title} ({YYYY-MM-DD})`"
+    research: "Append an entry headed `### Research: {Descriptive Title} ({YYYY-MM-DD})`"
+    decision: "Append an entry headed `### Decision: {Descriptive Title} ({YYYY-MM-DD})`"
+  title_rule: >
+    The heading title must be human-readable and specific (4-8 words when possible).
+    If the command argument is a slug such as `agenda-structure`, expand it into a
+    meaningful title such as `Agenda Structure And Session Rhythm`. Do not use vague
+    headings like `Summary`, `Update`, or `Notes`.
 
   proactive_triggers:
     description: "Agent proactively offers to save notes when these situations occur — does NOT save automatically."
@@ -171,28 +177,9 @@ note_saving:
       - "A longer discussion produced a concrete conclusion"
     offer_format: |
       This was an important decision/insight. Should I save this?
-      I would append it to `journal.md` → `## Notes Backup` as: `{type}: {slug} ({date})`
+      I would append it to `journal.md` → `## Notes Backup` as: `### {Type}: {Descriptive Title} ({date})`
       Content: [1-3 sentence preview of what would be saved]
       Yes / No / Adjust"
-
-  save_format: |
-    Each note entry inside `## Notes Backup` starts with:
-    ---
-    type: summary | research | decision
-    topic: [short topic description]
-    date: YYYY-MM-DD
-    related: [optional: Outline / session 3 / material file / etc.]
-    ---
-    [content]
-
-    For type: decision, use ADR structure:
-    **Context:** [What situation or constraint led to this decision?]
-    **Options considered:**
-    1. [Option A] — [brief pros/cons]
-    2. [Option B] — [brief pros/cons]
-    **Decision:** [What was chosen]
-    **Rationale:** [Why this option over the alternatives]
-    **Consequences:** [What this implies for future steps, constraints, or other documents]
 
 commands:
   /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
@@ -211,8 +198,8 @@ commands:
   /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
   /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
-  /save-notes {type?} {title?}: "Summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
-  /save-decision {title}: "Save a structured decision record (ADR format) — context, options considered, decision, rationale, consequences"
+  /save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
+  /save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
@@ -238,6 +225,7 @@ dependencies:
     - validate-course.md
     - assemble-bundle.md
     - create-learner-persona.md
+    - save-notes.md
   templates:
     - journal.md
     - course-context.yaml
@@ -249,6 +237,7 @@ dependencies:
     - session-skeleton.yaml
     - session-material.yaml
     - session-validation.yaml
+    - note-backup.yaml
   checklists:
     - course-quality-checklist.md
   data:

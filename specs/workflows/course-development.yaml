@@ -472,6 +472,8 @@ workflow:
       - /quick-fix {number} {type} {description}
       - /validate-course
       - /assemble-bundle
+      - /save-notes {type?} {title?}
+      - /save-decision {title}
 
     learner_agent_commands:
       - /review-as-persona {name} {number} {type}
