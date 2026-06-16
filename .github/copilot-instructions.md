@@ -110,8 +110,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md` if it exists, especially `## Course Context`, to understand course type, terminology, and conventions"
-    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Teaching-Agent` for Teaching-Agent project customization, if present"
-    - "Do not read `#### Artist-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation"
+    - "Read only `journal.md` → `## Agents` → `### Teaching-Agent` for Teaching-Agent project customization, if present"
+    - "Do not read `### Coauthor`, `### Artist-Agent`, `### Development-Agent`, or `### Learner Personas` during activation"
     - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
 
   suggest_escalation_when:
@@ -179,11 +179,11 @@ project_memory:
     its first HTML comment is the LiaScript metadata header (dashboard @style,
     default Mermaid import) and must stay the first comment in the file. It defines
     the binding document shape: Dashboard HTML shell plus one flat `* __Label:__`
-    bullet skeleton per section, plus scoped agent subsections under `## Agents`.
+    bullet skeleton per section, plus scoped agent memory under `## Agents`.
   journal_formatting_rules:
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
     - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
-    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (`### Coauthor` with one `#### {Agent-Name}` per coauthor agent, and `### Learner Personas` with one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
+    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
@@ -209,10 +209,10 @@ project_memory:
   update_rule: "When a task says to save an artifact, create or replace only the matching section in `journal.md`."
 
 agent_customization:
-  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Teaching-Agent`"
+  source: "`journal.md` → `## Agents` → `### Teaching-Agent`"
   read_scope:
     - "On activation, read only the Teaching-Agent subsection named above."
-    - "Do not read `#### Artist-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation."
+    - "Do not read `### Coauthor`, `### Artist-Agent`, `### Development-Agent`, or `### Learner Personas` during activation."
     - "Read learner personas only when a command explicitly requires a specific persona or a persona list."
   apply_rule: "Apply customization only as additive behavior. Never override base agent YAML, workflow gates, validation rules, safety rules, or epistemic rules."
 
@@ -252,7 +252,7 @@ commands:
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
   /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Agents` → `### Learner Personas`"
-  /configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching `journal.md` → `## Agents` → `### Coauthor` → `#### {agent}` subsection"
+  /configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching direct `journal.md` → `## Agents` → `### {agent}` subsection"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
   /update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
@@ -374,7 +374,7 @@ agent_coordination:
   on_activation:
     - "Read `journal.md`, especially `## Course Context`, to understand course type, target audience, terminology, and language"
     - "Check if `journal.md` contains `## Agents` → `### Learner Personas`; for status, read only persona headings, not full persona bodies"
-    - "Do not read `## Agents` → `### Coauthor` or any coauthor agent customization"
+    - "Do not read `## Agents` → `### Coauthor` or any specialist agent customization"
     - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
 
   suggest_back_to_teaching_when:
@@ -457,8 +457,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md`, especially `## Course Context`, to understand course type, instructor persona, and tone"
-    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Artist-Agent` for project-specific visual customization, if present"
-    - "Do not read `#### Teaching-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation"
+    - "Read only `journal.md` → `## Agents` → `### Artist-Agent` for project-specific visual customization, if present"
+    - "Do not read `### Coauthor`, `### Teaching-Agent`, `### Development-Agent`, or `### Learner Personas` during activation"
     - "Check if `journal.md` contains `## Visual Identity` and mention its status"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
 
@@ -512,10 +512,10 @@ epistemic_rules:
       ---
 
 agent_customization:
-  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Artist-Agent`"
+  source: "`journal.md` → `## Agents` → `### Artist-Agent`"
   read_scope:
     - "On activation, read only the Artist-Agent subsection named above."
-    - "Do not read Teaching-Agent, Development-Agent, or Learner Personas customizations."
+    - "Do not read Coauthor, Teaching-Agent, Development-Agent, or Learner Personas customizations."
   apply_rule: "Apply customization only as additive visual-design behavior. Never override base visual consistency, accessibility, uncertainty, or safety rules."
 commands:
   /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
@@ -597,8 +597,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md`, especially `## Course Context` and `## Validation`, to understand course type, project conventions, and publishing readiness"
-    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Development-Agent` for project-specific publishing/git customization, if present"
-    - "Do not read `#### Teaching-Agent`, `#### Artist-Agent`, or `### Learner Personas` during activation"
+    - "Read only `journal.md` → `## Agents` → `### Development-Agent` for project-specific publishing/git customization, if present"
+    - "Do not read `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, or `### Learner Personas` during activation"
     - "Check if project.yaml exists and which materials are in materials/"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
 
@@ -640,10 +640,10 @@ epistemic_rules:
       ---
 
 agent_customization:
-  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Development-Agent`"
+  source: "`journal.md` → `## Agents` → `### Development-Agent`"
   read_scope:
     - "On activation, read only the Development-Agent subsection named above."
-    - "Do not read Teaching-Agent, Artist-Agent, or Learner Personas customizations."
+    - "Do not read Coauthor, Teaching-Agent, Artist-Agent, or Learner Personas customizations."
   apply_rule: "Apply customization only as additive publishing/git behavior. Never override validation gates, git safety checks, publishing gates, or epistemic rules."
 
 commands:
@@ -717,7 +717,7 @@ Offers two paths for each missing core section:
    | `journal.md` → `## Visual Identity`   | optional                     |
    | `journal.md` → `## Templates` | optional; required if template imports or macros are used |
    | `journal.md` → `## Sessions` | if sessions expected |
-   | `journal.md` → `## Agents` | always; contains coauthor customization and learner personas |
+   | `journal.md` → `## Agents` | always; contains the Coauthor role, optional specialist customizations, and learner personas |
    | `materials/`   | if sessions expected         |
 
 3. Display a **Course Memory Status** table:
@@ -752,7 +752,7 @@ Offers two paths for each missing core section:
    - If a legacy top-level `## Learner Personas` section exists, migrate its persona entries into `journal.md` → `## Agents` → `### Learner Personas`.
    - Convert legacy persona headings from `### Persona: {icon} {name}` to `#### Persona: {icon} {name}`.
    - Remove the legacy top-level `## Learner Personas` section after migration to avoid duplicate persona sources.
-   - Do not read or merge coauthor customization subsections unless this task is explicitly checking the `## Agents` section shape.
+   - Do not read or merge Coauthor or specialist agent customization sections unless this task is explicitly checking the `## Agents` section shape.
 
 7. After all missing sections are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials
@@ -849,7 +849,7 @@ course-bundle/
 
 ## Purpose
 
-Enables the agent **in the instructor persona** to act as a co-author when creating and refining course materials.  
+Enables the agent **in the Coauthor role** to create and refine course materials with the instructor.
 This task is **interactive**: instructors discuss content, tone, and structure with the agent before these are incorporated into the materials.
 Suggest images for visualization, either as a search term or as a concrete image prompt. Images can be inserted as diagrams (e.g., Mermaid, ASCII art).
 
@@ -857,13 +857,13 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Inputs
 
-- Professor persona & style from `journal.md` → `## Didactics` (`__Professor Persona:__` and `__Persona Voice Sample:__` bullets — mandatory handoff)
+- Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (`__Role / Persona:__`, `__Behavior Additions:__`, `__Preferred Interaction Style:__`, `__Project-Specific Rules:__`, `__Persona Voice Sample:__`, and `__Boundaries / Never:__` bullets — mandatory handoff)
 - Agenda info (modules/sessions) from `journal.md` → `## Agenda`
 - Terminology & conventions from `journal.md` → `## Course Context`
 - LiaScript template usage rules from `journal.md` → `## Templates` (if present)
 - Currently open document `materials/{number}-{type}.md`
 - Optionally, corresponding session subsection in `journal.md` → `## Sessions`
-- Didactic inputs from `journal.md` → `## Didactics`
+- Didactic inputs from `journal.md` → `## Didactics` (concept, course type, difficulty; not the primary persona source)
 - Open questions or ideas from instructors (discussion points)
 
 ## Output
@@ -875,10 +875,12 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Steps
 
-1. Agent loads agenda info, skeleton, and didactics persona.
+1. Agent loads agenda info, skeleton, the Coauthor role, and didactic context.
+   - **Primary persona source:** `journal.md` → `## Agents` → `### Coauthor`.
+   - **Fallback only:** If `### Coauthor` is missing or inactive, load `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - **If the current session subsection in `journal.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
    - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
-2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
+2. **Agent adopts the Coauthor role into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
 
@@ -913,37 +915,39 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Purpose
 
-Configures project-specific behavior for exactly one coauthor agent inside
-`journal.md` -> `## Agents` -> `### Coauthor`.
+Configures project-specific behavior for exactly one role or agent inside
+`journal.md` -> `## Agents`.
 
-This task creates or updates only the selected agent subsection. It must not read,
+This task creates or updates only the selected role/agent scope. It must not read,
 rewrite, summarize, or infer settings from sibling agent subsections.
 
 ## Inputs
 
-- `{agent}`: Teaching-Agent | Artist-Agent | Development-Agent
+- `{agent}`: Coauthor | Teaching-Agent | Artist-Agent | Development-Agent
 - Instructor-provided customization request
-- `journal.md` -> `## Agents` -> `### Coauthor` -> `#### {agent}` only
+- `journal.md` -> `## Agents` -> `### {agent}` only
 - `templates/agents.yaml`
 
 ## Output
 
-- Updated `journal.md` -> `## Agents` -> `### Coauthor` -> `#### {agent}`
+- Updated `journal.md` -> `## Agents` -> `### {agent}`
 
 ## Steps
 
 1. Normalize `{agent}` to one of:
+   - Coauthor
    - Teaching-Agent
    - Artist-Agent
    - Development-Agent
 
-2. Read only the matching subsection:
-   - Teaching-Agent reads/writes only `#### Teaching-Agent`
-   - Artist-Agent reads/writes only `#### Artist-Agent`
-   - Development-Agent reads/writes only `#### Development-Agent`
+2. Read only the matching `### {agent}` subsection:
+   - Coauthor reads/writes only `### Coauthor`
+   - Teaching-Agent reads/writes only `### Teaching-Agent`
+   - Artist-Agent reads/writes only `### Artist-Agent`
+   - Development-Agent reads/writes only `### Development-Agent`
 
 3. If `journal.md` -> `## Agents` does not exist, create it from `templates/agents.yaml`.
-   If `### Coauthor` exists but the selected `#### {agent}` subsection is missing, create only that subsection.
+   If the selected `### {agent}` subsection is missing, create only that subsection from `templates/agents.yaml`.
 
 4. Ask what should be customized:
    - Behavior additions
@@ -956,14 +960,14 @@ rewrite, summarize, or infer settings from sibling agent subsections.
    - Do not override workflow gates, validation rules, safety rules, epistemic rules, or publishing gates.
    - If the instructor requests an override, save it as a rejected boundary note instead of applying it.
 
-6. Update only the selected `#### {agent}` subsection.
+6. Update only the selected scope.
    Set `* __Customization Status:__ active` if any meaningful customization exists.
 
 7. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update
    `journal.md` -> `## Dashboard` in place.
 
 8. Confirm:
-   > "Updated `journal.md` -> `## Agents` -> `### Coauthor` -> `#### {agent}`. Other agent sections were not read or changed."
+   > "Updated `journal.md` -> `## Agents` -> `### {agent}`. Other agent sections were not read or changed."
 
 ==================== END: specs/tasks/configure-agent.md ====================
 
@@ -976,7 +980,7 @@ rewrite, summarize, or infer settings from sibling agent subsections.
 
 Creates the **Course Agenda** as a structured schedule for the course.  
 Defines sessions/modules with title, duration, type (lecture/exercise), learning objectives, summary, and the corresponding materials files.
-**The agent also adopts the instructor persona and style from `journal.md` → `## Didactics` into its own persona, so all content is written in this voice.**
+**The agent also adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
@@ -984,8 +988,8 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 - Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
 - Time commitment from `journal.md` → `## Outline` (`__Time Commitment:__` bullet)
 - Didactic concept from `journal.md` → `## Didactics` (`__Didactic Concept:__` bullet)
-- **Instructor persona from `journal.md` → `## Didactics` (`__Professor Persona:__` bullet — mandatory handoff)**
-- **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
+- **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
+- Style & difficulty level from `journal.md` → `## Didactics`
 - Course type from `journal.md` → `## Course Context`
 
 ## Output
@@ -1007,9 +1011,10 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
    - Read terminology (sessions-called, lectures-called) and pacing model.
 2. Read learning objectives from the outline.
 3. Adopt didactic concept and course type from Didactics.
-4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
+4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
 
-- From this step, the agent writes in the tone of the instructor persona.
+- From this step, the agent writes in the tone of the Coauthor role.
+- If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
 - All agenda descriptions reflect this style.
 
 5. Define sessions/modules using the terminology from `journal.md` → `## Course Context`.
@@ -1045,6 +1050,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 ## Output
 
 - `journal.md` → `## Didactics`
+- `journal.md` → `## Agents` → `### Coauthor` updated with the coauthor role derived from the professor persona, teaching style, project-specific rules, and persona voice sample
 - Structure based on `templates/course-didactics.yaml`
 
 ## Steps
@@ -1064,7 +1070,15 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
 9. Save the generated didactics by replacing the content of `journal.md` → `## Didactics` — flat `* __Label:__` bullets only (including `* __Persona Voice Sample:__`), no sub-headings.
-10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection:
+    - Set `* __Customization Status:__ active`
+    - Set `* __Role / Persona:__` from `## Didactics` → `__Professor Persona:__`
+    - Set `* __Behavior Additions:__` from the teaching style, didactic concept, and project-specific coauthoring needs
+    - Set `* __Preferred Interaction Style:__` from the selected teaching style
+    - Set `* __Project-Specific Rules:__` from course type, time format, target platform, and material constraints
+    - Set `* __Persona Voice Sample:__` from `## Didactics` → `__Persona Voice Sample:__`
+    - Preserve `* __Boundaries / Never:__` and keep it additive-only; never override workflow gates, validation rules, safety rules, or epistemic rules
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: specs/tasks/create-didactics.md ====================
 
@@ -1519,7 +1533,7 @@ This task is invoked when:
 ## Purpose
 
 Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md` → `## Course Context` for terminology) as a structured framework.
-**The agent also adopts the instructor persona and style from `journal.md` → `## Didactics` into its own persona, so all content is written in this voice.**
+**The agent also adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
@@ -1527,8 +1541,8 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 - type: type of session (`lecture` or `exercise`)
 - title (optional)
 - Didactic concept from `journal.md` → `## Didactics`
-- **Instructor persona from `journal.md` → `## Didactics` (mandatory handoff)**
-- **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
+- **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
+- Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
 - Terminology from `journal.md` → `## Course Context` (sessions-called, lectures-called)
 
 ## Output
@@ -1541,8 +1555,9 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 1. Collect session number, type, and optional title.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
-4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
-   - From this step, the agent writes in the tone of the professor persona.
+4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
+   - From this step, the agent writes in the tone of the Coauthor role.
+   - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - All agenda descriptions reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.
@@ -2137,7 +2152,7 @@ Use this task when:
 ## Purpose
 
 Converts a **Session** into a detailed **Session Material**.  
-**The agent also adopts the instructor persona and style from `journal.md` → `## Didactics` into its own persona, so all content is written in this voice.**
+**The agent also adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
@@ -2146,8 +2161,8 @@ Converts a **Session** into a detailed **Session Material**.
 - didactics: content from `journal.md` → `## Didactics`
 - agenda: content from `journal.md` → `## Agenda`
 - templates: imports and usage notes from `journal.md` → `## Templates` (if present)
-- **Instructor persona from `journal.md` → `## Didactics` (mandatory handoff)**
-- **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
+- **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
+- Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
 - Terminology from `journal.md` → `## Course Context`
 
 ## Output
@@ -2160,8 +2175,9 @@ Converts a **Session** into a detailed **Session Material**.
 1. Load the matching skeleton subsection from `journal.md` → `## Sessions`.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
-4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
-   - From this step, the agent writes in the tone of the professor persona.
+4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
+   - From this step, the agent writes in the tone of the Coauthor role.
+   - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - All agenda descriptions reflect this style.
 5. Insert agenda information.
 6. Consider didactic inputs.
@@ -2541,7 +2557,7 @@ Generated in sequence without interruption inside `journal.md`:
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
-- `## Agents` (kept from `templates/journal.md`; coauthor customization and learner persona container)
+- `## Agents` (kept from `templates/journal.md`; Coauthor role, optional specialist customizations, and learner persona container)
 - `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
 - `## Sessions` containing an overview table followed by one subsection per session
@@ -2915,7 +2931,7 @@ Rules:
    - [ ] References present where content claims are made
 
    **Persona & style checks:**
-   - [ ] Tone matches the instructor persona from `journal.md` → `## Didactics`
+   - [ ] Tone matches the Coauthor role from `journal.md` → `## Agents` → `### Coauthor`
    - [ ] Terminology matches `journal.md` → `## Course Context` (sessions-called, etc.)
 
    **LiaScript syntax checks** (against `data/liascript-cheat-sheet.md`):
@@ -3057,20 +3073,34 @@ template:
     section: Agents
   title: 'Agents'
   notes:
-    - 'Agents is a scoped memory section. Agents must read only their own subsection.'
-    - 'Coauthor customizations are additive. They never override base agent YAML, workflow gates, validation rules, or epistemic rules.'
+    - 'Agents is a scoped memory section. The Coauthor role and specialist agent customizations live as direct `###` subsections under `## Agents`.'
+    - 'Coauthor role settings and specialist customizations are additive. They never override base agent YAML, workflow gates, validation rules, or epistemic rules.'
     - 'Learner personas live under `### Learner Personas`; learner review tasks load only the named persona they need.'
   sections:
     - id: intro
       title: Agents Intro
       template: |
         _Agent-specific project customizations and learner personas._
-        _Read-scope rule: each agent reads only the subsection explicitly assigned to it._
+        _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
 
     - id: coauthor
       title: Coauthor
       template: |
         ### Coauthor
+
+        * __Customization Status:__ inactive
+        * __Role / Persona:__
+          none
+        * __Behavior Additions:__
+          1. none
+        * __Preferred Interaction Style:__
+          none
+        * __Project-Specific Rules:__
+          1. none
+        * __Persona Voice Sample:__
+          none
+        * __Boundaries / Never:__
+          1. Do not override base workflow, validation, safety, or epistemic rules.
 
         ### Teaching-Agent
 
@@ -3760,11 +3790,25 @@ inserted at the top of the subsection. After /review-as-persona, a
 ## Agents
 
 _Agent-specific project customizations and learner personas._
-_Read-scope rule: each agent reads only the subsection explicitly assigned to it._
+_Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
 
 ### Coauthor
 
-#### Teaching-Agent
+* __Customization Status:__ inactive
+* __Role / Persona:__
+  none
+* __Behavior Additions:__
+  1. none
+* __Preferred Interaction Style:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Persona Voice Sample:__
+  none
+* __Boundaries / Never:__
+  1. Do not override base workflow, validation, safety, or epistemic rules.
+
+### Teaching-Agent
 
 * __Customization Status:__ inactive
 * __Behavior Additions:__
@@ -3776,7 +3820,7 @@ _Read-scope rule: each agent reads only the subsection explicitly assigned to it
 * __Boundaries / Never:__
   1. Do not override base workflow, validation, safety, or epistemic rules.
 
-#### Artist-Agent
+### Artist-Agent
 
 * __Customization Status:__ inactive
 * __Behavior Additions:__
@@ -3788,7 +3832,7 @@ _Read-scope rule: each agent reads only the subsection explicitly assigned to it
 * __Boundaries / Never:__
   1. Do not override base visual consistency, accessibility, or uncertainty rules.
 
-#### Development-Agent
+### Development-Agent
 
 * __Customization Status:__ inactive
 * __Behavior Additions:__
@@ -4318,7 +4362,7 @@ template:
 ## Agents
 
 - [ ] `journal.md` → `## Agents` exists
-- [ ] Coauthor customizations, if used, are stored under `## Agents` → `### Coauthor` → only the matching `#### {Agent}` subsection
+- [ ] Coauthor role, if used, is stored directly under `## Agents` → `### Coauthor`; specialist customizations, if used, are stored only in their matching direct `### {Agent}` subsection
 - [ ] Learner personas, if used, are stored under `## Agents` → `### Learner Personas`
 - [ ] No legacy top-level `## Learner Personas` section remains
 
