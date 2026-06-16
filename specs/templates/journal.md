@@ -385,11 +385,25 @@ inserted at the top of the subsection. After /review-as-persona, a
 ## Agents
 
 _Agent-specific project customizations and learner personas._
-_Read-scope rule: each agent reads only the subsection explicitly assigned to it._
+_Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
 
 ### Coauthor
 
-#### Teaching-Agent
+* __Customization Status:__ inactive
+* __Role / Persona:__
+  none
+* __Behavior Additions:__
+  1. none
+* __Preferred Interaction Style:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Persona Voice Sample:__
+  none
+* __Boundaries / Never:__
+  1. Do not override base workflow, validation, safety, or epistemic rules.
+
+### Teaching-Agent
 
 * __Customization Status:__ inactive
 * __Behavior Additions:__
@@ -401,7 +415,7 @@ _Read-scope rule: each agent reads only the subsection explicitly assigned to it
 * __Boundaries / Never:__
   1. Do not override base workflow, validation, safety, or epistemic rules.
 
-#### Artist-Agent
+### Artist-Agent
 
 * __Customization Status:__ inactive
 * __Behavior Additions:__
@@ -413,7 +427,7 @@ _Read-scope rule: each agent reads only the subsection explicitly assigned to it
 * __Boundaries / Never:__
   1. Do not override base visual consistency, accessibility, or uncertainty rules.
 
-#### Development-Agent
+### Development-Agent
 
 * __Customization Status:__ inactive
 * __Behavior Additions:__

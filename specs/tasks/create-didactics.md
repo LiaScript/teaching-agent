@@ -16,6 +16,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 ## Output
 
 - `journal.md` → `## Didactics`
+- `journal.md` → `## Agents` → `### Coauthor` updated with the coauthor role derived from the professor persona, teaching style, project-specific rules, and persona voice sample
 - Structure based on `templates/course-didactics.yaml`
 
 ## Steps
@@ -35,4 +36,12 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
 9. Save the generated didactics by replacing the content of `journal.md` → `## Didactics` — flat `* __Label:__` bullets only (including `* __Persona Voice Sample:__`), no sub-headings.
-10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection:
+    - Set `* __Customization Status:__ active`
+    - Set `* __Role / Persona:__` from `## Didactics` → `__Professor Persona:__`
+    - Set `* __Behavior Additions:__` from the teaching style, didactic concept, and project-specific coauthoring needs
+    - Set `* __Preferred Interaction Style:__` from the selected teaching style
+    - Set `* __Project-Specific Rules:__` from course type, time format, target platform, and material constraints
+    - Set `* __Persona Voice Sample:__` from `## Didactics` → `__Persona Voice Sample:__`
+    - Preserve `* __Boundaries / Never:__` and keep it additive-only; never override workflow gates, validation rules, safety rules, or epistemic rules
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

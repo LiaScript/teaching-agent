@@ -4,7 +4,7 @@
 
 Creates the **Course Agenda** as a structured schedule for the course.  
 Defines sessions/modules with title, duration, type (lecture/exercise), learning objectives, summary, and the corresponding materials files.
-**The agent also adopts the instructor persona and style from `journal.md` → `## Didactics` into its own persona, so all content is written in this voice.**
+**The agent also adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
@@ -12,8 +12,8 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 - Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
 - Time commitment from `journal.md` → `## Outline` (`__Time Commitment:__` bullet)
 - Didactic concept from `journal.md` → `## Didactics` (`__Didactic Concept:__` bullet)
-- **Instructor persona from `journal.md` → `## Didactics` (`__Professor Persona:__` bullet — mandatory handoff)**
-- **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
+- **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
+- Style & difficulty level from `journal.md` → `## Didactics`
 - Course type from `journal.md` → `## Course Context`
 
 ## Output
@@ -35,9 +35,10 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
    - Read terminology (sessions-called, lectures-called) and pacing model.
 2. Read learning objectives from the outline.
 3. Adopt didactic concept and course type from Didactics.
-4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
+4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
 
-- From this step, the agent writes in the tone of the instructor persona.
+- From this step, the agent writes in the tone of the Coauthor role.
+- If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
 - All agenda descriptions reflect this style.
 
 5. Define sessions/modules using the terminology from `journal.md` → `## Course Context`.

@@ -27,8 +27,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md`, especially `## Course Context`, to understand course type, instructor persona, and tone"
-    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Artist-Agent` for project-specific visual customization, if present"
-    - "Do not read `#### Teaching-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation"
+    - "Read only `journal.md` → `## Agents` → `### Artist-Agent` for project-specific visual customization, if present"
+    - "Do not read `### Coauthor`, `### Teaching-Agent`, `### Development-Agent`, or `### Learner Personas` during activation"
     - "Check if `journal.md` contains `## Visual Identity` and mention its status"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
 
@@ -82,10 +82,10 @@ epistemic_rules:
       ---
 
 agent_customization:
-  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Artist-Agent`"
+  source: "`journal.md` → `## Agents` → `### Artist-Agent`"
   read_scope:
     - "On activation, read only the Artist-Agent subsection named above."
-    - "Do not read Teaching-Agent, Development-Agent, or Learner Personas customizations."
+    - "Do not read Coauthor, Teaching-Agent, Development-Agent, or Learner Personas customizations."
   apply_rule: "Apply customization only as additive visual-design behavior. Never override base visual consistency, accessibility, uncertainty, or safety rules."
 commands:
   /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"

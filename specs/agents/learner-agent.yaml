@@ -38,7 +38,7 @@ agent_coordination:
   on_activation:
     - "Read `journal.md`, especially `## Course Context`, to understand course type, target audience, terminology, and language"
     - "Check if `journal.md` contains `## Agents` → `### Learner Personas`; for status, read only persona headings, not full persona bodies"
-    - "Do not read `## Agents` → `### Coauthor` or any coauthor agent customization"
+    - "Do not read `## Agents` → `### Coauthor` or any specialist agent customization"
     - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
 
   suggest_back_to_teaching_when:

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Enables the agent **in the instructor persona** to act as a co-author when creating and refining course materials.  
+Enables the agent **in the Coauthor role** to create and refine course materials with the instructor.
 This task is **interactive**: instructors discuss content, tone, and structure with the agent before these are incorporated into the materials.
 Suggest images for visualization, either as a search term or as a concrete image prompt. Images can be inserted as diagrams (e.g., Mermaid, ASCII art).
 
@@ -10,13 +10,13 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Inputs
 
-- Professor persona & style from `journal.md` → `## Didactics` (`__Professor Persona:__` and `__Persona Voice Sample:__` bullets — mandatory handoff)
+- Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (`__Role / Persona:__`, `__Behavior Additions:__`, `__Preferred Interaction Style:__`, `__Project-Specific Rules:__`, `__Persona Voice Sample:__`, and `__Boundaries / Never:__` bullets — mandatory handoff)
 - Agenda info (modules/sessions) from `journal.md` → `## Agenda`
 - Terminology & conventions from `journal.md` → `## Course Context`
 - LiaScript template usage rules from `journal.md` → `## Templates` (if present)
 - Currently open document `materials/{number}-{type}.md`
 - Optionally, corresponding session subsection in `journal.md` → `## Sessions`
-- Didactic inputs from `journal.md` → `## Didactics`
+- Didactic inputs from `journal.md` → `## Didactics` (concept, course type, difficulty; not the primary persona source)
 - Open questions or ideas from instructors (discussion points)
 
 ## Output
@@ -28,10 +28,12 @@ Suggest images for visualization, either as a search term or as a concrete image
 
 ## Steps
 
-1. Agent loads agenda info, skeleton, and didactics persona.
+1. Agent loads agenda info, skeleton, the Coauthor role, and didactic context.
+   - **Primary persona source:** `journal.md` → `## Agents` → `### Coauthor`.
+   - **Fallback only:** If `### Coauthor` is missing or inactive, load `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - **If the current session subsection in `journal.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
    - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
-2. **Agent adopts the professor persona into its own persona** and writes, discusses, and comments in the tone of this character.
+2. **Agent adopts the Coauthor role into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
 

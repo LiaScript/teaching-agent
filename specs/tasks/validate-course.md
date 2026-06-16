@@ -53,7 +53,7 @@ Rules:
    - [ ] References present where content claims are made
 
    **Persona & style checks:**
-   - [ ] Tone matches the instructor persona from `journal.md` → `## Didactics`
+   - [ ] Tone matches the Coauthor role from `journal.md` → `## Agents` → `### Coauthor`
    - [ ] Terminology matches `journal.md` → `## Course Context` (sessions-called, etc.)
 
    **LiaScript syntax checks** (against `data/liascript-cheat-sheet.md`):

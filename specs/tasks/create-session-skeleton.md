@@ -3,7 +3,7 @@
 ## Purpose
 
 Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md` → `## Course Context` for terminology) as a structured framework.
-**The agent also adopts the instructor persona and style from `journal.md` → `## Didactics` into its own persona, so all content is written in this voice.**
+**The agent also adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
@@ -11,8 +11,8 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 - type: type of session (`lecture` or `exercise`)
 - title (optional)
 - Didactic concept from `journal.md` → `## Didactics`
-- **Instructor persona from `journal.md` → `## Didactics` (mandatory handoff)**
-- **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
+- **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
+- Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
 - Terminology from `journal.md` → `## Course Context` (sessions-called, lectures-called)
 
 ## Output
@@ -25,8 +25,9 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 1. Collect session number, type, and optional title.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
-4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
-   - From this step, the agent writes in the tone of the professor persona.
+4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
+   - From this step, the agent writes in the tone of the Coauthor role.
+   - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - All agenda descriptions reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.

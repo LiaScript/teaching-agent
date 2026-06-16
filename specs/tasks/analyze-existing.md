@@ -34,7 +34,7 @@ Offers two paths for each missing core section:
    | `journal.md` → `## Visual Identity`   | optional                     |
    | `journal.md` → `## Templates` | optional; required if template imports or macros are used |
    | `journal.md` → `## Sessions` | if sessions expected |
-   | `journal.md` → `## Agents` | always; contains coauthor customization and learner personas |
+   | `journal.md` → `## Agents` | always; contains the Coauthor role, optional specialist customizations, and learner personas |
    | `materials/`   | if sessions expected         |
 
 3. Display a **Course Memory Status** table:
@@ -69,7 +69,7 @@ Offers two paths for each missing core section:
    - If a legacy top-level `## Learner Personas` section exists, migrate its persona entries into `journal.md` → `## Agents` → `### Learner Personas`.
    - Convert legacy persona headings from `### Persona: {icon} {name}` to `#### Persona: {icon} {name}`.
    - Remove the legacy top-level `## Learner Personas` section after migration to avoid duplicate persona sources.
-   - Do not read or merge coauthor customization subsections unless this task is explicitly checking the `## Agents` section shape.
+   - Do not read or merge Coauthor or specialist agent customization sections unless this task is explicitly checking the `## Agents` section shape.
 
 7. After all missing sections are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials

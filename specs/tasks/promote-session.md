@@ -3,7 +3,7 @@
 ## Purpose
 
 Converts a **Session** into a detailed **Session Material**.  
-**The agent also adopts the instructor persona and style from `journal.md` → `## Didactics` into its own persona, so all content is written in this voice.**
+**The agent also adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona, so all content is written in this voice.**
 
 ## Inputs
 
@@ -12,8 +12,8 @@ Converts a **Session** into a detailed **Session Material**.
 - didactics: content from `journal.md` → `## Didactics`
 - agenda: content from `journal.md` → `## Agenda`
 - templates: imports and usage notes from `journal.md` → `## Templates` (if present)
-- **Instructor persona from `journal.md` → `## Didactics` (mandatory handoff)**
-- **Style & difficulty level from `journal.md` → `## Didactics` (mandatory handoff)**
+- **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
+- Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
 - Terminology from `journal.md` → `## Course Context`
 
 ## Output
@@ -26,8 +26,9 @@ Converts a **Session** into a detailed **Session Material**.
 1. Load the matching skeleton subsection from `journal.md` → `## Sessions`.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
-4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
-   - From this step, the agent writes in the tone of the professor persona.
+4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
+   - From this step, the agent writes in the tone of the Coauthor role.
+   - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - All agenda descriptions reflect this style.
 5. Insert agenda information.
 6. Consider didactic inputs.

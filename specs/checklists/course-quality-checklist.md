@@ -40,7 +40,7 @@
 ## Agents
 
 - [ ] `journal.md` → `## Agents` exists
-- [ ] Coauthor customizations, if used, are stored under `## Agents` → `### Coauthor` → only the matching `#### {Agent}` subsection
+- [ ] Coauthor role, if used, is stored directly under `## Agents` → `### Coauthor`; specialist customizations, if used, are stored only in their matching direct `### {Agent}` subsection
 - [ ] Learner personas, if used, are stored under `## Agents` → `### Learner Personas`
 - [ ] No legacy top-level `## Learner Personas` section remains
 

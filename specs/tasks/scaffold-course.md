@@ -35,7 +35,7 @@ Generated in sequence without interruption inside `journal.md`:
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
-- `## Agents` (kept from `templates/journal.md`; coauthor customization and learner persona container)
+- `## Agents` (kept from `templates/journal.md`; Coauthor role, optional specialist customizations, and learner persona container)
 - `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
 - `## Sessions` containing an overview table followed by one subsection per session
