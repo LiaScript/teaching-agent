@@ -37,6 +37,13 @@
 - [ ] Template usage examples and constraints are documented in `## Templates`
 - [ ] Community discovery link included: https://github.com/topics/liascript-template
 
+## Agents
+
+- [ ] `journal.md` → `## Agents` exists
+- [ ] Coauthor customizations, if used, are stored under `## Agents` → `### Coauthor` → only the matching `#### {Agent}` subsection
+- [ ] Learner personas, if used, are stored under `## Agents` → `### Learner Personas`
+- [ ] No legacy top-level `## Learner Personas` section remains
+
 ## Agenda `[if agenda flag = yes in journal.md → ## Course Context]`
 
 - [ ] All sessions have: title, duration, type, learning objective, summary

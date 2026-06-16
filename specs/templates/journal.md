@@ -382,9 +382,52 @@ inserted at the top of the subsection. After /review-as-persona, a
 
 ---
 
-## Learner Personas
+## Agents
 
-_Optional — filled by `/create-learner-persona`. One `### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
+_Agent-specific project customizations and learner personas._
+_Read-scope rule: each agent reads only the subsection explicitly assigned to it._
+
+### Coauthor
+
+#### Teaching-Agent
+
+* __Customization Status:__ inactive
+* __Behavior Additions:__
+  1. none
+* __Preferred Interaction Style:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Boundaries / Never:__
+  1. Do not override base workflow, validation, safety, or epistemic rules.
+
+#### Artist-Agent
+
+* __Customization Status:__ inactive
+* __Behavior Additions:__
+  1. none
+* __Preferred Visual Priorities:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Boundaries / Never:__
+  1. Do not override base visual consistency, accessibility, or uncertainty rules.
+
+#### Development-Agent
+
+* __Customization Status:__ inactive
+* __Behavior Additions:__
+  1. none
+* __Preferred Publishing Workflow:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Boundaries / Never:__
+  1. Do not override validation gates, git safety, or publishing checks.
+
+### Learner Personas
+
+_Optional — filled by `/create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
 
 ---
 

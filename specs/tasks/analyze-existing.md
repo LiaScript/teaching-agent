@@ -12,7 +12,7 @@ Offers two paths for each missing core section:
 ## Inputs
 
 - `journal.md` → `## Course Context` (created by `/init-course`, mandatory)
-- Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`
+- Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`, `## Agents`
 - Existing folder: `materials/`
 
 ## Output
@@ -34,6 +34,7 @@ Offers two paths for each missing core section:
    | `journal.md` → `## Visual Identity`   | optional                     |
    | `journal.md` → `## Templates` | optional; required if template imports or macros are used |
    | `journal.md` → `## Sessions` | if sessions expected |
+   | `journal.md` → `## Agents` | always; contains coauthor customization and learner personas |
    | `materials/`   | if sessions expected         |
 
 3. Display a **Course Memory Status** table:
@@ -62,6 +63,13 @@ Offers two paths for each missing core section:
    - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
    - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
    - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
+
+6c. Ensure `journal.md` → `## Agents` exists:
+   - If missing, create it from `templates/agents.yaml`.
+   - If a legacy top-level `## Learner Personas` section exists, migrate its persona entries into `journal.md` → `## Agents` → `### Learner Personas`.
+   - Convert legacy persona headings from `### Persona: {icon} {name}` to `#### Persona: {icon} {name}`.
+   - Remove the legacy top-level `## Learner Personas` section after migration to avoid duplicate persona sources.
+   - Do not read or merge coauthor customization subsections unless this task is explicitly checking the `## Agents` section shape.
 
 7. After all missing sections are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials

@@ -16,6 +16,7 @@ The dashboard is **derived state**. It is never the source of truth.
 - `journal.md` → `## Didactics`
 - `journal.md` → `## Agenda`
 - `journal.md` → `## Sessions`, including overview table, `#### Validation Report`, and `#### Persona Reviews`
+- `journal.md` → `## Agents` → `### Learner Personas` headings, if present
 - `journal.md` → `## Validation` → `### Latest Validation Summary`, if present
 - `templates/project-dashboard.yaml`
 
@@ -32,6 +33,7 @@ Run this task automatically after any task that changes project state:
 - `/scaffold`
 - `/create-outline`
 - `/create-didactics`
+- `/configure-agent`
 - `/manage-templates`
 - `/create-agenda`
 - `/create-session`

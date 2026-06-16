@@ -41,7 +41,7 @@ workflow:
       - Templates
       - Agenda
       - Sessions
-      - Learner Personas
+      - Agents
       - Validation
       - Analysis Status
       - Notes Backup
@@ -115,7 +115,7 @@ workflow:
     - step: create_learner_personas
       agent: teaching
       command: /create-learner-persona {name?}
-      output: "journal.md → ## Learner Personas"
+      output: "journal.md → ## Agents → ### Learner Personas"
       dependencies: [create_didactics]
       optional: true
       notes: |
@@ -204,7 +204,7 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: "journal.md contains ## Learner Personas"
+              condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: |
                 Learner-perspective review after syntax validation (optional):
                 - Agent embodies persona and reads material as that learner
@@ -240,7 +240,7 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: "journal.md contains ## Learner Personas"
+              condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: "Learner-perspective review per material; saves each report under that session's `#### Persona Reviews`"
               repeat: for all materials
 
@@ -460,6 +460,7 @@ workflow:
       - /init-course
       - /scaffold {course-type?}
       - /analyze-existing
+      - /configure-agent {agent}
       - /create-outline
       - /create-didactics
       - /create-learner-persona {name?}

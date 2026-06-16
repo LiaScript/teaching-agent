@@ -99,6 +99,7 @@ Rules:
    - `journal.md` → `## Course Context` complete (course type, terminology, agenda flag, conventions)
    - `journal.md` → `## Outline`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
    - `journal.md` → `## Didactics`: instructor persona, didactic concept, style, difficulty level
+   - `journal.md` → `## Agents` exists and contains scoped `### Coauthor` and `### Learner Personas` containers
 
 4b. **Check Templates** `[if `journal.md` → `## Templates` exists or material files use template macros]`:
    - Every template documented in `journal.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header

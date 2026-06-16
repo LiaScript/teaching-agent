@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The agent temporarily **embodies a learner persona** from `journal.md` → `## Learner Personas` and reviews
+The agent temporarily **embodies a learner persona** from `journal.md` → `## Agents` → `### Learner Personas` and reviews
 one session material from the perspective of that fictional learner.
 
 This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
@@ -14,11 +14,11 @@ or simply get a feel for how this learner experiences the material.
 
 ## Inputs
 
-- `{name}` — persona name (must exist in `journal.md` → `## Learner Personas`)
+- `{name}` — persona name (must exist in `journal.md` → `## Agents` → `### Learner Personas`)
 - `{number}` — session number
 - `{type}` — session type (`lecture` or `exercise`)
 - `materials/{number}-{type}.md` — the material to review
-- `journal.md` → `## Learner Personas` — full persona definition
+- `journal.md` → `## Agents` → `### Learner Personas` → matching `#### Persona: {icon} {name}` only
 - `journal.md` → `## Agenda` — learning objectives for this session
 - `journal.md` → `## Course Context` — terminology and conventions
 - Matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
@@ -42,9 +42,10 @@ Rules:
 
 ## Steps
 
-1. Load the named persona from `journal.md` → `## Learner Personas`.
+1. Load only the named persona from `journal.md` → `## Agents` → `### Learner Personas`.
    - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
-   - If `journal.md` → `## Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
+   - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
+   - Do not read `journal.md` → `## Agents` → `### Coauthor` or any other persona body.
 
 2. Load `materials/{number}-{type}.md`.
 

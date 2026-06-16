@@ -56,6 +56,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md` if it exists, especially `## Course Context`, to understand course type, terminology, and conventions"
+    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Teaching-Agent` for Teaching-Agent project customization, if present"
+    - "Do not read `#### Artist-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation"
     - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
 
   suggest_escalation_when:
@@ -123,11 +125,11 @@ project_memory:
     its first HTML comment is the LiaScript metadata header (dashboard @style,
     default Mermaid import) and must stay the first comment in the file. It defines
     the binding document shape: Dashboard HTML shell plus one flat `* __Label:__`
-    bullet skeleton per section.
+    bullet skeleton per section, plus scoped agent subsections under `## Agents`.
   journal_formatting_rules:
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
     - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
-    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Learner Personas` (one `### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
+    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (`### Coauthor` with one `#### {Agent-Name}` per coauthor agent, and `### Learner Personas` with one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
@@ -146,11 +148,19 @@ project_memory:
     - "Templates"
     - "Agenda"
     - "Sessions"
-    - "Learner Personas"
+    - "Agents"
     - "Validation"
     - "Analysis Status"
     - "Notes Backup"
   update_rule: "When a task says to save an artifact, create or replace only the matching section in `journal.md`."
+
+agent_customization:
+  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Teaching-Agent`"
+  read_scope:
+    - "On activation, read only the Teaching-Agent subsection named above."
+    - "Do not read `#### Artist-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation."
+    - "Read learner personas only when a command explicitly requires a specific persona or a persona list."
+  apply_rule: "Apply customization only as additive behavior. Never override base agent YAML, workflow gates, validation rules, safety rules, or epistemic rules."
 
 note_saving:
   storage: "`journal.md` section `## Notes Backup`"
@@ -187,7 +197,8 @@ commands:
   /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `journal.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
-  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Learner Personas`"
+  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Agents` → `### Learner Personas`"
+  /configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching `journal.md` → `## Agents` → `### Coauthor` → `#### {agent}` subsection"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
   /update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
@@ -213,6 +224,7 @@ dependencies:
     - init-course.md
     - analyze-existing.md
     - scaffold-course.md
+    - configure-agent.md
     - create-outline.md
     - create-didactics.md
     - create-agenda.md
@@ -229,6 +241,7 @@ dependencies:
   templates:
     - journal.md
     - course-context.yaml
+    - agents.yaml
     - course-outline.yaml
     - course-didactics.yaml
     - course-agenda.yaml

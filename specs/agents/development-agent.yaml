@@ -26,6 +26,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md`, especially `## Course Context` and `## Validation`, to understand course type, project conventions, and publishing readiness"
+    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Development-Agent` for project-specific publishing/git customization, if present"
+    - "Do not read `#### Teaching-Agent`, `#### Artist-Agent`, or `### Learner Personas` during activation"
     - "Check if project.yaml exists and which materials are in materials/"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
 
@@ -65,6 +67,13 @@ epistemic_rules:
       - `[Search term 1]`
       - `[Search term 2]`
       ---
+
+agent_customization:
+  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Development-Agent`"
+  read_scope:
+    - "On activation, read only the Development-Agent subsection named above."
+    - "Do not read Teaching-Agent, Artist-Agent, or Learner Personas customizations."
+  apply_rule: "Apply customization only as additive publishing/git behavior. Never override validation gates, git safety checks, publishing gates, or epistemic rules."
 
 commands:
   /manage-git: "run task `tasks/manage-git.md`"

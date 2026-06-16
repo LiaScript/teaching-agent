@@ -24,15 +24,15 @@ When you need to reference a resource mentioned in your instructions:
 ```yaml
 dependencies:
   templates:
-    - outline.yaml
+    - course-outline.yaml
   tasks:
-    - create-outline
+    - create-outline.md
 ```
 
 These references map directly to bundle sections:
 
-- `templates: outline` → Look for `==================== START: specs/templates/outline.yaml ====================`
-- `tasks: create-outline` → Look for `==================== START: specs/tasks/create-outline.md ====================`
+- `templates: course-outline.yaml` → Look for `==================== START: specs/templates/course-outline.yaml ====================`
+- `tasks: create-outline.md` → Look for `==================== START: specs/tasks/create-outline.md ====================`
 
 3. **Execution Context**: You are operating in a web environment. All your capabilities and knowledge are contained within this bundle. Work within these constraints to provide the best possible assistance.
 
@@ -110,6 +110,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md` if it exists, especially `## Course Context`, to understand course type, terminology, and conventions"
+    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Teaching-Agent` for Teaching-Agent project customization, if present"
+    - "Do not read `#### Artist-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation"
     - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
 
   suggest_escalation_when:
@@ -177,11 +179,11 @@ project_memory:
     its first HTML comment is the LiaScript metadata header (dashboard @style,
     default Mermaid import) and must stay the first comment in the file. It defines
     the binding document shape: Dashboard HTML shell plus one flat `* __Label:__`
-    bullet skeleton per section.
+    bullet skeleton per section, plus scoped agent subsections under `## Agents`.
   journal_formatting_rules:
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
     - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
-    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Learner Personas` (one `### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {type}: {title} ({date})` per note)."
+    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (`### Coauthor` with one `#### {Agent-Name}` per coauthor agent, and `### Learner Personas` with one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
@@ -200,19 +202,33 @@ project_memory:
     - "Templates"
     - "Agenda"
     - "Sessions"
-    - "Learner Personas"
+    - "Agents"
     - "Validation"
     - "Analysis Status"
     - "Notes Backup"
   update_rule: "When a task says to save an artifact, create or replace only the matching section in `journal.md`."
 
+agent_customization:
+  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Teaching-Agent`"
+  read_scope:
+    - "On activation, read only the Teaching-Agent subsection named above."
+    - "Do not read `#### Artist-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation."
+    - "Read learner personas only when a command explicitly requires a specific persona or a persona list."
+  apply_rule: "Apply customization only as additive behavior. Never override base agent YAML, workflow gates, validation rules, safety rules, or epistemic rules."
+
 note_saving:
   storage: "`journal.md` section `## Notes Backup`"
+  template: "`templates/note-backup.yaml`"
+  task: "`tasks/save-notes.md`"
   naming_convention:
-    summary: "Append an entry headed `### Summary: {title} ({YYYY-MM-DD})`"
-    research: "Append an entry headed `### Research: {title} ({YYYY-MM-DD})`"
-    decision: "Append an entry headed `### Decision: {title} ({YYYY-MM-DD})`"
-  note: "slug/title = 2-4 word kebab-case description of the topic, e.g. 'agenda-structure', 'course-type-decision'"
+    summary: "Append an entry headed `### Summary: {Descriptive Title} ({YYYY-MM-DD})`"
+    research: "Append an entry headed `### Research: {Descriptive Title} ({YYYY-MM-DD})`"
+    decision: "Append an entry headed `### Decision: {Descriptive Title} ({YYYY-MM-DD})`"
+  title_rule: >
+    The heading title must be human-readable and specific (4-8 words when possible).
+    If the command argument is a slug such as `agenda-structure`, expand it into a
+    meaningful title such as `Agenda Structure And Session Rhythm`. Do not use vague
+    headings like `Summary`, `Update`, or `Notes`.
 
   proactive_triggers:
     description: "Agent proactively offers to save notes when these situations occur — does NOT save automatically."
@@ -225,28 +241,9 @@ note_saving:
       - "A longer discussion produced a concrete conclusion"
     offer_format: |
       This was an important decision/insight. Should I save this?
-      I would append it to `journal.md` → `## Notes Backup` as: `{type}: {slug} ({date})`
+      I would append it to `journal.md` → `## Notes Backup` as: `### {Type}: {Descriptive Title} ({date})`
       Content: [1-3 sentence preview of what would be saved]
       Yes / No / Adjust"
-
-  save_format: |
-    Each note entry inside `## Notes Backup` starts with:
-    ---
-    type: summary | research | decision
-    topic: [short topic description]
-    date: YYYY-MM-DD
-    related: [optional: Outline / session 3 / material file / etc.]
-    ---
-    [content]
-
-    For type: decision, use ADR structure:
-    **Context:** [What situation or constraint led to this decision?]
-    **Options considered:**
-    1. [Option A] — [brief pros/cons]
-    2. [Option B] — [brief pros/cons]
-    **Decision:** [What was chosen]
-    **Rationale:** [Why this option over the alternatives]
-    **Consequences:** [What this implies for future steps, constraints, or other documents]
 
 commands:
   /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
@@ -254,7 +251,8 @@ commands:
   /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `journal.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
   /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
   /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
-  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Learner Personas`"
+  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Agents` → `### Learner Personas`"
+  /configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching `journal.md` → `## Agents` → `### Coauthor` → `#### {agent}` subsection"
   /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
   /update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
@@ -265,8 +263,8 @@ commands:
   /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
   /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
   /assemble-bundle: "run task `tasks/assemble-bundle.md`"
-  /save-notes {type?} {title?}: "Summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
-  /save-decision {title}: "Save a structured decision record (ADR format) — context, options considered, decision, rationale, consequences"
+  /save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
+  /save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
   /help: "Show available actions"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
@@ -280,6 +278,7 @@ dependencies:
     - init-course.md
     - analyze-existing.md
     - scaffold-course.md
+    - configure-agent.md
     - create-outline.md
     - create-didactics.md
     - create-agenda.md
@@ -292,9 +291,11 @@ dependencies:
     - validate-course.md
     - assemble-bundle.md
     - create-learner-persona.md
+    - save-notes.md
   templates:
     - journal.md
     - course-context.yaml
+    - agents.yaml
     - course-outline.yaml
     - course-didactics.yaml
     - course-agenda.yaml
@@ -303,6 +304,7 @@ dependencies:
     - session-skeleton.yaml
     - session-material.yaml
     - session-validation.yaml
+    - note-backup.yaml
   checklists:
     - course-quality-checklist.md
   data:
@@ -353,7 +355,7 @@ persona:
   role: "Learner Perspective Specialist"
   style: "empathetic, evidence-grounded, critical, honest — and fully immersive when in persona"
   identity: >
-    Embodies defined learner personas from `journal.md` → `## Learner Personas` to review course materials
+    Embodies defined learner personas from `journal.md` → `## Agents` → `### Learner Personas` to review course materials
     from the target audience's perspective. Reads, reacts, and gives feedback as that person would.
     Stays in persona for open follow-up chat after reviews.
     Hands back to the Teaching-Agent when persona work is done.
@@ -371,7 +373,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md`, especially `## Course Context`, to understand course type, target audience, terminology, and language"
-    - "Check if `journal.md` contains `## Learner Personas` and announce status: how many personas are defined"
+    - "Check if `journal.md` contains `## Agents` → `### Learner Personas`; for status, read only persona headings, not full persona bodies"
+    - "Do not read `## Agents` → `### Coauthor` or any coauthor agent customization"
     - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
 
   suggest_back_to_teaching_when:
@@ -384,7 +387,7 @@ agent_coordination:
     - "Format: 'I am handing back to the Teaching-Agent. Persona status: [summary]. Key review findings: [1–3 points]'"
 
 epistemic_rules:
-  principle: "Never invent persona characteristics. Only use what is explicitly defined in `journal.md` → `## Learner Personas`."
+  principle: "Never invent persona characteristics. Only use what is explicitly defined in the named persona under `journal.md` → `## Agents` → `### Learner Personas`."
 
   when_uncertain:
     - "If a persona detail is missing or unclear: react as the persona would in that situation, not as an analyst filling a gap"
@@ -393,7 +396,7 @@ epistemic_rules:
 
 commands:
   /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
-  /list-learners: "list all personas defined in `journal.md` → `## Learner Personas` with a one-line description each"
+  /list-learners: "list all personas defined in `journal.md` → `## Agents` → `### Learner Personas`; read only persona headings and one-line overview snippets"
   /agent {character}: "take over the persona of agents/{character}-agent.yaml"
   /list-agents: "Show available agent personas"
   /help: "Show available actions"
@@ -454,6 +457,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md`, especially `## Course Context`, to understand course type, instructor persona, and tone"
+    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Artist-Agent` for project-specific visual customization, if present"
+    - "Do not read `#### Teaching-Agent`, `#### Development-Agent`, or `### Learner Personas` during activation"
     - "Check if `journal.md` contains `## Visual Identity` and mention its status"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
 
@@ -471,7 +476,7 @@ browser_execution:
     The Artist-Agent can execute image prompts directly in the browser via the Chrome DevTools MCP server.
     The full workflow (MCP check, ChatGPT submission, download, save) is defined in `tasks/generate-image.md`.
 
-  required_mcp: "chrome-devtools (mcp_chrome-devtoo_* tools)"
+  required_mcp: "chrome-devtools (mcp_chrome-devtools_* tools)"
 
   setup_instructions: |
     To enable browser-based image generation, Chrome must be started with remote debugging:
@@ -481,7 +486,7 @@ browser_execution:
     The chrome-devtools MCP server must be configured in your VS Code MCP settings (mcp.json).
 
   on_activation_check:
-    - "Check if mcp_chrome-devtoo_* tools are available"
+    - "Check if mcp_chrome-devtools_* tools are available"
     - "If available: announce browser execution mode is active"
     - "If unavailable: explain the setup steps above and offer prompt-only mode (/create-image) as fallback"
 
@@ -505,6 +510,13 @@ epistemic_rules:
       - `[Search term 1]`
       - `[Search term 2]`
       ---
+
+agent_customization:
+  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Artist-Agent`"
+  read_scope:
+    - "On activation, read only the Artist-Agent subsection named above."
+    - "Do not read Teaching-Agent, Development-Agent, or Learner Personas customizations."
+  apply_rule: "Apply customization only as additive visual-design behavior. Never override base visual consistency, accessibility, uncertainty, or safety rules."
 commands:
   /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   /create-logo: "run task `tasks/create-logo.md`"
@@ -532,7 +544,7 @@ activation-instructions:
   - The agent.customization field ALWAYS takes precedence
   - Always ensure visual consistency with the style guide
   - Generate detailed, actionable image prompts
-  - On activation: check if mcp_chrome-devtoo_* tools are available and announce browser execution mode status
+  - On activation: check if mcp_chrome-devtools_* tools are available and announce browser execution mode status
   - STAY IN CHARACTER!
 
 fuzzy-matching:
@@ -585,6 +597,8 @@ agent_coordination:
 
   on_activation:
     - "Read `journal.md`, especially `## Course Context` and `## Validation`, to understand course type, project conventions, and publishing readiness"
+    - "Read only `journal.md` → `## Agents` → `### Coauthor` → `#### Development-Agent` for project-specific publishing/git customization, if present"
+    - "Do not read `#### Teaching-Agent`, `#### Artist-Agent`, or `### Learner Personas` during activation"
     - "Check if project.yaml exists and which materials are in materials/"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
 
@@ -624,6 +638,13 @@ epistemic_rules:
       - `[Search term 1]`
       - `[Search term 2]`
       ---
+
+agent_customization:
+  source: "`journal.md` → `## Agents` → `### Coauthor` → `#### Development-Agent`"
+  read_scope:
+    - "On activation, read only the Development-Agent subsection named above."
+    - "Do not read Teaching-Agent, Artist-Agent, or Learner Personas customizations."
+  apply_rule: "Apply customization only as additive publishing/git behavior. Never override validation gates, git safety checks, publishing gates, or epistemic rules."
 
 commands:
   /manage-git: "run task `tasks/manage-git.md`"
@@ -674,7 +695,7 @@ Offers two paths for each missing core section:
 ## Inputs
 
 - `journal.md` → `## Course Context` (created by `/init-course`, mandatory)
-- Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`
+- Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`, `## Agents`
 - Existing folder: `materials/`
 
 ## Output
@@ -696,6 +717,7 @@ Offers two paths for each missing core section:
    | `journal.md` → `## Visual Identity`   | optional                     |
    | `journal.md` → `## Templates` | optional; required if template imports or macros are used |
    | `journal.md` → `## Sessions` | if sessions expected |
+   | `journal.md` → `## Agents` | always; contains coauthor customization and learner personas |
    | `materials/`   | if sessions expected         |
 
 3. Display a **Course Memory Status** table:
@@ -722,8 +744,15 @@ Offers two paths for each missing core section:
 6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
    - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
    - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
-   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Fertig stays ❌ (cannot be inferred — instructor must confirm)
+   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
    - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
+
+6c. Ensure `journal.md` → `## Agents` exists:
+   - If missing, create it from `templates/agents.yaml`.
+   - If a legacy top-level `## Learner Personas` section exists, migrate its persona entries into `journal.md` → `## Agents` → `### Learner Personas`.
+   - Convert legacy persona headings from `### Persona: {icon} {name}` to `#### Persona: {icon} {name}`.
+   - Remove the legacy top-level `## Learner Personas` section after migration to avoid duplicate persona sources.
+   - Do not read or merge coauthor customization subsections unless this task is explicitly checking the `## Agents` section shape.
 
 7. After all missing sections are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials
@@ -736,6 +765,7 @@ Offers two paths for each missing core section:
 8. Suggest a prioritized action list and the recommended next step (usually `/coauthor-materials`).
 
 9. Save the full status overview as `journal.md` → `## Analysis Status`.
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: specs/tasks/analyze-existing.md ====================
 
@@ -863,7 +893,7 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
-7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Fertig column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notizen column. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Done column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 8. After approval, 🎛️ ask with structured question (single choice):
    - **Yes, validate now** — run `/validate-course {number} {type}`
    - **Later** — skip validation, proceed directly to the next session
@@ -873,14 +903,69 @@ Suggest images for visualization, either as a search term or as a concrete image
 - This task is **dialog-oriented** and remains open until instructors "approve" the materials.
 - The goal is **co-authoring**: the agent writes _with_, not _instead of_ the instructor.
 - Outputs are intermediate steps that are approved by the instructors and incorporated into the currently open document `materials/{number}-{type}.md`.
-  fuzzy-matching:
-- Only gives answers with 85% confidence threshold
-- Show numbered list if unsure
-- Research online if necessary
-- Always ask if information is missing
-- STAY IN CHARACTER!
 
 ==================== END: specs/tasks/coauthor-materials.md ====================
+
+
+==================== START: specs/tasks/configure-agent.md ====================
+
+# Task: configure-agent
+
+## Purpose
+
+Configures project-specific behavior for exactly one coauthor agent inside
+`journal.md` -> `## Agents` -> `### Coauthor`.
+
+This task creates or updates only the selected agent subsection. It must not read,
+rewrite, summarize, or infer settings from sibling agent subsections.
+
+## Inputs
+
+- `{agent}`: Teaching-Agent | Artist-Agent | Development-Agent
+- Instructor-provided customization request
+- `journal.md` -> `## Agents` -> `### Coauthor` -> `#### {agent}` only
+- `templates/agents.yaml`
+
+## Output
+
+- Updated `journal.md` -> `## Agents` -> `### Coauthor` -> `#### {agent}`
+
+## Steps
+
+1. Normalize `{agent}` to one of:
+   - Teaching-Agent
+   - Artist-Agent
+   - Development-Agent
+
+2. Read only the matching subsection:
+   - Teaching-Agent reads/writes only `#### Teaching-Agent`
+   - Artist-Agent reads/writes only `#### Artist-Agent`
+   - Development-Agent reads/writes only `#### Development-Agent`
+
+3. If `journal.md` -> `## Agents` does not exist, create it from `templates/agents.yaml`.
+   If `### Coauthor` exists but the selected `#### {agent}` subsection is missing, create only that subsection.
+
+4. Ask what should be customized:
+   - Behavior additions
+   - Preferred interaction or workflow style
+   - Project-specific rules
+   - Boundaries / never rules
+
+5. Enforce additive-only customization:
+   - Do not override base agent YAML.
+   - Do not override workflow gates, validation rules, safety rules, epistemic rules, or publishing gates.
+   - If the instructor requests an override, save it as a rejected boundary note instead of applying it.
+
+6. Update only the selected `#### {agent}` subsection.
+   Set `* __Customization Status:__ active` if any meaningful customization exists.
+
+7. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update
+   `journal.md` -> `## Dashboard` in place.
+
+8. Confirm:
+   > "Updated `journal.md` -> `## Agents` -> `### Coauthor` -> `#### {agent}`. Other agent sections were not read or changed."
+
+==================== END: specs/tasks/configure-agent.md ====================
 
 
 ==================== START: specs/tasks/create-agenda.md ====================
@@ -1101,11 +1186,12 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 - Name (optional — agent suggests if not provided)
 - Target audience from `journal.md` → `## Outline` (`__Target Audience:__` bullet)
 - Difficulty level, course type, and style from `journal.md` → `## Didactics`
+- `templates/agents.yaml` — used if `journal.md` → `## Agents` does not exist yet
 - Optional: research data provided by instructor (for data-driven mode)
 
 ## Output
 
-- `journal.md` → `## Learner Personas` — created if missing; new persona appended as a separate entry if it exists
+- `journal.md` → `## Agents` → `### Learner Personas` — created if missing; new persona appended as a separate entry if it exists
 
 ## Steps
 
@@ -1163,10 +1249,11 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 10. Generate persona section using the **Persona Structure** template (see below).
 11. Display a 3-line summary and 🎛️ ask for confirmation:
-    > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Learner Personas`? (Yes / Adjust)"
-12. On approval: save to `journal.md` → `## Learner Personas`.
-    - If `## Learner Personas` does not exist: create it with a short section intro and the persona entry
-    - If it exists: append as a new `### Persona: {icon} {name}` subsection
+    > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Agents` → `### Learner Personas`? (Yes / Adjust)"
+12. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
+    - If `## Agents` does not exist: create it from `templates/agents.yaml`
+    - If `### Learner Personas` does not exist inside `## Agents`: create that subsection
+    - Append as a new `#### Persona: {icon} {name}` subsection
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 14. Suggest next step:
     > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
@@ -1175,20 +1262,20 @@ and serve as the basis for `/review-as-persona` feedback sessions.
 
 ## Persona Structure
 
-Each persona is one `###` subsection inside `journal.md` → `## Learner Personas` — never use `##` here (it would terminate the section) and never go deeper than `####`:
+Each persona is one `####` subsection inside `journal.md` → `## Agents` → `### Learner Personas` — never use `##` or `###` inside a persona entry (they would terminate the target container) and never go deeper than `#####`:
 
 ```markdown
-### Persona: [Icon] [Name]
+#### Persona: [Icon] [Name]
 
 *Created: YYYY-MM-DD | Mode: quick / data-driven*
 
-#### Overview
+##### Overview
 
 Short narrative description (3–5 sentences) — brings the persona to life.
 Written in present tense, third person, like a brief character sketch.
 Includes: age, background, where they are in their training, attitude toward learning.
 
-#### 1. Sociodemographics
+##### 1. Sociodemographics
 - Age: ...
 - Gender: ...
 - Origin / Background: ...
@@ -1196,14 +1283,14 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-#### 2. Educational Background
+##### 2. Educational Background
 - Highest school qualification: ...
 - Literacy / text comprehension: ...
 - Numeracy: ...
 
 *[Source / Assumption note]*
 
-#### 3. Training & Work Context
+##### 3. Training & Work Context
 - Training structure: ... (e.g., block schedule, weeks per block)
 - Typical work day / schedule: ...
 - Commute / accessibility: ...
@@ -1211,7 +1298,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-#### 4. Digital Behavior
+##### 4. Digital Behavior
 - Primary device: ...
 - Apps used regularly: ...
 - Learning app or e-learning experience: ...
@@ -1220,7 +1307,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-#### 5. Motivation & Goals
+##### 5. Motivation & Goals
 - Reason for choosing this field / training: ...
 - Short-term goal: ...
 - Long-term goal: ...
@@ -1228,7 +1315,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-#### 6. Barriers & Risk Factors
+##### 6. Barriers & Risk Factors
 - Known learning difficulties: ...
 - Time pressure / exhaustion during training: ...
 - Attitude toward additional digital learning: ...
@@ -1236,14 +1323,14 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-#### 7. Prior Knowledge Gaps
+##### 7. Prior Knowledge Gaps
 - Concepts likely unknown at course start: ...
 - Skills likely missing: ...
 - Terminology that must be introduced, not assumed: ...
 
 *[Source / Assumption note]*
 
-#### Design Implications
+##### Design Implications
 5–7 concrete consequences for material design, directly derived from this persona:
 
 - [e.g., "Avoid paragraphs longer than 4 lines — reading comprehension is limited"]
@@ -1472,7 +1559,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 8. Update the overview table inside `journal.md` → `## Sessions`:
    - If `journal.md` → `## Sessions` does not exist yet, create it with the overview table first:
      ```
-     | # | Titel | Typ | Skeleton | Material | Ready | Notes |
+     | # | Title | Type | Skeleton | Material | Done | Notes |
      |---|---|---|---|---|---|---|
      ```
    - Add a new row: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
@@ -1532,6 +1619,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 11. Create example prompts for logos, images, and diagrams based on course theme.
 12. Fill the `templates/visuals.yaml` template with the results.
 13. Save the visual style guide by creating or replacing `journal.md` → `## Visual Identity`.
+14. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Usage
 
@@ -1583,19 +1671,19 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 
 ## Phase 1: Entry Point
 
-1. Check if `mcp_chrome-devtoo_*` tools are available.
+1. Check if `mcp_chrome-devtools_*` tools are available.
    - **Not available** → explain setup, stop. Suggest `/create-image` for prompt-only mode.
 
-2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtoo_list_pages`.
+2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtools_list_pages`.
    - **Fails or returns empty** → start Chrome in the background:
      ```bash
      google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug &
      ```
-     Wait ~3 seconds, then retry `mcp_chrome-devtoo_list_pages` to confirm connection.
+     Wait ~3 seconds, then retry `mcp_chrome-devtools_list_pages` to confirm connection.
      If it still fails: inform the instructor and stop.
    - **Succeeds** → continue.
 
-3. Resize the browser viewport: use `mcp_chrome-devtoo_resize_page` → width: 1280, height: 900.
+3. Resize the browser viewport: use `mcp_chrome-devtools_resize_page` → width: 1280, height: 900.
    This ensures stop-button and send-button are rendered (they may be hidden on narrow viewports).
 
 4. Determine mode:
@@ -1719,7 +1807,6 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
        const newUrls = getNewImageUrls(urlsBefore);
        if (!newUrls.length) { console.warn(`[batch] ❌ No image found: ${slug}`); continue; }
        const size = await downloadBlob(newUrls[0], `${slug}.png`); // newUrls[0] = finished image; others are still-loading previews
-       console.log(`[batch] ✅ Done: ${slug} (${Math.round(size/1024)} KB)`);
        console.log(`[batch] ✅ Done: ${slug} (${Math.round(size/1024)} KB)`);
        await sleep(1000);
      }
@@ -1924,7 +2011,7 @@ The course context acts as the governance layer: it defines the course type, ter
 - All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `journal.md` → `## Course Context` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
 - For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.
-- The skeleton's formatting rules are binding: flat bullet sections, no `###` sub-headings outside `## Sessions` / `## Templates` / `## Learner Personas` / `## Validation` / `## Notes Backup`, and the Dashboard is only ever updated via `tasks/update-dashboard.md`.
+- The skeleton's formatting rules are binding: flat bullet sections, no `###` sub-headings outside `## Sessions` / `## Templates` / `## Agents` / `## Validation` / `## Notes Backup`, and the Dashboard is only ever updated via `tasks/update-dashboard.md`.
 
 ==================== END: specs/tasks/init-course.md ====================
 
@@ -2074,18 +2161,16 @@ Converts a **Session** into a detailed **Session Material**.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
 4. **Agent adopts the instructor persona & style from Didactics into its own persona.**
-
-- From this step, the agent writes in the tone of the professor persona.
-- All agenda descriptions reflect this style.
-
-4. Insert agenda information.
-5. Consider didactic inputs.
-6. Generate planned outline.
-7. Apply template.
-8. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
-9. Save the material file as `materials/{number}-{type}.md`.
-10. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
-11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+   - From this step, the agent writes in the tone of the professor persona.
+   - All agenda descriptions reflect this style.
+5. Insert agenda information.
+6. Consider didactic inputs.
+7. Generate planned outline.
+8. Apply template.
+9. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header of `materials/{number}-{type}.md`.
+10. Save the material file as `materials/{number}-{type}.md`.
+11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: specs/tasks/promote-session.md ====================
 
@@ -2157,7 +2242,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 ## Purpose
 
-The agent temporarily **embodies a learner persona** from `journal.md` → `## Learner Personas` and reviews
+The agent temporarily **embodies a learner persona** from `journal.md` → `## Agents` → `### Learner Personas` and reviews
 one session material from the perspective of that fictional learner.
 
 This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
@@ -2169,11 +2254,11 @@ or simply get a feel for how this learner experiences the material.
 
 ## Inputs
 
-- `{name}` — persona name (must exist in `journal.md` → `## Learner Personas`)
+- `{name}` — persona name (must exist in `journal.md` → `## Agents` → `### Learner Personas`)
 - `{number}` — session number
 - `{type}` — session type (`lecture` or `exercise`)
 - `materials/{number}-{type}.md` — the material to review
-- `journal.md` → `## Learner Personas` — full persona definition
+- `journal.md` → `## Agents` → `### Learner Personas` → matching `#### Persona: {icon} {name}` only
 - `journal.md` → `## Agenda` — learning objectives for this session
 - `journal.md` → `## Course Context` — terminology and conventions
 - Matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
@@ -2197,9 +2282,10 @@ Rules:
 
 ## Steps
 
-1. Load the named persona from `journal.md` → `## Learner Personas`.
+1. Load only the named persona from `journal.md` → `## Agents` → `### Learner Personas`.
    - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
-   - If `journal.md` → `## Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
+   - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
+   - Do not read `journal.md` → `## Agents` → `### Coauthor` or any other persona body.
 
 2. Load `materials/{number}-{type}.md`.
 
@@ -2334,6 +2420,88 @@ Rules:
 ==================== END: specs/tasks/review-as-persona.md ====================
 
 
+==================== START: specs/tasks/save-notes.md ====================
+
+# Task: save-notes
+
+## Purpose
+
+Saves a useful discussion result, research request, or decision as an append-only entry in
+`journal.md` -> `## Notes Backup`.
+
+Use this task for both:
+- `/save-notes {type?} {title?}` - summary, research, or decision note
+- `/save-decision {title}` - decision note with ADR-style content
+
+## Inputs
+
+- Current conversation or instructor-provided note content
+- Optional `type`: summary | research | decision (default: summary)
+- Optional `title`: short command argument or free-text title
+- Optional `related`: Outline / Didactics / Agenda / session number / material file / etc.
+- `templates/note-backup.yaml`
+- Existing `journal.md` -> `## Notes Backup`, if present
+
+## Output
+
+- Appended entry inside `journal.md` -> `## Notes Backup`
+- Entry heading format:
+
+  ```markdown
+  ### {Type}: {Descriptive Title} ({YYYY-MM-DD})
+  ```
+
+## Steps
+
+1. Determine note type:
+   - `/save-decision {title}` always uses `decision`.
+   - `/save-notes` defaults to `summary` unless the instructor provides `research` or `decision`.
+
+2. Create a descriptive heading title:
+   - If no title is provided, derive one from the content.
+   - If the title is a slug, expand it into a readable heading.
+   - Use 4-8 meaningful words when possible.
+   - Avoid vague titles such as `Summary`, `Notes`, `Update`, or `Decision`.
+
+   Examples:
+   - `agenda-structure` -> `Agenda Structure And Session Rhythm`
+   - `persona-chat-lina-2-exercise` -> `Lina Feedback On Session 2 Exercise`
+   - `course-type-decision` -> `Course Type And Scope Decision`
+
+3. Read `templates/note-backup.yaml` and select the content block matching the note type:
+   - summary -> Summary Content
+   - research -> Research Content
+   - decision -> Decision Content
+
+4. Fill the template:
+   - `type_label`: Summary / Research / Decision
+   - `descriptive_title`: meaningful heading title
+   - `date`: current date
+   - `topic`, `related`, `source`
+   - type-specific content
+
+5. Append the rendered entry to `journal.md` -> `## Notes Backup`.
+   - If `## Notes Backup` does not exist, create it near the end of `journal.md`.
+   - Do not replace, reorder, or summarize existing entries.
+   - Each note is one `###` subsection.
+   - Do not use `##` headings inside a note entry.
+
+6. For decision notes, use ADR-style content:
+   - Context
+   - Options considered
+   - Decision
+   - Rationale
+   - Consequences
+
+7. Confirm the saved heading and location:
+   > "Saved to `journal.md` -> `## Notes Backup` -> `### {Type}: {Descriptive Title} ({YYYY-MM-DD})`."
+
+8. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update
+   `journal.md` -> `## Dashboard` in place.
+
+==================== END: specs/tasks/save-notes.md ====================
+
+
 ==================== START: specs/tasks/scaffold-course.md ====================
 
 # Task: scaffold-course
@@ -2373,6 +2541,7 @@ Generated in sequence without interruption inside `journal.md`:
 - `## Course Context`
 - `## Outline`
 - `## Didactics`
+- `## Agents` (kept from `templates/journal.md`; coauthor customization and learner persona container)
 - `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
 - `## Sessions` containing an overview table followed by one subsection per session
@@ -2505,6 +2674,7 @@ The dashboard is **derived state**. It is never the source of truth.
 - `journal.md` → `## Didactics`
 - `journal.md` → `## Agenda`
 - `journal.md` → `## Sessions`, including overview table, `#### Validation Report`, and `#### Persona Reviews`
+- `journal.md` → `## Agents` → `### Learner Personas` headings, if present
 - `journal.md` → `## Validation` → `### Latest Validation Summary`, if present
 - `templates/project-dashboard.yaml`
 
@@ -2521,6 +2691,7 @@ Run this task automatically after any task that changes project state:
 - `/scaffold`
 - `/create-outline`
 - `/create-didactics`
+- `/configure-agent`
 - `/manage-templates`
 - `/create-agenda`
 - `/create-session`
@@ -2529,6 +2700,7 @@ Run this task automatically after any task that changes project state:
 - `/quick-fix`
 - `/validate-course`
 - `/review-as-persona`
+- `/save-notes` or `/save-decision`
 - `/assemble-bundle`
 - `/create-project` or `/update-project`
 
@@ -2789,6 +2961,7 @@ Rules:
    - `journal.md` → `## Course Context` complete (course type, terminology, agenda flag, conventions)
    - `journal.md` → `## Outline`: title, target audience, time commitment `[not single-lesson]`, abstract, learning objectives
    - `journal.md` → `## Didactics`: instructor persona, didactic concept, style, difficulty level
+   - `journal.md` → `## Agents` exists and contains scoped `### Coauthor` and `### Learner Personas` containers
 
 4b. **Check Templates** `[if `journal.md` → `## Templates` exists or material files use template macros]`:
    - Every template documented in `journal.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header
@@ -2805,7 +2978,7 @@ Rules:
    - All expected sessions have a row in the overview table
    - Cross-check: every ✅ Skeleton row has a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
    - Cross-check: every ✅ Material row has a file in `materials/`
-   - All sessions marked ✅ Fertig `[required before publishing]`
+   - All sessions marked ✅ Done `[required before publishing]`
 
 7. **Check each material file** in `materials/` (same LiaScript + content checks as Session Mode Step 4).
    For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching `#### Validation Report` in that session subsection under `journal.md` → `## Sessions`.
@@ -2869,6 +3042,81 @@ Rules:
 **Rule:** Never suggest or assist with `/create-project` or `/update-project` unless `journal.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.
 
 ==================== END: specs/tasks/validate-course.md ====================
+
+
+==================== START: specs/templates/agents.yaml ====================
+
+```yaml
+template:
+  id: agents
+  name: 'Agent Customizations'
+  version: 1.0
+  output:
+    format: markdown
+    filename: journal.md
+    section: Agents
+  title: 'Agents'
+  notes:
+    - 'Agents is a scoped memory section. Agents must read only their own subsection.'
+    - 'Coauthor customizations are additive. They never override base agent YAML, workflow gates, validation rules, or epistemic rules.'
+    - 'Learner personas live under `### Learner Personas`; learner review tasks load only the named persona they need.'
+  sections:
+    - id: intro
+      title: Agents Intro
+      template: |
+        _Agent-specific project customizations and learner personas._
+        _Read-scope rule: each agent reads only the subsection explicitly assigned to it._
+
+    - id: coauthor
+      title: Coauthor
+      template: |
+        ### Coauthor
+
+        ### Teaching-Agent
+
+        * __Customization Status:__ inactive
+        * __Behavior Additions:__
+          1. none
+        * __Preferred Interaction Style:__
+          none
+        * __Project-Specific Rules:__
+          1. none
+        * __Boundaries / Never:__
+          1. Do not override base workflow, validation, safety, or epistemic rules.
+
+        ### Artist-Agent
+
+        * __Customization Status:__ inactive
+        * __Behavior Additions:__
+          1. none
+        * __Preferred Visual Priorities:__
+          none
+        * __Project-Specific Rules:__
+          1. none
+        * __Boundaries / Never:__
+          1. Do not override base visual consistency, accessibility, or uncertainty rules.
+
+        ### Development-Agent
+
+        * __Customization Status:__ inactive
+        * __Behavior Additions:__
+          1. none
+        * __Preferred Publishing Workflow:__
+          none
+        * __Project-Specific Rules:__
+          1. none
+        * __Boundaries / Never:__
+          1. Do not override validation gates, git safety, or publishing checks.
+
+    - id: learner-personas
+      title: Learner Personas
+      template: |
+        ### Learner Personas
+
+        _Optional — filled by `/create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona._
+```
+
+==================== END: specs/templates/agents.yaml ====================
 
 
 ==================== START: specs/templates/course-agenda.yaml ====================
@@ -3228,6 +3476,7 @@ __Last updated:__ {{YYYY-MM-DD}}
 
 ### Quality State
 
+<!-- data-type="none" -->
 | Area | State |
 | --- | --- |
 | Course context | <span class="dashboard-status dashboard-status-blocked">open</span> |
@@ -3508,9 +3757,52 @@ inserted at the top of the subsection. After /review-as-persona, a
 
 ---
 
-## Learner Personas
+## Agents
 
-_Optional — filled by `/create-learner-persona`. One `### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
+_Agent-specific project customizations and learner personas._
+_Read-scope rule: each agent reads only the subsection explicitly assigned to it._
+
+### Coauthor
+
+#### Teaching-Agent
+
+* __Customization Status:__ inactive
+* __Behavior Additions:__
+  1. none
+* __Preferred Interaction Style:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Boundaries / Never:__
+  1. Do not override base workflow, validation, safety, or epistemic rules.
+
+#### Artist-Agent
+
+* __Customization Status:__ inactive
+* __Behavior Additions:__
+  1. none
+* __Preferred Visual Priorities:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Boundaries / Never:__
+  1. Do not override base visual consistency, accessibility, or uncertainty rules.
+
+#### Development-Agent
+
+* __Customization Status:__ inactive
+* __Behavior Additions:__
+  1. none
+* __Preferred Publishing Workflow:__
+  none
+* __Project-Specific Rules:__
+  1. none
+* __Boundaries / Never:__
+  1. Do not override validation gates, git safety, or publishing checks.
+
+### Learner Personas
+
+_Optional — filled by `/create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
 
 ---
 
@@ -3532,9 +3824,113 @@ _Only used for improve-existing courses — filled by `/analyze-existing`._
 
 ## Notes Backup
 
-_Appended to by `/save-notes` and `/save-decision` as `### {type}: {title} ({date})` entries._
+_Appended to by `/save-notes` and `/save-decision` from `templates/note-backup.yaml`._
+_Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._
 
 ==================== END: specs/templates/journal.md ====================
+
+
+==================== START: specs/templates/note-backup.yaml ====================
+
+```yaml
+template:
+  id: note-backup
+  name: 'Notes Backup Entry'
+  version: 1.0
+  output:
+    format: markdown
+    filename: journal.md
+    section: Notes Backup
+    append: true
+    heading: '### {{type_label}}: {{descriptive_title}} ({{date}})'
+  title: 'Notes Backup Entry'
+  notes:
+    - 'Append rendered entries to `journal.md` -> `## Notes Backup`; never replace existing entries.'
+    - 'The `descriptive_title` must be human-readable and specific, not just a generic slug.'
+    - 'Use exactly one content block: summary, research, or decision.'
+  fields:
+    type:
+      allowed:
+        - summary
+        - research
+        - decision
+    type_label:
+      summary: Summary
+      research: Research
+      decision: Decision
+    descriptive_title:
+      rule: '4-8 meaningful words when possible; expand command slugs into readable titles.'
+      examples:
+        - 'Agenda Structure And Session Rhythm'
+        - 'Learner Persona Research Prompt'
+        - 'Course Type Scope Decision'
+    date:
+      format: YYYY-MM-DD
+  sections:
+    - id: heading
+      title: Note Heading
+      template: |
+        ### {{type_label}}: {{descriptive_title}} ({{date}})
+
+    - id: metadata
+      title: Metadata
+      template: |
+        * __Type:__ {{summary | research | decision}}
+        * __Topic:__ {{topic}}
+        * __Related:__ {{related | optional}}
+        * __Source:__ {{chat discussion | instructor decision | research prompt | external research | material review}}
+
+    - id: summary-content
+      title: Summary Content
+      applies_to: summary
+      template: |
+        * __Summary:__
+          {{1-3 paragraphs summarizing the insight, conclusion, or useful context.}}
+
+        * __Why it matters:__
+          {{Short explanation of how this affects the course, materials, workflow, or future decisions.}}
+
+        * __Follow-up:__
+          1. {{next useful action, or "None"}}
+
+    - id: research-content
+      title: Research Content
+      applies_to: research
+      template: |
+        * __Research Question:__
+          {{question or prompt that was generated, discussed, or answered}}
+
+        * __Findings:__
+          {{brief findings, or "Pending - research request saved for later"}}
+
+        * __Sources / Search Suggestions:__
+          1. {{source, URL, or search term}}
+
+        * __Follow-up:__
+          1. {{next verification or integration step}}
+
+    - id: decision-content
+      title: Decision Content
+      applies_to: decision
+      template: |
+        * __Context:__
+          {{What situation or constraint led to this decision?}}
+
+        * __Options considered:__
+          1. {{Option A}} - {{brief pros/cons}}
+          2. {{Option B}} - {{brief pros/cons}}
+
+        * __Decision:__
+          {{What was chosen}}
+
+        * __Rationale:__
+          {{Why this option over the alternatives}}
+
+        * __Consequences:__
+          {{What this implies for future steps, constraints, or other documents}}
+```
+
+==================== END: specs/templates/note-backup.yaml ====================
 
 
 ==================== START: specs/templates/project-dashboard.yaml ====================
@@ -3919,6 +4315,13 @@ template:
 - [ ] Template usage examples and constraints are documented in `## Templates`
 - [ ] Community discovery link included: https://github.com/topics/liascript-template
 
+## Agents
+
+- [ ] `journal.md` → `## Agents` exists
+- [ ] Coauthor customizations, if used, are stored under `## Agents` → `### Coauthor` → only the matching `#### {Agent}` subsection
+- [ ] Learner personas, if used, are stored under `## Agents` → `### Learner Personas`
+- [ ] No legacy top-level `## Learner Personas` section remains
+
 ## Agenda `[if agenda flag = yes in journal.md → ## Course Context]`
 
 - [ ] All sessions have: title, duration, type, learning objective, summary
@@ -3932,7 +4335,7 @@ template:
 - [ ] All expected sessions have a row in the overview table
 - [ ] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - [ ] No session marked ✅ Material without a file in `materials/`
-- [ ] All sessions marked ✅ Fertig before publishing
+- [ ] All sessions marked ✅ Done before publishing
 
 ## Session Subsections (`journal.md` → `## Sessions`)
 
@@ -3972,7 +4375,7 @@ template:
 ==================== END: specs/checklists/course-quality-checklist.md ====================
 
 
-==================== START: specs/data/liascript-cheet-sheet.md ====================
+==================== START: specs/data/liascript-cheat-sheet.md ====================
 
 # LiaScript Guide – Syntax, Semantics & Best Practices
 
@@ -4684,7 +5087,7 @@ console.log("Basso continuo = foundation");
 </script>
 ````
 
-==================== END: specs/data/liascript-cheet-sheet.md ====================
+==================== END: specs/data/liascript-cheat-sheet.md ====================
 
 
 ==================== START: specs/data/liascript-workflows.md ====================
@@ -5744,7 +6147,7 @@ workflow:
       - Templates
       - Agenda
       - Sessions
-      - Learner Personas
+      - Agents
       - Validation
       - Analysis Status
       - Notes Backup
@@ -5818,7 +6221,7 @@ workflow:
     - step: create_learner_personas
       agent: teaching
       command: /create-learner-persona {name?}
-      output: "journal.md → ## Learner Personas"
+      output: "journal.md → ## Agents → ### Learner Personas"
       dependencies: [create_didactics]
       optional: true
       notes: |
@@ -5907,7 +6310,7 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: "journal.md contains ## Learner Personas"
+              condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: |
                 Learner-perspective review after syntax validation (optional):
                 - Agent embodies persona and reads material as that learner
@@ -5943,7 +6346,7 @@ workflow:
             - agent: learner
               command: /review-as-persona {name} {number} {type}
               optional: true
-              condition: "journal.md contains ## Learner Personas"
+              condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: "Learner-perspective review per material; saves each report under that session's `#### Persona Reviews`"
               repeat: for all materials
 
@@ -5961,7 +6364,7 @@ workflow:
       notes: |
         Full course check before publishing:
         - Project-memory consistency (context ↔ outline ↔ didactics ↔ agenda ↔ sessions)
-        - All sessions Fertig ✅ in `journal.md` → `## Sessions`
+        - All sessions Done ✅ in `journal.md` → `## Sessions`
         - LiaScript syntax check on all material files
         - Creates or replaces one `#### Validation Report` per material inside the matching `journal.md` → `## Sessions` session subsection
         - Replaces `journal.md` → `## Validation` → `### Latest Validation Summary` with `Mode: course`, PASS/FAIL, and issue count
@@ -6039,7 +6442,7 @@ workflow:
     - Choose iterative or batch approach for sessions
     - Publishing is optional and user-initiated — only when explicitly requested
     - /create-project recommended when multiple materials exist and course is ready to share
-    - `journal.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Fertig status automatically
+    - `journal.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Done status automatically
     - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
     - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
     - `journal.md` → `## Dashboard` is derived state and should be regenerated automatically with /update-dashboard after state-changing tasks
@@ -6163,6 +6566,7 @@ workflow:
       - /init-course
       - /scaffold {course-type?}
       - /analyze-existing
+      - /configure-agent {agent}
       - /create-outline
       - /create-didactics
       - /create-learner-persona {name?}
@@ -6175,6 +6579,8 @@ workflow:
       - /quick-fix {number} {type} {description}
       - /validate-course
       - /assemble-bundle
+      - /save-notes {type?} {title?}
+      - /save-decision {title}
 
     learner_agent_commands:
       - /review-as-persona {name} {number} {type}
