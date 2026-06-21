@@ -141,7 +141,7 @@ workflow:
     - step: create_logo
       agent: artist
       command: :create-logo
-      output: assets/prompts/logo-prompt.md
+      output: "journal.md → ## Visual Identity → __Example Prompts__"
       dependencies: [create_visuals]
       optional: true
       notes: |

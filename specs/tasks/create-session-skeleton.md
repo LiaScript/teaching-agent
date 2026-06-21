@@ -41,6 +41,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - `**Summary:**` and `**Content:**` are free text blocks and may contain more than one paragraph.
    - `**Activities:**` must be a numbered list.
    - `**References:**` must be a numbered list.
+   - End the subsection with an empty `#### Images` block (placeholder note); it is later filled by `:create-image` and rendered by `:generate-image`.
 8. Update the overview table inside `journal.md` → `## Sessions`:
    - If `journal.md` → `## Sessions` does not exist yet, create it with the overview table first:
      ```

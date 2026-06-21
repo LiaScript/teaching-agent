@@ -45,3 +45,9 @@ template:
         **References:**
 
         1. [Relevant source or material]
+    - id: images
+      title: Images
+      template: |
+        #### Images
+
+        _Filled by `:create-image` (Artist-Agent). One `<section>` per image belonging to this session; rendered by `:generate-image`. Empty until the first image prompt is created._

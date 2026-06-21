@@ -520,11 +520,11 @@ agent_customization:
 commands:
   :create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   :create-logo: "run task `tasks/create-logo.md`"
-  :create-image {description}: "run task `tasks/create-image.md` — generate prompt and save to assets/prompts/ (no browser required)"
+  :create-image {number} {type} {description}: "run task `tasks/create-image.md` — generate prompt and save as a `<section>` in the target session's `#### Images` block in journal.md (no browser required). Session args optional when only one session exists."
   :generate-image {slug?}: >-
     run task `tasks/generate-image.md`.
-    With slug: execute that single saved prompt via browser.
-    Without slug: show mode selection (single / sequential batch / automated batch) over all pending prompts in assets/prompts/.
+    With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via browser.
+    Without slug: show mode selection (single / sequential batch / automated batch) over all pending image entries across the sessions' `#### Images` blocks.
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -1092,9 +1092,17 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 Generates a detailed image prompt for course materials based on a user description, aligned with the visual style guide.
 Creates professional, actionable prompts for AI image generators that maintain visual consistency with the course identity.
 
+## Command
+
+`:create-image {number} {type} {description}` — `{number} {type}` identify the target session; `{description}` is what should be visualized.
+
+- If `{number} {type}` are omitted and exactly **one** session exists in `journal.md` → `## Sessions`, use that session without asking.
+- If `{number} {type}` are omitted and **multiple** sessions exist, ask which session the image belongs to (numbered list).
+
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
+- Target session: `{number} {type}` → the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - Image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet)
 - Website color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet)
 - Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)
@@ -1103,7 +1111,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Output
 
 - A detailed image prompt (displayed as formatted text)
-- Always saved to `assets/prompts/image-{slug}.md` (created automatically if folder does not exist)
+- Always saved as a `<section>` entry inside the target session's `#### Images` block in `journal.md` → `## Sessions` → `### {number}. {title}` (the `#### Images` block is created automatically if it does not exist)
 
 ## Steps
 
@@ -1126,9 +1134,12 @@ Creates professional, actionable prompts for AI image generators that maintain v
 8. Generate a detailed, actionable prompt.
 9. Include accessibility considerations (alt text suggestion).
 10. Present the prompt in a clear format.
-11. Save to `assets/prompts/image-{slug}.md` — always, without asking.
-    Create the folder if it does not exist.
-    Confirm: "Prompt saved: `assets/prompts/image-{slug}.md`"
+11. Derive a `{slug}` from the description (kebab-case).
+12. Save into the target session's `#### Images` block — always, without asking:
+    - Locate the `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
+    - If it has no `#### Images` block, create one (placed after `**References:**`, before `#### Validation Report` if present).
+    - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {slug}` already exists, replace it.
+    - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{slug}`"
 
 ## Output Format
 
@@ -1161,6 +1172,31 @@ Technical Specifications:
 - Format: PNG/JPG/SVG
 - Usage: [Slide/Handout/Web/etc.]
 ```
+
+## Journal Entry Format
+
+Each image is stored as one `<section>` inside the session's `#### Images` block. The image is **always** embedded — the `![…]` line renders the PNG once `:generate-image` has saved it (and shows as a broken-image placeholder until then, which is the intended "not yet generated" signal).
+
+```markdown
+#### Images
+
+<section>
+
+#### {slug}
+
+* __Datei:__ assets/images/{slug}.png
+* __Status:__ prompt-ready
+* __Alt-Text:__ {descriptive alt text}
+* __Prompt:__
+  "{full detailed prompt ready for image generator}"
+
+![{alt text}](assets/images/{slug}.png)
+
+</section>
+```
+
+- `__Status:__` starts as `prompt-ready`; `:generate-image` flips it to `generated` after saving the PNG.
+- One `<section>` per image; multiple images stack under the same `#### Images` block.
 
 ## Special Features
 
@@ -1384,7 +1420,7 @@ Creates a professional, actionable prompt that can be used with AI image generat
 ## Output
 
 - A detailed logo prompt (displayed as formatted text)
-- Optionally saved to `assets/prompts/logo-prompt.md`
+- Saved to `journal.md` → `## Visual Identity` → `__Example Prompts:__` (the `Logo:` entry), since the logo is course-wide and not tied to a single session
 
 ## Steps
 
@@ -1401,7 +1437,7 @@ Creates a professional, actionable prompt that can be used with AI image generat
    - Mood and atmosphere
    - Technical specifications (scalable, suitable for digital/print)
 7. Present the prompt in a clear, actionable format.
-8. Optionally save to `assets/prompts/logo-prompt.md`.
+8. Save the complete prompt into `journal.md` → `## Visual Identity` → `__Example Prompts:__` as the `1. Logo:` entry (replace the existing placeholder/prompt). Confirm: "Logo prompt saved: `journal.md` → `## Visual Identity` → `__Example Prompts:__`"
 
 ## Output Format
 
@@ -1571,6 +1607,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - `**Summary:**` and `**Content:**` are free text blocks and may contain more than one paragraph.
    - `**Activities:**` must be a numbered list.
    - `**References:**` must be a numbered list.
+   - End the subsection with an empty `#### Images` block (placeholder note); it is later filled by `:create-image` and rendered by `:generate-image`.
 8. Update the overview table inside `journal.md` → `## Sessions`:
    - If `journal.md` → `## Sessions` does not exist yet, create it with the overview table first:
      ```
@@ -1653,9 +1690,9 @@ This style guide will be referenced by the Teaching-Agent when:
 
 ## Purpose
 
-Executes saved image prompts from `assets/prompts/` via the browser — in two modes:
+Executes saved image prompts stored in `journal.md` → `## Sessions` → `#### Images` blocks via the browser — in two modes:
 
-- **Single mode** (`:generate-image {slug}`) — execute one specific prompt file directly
+- **Single mode** (`:generate-image {slug}`) — execute one specific image entry directly
 - **Batch mode** (`:generate-image` without argument) — show mode selection, then process all pending prompts
 
 To generate and save prompts first, use `:create-image`.
@@ -1664,8 +1701,8 @@ Requires the **chrome-devtools MCP server** to be active and Chrome running with
 
 ## Inputs
 
-- **Single mode:** `assets/prompts/image-{slug}.md`
-- **Batch mode:** all `assets/prompts/image-*.md` files (skips slugs that already have a matching image)
+- **Single mode:** the `<section>` whose heading is `#### {slug}`, found in any session's `#### Images` block in `journal.md` → `## Sessions`
+- **Batch mode:** all `<section>` image entries across every session's `#### Images` block (skips entries whose `__Status:__` is `generated` or whose `assets/images/{slug}.png` already exists)
 - Chrome DevTools MCP availability (checked at task start)
 - Course language from `journal.md` → `## Course Context` (safety-net: appended to prompt if no language instruction is already present)
 
@@ -1712,19 +1749,19 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 
 ## Phase 2a: Single Mode
 
-3. Read `assets/prompts/image-{slug}.md`.
-4. Extract the `Complete Prompt:` section (the quoted string).
+3. Find the `<section>` whose heading is `#### {slug}` inside a `#### Images` block in `journal.md` → `## Sessions`.
+4. Extract the `__Prompt:__` value (the quoted string).
 5. Execute (Phase 3 → 4 → 5 below), then stop.
 
 ---
 
 ## Phase 2b: Batch Mode — Collect Queue
 
-3. Scan `assets/prompts/` for all files matching `image-*.md`.
-4. Derive slug per file (e.g. `image-fox-samurai.md` → `fox-samurai`).
-5. Check if `assets/images/{slug}.png` already exists:
-   - **Exists** → mark `⏭ skipped`
-   - **Missing** → add to queue
+3. Scan every session's `#### Images` block in `journal.md` → `## Sessions` for `<section>` image entries.
+4. Read the slug per entry from its `#### {slug}` heading.
+5. Skip if already generated:
+   - `__Status:__` is `generated`, **or** `assets/images/{slug}.png` already exists → mark `⏭ skipped`
+   - otherwise (`__Status:__ prompt-ready` and no PNG) → add to queue
 6. Print queue:
    ```
    Batch queue: {N} to process, {M} skipped (already done)
@@ -1740,7 +1777,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ### Automated Batch
 
-8. Read all pending prompt files, extract `Complete Prompt:` strings. Read course language from `journal.md` → `## Course Context`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
+8. Read all pending `<section>` entries, extract their `__Prompt:__` strings. Read course language from `journal.md` → `## Course Context`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 9. Inject the following self-contained JS loop into the browser:
 
    ```js
@@ -1916,6 +1953,11 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
   ```
 - Confirm: `"✅ {slug}.png saved ({size} KB) → {path}"`
 
+## Phase 5b: Update Journal Entry *(all modes)*
+
+- In the `<section>` for `{slug}`, set `__Status:__` to `generated`.
+- The `![…](assets/images/{slug}.png)` embed is already present (written by `:create-image`) and now renders the saved PNG — no change needed unless the path differs from the saved location, in which case update it to match.
+
 ---
 
 ## Phase 6: Summary *(batch modes only)*
@@ -1935,7 +1977,8 @@ If any failures: list slugs, suggest `:generate-image {slug}` to retry individua
 | Feature                  | `:create-image` | `:generate-image {slug}` | `:generate-image` (batch) |
 |--------------------------|-----------------|--------------------------|---------------------------|
 | Generate prompt          | ✅              | ❌ (reads saved)          | ❌ (reads saved)           |
-| Save prompt to file      | ✅ always        | ❌                         | ❌                         |
+| Save prompt to journal   | ✅ always        | ❌                         | ❌                         |
+| Set Status → generated   | ❌ (prompt-ready)| ✅                         | ✅                         |
 | Submit to ChatGPT        | ❌              | ✅ single                 | ✅ all pending             |
 | Download image           | ❌              | ✅                         | ✅                         |
 | Save to project folder   | ❌              | ✅                         | ✅                         |
@@ -4166,6 +4209,12 @@ template:
         **References:**
 
         1. [Relevant source or material]
+    - id: images
+      title: Images
+      template: |
+        #### Images
+
+        _Filled by `:create-image` (Artist-Agent). One `<section>` per image belonging to this session; rendered by `:generate-image`. Empty until the first image prompt is created._
 ```
 
 ==================== END: specs/templates/session-skeleton.yaml ====================
@@ -6292,7 +6341,7 @@ workflow:
     - step: create_logo
       agent: artist
       command: :create-logo
-      output: assets/prompts/logo-prompt.md
+      output: "journal.md → ## Visual Identity → __Example Prompts__"
       dependencies: [create_visuals]
       optional: true
       notes: |

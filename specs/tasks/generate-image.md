@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Executes saved image prompts from `assets/prompts/` via the browser — in two modes:
+Executes saved image prompts stored in `journal.md` → `## Sessions` → `#### Images` blocks via the browser — in two modes:
 
-- **Single mode** (`:generate-image {slug}`) — execute one specific prompt file directly
+- **Single mode** (`:generate-image {slug}`) — execute one specific image entry directly
 - **Batch mode** (`:generate-image` without argument) — show mode selection, then process all pending prompts
 
 To generate and save prompts first, use `:create-image`.
@@ -13,8 +13,8 @@ Requires the **chrome-devtools MCP server** to be active and Chrome running with
 
 ## Inputs
 
-- **Single mode:** `assets/prompts/image-{slug}.md`
-- **Batch mode:** all `assets/prompts/image-*.md` files (skips slugs that already have a matching image)
+- **Single mode:** the `<section>` whose heading is `#### {slug}`, found in any session's `#### Images` block in `journal.md` → `## Sessions`
+- **Batch mode:** all `<section>` image entries across every session's `#### Images` block (skips entries whose `__Status:__` is `generated` or whose `assets/images/{slug}.png` already exists)
 - Chrome DevTools MCP availability (checked at task start)
 - Course language from `journal.md` → `## Course Context` (safety-net: appended to prompt if no language instruction is already present)
 
@@ -61,19 +61,19 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 
 ## Phase 2a: Single Mode
 
-3. Read `assets/prompts/image-{slug}.md`.
-4. Extract the `Complete Prompt:` section (the quoted string).
+3. Find the `<section>` whose heading is `#### {slug}` inside a `#### Images` block in `journal.md` → `## Sessions`.
+4. Extract the `__Prompt:__` value (the quoted string).
 5. Execute (Phase 3 → 4 → 5 below), then stop.
 
 ---
 
 ## Phase 2b: Batch Mode — Collect Queue
 
-3. Scan `assets/prompts/` for all files matching `image-*.md`.
-4. Derive slug per file (e.g. `image-fox-samurai.md` → `fox-samurai`).
-5. Check if `assets/images/{slug}.png` already exists:
-   - **Exists** → mark `⏭ skipped`
-   - **Missing** → add to queue
+3. Scan every session's `#### Images` block in `journal.md` → `## Sessions` for `<section>` image entries.
+4. Read the slug per entry from its `#### {slug}` heading.
+5. Skip if already generated:
+   - `__Status:__` is `generated`, **or** `assets/images/{slug}.png` already exists → mark `⏭ skipped`
+   - otherwise (`__Status:__ prompt-ready` and no PNG) → add to queue
 6. Print queue:
    ```
    Batch queue: {N} to process, {M} skipped (already done)
@@ -89,7 +89,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ### Automated Batch
 
-8. Read all pending prompt files, extract `Complete Prompt:` strings. Read course language from `journal.md` → `## Course Context`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
+8. Read all pending `<section>` entries, extract their `__Prompt:__` strings. Read course language from `journal.md` → `## Course Context`. For each prompt, if it does not already contain an in-image language instruction, append: `"All text visible in the image (labels, headings, UI elements) must be written in {language}."`
 9. Inject the following self-contained JS loop into the browser:
 
    ```js
@@ -265,6 +265,11 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
   ```
 - Confirm: `"✅ {slug}.png saved ({size} KB) → {path}"`
 
+## Phase 5b: Update Journal Entry *(all modes)*
+
+- In the `<section>` for `{slug}`, set `__Status:__` to `generated`.
+- The `![…](assets/images/{slug}.png)` embed is already present (written by `:create-image`) and now renders the saved PNG — no change needed unless the path differs from the saved location, in which case update it to match.
+
 ---
 
 ## Phase 6: Summary *(batch modes only)*
@@ -284,7 +289,8 @@ If any failures: list slugs, suggest `:generate-image {slug}` to retry individua
 | Feature                  | `:create-image` | `:generate-image {slug}` | `:generate-image` (batch) |
 |--------------------------|-----------------|--------------------------|---------------------------|
 | Generate prompt          | ✅              | ❌ (reads saved)          | ❌ (reads saved)           |
-| Save prompt to file      | ✅ always        | ❌                         | ❌                         |
+| Save prompt to journal   | ✅ always        | ❌                         | ❌                         |
+| Set Status → generated   | ❌ (prompt-ready)| ✅                         | ✅                         |
 | Submit to ChatGPT        | ❌              | ✅ single                 | ✅ all pending             |
 | Download image           | ❌              | ✅                         | ✅                         |
 | Save to project folder   | ❌              | ✅                         | ✅                         |

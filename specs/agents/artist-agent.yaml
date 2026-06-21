@@ -90,11 +90,11 @@ agent_customization:
 commands:
   :create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   :create-logo: "run task `tasks/create-logo.md`"
-  :create-image {description}: "run task `tasks/create-image.md` — generate prompt and save to assets/prompts/ (no browser required)"
+  :create-image {number} {type} {description}: "run task `tasks/create-image.md` — generate prompt and save as a `<section>` in the target session's `#### Images` block in journal.md (no browser required). Session args optional when only one session exists."
   :generate-image {slug?}: >-
     run task `tasks/generate-image.md`.
-    With slug: execute that single saved prompt via browser.
-    Without slug: show mode selection (single / sequential batch / automated batch) over all pending prompts in assets/prompts/.
+    With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via browser.
+    Without slug: show mode selection (single / sequential batch / automated batch) over all pending image entries across the sessions' `#### Images` blocks.
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"

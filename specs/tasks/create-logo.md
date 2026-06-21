@@ -15,7 +15,7 @@ Creates a professional, actionable prompt that can be used with AI image generat
 ## Output
 
 - A detailed logo prompt (displayed as formatted text)
-- Optionally saved to `assets/prompts/logo-prompt.md`
+- Saved to `journal.md` → `## Visual Identity` → `__Example Prompts:__` (the `Logo:` entry), since the logo is course-wide and not tied to a single session
 
 ## Steps
 
@@ -32,7 +32,7 @@ Creates a professional, actionable prompt that can be used with AI image generat
    - Mood and atmosphere
    - Technical specifications (scalable, suitable for digital/print)
 7. Present the prompt in a clear, actionable format.
-8. Optionally save to `assets/prompts/logo-prompt.md`.
+8. Save the complete prompt into `journal.md` → `## Visual Identity` → `__Example Prompts:__` as the `1. Logo:` entry (replace the existing placeholder/prompt). Confirm: "Logo prompt saved: `journal.md` → `## Visual Identity` → `__Example Prompts:__`"
 
 ## Output Format
 

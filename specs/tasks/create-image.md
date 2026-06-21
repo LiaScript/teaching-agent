@@ -5,9 +5,17 @@
 Generates a detailed image prompt for course materials based on a user description, aligned with the visual style guide.
 Creates professional, actionable prompts for AI image generators that maintain visual consistency with the course identity.
 
+## Command
+
+`:create-image {number} {type} {description}` — `{number} {type}` identify the target session; `{description}` is what should be visualized.
+
+- If `{number} {type}` are omitted and exactly **one** session exists in `journal.md` → `## Sessions`, use that session without asking.
+- If `{number} {type}` are omitted and **multiple** sessions exist, ask which session the image belongs to (numbered list).
+
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
+- Target session: `{number} {type}` → the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - Image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet)
 - Website color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet)
 - Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)
@@ -16,7 +24,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 ## Output
 
 - A detailed image prompt (displayed as formatted text)
-- Always saved to `assets/prompts/image-{slug}.md` (created automatically if folder does not exist)
+- Always saved as a `<section>` entry inside the target session's `#### Images` block in `journal.md` → `## Sessions` → `### {number}. {title}` (the `#### Images` block is created automatically if it does not exist)
 
 ## Steps
 
@@ -39,9 +47,12 @@ Creates professional, actionable prompts for AI image generators that maintain v
 8. Generate a detailed, actionable prompt.
 9. Include accessibility considerations (alt text suggestion).
 10. Present the prompt in a clear format.
-11. Save to `assets/prompts/image-{slug}.md` — always, without asking.
-    Create the folder if it does not exist.
-    Confirm: "Prompt saved: `assets/prompts/image-{slug}.md`"
+11. Derive a `{slug}` from the description (kebab-case).
+12. Save into the target session's `#### Images` block — always, without asking:
+    - Locate the `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
+    - If it has no `#### Images` block, create one (placed after `**References:**`, before `#### Validation Report` if present).
+    - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {slug}` already exists, replace it.
+    - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{slug}`"
 
 ## Output Format
 
@@ -74,6 +85,31 @@ Technical Specifications:
 - Format: PNG/JPG/SVG
 - Usage: [Slide/Handout/Web/etc.]
 ```
+
+## Journal Entry Format
+
+Each image is stored as one `<section>` inside the session's `#### Images` block. The image is **always** embedded — the `![…]` line renders the PNG once `:generate-image` has saved it (and shows as a broken-image placeholder until then, which is the intended "not yet generated" signal).
+
+```markdown
+#### Images
+
+<section>
+
+#### {slug}
+
+* __Datei:__ assets/images/{slug}.png
+* __Status:__ prompt-ready
+* __Alt-Text:__ {descriptive alt text}
+* __Prompt:__
+  "{full detailed prompt ready for image generator}"
+
+![{alt text}](assets/images/{slug}.png)
+
+</section>
+```
+
+- `__Status:__` starts as `prompt-ready`; `:generate-image` flips it to `generated` after saving the PNG.
+- One `<section>` per image; multiple images stack under the same `#### Images` block.
 
 ## Special Features
 
