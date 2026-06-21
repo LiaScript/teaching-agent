@@ -21,7 +21,7 @@ Supports users with git operations, GitHub integration, and project publishing.
 
 0. Load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
-   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `/validate-course`.
+   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
 2. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 3. Refer to the all files in the `materials/` folder or ask the user which one to embed in the materials list.
 4. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling.

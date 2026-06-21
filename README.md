@@ -74,16 +74,16 @@ Teaching-Agent guides you through **6 phases** — starting with project initial
 
 ```mermaid
 flowchart TD
-    INIT["**Phase 0 · INIT**<br/>/init-course<br/>→ journal.md / Course Context"]
-    OUTLINE["**Phase 1 · FOUNDATION**<br/>/create-outline<br/>→ journal.md / Outline"]
-    DIDACTICS["**Phase 2 · DIDACTICS**<br/>/create-didactics<br/>→ journal.md / Didactics"]
-    AGENDA["**Phase 3 · PLANNING**<br/>/create-agenda<br/>→ journal.md / Agenda"]
-    DEV["**Phase 4 · DEVELOPMENT**<br/>/create-session → journal.md / Session Skeletons<br/>/promote-session → materials/<br/>/coauthor-materials"]
-    FINAL["**Phase 5 · FINALIZATION**<br/>/validate-course<br/>/assemble-bundle"]
+    INIT["**Phase 0 · INIT**<br/>:init-course<br/>→ journal.md / Course Context"]
+    OUTLINE["**Phase 1 · FOUNDATION**<br/>:create-outline<br/>→ journal.md / Outline"]
+    DIDACTICS["**Phase 2 · DIDACTICS**<br/>:create-didactics<br/>→ journal.md / Didactics"]
+    AGENDA["**Phase 3 · PLANNING**<br/>:create-agenda<br/>→ journal.md / Agenda"]
+    DEV["**Phase 4 · DEVELOPMENT**<br/>:create-session → journal.md / Session Skeletons<br/>:promote-session → materials/<br/>:coauthor-materials"]
+    FINAL["**Phase 5 · FINALIZATION**<br/>:validate-course<br/>:assemble-bundle"]
 
-    ART1["🎨 **Artist-Agent**<br/>/create-visuals · /create-logo<br/>→ journal.md / Visual Identity"]
-    ART2["🎨 **Artist-Agent**<br/>/create-image<br/>(on demand)"]
-    DEVAGT["🛠️ **Development-Agent**<br/>/manage-git · /create-project<br/>(anytime)"]
+    ART1["🎨 **Artist-Agent**<br/>:create-visuals · :create-logo<br/>→ journal.md / Visual Identity"]
+    ART2["🎨 **Artist-Agent**<br/>:create-image<br/>(on demand)"]
+    DEVAGT["🛠️ **Development-Agent**<br/>:manage-git · :create-project<br/>(anytime)"]
 
     INIT --> OUTLINE --> DIDACTICS --> AGENDA --> DEV --> FINAL
     DIDACTICS -.->|optional| ART1 -.-> AGENDA
@@ -121,7 +121,7 @@ flowchart TD
 code /path/to/teaching-agent
 
 # Activate the agent in chat
-@teaching-agent /help
+@teaching-agent :help
 ```
 
 The agent will introduce itself and show available commands.
@@ -132,7 +132,7 @@ The agent will introduce itself and show available commands.
 
 ### Step 1: Create the Lecture Outline
 
-**Command:** `/create-outline`
+**Command:** `:create-outline`
 
 **What it does:**
 - Defines the course title, target audience, and time commitment
@@ -144,7 +144,7 @@ The agent will introduce itself and show available commands.
 
 **Example interaction:**
 ```
-You: @teaching-agent /create-outline
+You: @teaching-agent :create-outline
 
 Agent: Great! Let's build your lecture outline. I need some information:
 
@@ -161,7 +161,7 @@ Agent: Perfect! Now let's define the abstract...
 
 ### Step 2: Define Didactics & Teaching Style
 
-**Command:** `/create-didactics`
+**Command:** `:create-didactics`
 
 **What it does:**
 - Designs the didactic concept (teaching methods, learning phases)
@@ -178,7 +178,7 @@ From this point forward, the agent **adopts your professor persona** when creati
 
 ### Step 3: Build the Lecture Agenda
 
-**Command:** `/create-agenda`
+**Command:** `:create-agenda`
 
 **What it does:**
 - Creates a structured schedule of sessions/modules
@@ -193,7 +193,7 @@ From this point forward, the agent **adopts your professor persona** when creati
 
 ### Step 4: Create Session Skeletons
 
-**Command:** `/create-session {number} {type} {title?}`
+**Command:** `:create-session {number} {type} {title?}`
 
 **Parameters:**
 - `{number}`: Session number (e.g., 1, 2, 3)
@@ -208,14 +208,14 @@ From this point forward, the agent **adopts your professor persona** when creati
 
 **Example:**
 ```
-@teaching-agent /create-session 1 lecture "Introduction to Neural Networks"
+@teaching-agent :create-session 1 lecture "Introduction to Neural Networks"
 ```
 
 ---
 
 ### Step 5: Promote Skeletons to Full Materials
 
-**Command:** `/promote-session {number} {type}`
+**Command:** `:promote-session {number} {type}`
 
 **What it does:**
 - Converts a skeleton into detailed session materials
@@ -227,14 +227,14 @@ From this point forward, the agent **adopts your professor persona** when creati
 
 **Example:**
 ```
-@teaching-agent /promote-session 1 lecture
+@teaching-agent :promote-session 1 lecture
 ```
 
 ---
 
 ### Step 6: Collaborate on Content (Co-Authoring)
 
-**Command:** `/coauthor-materials`
+**Command:** `:coauthor-materials`
 
 **What it does:**
 - Interactive, dialog-based content creation
@@ -250,7 +250,7 @@ From this point forward, the agent **adopts your professor persona** when creati
 
 **Example workflow:**
 ```
-You: @teaching-agent /coauthor-materials
+You: @teaching-agent :coauthor-materials
 
 Agent: I'm ready to co-author materials with you in the professor persona!
         Which session are we working on?
@@ -264,7 +264,7 @@ Agent: Got it! Let me suggest some content for the introduction...
 
 ### Step 7: Validate Your Course
 
-**Command:** `/validate-course`
+**Command:** `:validate-course`
 
 **What it does:**
 - Checks consistency across `journal.md` sections and materials
@@ -278,7 +278,7 @@ Agent: Got it! Let me suggest some content for the introduction...
 
 ### Step 8: Assemble the Final Bundle
 
-**Command:** `/assemble-bundle`
+**Command:** `:assemble-bundle`
 
 **What it does:**
 - Collects all documents into a complete package
@@ -293,16 +293,16 @@ Agent: Got it! Let me suggest some content for the introduction...
 
 | Command                               | Purpose                      | Output                      |
 | ------------------------------------- | ---------------------------- | --------------------------- |
-| `/help`                               | Show available commands      | —                           |
-| `/create-outline`                     | Define course foundation     | `journal.md` → `## Outline` |
-| `/create-didactics`                   | Design teaching approach     | `journal.md` → `## Didactics` |
-| `/create-agenda`                      | Structure sessions           | `journal.md` → `## Agenda` |
-| `/create-session {n} {type} {title?}` | Create session skeleton      | `journal.md` → `## Session Skeletons`   |
-| `/promote-session {n} {type}`         | Expand to full materials     | `materials/{n}-{type}.md`   |
-| `/coauthor-materials`                 | Interactive content creation | Refined materials           |
-| `/validate-course`                    | Check consistency            | `journal.md` → `## Validation` |
-| `/assemble-bundle`                    | Package everything           | `course-bundle/`            |
-| `/exit`                               | End session                  | —                           |
+| `:help`                               | Show available commands      | —                           |
+| `:create-outline`                     | Define course foundation     | `journal.md` → `## Outline` |
+| `:create-didactics`                   | Design teaching approach     | `journal.md` → `## Didactics` |
+| `:create-agenda`                      | Structure sessions           | `journal.md` → `## Agenda` |
+| `:create-session {n} {type} {title?}` | Create session skeleton      | `journal.md` → `## Session Skeletons`   |
+| `:promote-session {n} {type}`         | Expand to full materials     | `materials/{n}-{type}.md`   |
+| `:coauthor-materials`                 | Interactive content creation | Refined materials           |
+| `:validate-course`                    | Check consistency            | `journal.md` → `## Validation` |
+| `:assemble-bundle`                    | Package everything           | `course-bundle/`            |
+| `:exit`                               | End session                  | —                           |
 
 ---
 
@@ -311,29 +311,29 @@ Agent: Got it! Let me suggest some content for the introduction...
 ### Example: Creating a Machine Learning Course
 
 ```
-1. @teaching-agent /create-outline
+1. @teaching-agent :create-outline
    → Define "Intro to ML" for undergrad students
 
-2. @teaching-agent /create-didactics
+2. @teaching-agent :create-didactics
    → Set persona: "Practical, encouraging professor with industry experience"
    → Style: Conversational, hands-on, with real-world examples
 
-3. @teaching-agent /create-agenda
+3. @teaching-agent :create-agenda
    → 14 sessions: 10 lectures + 4 exercises
 
-4. @teaching-agent /create-session 1 lecture "What is Machine Learning?"
+4. @teaching-agent :create-session 1 lecture "What is Machine Learning?"
    → Build skeleton
 
-5. @teaching-agent /promote-session 1 lecture
+5. @teaching-agent :promote-session 1 lecture
    → Generate full materials with examples
 
-6. @teaching-agent /coauthor-materials
+6. @teaching-agent :coauthor-materials
    → Add interactive code examples and quizzes
 
-7. @teaching-agent /validate-course
+7. @teaching-agent :validate-course
    → Check everything is consistent
 
-8. @teaching-agent /assemble-bundle
+8. @teaching-agent :assemble-bundle
    → Package for LiaScript deployment
 ```
 
@@ -348,5 +348,5 @@ Agent: Got it! Let me suggest some content for the introduction...
 **Ready to build your lecture?** Start with:
 
 ```
-@teaching-agent /help
+@teaching-agent :help
 ```

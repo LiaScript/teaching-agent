@@ -68,14 +68,14 @@ The course context acts as the governance layer: it defines the course type, ter
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
 11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, date).
 12. Confirm completion and suggest the next step based on course type:
-    - **lecture-series / workshop** → `/create-outline`
-    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
-    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
-    - **improve-existing** → `/analyze-existing` (scans existing project memory and materials, offers to fill gaps)
+    - **lecture-series / workshop** → `:create-outline`
+    - **self-paced** → `:create-outline` (agenda depends on instructor answer)
+    - **single-lesson** → `:create-outline` → `:create-didactics` → `:create-agenda` (if yes) → `:create-session 1 lesson`
+    - **improve-existing** → `:analyze-existing` (scans existing project memory and materials, offers to fill gaps)
 
 ## Notes
 
-- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `journal.md` → `## Course Context` and adapt their behavior accordingly.
+- All subsequent tasks (`:create-outline`, `:create-didactics`, `:create-agenda`, etc.) will read `journal.md` → `## Course Context` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
-- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.
+- For `improve-existing`, `:analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.
 - The skeleton's formatting rules are binding: flat bullet sections, no `###` sub-headings outside `## Sessions` / `## Templates` / `## Agents` / `## Validation` / `## Notes Backup`, and the Dashboard is only ever updated via `tasks/update-dashboard.md`.

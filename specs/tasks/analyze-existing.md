@@ -3,7 +3,7 @@
 ## Purpose
 
 Analyzes an existing course project to identify which `journal.md` sections and material files are present and which are missing.
-Used as the **second step after `/init-course`** when the course type is `improve-existing`.
+Used as the **second step after `:init-course`** when the course type is `improve-existing`.
 
 Offers two paths for each missing core section:
 - **Auto-generate** — agent reads existing materials and reverse-engineers a draft
@@ -11,7 +11,7 @@ Offers two paths for each missing core section:
 
 ## Inputs
 
-- `journal.md` → `## Course Context` (created by `/init-course`, mandatory)
+- `journal.md` → `## Course Context` (created by `:init-course`, mandatory)
 - Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`, `## Agents`
 - Existing folder: `materials/`
 
@@ -54,9 +54,9 @@ Offers two paths for each missing core section:
    - Add a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
 
 6. If **interactive creation** is chosen, run the relevant task:
-   - `journal.md` → `## Outline` → `/create-outline`
-   - `journal.md` → `## Didactics` → `/create-didactics`
-   - `journal.md` → `## Agenda` → `/create-agenda`
+   - `journal.md` → `## Outline` → `:create-outline`
+   - `journal.md` → `## Didactics` → `:create-didactics`
+   - `journal.md` → `## Agenda` → `:create-agenda`
 
 6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
    - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
@@ -79,7 +79,7 @@ Offers two paths for each missing core section:
    - Missing references or learning objectives
    - Language/tone inconsistencies vs. `journal.md` → `## Course Context` conventions
 
-8. Suggest a prioritized action list and the recommended next step (usually `/coauthor-materials`).
+8. Suggest a prioritized action list and the recommended next step (usually `:coauthor-materials`).
 
 9. Save the full status overview as `journal.md` → `## Analysis Status`.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

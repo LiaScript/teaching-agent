@@ -4,9 +4,9 @@
 
 Runs all structural setup steps in one automated pass — without stopping for approval after each step.
 
-The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `journal.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
+The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `journal.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`:coauthor-materials`) starts after the scaffold is complete.
 
-This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init-course` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
+This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `:init-course` → `:create-outline` → `:create-didactics` → `:create-agenda` → `:create-session` one by one.
 
 ## Inputs
 
@@ -128,19 +128,19 @@ After each section is saved, print a brief progress line:
    > | Agenda         | ✅ / skipped    |
    > | Sessions       | ✅ overview + [N] subsections |
    >
-   > "Next step: `/coauthor-materials` to start with Session 1."
+   > "Next step: `:coauthor-materials` to start with Session 1."
 
 8. Offer a note save:
-   > "Should I save the course structure decisions as a Decision Note? (`/save-decision course-structure`)"
+   > "Should I save the course structure decisions as a Decision Note? (`:save-decision course-structure`)"
 
 ## Escalation Rules
 
 - If a required input is missing and cannot be reasonably inferred: **pause and ask** — do not guess.
 - If the session count is unusually high (>12 for a single-lesson or >20 overall): flag it and ask to confirm before continuing.
-- If course type is `improve-existing`: redirect to `/analyze-existing` instead.
+- If course type is `improve-existing`: redirect to `:analyze-existing` instead.
 
 ## Notes
 
-- Scaffold mode does NOT run `/promote-session` or `/coauthor-materials` — those remain interactive.
+- Scaffold mode does NOT run `:promote-session` or `:coauthor-materials` — those remain interactive.
 - All generated `journal.md` sections are drafts. The instructor reviews and refines them during co-authoring.
 - The Persona Voice Sample in `journal.md` → `## Didactics` is especially important — it anchors tone for all future co-authoring sessions.

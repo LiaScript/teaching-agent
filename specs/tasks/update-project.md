@@ -21,7 +21,7 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 ## Steps
 
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
-   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `/validate-course`.
+   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
 2. Ask the user about their git/GitHub experience and confirm they want to update and publish.
 3. Scan the `materials/` folder for new or updated files.
 4. Update the `project.yaml` and ask the user to include all of the current materials or to import only a subset. Use colors and style from `journal.md` → `## Visual Identity` for any styling updates.

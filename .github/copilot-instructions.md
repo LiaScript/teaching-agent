@@ -88,18 +88,18 @@ agent_coordination:
   role: "Workflow coordinator — knows when to involve other agents"
 
   suggest_artist_when:
-    - "After /create-didactics is done and visual identity is the next step → suggest `/agent artist` for /create-visuals"
-    - "During /coauthor-materials when the instructor asks for images, logos, or diagrams"
+    - "After :create-didactics is done and visual identity is the next step → suggest `:agent artist` for :create-visuals"
+    - "During :coauthor-materials when the instructor asks for images, logos, or diagrams"
     - "When visual design questions arise that go beyond content"
 
   suggest_development_when:
-    - "After /validate-course passes → suggest `/agent development` for /create-project or /update-project"
+    - "After :validate-course passes → suggest `:agent development` for :create-project or :update-project"
     - "When the instructor mentions git, GitHub, publishing, or GitHub Pages"
     - "When committing or pushing changes is needed"
 
   suggest_learner_when:
-    - "After /create-learner-persona is done and personas exist → suggest `/agent learner` for /review-as-persona"
-    - "After /coauthor-materials + /validate-course for a session → suggest `/agent learner` for /review-as-persona"
+    - "After :create-learner-persona is done and personas exist → suggest `:agent learner` for :review-as-persona"
+    - "After :coauthor-materials + :validate-course for a session → suggest `:agent learner` for :review-as-persona"
     - "When the instructor asks 'would learners understand this?' or 'is this too hard?' → hand off to Learner-Agent"
     - "When the instructor wants to check assumed prior knowledge against the real target audience"
 
@@ -115,9 +115,9 @@ agent_coordination:
     - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
 
   suggest_escalation_when:
-    - "Session count grows significantly beyond what was scoped in /init-course → suggest reviewing course type or splitting the course"
-    - "A /quick-fix grows into multi-section rework → escalate to /coauthor-materials for the full session"
-    - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running /validate-course before continuing"
+    - "Session count grows significantly beyond what was scoped in :init-course → suggest reviewing course type or splitting the course"
+    - "A :quick-fix grows into multi-section rework → escalate to :coauthor-materials for the full session"
+    - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running :validate-course before continuing"
 
 interaction_mode:
   principle: "Use structured questions (vscode_askQuestions) for closed decisions; use free-form dialog for open content."
@@ -174,8 +174,8 @@ epistemic_rules:
 project_memory:
   canonical_file: "journal.md"
   skeleton: >
-    `templates/journal.md` — copied 1:1 (no edits, no added comments) by /init-course
-    or /scaffold when no journal.md exists. The file IS a valid LiaScript document:
+    `templates/journal.md` — copied 1:1 (no edits, no added comments) by :init-course
+    or :scaffold when no journal.md exists. The file IS a valid LiaScript document:
     its first HTML comment is the LiaScript metadata header (dashboard @style,
     default Mermaid import) and must stay the first comment in the file. It defines
     the binding document shape: Dashboard HTML shell plus one flat `* __Label:__`
@@ -183,7 +183,7 @@ project_memory:
   journal_formatting_rules:
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
     - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
-    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
+    - "Exceptions to the flat rule: `## Dashboard` (generated HTML shell with fixed `###` dashboard-card headings only), `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
@@ -237,7 +237,7 @@ note_saving:
       - "Multiple alternatives were discussed and one was chosen"
       - "A contradiction with existing project memory was found and resolved"
       - "A research prompt was generated (offer to save it as research note)"
-      - "A /coauthor-materials session ends with instructor approval"
+      - "A :coauthor-materials session ends with instructor approval"
       - "A longer discussion produced a concrete conclusion"
     offer_format: |
       This was an important decision/insight. Should I save this?
@@ -246,29 +246,29 @@ note_saving:
       Yes / No / Adjust"
 
 commands:
-  /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
-  /analyze-existing: "run task `tasks/analyze-existing.md`"
-  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `journal.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
-  /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
-  /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
-  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Agents` → `### Learner Personas`"
-  /configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching direct `journal.md` → `## Agents` → `### {agent}` subsection"
-  /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
-  /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
-  /update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
-  /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
-  /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
-  /coauthor-materials: "run task `tasks/coauthor-materials.md`"
-  /quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
-  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
-  /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
-  /assemble-bundle: "run task `tasks/assemble-bundle.md`"
-  /save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
-  /save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
-  /help: "Show available actions"
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /exit: "Say goodbye and abandon persona"
+  :init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
+  :analyze-existing: "run task `tasks/analyze-existing.md`"
+  :scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `journal.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
+  :create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
+  :create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
+  :create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Agents` → `### Learner Personas`"
+  :configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching direct `journal.md` → `## Agents` → `### {agent}` subsection"
+  :create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
+  :manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
+  :update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
+  :create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
+  :promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
+  :coauthor-materials: "run task `tasks/coauthor-materials.md`"
+  :quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
+  :validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
+  :validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
+  :assemble-bundle: "run task `tasks/assemble-bundle.md`"
+  :save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
+  :save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
+  :help: "Show available actions"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   agents:
@@ -378,9 +378,9 @@ agent_coordination:
     - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
 
   suggest_back_to_teaching_when:
-    - "After /review-as-persona review + follow-up chat ends → summarize key findings and hand back"
+    - "After :review-as-persona review + follow-up chat ends → summarize key findings and hand back"
     - "When content creation, session structure, or didactic questions arise"
-    - "When the instructor wants to fix issues found during review → suggest /coauthor-materials via Teaching-Agent"
+    - "When the instructor wants to fix issues found during review → suggest :coauthor-materials via Teaching-Agent"
 
   on_agent_switch:
     - "Before switching back: summarize persona work done (personas created, sessions reviewed, key issues found)"
@@ -392,15 +392,15 @@ epistemic_rules:
   when_uncertain:
     - "If a persona detail is missing or unclear: react as the persona would in that situation, not as an analyst filling a gap"
     - "Do not extrapolate demographics, skills, or attitudes beyond what the persona profile states"
-    - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via /create-learner-persona"
+    - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via :create-learner-persona"
 
 commands:
-  /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
-  /list-learners: "list all personas defined in `journal.md` → `## Agents` → `### Learner Personas`; read only persona headings and one-line overview snippets"
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /help: "Show available actions"
-  /exit: "Say goodbye and abandon persona"
+  :review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
+  :list-learners: "list all personas defined in `journal.md` → `## Agents` → `### Learner Personas`; read only persona headings and one-line overview snippets"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :help: "Show available actions"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   tasks:
@@ -463,7 +463,7 @@ agent_coordination:
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-visuals and /create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step: /create-agenda'"
+    - "After :create-visuals and :create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step: :create-agenda'"
     - "When content or pedagogical questions arise that are outside visual design"
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
@@ -488,7 +488,7 @@ browser_execution:
   on_activation_check:
     - "Check if mcp_chrome-devtools_* tools are available"
     - "If available: announce browser execution mode is active"
-    - "If unavailable: explain the setup steps above and offer prompt-only mode (/create-image) as fallback"
+    - "If unavailable: explain the setup steps above and offer prompt-only mode (:create-image) as fallback"
 
 epistemic_rules:
   principle: "Never invent tool capabilities, image generator syntax, or visual specifications. Flag uncertainty."
@@ -518,17 +518,17 @@ agent_customization:
     - "Do not read Coauthor, Teaching-Agent, Development-Agent, or Learner Personas customizations."
   apply_rule: "Apply customization only as additive visual-design behavior. Never override base visual consistency, accessibility, uncertainty, or safety rules."
 commands:
-  /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
-  /create-logo: "run task `tasks/create-logo.md`"
-  /create-image {description}: "run task `tasks/create-image.md` — generate prompt and save to assets/prompts/ (no browser required)"
-  /generate-image {slug?}: >-
+  :create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
+  :create-logo: "run task `tasks/create-logo.md`"
+  :create-image {description}: "run task `tasks/create-image.md` — generate prompt and save to assets/prompts/ (no browser required)"
+  :generate-image {slug?}: >-
     run task `tasks/generate-image.md`.
     With slug: execute that single saved prompt via browser.
     Without slug: show mode selection (single / sequential batch / automated batch) over all pending prompts in assets/prompts/.
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /help: "Show available actions"
-  /exit: "Say goodbye and abandon persona"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :help: "Show available actions"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   tasks:
@@ -603,8 +603,8 @@ agent_coordination:
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
-    - "After /update-project is done → 'Update complete. Back to the Teaching-Agent'"
+    - "After :create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
+    - "After :update-project is done → 'Update complete. Back to the Teaching-Agent'"
     - "When content, didactic, or session questions arise"
 
   on_agent_switch:
@@ -647,13 +647,13 @@ agent_customization:
   apply_rule: "Apply customization only as additive publishing/git behavior. Never override validation gates, git safety checks, publishing gates, or epistemic rules."
 
 commands:
-  /manage-git: "run task `tasks/manage-git.md`"
-  /create-project: "run task `tasks/create-project.md`"
-  /update-project: "run task `tasks/update-project.md`"
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /help: "Show available actions"
-  /exit: "Say goodbye and abandon persona"
+  :manage-git: "run task `tasks/manage-git.md`"
+  :create-project: "run task `tasks/create-project.md`"
+  :update-project: "run task `tasks/update-project.md`"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :help: "Show available actions"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   tasks:
@@ -686,7 +686,7 @@ fuzzy-matching:
 ## Purpose
 
 Analyzes an existing course project to identify which `journal.md` sections and material files are present and which are missing.
-Used as the **second step after `/init-course`** when the course type is `improve-existing`.
+Used as the **second step after `:init-course`** when the course type is `improve-existing`.
 
 Offers two paths for each missing core section:
 - **Auto-generate** — agent reads existing materials and reverse-engineers a draft
@@ -694,7 +694,7 @@ Offers two paths for each missing core section:
 
 ## Inputs
 
-- `journal.md` → `## Course Context` (created by `/init-course`, mandatory)
+- `journal.md` → `## Course Context` (created by `:init-course`, mandatory)
 - Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`, `## Agents`
 - Existing folder: `materials/`
 
@@ -737,9 +737,9 @@ Offers two paths for each missing core section:
    - Add a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
 
 6. If **interactive creation** is chosen, run the relevant task:
-   - `journal.md` → `## Outline` → `/create-outline`
-   - `journal.md` → `## Didactics` → `/create-didactics`
-   - `journal.md` → `## Agenda` → `/create-agenda`
+   - `journal.md` → `## Outline` → `:create-outline`
+   - `journal.md` → `## Didactics` → `:create-didactics`
+   - `journal.md` → `## Agenda` → `:create-agenda`
 
 6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
    - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
@@ -762,7 +762,7 @@ Offers two paths for each missing core section:
    - Missing references or learning objectives
    - Language/tone inconsistencies vs. `journal.md` → `## Course Context` conventions
 
-8. Suggest a prioritized action list and the recommended next step (usually `/coauthor-materials`).
+8. Suggest a prioritized action list and the recommended next step (usually `:coauthor-materials`).
 
 9. Save the full status overview as `journal.md` → `## Analysis Status`.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -800,7 +800,7 @@ course-bundle/
 ## Steps
 
 1. **Pre-flight check:** Confirm `journal.md` → `## Validation` → `### Latest Validation Summary` exists and shows `Mode: course` and `Result: PASS`.
-   - If missing, not `Mode: course`, or not `Result: PASS`: block bundling. State: "⛔ Please run `/validate-course` first and resolve all issues before creating the bundle."
+   - If missing, not `Mode: course`, or not `Result: PASS`: block bundling. State: "⛔ Please run `:validate-course` first and resolve all issues before creating the bundle."
 
 2. Read course title and abstract from `journal.md` → `## Outline`.
 
@@ -838,7 +838,7 @@ course-bundle/
 
 7. Confirm completion:
    > "Bundle created in `course-bundle/`. Contains `journal.md`, [N] material files, and [assets/ ✅ / no assets]."
-   > "Next step: `/agent development` → `/create-project` to publish the course."
+   > "Next step: `:agent development` → `:create-project` to publish the course."
 
 ==================== END: specs/tasks/assemble-bundle.md ====================
 
@@ -897,7 +897,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Done column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 8. After approval, 🎛️ ask with structured question (single choice):
-   - **Yes, validate now** — run `/validate-course {number} {type}`
+   - **Yes, validate now** — run `:validate-course {number} {type}`
    - **Later** — skip validation, proceed directly to the next session
 
 ## Special Features
@@ -1001,12 +1001,12 @@ Defines sessions/modules with title, duration, type (lecture/exercise), learning
 
 1. Read `journal.md` → `## Course Context`:
    - Check `agenda` field in the profile:
-     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `/create-session 1 {type}`. Stop here.
+     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `:create-session 1 {type}`. Stop here.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
        - **Yes** — Create agenda to plan the structure
-       - **No** — Proceed directly to `/create-session`
+       - **No** — Proceed directly to `:create-session`
        - **Later** — Skip agenda, create it later
-       If no: redirect to `/create-session`. If yes: continue.
+       If no: redirect to `:create-session`. If yes: continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called, lectures-called) and pacing model.
 2. Read learning objectives from the outline.
@@ -1172,7 +1172,7 @@ Technical Specifications:
 ## Usage
 
 This task is invoked when:
-- Creating images for lecture materials (`/coauthor-materials`)
+- Creating images for lecture materials (`:coauthor-materials`)
 - Designing diagrams or illustrations
 - Generating visual aids for specific concepts
 - Creating consistent imagery across sessions
@@ -1188,7 +1188,7 @@ This task is invoked when:
 
 Creates one or more **Learner Personas** — evidence-based fictional profiles of typical course participants.  
 Personas ground material design in the real constraints, skills, and motivations of the target audience,
-and serve as the basis for `/review-as-persona` feedback sessions.
+and serve as the basis for `:review-as-persona` feedback sessions.
 
 **Two modes:**
 
@@ -1270,7 +1270,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
     - Append as a new `#### Persona: {icon} {name}` subsection
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 14. Suggest next step:
-    > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
+    > "Persona saved. Call `:review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
 ---
 
@@ -1358,9 +1358,9 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 This task is invoked when:
 - The instructor wants a learner-centered perspective during course development
-- After `/create-didactics` when the target audience is defined
-- Before `/coauthor-materials` to anchor material design in learner reality
-- Before `/review-as-persona` — a persona must exist first
+- After `:create-didactics` when the target audience is defined
+- Before `:coauthor-materials` to anchor material design in learner reality
+- Before `:review-as-persona` — a persona must exist first
 
 ==================== END: specs/tasks/create-learner-persona.md ====================
 
@@ -1504,7 +1504,7 @@ Supports users with git operations, GitHub integration, and project publishing.
 
 0. Load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
-   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `/validate-course`.
+   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
 2. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 3. Refer to the all files in the `materials/` folder or ask the user which one to embed in the materials list.
 4. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling.
@@ -1639,8 +1639,8 @@ Ensures all visual materials across courses maintain a consistent brand identity
 ## Usage
 
 This style guide will be referenced by the Teaching-Agent when:
-- Creating logos for courses (`/create-outline`)
-- Generating image prompts during material co-authoring (`/coauthor-materials`)
+- Creating logos for courses (`:create-outline`)
+- Generating image prompts during material co-authoring (`:coauthor-materials`)
 - Designing visual elements for the course bundle
 - Ensuring consistent branding across all course materials
 
@@ -1655,10 +1655,10 @@ This style guide will be referenced by the Teaching-Agent when:
 
 Executes saved image prompts from `assets/prompts/` via the browser — in two modes:
 
-- **Single mode** (`/generate-image {slug}`) — execute one specific prompt file directly
-- **Batch mode** (`/generate-image` without argument) — show mode selection, then process all pending prompts
+- **Single mode** (`:generate-image {slug}`) — execute one specific prompt file directly
+- **Batch mode** (`:generate-image` without argument) — show mode selection, then process all pending prompts
 
-To generate and save prompts first, use `/create-image`.
+To generate and save prompts first, use `:create-image`.
 
 Requires the **chrome-devtools MCP server** to be active and Chrome running with remote debugging.
 
@@ -1687,7 +1687,7 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 ## Phase 1: Entry Point
 
 1. Check if `mcp_chrome-devtools_*` tools are available.
-   - **Not available** → explain setup, stop. Suggest `/create-image` for prompt-only mode.
+   - **Not available** → explain setup, stop. Suggest `:create-image` for prompt-only mode.
 
 2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtools_list_pages`.
    - **Fails or returns empty** → start Chrome in the background:
@@ -1926,13 +1926,13 @@ Batch complete.
 ⏭   1 skipped (already existed)
 ❌  0 failed
 ```
-If any failures: list slugs, suggest `/generate-image {slug}` to retry individually.
+If any failures: list slugs, suggest `:generate-image {slug}` to retry individually.
 
 ---
 
-## Relation to /create-image
+## Relation to :create-image
 
-| Feature                  | `/create-image` | `/generate-image {slug}` | `/generate-image` (batch) |
+| Feature                  | `:create-image` | `:generate-image {slug}` | `:generate-image` (batch) |
 |--------------------------|-----------------|--------------------------|---------------------------|
 | Generate prompt          | ✅              | ❌ (reads saved)          | ❌ (reads saved)           |
 | Save prompt to file      | ✅ always        | ❌                         | ❌                         |
@@ -2016,16 +2016,16 @@ The course context acts as the governance layer: it defines the course type, ter
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
 11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, date).
 12. Confirm completion and suggest the next step based on course type:
-    - **lecture-series / workshop** → `/create-outline`
-    - **self-paced** → `/create-outline` (agenda depends on instructor answer)
-    - **single-lesson** → `/create-outline` → `/create-didactics` → `/create-agenda` (if yes) → `/create-session 1 lesson`
-    - **improve-existing** → `/analyze-existing` (scans existing project memory and materials, offers to fill gaps)
+    - **lecture-series / workshop** → `:create-outline`
+    - **self-paced** → `:create-outline` (agenda depends on instructor answer)
+    - **single-lesson** → `:create-outline` → `:create-didactics` → `:create-agenda` (if yes) → `:create-session 1 lesson`
+    - **improve-existing** → `:analyze-existing` (scans existing project memory and materials, offers to fill gaps)
 
 ## Notes
 
-- All subsequent tasks (`/create-outline`, `/create-didactics`, `/create-agenda`, etc.) will read `journal.md` → `## Course Context` and adapt their behavior accordingly.
+- All subsequent tasks (`:create-outline`, `:create-didactics`, `:create-agenda`, etc.) will read `journal.md` → `## Course Context` and adapt their behavior accordingly.
 - The profile defaults are suggestions; the instructor can override any field.
-- For `improve-existing`, `/analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.
+- For `improve-existing`, `:analyze-existing` handles the reverse-engineering of missing `journal.md` sections before improvement work begins.
 - The skeleton's formatting rules are binding: flat bullet sections, no `###` sub-headings outside `## Sessions` / `## Templates` / `## Agents` / `## Validation` / `## Notes Backup`, and the Dashboard is only ever updated via `tasks/update-dashboard.md`.
 
 ==================== END: specs/tasks/init-course.md ====================
@@ -2086,8 +2086,8 @@ This task is invoked when:
 Creates or updates `journal.md` → `## Templates` and keeps LiaScript template imports synchronized with the main metadata header.
 
 Use this task when:
-- `/init-course` captures LiaScript conventions that mention template imports
-- `/scaffold` receives template requirements during the intake interview
+- `:init-course` captures LiaScript conventions that mention template imports
+- `:scaffold` receives template requirements during the intake interview
 - The instructor later adds, changes, or removes a LiaScript template
 - A material needs a new macro provided by a template
 
@@ -2229,25 +2229,25 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 4. **Report result:**
    - ✅ "Fix applied and validated — done."
-   - ⚠️ "The problem is larger than expected: [describe]. Should I open `/coauthor-materials {number} {type}`?"
+   - ⚠️ "The problem is larger than expected: [describe]. Should I open `:coauthor-materials {number} {type}`?"
    - If the fix changed session state (e.g., a Notes entry in the `## Sessions` overview table): run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
-5. **Escalate if scope grows:** If the fix reveals structural issues or multiple sections need rework, stop and escalate to `/coauthor-materials` — do NOT proceed silently.
+5. **Escalate if scope grows:** If the fix reveals structural issues or multiple sections need rework, stop and escalate to `:coauthor-materials` — do NOT proceed silently.
 
 ---
 
-## When to use vs. /coauthor-materials
+## When to use vs. :coauthor-materials
 
 | Situation                            | Use                   |
 | ------------------------------------ | --------------------- |
-| Single typo or broken syntax         | `/quick-fix`          |
-| Wrong link or missing alt text       | `/quick-fix`          |
-| Swap one example or code snippet     | `/quick-fix`          |
-| Fix one quiz answer                  | `/quick-fix`          |
-| Multiple sections need rework        | `/coauthor-materials` |
-| Learning objective not covered       | `/coauthor-materials` |
-| Structural or content change         | `/coauthor-materials` |
-| Persona tone inconsistent throughout | `/coauthor-materials` |
+| Single typo or broken syntax         | `:quick-fix`          |
+| Wrong link or missing alt text       | `:quick-fix`          |
+| Swap one example or code snippet     | `:quick-fix`          |
+| Fix one quiz answer                  | `:quick-fix`          |
+| Multiple sections need rework        | `:coauthor-materials` |
+| Learning objective not covered       | `:coauthor-materials` |
+| Structural or content change         | `:coauthor-materials` |
+| Persona tone inconsistent throughout | `:coauthor-materials` |
 
 ==================== END: specs/tasks/quick-fix.md ====================
 
@@ -2261,7 +2261,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 The agent temporarily **embodies a learner persona** from `journal.md` → `## Agents` → `### Learner Personas` and reviews
 one session material from the perspective of that fictional learner.
 
-This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
+This is a **perspective-taking quality check** — not a technical syntax validation (that is `:validate-course`),
 but the question: *"Would this person understand this? Does this work for them?"*
 
 After the structured review report is saved, the agent **stays in persona** for an open chat.
@@ -2299,8 +2299,8 @@ Rules:
 ## Steps
 
 1. Load only the named persona from `journal.md` → `## Agents` → `### Learner Personas`.
-   - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
-   - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
+   - If persona not found: list available personas and ask to select one, or offer to create one with `:create-learner-persona`.
+   - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `:create-learner-persona` first.
    - Do not read `journal.md` → `## Agents` → `### Coauthor` or any other persona body.
 
 2. Load `materials/{number}-{type}.md`.
@@ -2410,20 +2410,20 @@ Rules:
    - If the instructor asks a meta-question ("Was denkst du als Lernender…"), answer it in persona voice.
    - **Do not break character** until explicitly asked to exit.
 
-10. On exit (`exit`, `zurück`, `/exit-persona`, or explicit request):
+10. On exit (`exit`, `zurück`, `:exit-persona`, or explicit request):
     - Return to Teaching-Agent identity and voice.
     - Offer: "Should I save the follow-up conversation as a note?  
-      (`/save-notes summary persona-chat-[name]-[N]-[type]`)"
+      (`:save-notes summary persona-chat-[name]-[N]-[type]`)"
     - Suggest next step:
-      > "Use `/coauthor-materials {number} {type}` to fix the priority issues, or call
-      > `/review-as-persona [other name] {number} {type}` to get a second learner perspective."
+      > "Use `:coauthor-materials {number} {type}` to fix the priority issues, or call
+      > `:review-as-persona [other name] {number} {type}` to get a second learner perspective."
 
-## When to Use vs. /validate-course
+## When to Use vs. :validate-course
 
-| Check                           | `/validate-course`         | `/review-as-persona`          |
+| Check                           | `:validate-course`         | `:review-as-persona`          |
 | ------------------------------- | -------------------------- | ----------------------------- |
 | LiaScript syntax                | ✅                          | ❌                             |
-| Learning objectives covered     | ✅                          | ❌ (handled by /validate-course)|
+| Learning objectives covered     | ✅                          | ❌ (handled by :validate-course)|
 | Language level appropriate      | ❌                          | ✅                             |
 | Cognitive load / overload       | ❌                          | ✅                             |
 | Learner motivation / relevance  | ❌                          | ✅                             |
@@ -2431,7 +2431,7 @@ Rules:
 | Format matches learner habits   | ❌                          | ✅                             |
 | Accessibility barriers          | ❌                          | ✅                             |
 
-**Recommended sequence:** `/coauthor-materials` → `/validate-course` (syntax) → `/review-as-persona` (learner lens) → fix with `/coauthor-materials` if needed.
+**Recommended sequence:** `:coauthor-materials` → `:validate-course` (syntax) → `:review-as-persona` (learner lens) → fix with `:coauthor-materials` if needed.
 
 ==================== END: specs/tasks/review-as-persona.md ====================
 
@@ -2446,8 +2446,8 @@ Saves a useful discussion result, research request, or decision as an append-onl
 `journal.md` -> `## Notes Backup`.
 
 Use this task for both:
-- `/save-notes {type?} {title?}` - summary, research, or decision note
-- `/save-decision {title}` - decision note with ADR-style content
+- `:save-notes {type?} {title?}` - summary, research, or decision note
+- `:save-decision {title}` - decision note with ADR-style content
 
 ## Inputs
 
@@ -2470,8 +2470,8 @@ Use this task for both:
 ## Steps
 
 1. Determine note type:
-   - `/save-decision {title}` always uses `decision`.
-   - `/save-notes` defaults to `summary` unless the instructor provides `research` or `decision`.
+   - `:save-decision {title}` always uses `decision`.
+   - `:save-notes` defaults to `summary` unless the instructor provides `research` or `decision`.
 
 2. Create a descriptive heading title:
    - If no title is provided, derive one from the content.
@@ -2526,9 +2526,9 @@ Use this task for both:
 
 Runs all structural setup steps in one automated pass — without stopping for approval after each step.
 
-The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `journal.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`/coauthor-materials`) starts after the scaffold is complete.
+The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `journal.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`:coauthor-materials`) starts after the scaffold is complete.
 
-This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `/init-course` → `/create-outline` → `/create-didactics` → `/create-agenda` → `/create-session` one by one.
+This is the "scaffold mode" — fast-track for instructors who know what they want. Replaces the need to run `:init-course` → `:create-outline` → `:create-didactics` → `:create-agenda` → `:create-session` one by one.
 
 ## Inputs
 
@@ -2650,20 +2650,20 @@ After each section is saved, print a brief progress line:
    > | Agenda         | ✅ / skipped    |
    > | Sessions       | ✅ overview + [N] subsections |
    >
-   > "Next step: `/coauthor-materials` to start with Session 1."
+   > "Next step: `:coauthor-materials` to start with Session 1."
 
 8. Offer a note save:
-   > "Should I save the course structure decisions as a Decision Note? (`/save-decision course-structure`)"
+   > "Should I save the course structure decisions as a Decision Note? (`:save-decision course-structure`)"
 
 ## Escalation Rules
 
 - If a required input is missing and cannot be reasonably inferred: **pause and ask** — do not guess.
 - If the session count is unusually high (>12 for a single-lesson or >20 overall): flag it and ask to confirm before continuing.
-- If course type is `improve-existing`: redirect to `/analyze-existing` instead.
+- If course type is `improve-existing`: redirect to `:analyze-existing` instead.
 
 ## Notes
 
-- Scaffold mode does NOT run `/promote-session` or `/coauthor-materials` — those remain interactive.
+- Scaffold mode does NOT run `:promote-session` or `:coauthor-materials` — those remain interactive.
 - All generated `journal.md` sections are drafts. The instructor reviews and refines them during co-authoring.
 - The Persona Voice Sample in `journal.md` → `## Didactics` is especially important — it anchors tone for all future co-authoring sessions.
 
@@ -2703,22 +2703,22 @@ The dashboard is **derived state**. It is never the source of truth.
 
 Run this task automatically after any task that changes project state:
 
-- `/init-course`
-- `/scaffold`
-- `/create-outline`
-- `/create-didactics`
-- `/configure-agent`
-- `/manage-templates`
-- `/create-agenda`
-- `/create-session`
-- `/promote-session`
-- `/coauthor-materials` after approval
-- `/quick-fix`
-- `/validate-course`
-- `/review-as-persona`
-- `/save-notes` or `/save-decision`
-- `/assemble-bundle`
-- `/create-project` or `/update-project`
+- `:init-course`
+- `:scaffold`
+- `:create-outline`
+- `:create-didactics`
+- `:configure-agent`
+- `:manage-templates`
+- `:create-agenda`
+- `:create-session`
+- `:promote-session`
+- `:coauthor-materials` after approval
+- `:quick-fix`
+- `:validate-course`
+- `:review-as-persona`
+- `:save-notes` or `:save-decision`
+- `:assemble-bundle`
+- `:create-project` or `:update-project`
 
 ## Steps
 
@@ -2733,7 +2733,7 @@ Run this task automatically after any task that changes project state:
    - Optional learner persona review status
 3. Ensure the main metadata header contains the imports required by the dashboard:
    - If the Mermaid LiaScript template is imported, render workflow diagrams as fenced code blocks with `@mermaid`.
-   - If Mermaid is not imported, either use plain Mermaid syntax supported by the target renderer or suggest `/manage-templates mermaid`.
+   - If Mermaid is not imported, either use plain Mermaid syntax supported by the target renderer or suggest `:manage-templates mermaid`.
 4. Ensure the main metadata header contains only minimal dashboard CSS:
    - Prefer one reusable `<article class="dashboard">`.
    - Use simple `<div class="dashboard-card">` sections.
@@ -2855,7 +2855,7 @@ Updates the `project.yaml` with any newly created or updated materials, commits 
 ## Steps
 
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
-   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `/validate-course`.
+   - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
 2. Ask the user about their git/GitHub experience and confirm they want to update and publish.
 3. Scan the `materials/` folder for new or updated files.
 4. Update the `project.yaml` and ask the user to include all of the current materials or to import only a subset. Use colors and style from `journal.md` → `## Visual Identity` for any styling updates.
@@ -2883,8 +2883,8 @@ This task is invoked when:
 Checks the consistency, completeness, and LiaScript syntax correctness of the project memory and course materials.
 Can be run in two modes:
 
-- **Session mode** (`/validate-course {number} {type}`) — checks a single material file after co-authoring
-- **Course mode** (`/validate-course`) — checks the entire course before publishing
+- **Session mode** (`:validate-course {number} {type}`) — checks a single material file after co-authoring
+- **Course mode** (`:validate-course`) — checks the entire course before publishing
 
 ## Inputs
 
@@ -2918,7 +2918,7 @@ Rules:
 
 ---
 
-## Session Mode Steps (`/validate-course {number} {type}`)
+## Session Mode Steps (`:validate-course {number} {type}`)
 
 1. Load `journal.md` → `## Course Context` for course type and conventions.
 2. Load `journal.md` → `## Agenda` to get the learning objectives for this session.
@@ -2963,11 +2963,11 @@ Rules:
 6. Create or replace the rendered `#### Validation Report` in the matching session subsection under `journal.md` → `## Sessions`.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
-8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `/coauthor-materials` to fix them.
+8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
 
 ---
 
-## Course Mode Steps (`/validate-course`)
+## Course Mode Steps (`:validate-course`)
 
 1. Load `journal.md` → `## Course Context` to understand course type and applicable conventions.
 2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply).
@@ -3040,8 +3040,8 @@ Rules:
 
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
 11. After all session validation reports and the latest summary are created: suggest next step.
-    - If issues exist: "Open `/coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `/validate-course`."
-    - If no issues: "Course is ready for publishing. Next step: `/agent development` → `/create-project`"
+    - If issues exist: "Open `:coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `:validate-course`."
+    - If no issues: "Course is ready for publishing. Next step: `:agent development` → `:create-project`"
 
 ---
 
@@ -3051,11 +3051,11 @@ Rules:
 
 | Result                 | Agent behavior                                                                                                                                                                                                          |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `journal.md` → `## Validation` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
+| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `journal.md` → `## Validation` and rerun `:validate-course`. `:create-project` and `:update-project` are locked until PASS." |
 | 🟡 PASS with concerns | Ask: "There are open points, but no critical blockers. Do you want to proceed to publishing anyway? (Yes / No / Resolve issues first)"                                                                            |
-| 🟢 PASS               | Only if `Mode: course`: suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `/agent development` → `/create-project`"                                                                                          |
+| 🟢 PASS               | Only if `Mode: course`: suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `:agent development` → `:create-project`"                                                                                          |
 
-**Rule:** Never suggest or assist with `/create-project` or `/update-project` unless `journal.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.
+**Rule:** Never suggest or assist with `:create-project` or `:update-project` unless `journal.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.
 
 ==================== END: specs/tasks/validate-course.md ====================
 
@@ -3143,7 +3143,7 @@ template:
       template: |
         ### Learner Personas
 
-        _Optional — filled by `/create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona._
+        _Optional — filled by `:create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona._
 ```
 
 ==================== END: specs/templates/agents.yaml ====================
@@ -3496,9 +3496,9 @@ __Last updated:__ {{YYYY-MM-DD}}
 
 ### Next Commands
 
-1. `/init-course`
-2. `/create-outline`
-3. `/scaffold` (fast-track alternative)
+1. `:init-course`
+2. `:create-outline`
+3. `:scaffold` (fast-track alternative)
 
 </div>
 
@@ -3564,7 +3564,7 @@ _No sessions yet._
 
 ### Open Blockers
 
-Course Context missing — run `/init-course`.
+Course Context missing — run `:init-course`.
 
 </div>
 
@@ -3583,7 +3583,7 @@ Course Context missing — run `/init-course`.
 
 ## Course Context
 
-_Filled by `/init-course` from `templates/course-context.yaml`._
+_Filled by `:init-course` from `templates/course-context.yaml`._
 
 * __Course Type:__
   1. Type: {{lecture-series | self-paced | workshop | single-lesson | improve-existing}}
@@ -3615,7 +3615,7 @@ _Filled by `/init-course` from `templates/course-context.yaml`._
 
 ## Outline
 
-_Filled by `/create-outline` from `templates/course-outline.yaml`._
+_Filled by `:create-outline` from `templates/course-outline.yaml`._
 
 * __Title:__
   {{name of the lecture or course}}
@@ -3638,7 +3638,7 @@ _Filled by `/create-outline` from `templates/course-outline.yaml`._
 
 ## Didactics
 
-_Filled by `/create-didactics` from `templates/course-didactics.yaml`._
+_Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 
 * __Didactic Concept:__
   {{teaching methods, learning phases, didactic considerations — e.g. lesson rhythm, scaffolding, error culture}}
@@ -3662,7 +3662,7 @@ _Filled by `/create-didactics` from `templates/course-didactics.yaml`._
 
 ## Visual Identity
 
-_Filled by `/create-visuals` (optional) from `templates/visuals.yaml`._
+_Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
 
 * __Logo Generation Guidelines:__
   1. Style: {{...}}
@@ -3700,7 +3700,7 @@ _Filled by `/create-visuals` (optional) from `templates/visuals.yaml`._
 
 ## Templates
 
-_Managed by `/manage-templates` from `templates/course-templates.yaml`._
+_Managed by `:manage-templates` from `templates/course-templates.yaml`._
 
 LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
@@ -3738,7 +3738,7 @@ More community templates can be found at [topics/liascript-template](https://git
 
 ## Agenda
 
-_Filled by `/create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
+_Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
 
 * __Overview:__
   {{number of sessions, duration, pacing, platform — 2–4 sentences}}
@@ -3753,7 +3753,7 @@ _Filled by `/create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 
 ## Sessions
 
-_Managed by `/create-session`, `/promote-session`, `/coauthor-materials`, and `/validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
+_Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
 
 | # | Title | Type | Skeleton | Material | Done | Notes |
 |---|-------|------|----------|----------|------|-------|
@@ -3780,8 +3780,8 @@ _Managed by `/create-session`, `/promote-session`, `/coauthor-materials`, and `/
 
 1. {{reference}}
 
-After /validate-course in session mode, a `#### Validation Report` block is
-inserted at the top of the subsection. After /review-as-persona, a
+After :validate-course in session mode, a `#### Validation Report` block is
+inserted at the top of the subsection. After :review-as-persona, a
 `#### Persona Reviews` block is appended.
 -->
 
@@ -3846,29 +3846,29 @@ _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; e
 
 ### Learner Personas
 
-_Optional — filled by `/create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
+_Optional — filled by `:create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
 
 ---
 
 ## Validation
 
-_Replaced by `/validate-course` (course mode). The `### Latest Validation Summary` below is the authoritative publishing gate — publishing requires `Mode: course` and `Result: PASS`. Per-session reports live in `## Sessions` → `#### Validation Report`, not here._
+_Replaced by `:validate-course` (course mode). The `### Latest Validation Summary` below is the authoritative publishing gate — publishing requires `Mode: course` and `Result: PASS`. Per-session reports live in `## Sessions` → `#### Validation Report`, not here._
 
 ### Latest Validation Summary
 
-_Not yet run — run `/validate-course`. Format defined in `tasks/validate-course.md`, course mode step 9 (Date, Mode, Course type, Result, findings, recommended actions)._
+_Not yet run — run `:validate-course`. Format defined in `tasks/validate-course.md`, course mode step 9 (Date, Mode, Course type, Result, findings, recommended actions)._
 
 ---
 
 ## Analysis Status
 
-_Only used for improve-existing courses — filled by `/analyze-existing`._
+_Only used for improve-existing courses — filled by `:analyze-existing`._
 
 ---
 
 ## Notes Backup
 
-_Appended to by `/save-notes` and `/save-decision` from `templates/note-backup.yaml`._
+_Appended to by `:save-notes` and `:save-decision` from `templates/note-backup.yaml`._
 _Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._
 
 ==================== END: specs/templates/journal.md ====================
@@ -4091,7 +4091,8 @@ template:
   sections:
     - id: outline
       title: Planned Outline
-      template: > # {{title}}
+      template: |
+        # {{title}}
 
         Summary
 
@@ -6200,7 +6201,7 @@ workflow:
     # Phase 0: Project Initialization
     - step: init
       agent: teaching
-      command: /init-course
+      command: :init-course
       output: "journal.md → ## Course Context"
       notes: |
         First mandatory step for every new course:
@@ -6212,7 +6213,7 @@ workflow:
     # Phase 0-alt: Scaffold Fast-Track (replaces Phase 0–3 in one pass)
     - step: scaffold
       agent: teaching
-      command: /scaffold {course-type?}
+      command: :scaffold {course-type?}
       output: "journal.md sections: Course Context, Outline, Didactics, Templates, Agenda, Sessions"
       alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
       notes: |
@@ -6220,14 +6221,14 @@ workflow:
         - Single intake interview collects all inputs upfront
         - Auto-generates all structural artefacts in one pass (no approval between steps)
         - Adds `## Templates` and header imports if template requirements are provided
-        - Stops before /coauthor-materials — content authoring remains interactive
-        - Use instead of running /init-course → /create-outline → /create-didactics → /create-agenda → /create-session separately
-        - Not suitable for improve-existing (use /analyze-existing instead)
+        - Stops before :coauthor-materials — content authoring remains interactive
+        - Use instead of running :init-course → :create-outline → :create-didactics → :create-agenda → :create-session separately
+        - Not suitable for improve-existing (use :analyze-existing instead)
 
     # Phase 0b: Existing Course Analysis (improve-existing only)
     - step: analyze_existing
       agent: teaching
-      command: /analyze-existing
+      command: :analyze-existing
       output: "journal.md → ## Analysis Status"
       dependencies: [init]
       condition: course_type == improve-existing
@@ -6241,7 +6242,7 @@ workflow:
     # Phase 1: Foundation
     - step: create_outline
       agent: teaching
-      command: /create-outline
+      command: :create-outline
       output: "journal.md → ## Outline"
       dependencies: [init]
       notes: |
@@ -6252,7 +6253,7 @@ workflow:
 
     - step: create_didactics
       agent: teaching
-      command: /create-didactics
+      command: :create-didactics
       output: "journal.md → ## Didactics"
       dependencies: [create_outline]
       notes: |
@@ -6264,7 +6265,7 @@ workflow:
     # Phase 1b: Learner Personas (optional)
     - step: create_learner_personas
       agent: teaching
-      command: /create-learner-persona {name?}
+      command: :create-learner-persona {name?}
       output: "journal.md → ## Agents → ### Learner Personas"
       dependencies: [create_didactics]
       optional: true
@@ -6273,13 +6274,13 @@ workflow:
         - Quick mode: derive directly from `## Outline` and `## Didactics`
         - Data-driven mode: generate research prompt, then build from provided data
         - Number of personas: flexible — 1 typical, or 2–3 for target group diversity
-        - Personas are used later by /review-as-persona to give learner-perspective feedback
-        - Run /list-learners to see existing personas at any time
+        - Personas are used later by :review-as-persona to give learner-perspective feedback
+        - Run :list-learners to see existing personas at any time
 
     # Phase 2: Visual Identity
     - step: create_visuals
       agent: artist
-      command: /create-visuals
+      command: :create-visuals
       output: "journal.md → ## Visual Identity"
       dependencies: [create_outline, create_didactics]
       notes: |
@@ -6290,7 +6291,7 @@ workflow:
 
     - step: create_logo
       agent: artist
-      command: /create-logo
+      command: :create-logo
       output: assets/prompts/logo-prompt.md
       dependencies: [create_visuals]
       optional: true
@@ -6301,7 +6302,7 @@ workflow:
     # Phase 3: Structure
     - step: create_agenda
       agent: teaching
-      command: /create-agenda
+      command: :create-agenda
       output: "journal.md → ## Agenda"
       dependencies: [create_didactics, create_visuals]
       notes: |
@@ -6312,7 +6313,7 @@ workflow:
 
     - step: manage_templates
       agent: teaching
-      command: /manage-templates {name?}
+      command: :manage-templates {name?}
       output: "journal.md header imports + journal.md → ## Templates"
       optional: true
       notes: |
@@ -6329,30 +6330,30 @@ workflow:
         iterative:
           description: "Create one session at a time, fully develop it, then move to next"
           sequence:
-            - command: /create-session {number} {type} {title}
+            - command: :create-session {number} {type} {title}
               output: "journal.md → ## Sessions"
               notes: "Create skeleton subsection for session N and update the Sessions overview table"
-            - command: /promote-session {number} {type}
+            - command: :promote-session {number} {type}
               output: materials/{number}-{type}.md
               notes: "Convert skeleton to full material"
-            - command: /coauthor-materials
+            - command: :coauthor-materials
               notes: |
                 Interactive co-authoring in instructor persona:
                 - Refine content, add examples
                 - Suggest images (call artist-agent if needed)
                 - Iterate until material is complete
             - agent: artist
-              command: /create-image {description}
+              command: :create-image {description}
               optional: true
               notes: "Create image prompts during coauthoring as needed"
-            - command: /validate-course {number} {type}
+            - command: :validate-course {number} {type}
               notes: |
                 Session-level check after coauthor approval:
                 - LiaScript syntax, learning objectives, persona tone
-                - If issues found: re-open /coauthor-materials with report as context
+                - If issues found: re-open :coauthor-materials with report as context
                 - If clean: proceed to persona review
             - agent: learner
-              command: /review-as-persona {name} {number} {type}
+              command: :review-as-persona {name} {number} {type}
               optional: true
               condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: |
@@ -6363,32 +6364,32 @@ workflow:
                 - Saves report to the matching `journal.md` → `## Sessions` session subsection under `#### Persona Reviews`
                 - Agent stays in persona for interactive follow-up chat
                 - Run for each defined persona, or just one
-                - If issues found: fix with /coauthor-materials, then optionally re-review
+                - If issues found: fix with :coauthor-materials, then optionally re-review
             - repeat: for each session
 
         batch:
           description: "Create all skeletons first, then promote all, then coauthor all"
           sequence:
-            - command: /create-session {number} {type} {title}
+            - command: :create-session {number} {type} {title}
               output: "journal.md → ## Sessions"
               notes: "Create all session skeleton subsections and update the Sessions overview table"
               repeat: for all sessions
-            - command: /promote-session {number} {type}
+            - command: :promote-session {number} {type}
               output: materials/{number}-{type}.md
               notes: "Promote all skeletons to materials"
               repeat: for all sessions
-            - command: /coauthor-materials
+            - command: :coauthor-materials
               notes: |
                 Go through all materials sequentially:
                 - Refine content for each session
                 - Add images via artist-agent when needed
                 - Mark each session complete before moving to next
               repeat: for all materials
-            - command: /validate-course {number} {type}
+            - command: :validate-course {number} {type}
               notes: "Session-level check per material after coauthor approval"
               repeat: for all materials
             - agent: learner
-              command: /review-as-persona {name} {number} {type}
+              command: :review-as-persona {name} {number} {type}
               optional: true
               condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: "Learner-perspective review per material; saves each report under that session's `#### Persona Reviews`"
@@ -6402,7 +6403,7 @@ workflow:
     # Phase 5: Validation
     - step: validate_course
       agent: teaching
-      command: /validate-course
+      command: :validate-course
       output: "journal.md → ## Sessions plus journal.md → ## Validation"
       dependencies: [session_development]
       notes: |
@@ -6414,20 +6415,20 @@ workflow:
         - Replaces `journal.md` → `## Validation` → `### Latest Validation Summary` with `Mode: course`, PASS/FAIL, and issue count
 
         Feedback loop if issues found:
-        - Open /coauthor-materials {number} {type} for affected sessions
+        - Open :coauthor-materials {number} {type} for affected sessions
         - Agent loads the matching session's `#### Validation Report` and works through issues
-        - Re-run /validate-course after fixes until report is clean
+        - Re-run :validate-course after fixes until report is clean
         - Instructor confirms "Report ist akzeptabel" to exit loop
 
         Publishing Gate (enforced):
-        - `Mode: course` + PASS → proceed to /create-project or /assemble-bundle
+        - `Mode: course` + PASS → proceed to :create-project or :assemble-bundle
         - FAIL → publishing commands blocked until re-validation passes
         - PASS with concerns → instructor decides explicitly
 
     # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations
       agent: development
-      command: /manage-git
+      command: :manage-git
       optional: throughout workflow
       notes: |
         Available anytime for:
@@ -6439,7 +6440,7 @@ workflow:
 
     - step: initial_publishing
       agent: development
-      command: /create-project
+      command: :create-project
       output: project.yaml + .github/workflows/
       optional: true
       condition: user_requests_publishing AND first_time_setup AND project_validation == PASS
@@ -6454,7 +6455,7 @@ workflow:
 
     - step: update_publishing
       agent: development
-      command: /update-project
+      command: :update-project
       optional: true
       condition: user_requests_publishing AND updates_to_existing_project
       notes: |
@@ -6466,7 +6467,7 @@ workflow:
     # Phase 7: Bundling (Optional)
     - step: assemble_bundle
       agent: teaching
-      command: /assemble-bundle
+      command: :assemble-bundle
       output: course-bundle/
       optional: true
       condition: project_validation == PASS
@@ -6485,16 +6486,16 @@ workflow:
     - Image creation on-demand during coauthoring
     - Choose iterative or batch approach for sessions
     - Publishing is optional and user-initiated — only when explicitly requested
-    - /create-project recommended when multiple materials exist and course is ready to share
+    - :create-project recommended when multiple materials exist and course is ready to share
     - `journal.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Done status automatically
-    - Learner personas are optional but recommended: /create-learner-persona after /create-didactics
-    - /review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
-    - `journal.md` → `## Dashboard` is derived state and should be regenerated automatically with /update-dashboard after state-changing tasks
+    - Learner personas are optional but recommended: :create-learner-persona after :create-didactics
+    - :review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
+    - `journal.md` → `## Dashboard` is derived state and should be regenerated automatically with :update-dashboard after state-changing tasks
 
   flow_diagram: |
     ```mermaid
     graph TD
-        A[Start: /init-course] --> B{Course Type?}
+        A[Start: :init-course] --> B{Course Type?}
         B -->|improve-existing| C[teaching: analyze-existing]
         B -->|new course| D[teaching: create-outline]
         D --> E[teaching: create-didactics]
@@ -6588,58 +6589,58 @@ workflow:
   quick_reference:
     course_type_paths:
       lecture-series:
-        sequence: [/init-course, /create-outline, /create-didactics, /create-visuals, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
-        publishing: "optional: /create-project when ready to share"
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-visuals", ":create-agenda", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
+        publishing: "optional: :create-project when ready to share"
       self-paced:
-        sequence: [/init-course, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
-        note: "Agenda optional — decided at /init-course"
-        publishing: "optional: /create-project when ready to share"
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
+        note: "Agenda optional — decided at :init-course"
+        publishing: "optional: :create-project when ready to share"
       workshop:
-        sequence: [/init-course, /create-outline, /create-didactics, /create-agenda, /create-session, /promote-session, /coauthor-materials, /validate-course]
-        publishing: "optional: /create-project when ready to share"
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-agenda", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
+        publishing: "optional: :create-project when ready to share"
       single-lesson:
-        sequence: [/init-course, /create-outline, /create-didactics, /create-session, /promote-session, /coauthor-materials, /validate-course]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
         note: "No agenda needed; one session only"
         publishing: "usually not needed for a single lesson"
       improve-existing:
-        sequence: [/init-course, /analyze-existing, /coauthor-materials, /validate-course]
-        note: "/analyze-existing scans for missing `journal.md` sections and offers to auto-generate or create them interactively"
-        publishing: "optional: /update-project if project.yaml already exists"
+        sequence: [":init-course", ":analyze-existing", ":coauthor-materials", ":validate-course"]
+        note: ":analyze-existing scans for missing `journal.md` sections and offers to auto-generate or create them interactively"
+        publishing: "optional: :update-project if project.yaml already exists"
 
     teaching_agent_commands:
-      - /init-course
-      - /scaffold {course-type?}
-      - /analyze-existing
-      - /configure-agent {agent}
-      - /create-outline
-      - /create-didactics
-      - /create-learner-persona {name?}
-      - /create-agenda
-      - /manage-templates {name?}
-      - /update-dashboard
-      - /create-session {number} {type} {title}
-      - /promote-session {number} {type}
-      - /coauthor-materials
-      - /quick-fix {number} {type} {description}
-      - /validate-course
-      - /assemble-bundle
-      - /save-notes {type?} {title?}
-      - /save-decision {title}
+      - :init-course
+      - :scaffold {course-type?}
+      - :analyze-existing
+      - :configure-agent {agent}
+      - :create-outline
+      - :create-didactics
+      - :create-learner-persona {name?}
+      - :create-agenda
+      - :manage-templates {name?}
+      - :update-dashboard
+      - :create-session {number} {type} {title}
+      - :promote-session {number} {type}
+      - :coauthor-materials
+      - :quick-fix {number} {type} {description}
+      - :validate-course
+      - :assemble-bundle
+      - :save-notes {type?} {title?}
+      - :save-decision {title}
 
     learner_agent_commands:
-      - /review-as-persona {name} {number} {type}
-      - /list-learners
-      - /agent {character}
+      - :review-as-persona {name} {number} {type}
+      - :list-learners
+      - :agent {character}
 
     artist_agent_commands:
-      - /create-visuals
-      - /create-logo
-      - /create-image {description}
+      - :create-visuals
+      - :create-logo
+      - :create-image {description}
 
     development_agent_commands:
-      - /manage-git
-      - /create-project
-      - /update-project
+      - :manage-git
+      - :create-project
+      - :update-project
 ```
 
 ==================== END: specs/workflows/course-development.yaml ====================

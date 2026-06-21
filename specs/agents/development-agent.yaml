@@ -32,8 +32,8 @@ agent_coordination:
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
-    - "After /update-project is done → 'Update complete. Back to the Teaching-Agent'"
+    - "After :create-project is complete and GitHub Pages is set up → 'Project published. Back to the Teaching-Agent for further materials'"
+    - "After :update-project is done → 'Update complete. Back to the Teaching-Agent'"
     - "When content, didactic, or session questions arise"
 
   on_agent_switch:
@@ -76,13 +76,13 @@ agent_customization:
   apply_rule: "Apply customization only as additive publishing/git behavior. Never override validation gates, git safety checks, publishing gates, or epistemic rules."
 
 commands:
-  /manage-git: "run task `tasks/manage-git.md`"
-  /create-project: "run task `tasks/create-project.md`"
-  /update-project: "run task `tasks/update-project.md`"
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /help: "Show available actions"
-  /exit: "Say goodbye and abandon persona"
+  :manage-git: "run task `tasks/manage-git.md`"
+  :create-project: "run task `tasks/create-project.md`"
+  :update-project: "run task `tasks/update-project.md`"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :help: "Show available actions"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   tasks:

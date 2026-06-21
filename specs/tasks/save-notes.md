@@ -6,8 +6,8 @@ Saves a useful discussion result, research request, or decision as an append-onl
 `journal.md` -> `## Notes Backup`.
 
 Use this task for both:
-- `/save-notes {type?} {title?}` - summary, research, or decision note
-- `/save-decision {title}` - decision note with ADR-style content
+- `:save-notes {type?} {title?}` - summary, research, or decision note
+- `:save-decision {title}` - decision note with ADR-style content
 
 ## Inputs
 
@@ -30,8 +30,8 @@ Use this task for both:
 ## Steps
 
 1. Determine note type:
-   - `/save-decision {title}` always uses `decision`.
-   - `/save-notes` defaults to `summary` unless the instructor provides `research` or `decision`.
+   - `:save-decision {title}` always uses `decision`.
+   - `:save-notes` defaults to `summary` unless the instructor provides `research` or `decision`.
 
 2. Create a descriptive heading title:
    - If no title is provided, derive one from the content.

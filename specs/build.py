@@ -226,9 +226,9 @@ def _nav_content(target_key: str, target: dict, agent: dict) -> str:
     if suggest_artist or suggest_learner or suggest_dev:
         lines += ["## Agent Coordination", ""]
         for label, items in [
-            ("Suggest `/agent artist`", suggest_artist),
-            ("Suggest `/agent learner`", suggest_learner),
-            ("Suggest `/agent development`", suggest_dev),
+            ("Suggest `:agent artist`", suggest_artist),
+            ("Suggest `:agent learner`", suggest_learner),
+            ("Suggest `:agent development`", suggest_dev),
         ]:
             if items:
                 lines.append(f"**{label}:**")
@@ -243,8 +243,8 @@ def _nav_content(target_key: str, target: dict, agent: dict) -> str:
         "```",
         "specs/tasks/       ← task definitions  (read on demand, one per command)",
         "specs/templates/   ← YAML templates    (read when filling a template)",
-        "specs/agents/      ← agent personas    (read on /agent switch)",
-        "specs/checklists/  ← quality checks    (read during /validate-course)",
+        "specs/agents/      ← agent personas    (read on :agent switch)",
+        "specs/checklists/  ← quality checks    (read during :validate-course)",
         "specs/data/        ← LiaScript data    (read when working with LiaScript)",
         "journal.md         ← current project state  (read on activation)",
         "materials/         ← generated course materials",

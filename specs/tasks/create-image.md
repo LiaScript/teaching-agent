@@ -85,7 +85,7 @@ Technical Specifications:
 ## Usage
 
 This task is invoked when:
-- Creating images for lecture materials (`/coauthor-materials`)
+- Creating images for lecture materials (`:coauthor-materials`)
 - Designing diagrams or illustrations
 - Generating visual aids for specific concepts
 - Creating consistent imagery across sessions

@@ -91,9 +91,9 @@ __Last updated:__ {{YYYY-MM-DD}}
 
 ### Next Commands
 
-1. `/init-course`
-2. `/create-outline`
-3. `/scaffold` (fast-track alternative)
+1. `:init-course`
+2. `:create-outline`
+3. `:scaffold` (fast-track alternative)
 
 </div>
 
@@ -159,7 +159,7 @@ _No sessions yet._
 
 ### Open Blockers
 
-Course Context missing — run `/init-course`.
+Course Context missing — run `:init-course`.
 
 </div>
 
@@ -178,7 +178,7 @@ Course Context missing — run `/init-course`.
 
 ## Course Context
 
-_Filled by `/init-course` from `templates/course-context.yaml`._
+_Filled by `:init-course` from `templates/course-context.yaml`._
 
 * __Course Type:__
   1. Type: {{lecture-series | self-paced | workshop | single-lesson | improve-existing}}
@@ -210,7 +210,7 @@ _Filled by `/init-course` from `templates/course-context.yaml`._
 
 ## Outline
 
-_Filled by `/create-outline` from `templates/course-outline.yaml`._
+_Filled by `:create-outline` from `templates/course-outline.yaml`._
 
 * __Title:__
   {{name of the lecture or course}}
@@ -233,7 +233,7 @@ _Filled by `/create-outline` from `templates/course-outline.yaml`._
 
 ## Didactics
 
-_Filled by `/create-didactics` from `templates/course-didactics.yaml`._
+_Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 
 * __Didactic Concept:__
   {{teaching methods, learning phases, didactic considerations — e.g. lesson rhythm, scaffolding, error culture}}
@@ -257,7 +257,7 @@ _Filled by `/create-didactics` from `templates/course-didactics.yaml`._
 
 ## Visual Identity
 
-_Filled by `/create-visuals` (optional) from `templates/visuals.yaml`._
+_Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
 
 * __Logo Generation Guidelines:__
   1. Style: {{...}}
@@ -295,7 +295,7 @@ _Filled by `/create-visuals` (optional) from `templates/visuals.yaml`._
 
 ## Templates
 
-_Managed by `/manage-templates` from `templates/course-templates.yaml`._
+_Managed by `:manage-templates` from `templates/course-templates.yaml`._
 
 LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
@@ -333,7 +333,7 @@ More community templates can be found at [topics/liascript-template](https://git
 
 ## Agenda
 
-_Filled by `/create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
+_Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
 
 * __Overview:__
   {{number of sessions, duration, pacing, platform — 2–4 sentences}}
@@ -348,7 +348,7 @@ _Filled by `/create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 
 ## Sessions
 
-_Managed by `/create-session`, `/promote-session`, `/coauthor-materials`, and `/validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
+_Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
 
 | # | Title | Type | Skeleton | Material | Done | Notes |
 |---|-------|------|----------|----------|------|-------|
@@ -375,8 +375,8 @@ _Managed by `/create-session`, `/promote-session`, `/coauthor-materials`, and `/
 
 1. {{reference}}
 
-After /validate-course in session mode, a `#### Validation Report` block is
-inserted at the top of the subsection. After /review-as-persona, a
+After :validate-course in session mode, a `#### Validation Report` block is
+inserted at the top of the subsection. After :review-as-persona, a
 `#### Persona Reviews` block is appended.
 -->
 
@@ -441,27 +441,27 @@ _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; e
 
 ### Learner Personas
 
-_Optional — filled by `/create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
+_Optional — filled by `:create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
 
 ---
 
 ## Validation
 
-_Replaced by `/validate-course` (course mode). The `### Latest Validation Summary` below is the authoritative publishing gate — publishing requires `Mode: course` and `Result: PASS`. Per-session reports live in `## Sessions` → `#### Validation Report`, not here._
+_Replaced by `:validate-course` (course mode). The `### Latest Validation Summary` below is the authoritative publishing gate — publishing requires `Mode: course` and `Result: PASS`. Per-session reports live in `## Sessions` → `#### Validation Report`, not here._
 
 ### Latest Validation Summary
 
-_Not yet run — run `/validate-course`. Format defined in `tasks/validate-course.md`, course mode step 9 (Date, Mode, Course type, Result, findings, recommended actions)._
+_Not yet run — run `:validate-course`. Format defined in `tasks/validate-course.md`, course mode step 9 (Date, Mode, Course type, Result, findings, recommended actions)._
 
 ---
 
 ## Analysis Status
 
-_Only used for improve-existing courses — filled by `/analyze-existing`._
+_Only used for improve-existing courses — filled by `:analyze-existing`._
 
 ---
 
 ## Notes Backup
 
-_Appended to by `/save-notes` and `/save-decision` from `templates/note-backup.yaml`._
+_Appended to by `:save-notes` and `:save-decision` from `templates/note-backup.yaml`._
 _Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._

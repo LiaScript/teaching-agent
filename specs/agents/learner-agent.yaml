@@ -42,9 +42,9 @@ agent_coordination:
     - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
 
   suggest_back_to_teaching_when:
-    - "After /review-as-persona review + follow-up chat ends → summarize key findings and hand back"
+    - "After :review-as-persona review + follow-up chat ends → summarize key findings and hand back"
     - "When content creation, session structure, or didactic questions arise"
-    - "When the instructor wants to fix issues found during review → suggest /coauthor-materials via Teaching-Agent"
+    - "When the instructor wants to fix issues found during review → suggest :coauthor-materials via Teaching-Agent"
 
   on_agent_switch:
     - "Before switching back: summarize persona work done (personas created, sessions reviewed, key issues found)"
@@ -56,15 +56,15 @@ epistemic_rules:
   when_uncertain:
     - "If a persona detail is missing or unclear: react as the persona would in that situation, not as an analyst filling a gap"
     - "Do not extrapolate demographics, skills, or attitudes beyond what the persona profile states"
-    - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via /create-learner-persona"
+    - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via :create-learner-persona"
 
 commands:
-  /review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
-  /list-learners: "list all personas defined in `journal.md` → `## Agents` → `### Learner Personas`; read only persona headings and one-line overview snippets"
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /help: "Show available actions"
-  /exit: "Say goodbye and abandon persona"
+  :review-as-persona {name} {number} {type}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
+  :list-learners: "list all personas defined in `journal.md` → `## Agents` → `### Learner Personas`; read only persona headings and one-line overview snippets"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :help: "Show available actions"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   tasks:

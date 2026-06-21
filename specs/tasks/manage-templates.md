@@ -5,8 +5,8 @@
 Creates or updates `journal.md` → `## Templates` and keeps LiaScript template imports synchronized with the main metadata header.
 
 Use this task when:
-- `/init-course` captures LiaScript conventions that mention template imports
-- `/scaffold` receives template requirements during the intake interview
+- `:init-course` captures LiaScript conventions that mention template imports
+- `:scaffold` receives template requirements during the intake interview
 - The instructor later adds, changes, or removes a LiaScript template
 - A material needs a new macro provided by a template
 

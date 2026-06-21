@@ -4,10 +4,10 @@
 
 Executes saved image prompts from `assets/prompts/` via the browser — in two modes:
 
-- **Single mode** (`/generate-image {slug}`) — execute one specific prompt file directly
-- **Batch mode** (`/generate-image` without argument) — show mode selection, then process all pending prompts
+- **Single mode** (`:generate-image {slug}`) — execute one specific prompt file directly
+- **Batch mode** (`:generate-image` without argument) — show mode selection, then process all pending prompts
 
-To generate and save prompts first, use `/create-image`.
+To generate and save prompts first, use `:create-image`.
 
 Requires the **chrome-devtools MCP server** to be active and Chrome running with remote debugging.
 
@@ -36,7 +36,7 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 ## Phase 1: Entry Point
 
 1. Check if `mcp_chrome-devtools_*` tools are available.
-   - **Not available** → explain setup, stop. Suggest `/create-image` for prompt-only mode.
+   - **Not available** → explain setup, stop. Suggest `:create-image` for prompt-only mode.
 
 2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtools_list_pages`.
    - **Fails or returns empty** → start Chrome in the background:
@@ -275,13 +275,13 @@ Batch complete.
 ⏭   1 skipped (already existed)
 ❌  0 failed
 ```
-If any failures: list slugs, suggest `/generate-image {slug}` to retry individually.
+If any failures: list slugs, suggest `:generate-image {slug}` to retry individually.
 
 ---
 
-## Relation to /create-image
+## Relation to :create-image
 
-| Feature                  | `/create-image` | `/generate-image {slug}` | `/generate-image` (batch) |
+| Feature                  | `:create-image` | `:generate-image {slug}` | `:generate-image` (batch) |
 |--------------------------|-----------------|--------------------------|---------------------------|
 | Generate prompt          | ✅              | ❌ (reads saved)          | ❌ (reads saved)           |
 | Save prompt to file      | ✅ always        | ❌                         | ❌                         |

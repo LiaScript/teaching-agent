@@ -78,4 +78,4 @@ template:
       template: |
         ### Learner Personas
 
-        _Optional — filled by `/create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona._
+        _Optional — filled by `:create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona._

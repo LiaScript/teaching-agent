@@ -50,7 +50,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 ## Usage
 
 This style guide will be referenced by the Teaching-Agent when:
-- Creating logos for courses (`/create-outline`)
-- Generating image prompts during material co-authoring (`/coauthor-materials`)
+- Creating logos for courses (`:create-outline`)
+- Generating image prompts during material co-authoring (`:coauthor-materials`)
 - Designing visual elements for the course bundle
 - Ensuring consistent branding across all course materials

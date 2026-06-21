@@ -9,7 +9,8 @@ template:
   sections:
     - id: outline
       title: Planned Outline
-      template: > # {{title}}
+      template: |
+        # {{title}}
 
         Summary
 

@@ -34,22 +34,22 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 4. **Report result:**
    - ✅ "Fix applied and validated — done."
-   - ⚠️ "The problem is larger than expected: [describe]. Should I open `/coauthor-materials {number} {type}`?"
+   - ⚠️ "The problem is larger than expected: [describe]. Should I open `:coauthor-materials {number} {type}`?"
    - If the fix changed session state (e.g., a Notes entry in the `## Sessions` overview table): run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
-5. **Escalate if scope grows:** If the fix reveals structural issues or multiple sections need rework, stop and escalate to `/coauthor-materials` — do NOT proceed silently.
+5. **Escalate if scope grows:** If the fix reveals structural issues or multiple sections need rework, stop and escalate to `:coauthor-materials` — do NOT proceed silently.
 
 ---
 
-## When to use vs. /coauthor-materials
+## When to use vs. :coauthor-materials
 
 | Situation                            | Use                   |
 | ------------------------------------ | --------------------- |
-| Single typo or broken syntax         | `/quick-fix`          |
-| Wrong link or missing alt text       | `/quick-fix`          |
-| Swap one example or code snippet     | `/quick-fix`          |
-| Fix one quiz answer                  | `/quick-fix`          |
-| Multiple sections need rework        | `/coauthor-materials` |
-| Learning objective not covered       | `/coauthor-materials` |
-| Structural or content change         | `/coauthor-materials` |
-| Persona tone inconsistent throughout | `/coauthor-materials` |
+| Single typo or broken syntax         | `:quick-fix`          |
+| Wrong link or missing alt text       | `:quick-fix`          |
+| Swap one example or code snippet     | `:quick-fix`          |
+| Fix one quiz answer                  | `:quick-fix`          |
+| Multiple sections need rework        | `:coauthor-materials` |
+| Learning objective not covered       | `:coauthor-materials` |
+| Structural or content change         | `:coauthor-materials` |
+| Persona tone inconsistent throughout | `:coauthor-materials` |

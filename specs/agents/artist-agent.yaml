@@ -33,7 +33,7 @@ agent_coordination:
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
 
   suggest_back_to_teaching_when:
-    - "After /create-visuals and /create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step: /create-agenda'"
+    - "After :create-visuals and :create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step: :create-agenda'"
     - "When content or pedagogical questions arise that are outside visual design"
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
@@ -58,7 +58,7 @@ browser_execution:
   on_activation_check:
     - "Check if mcp_chrome-devtools_* tools are available"
     - "If available: announce browser execution mode is active"
-    - "If unavailable: explain the setup steps above and offer prompt-only mode (/create-image) as fallback"
+    - "If unavailable: explain the setup steps above and offer prompt-only mode (:create-image) as fallback"
 
 epistemic_rules:
   principle: "Never invent tool capabilities, image generator syntax, or visual specifications. Flag uncertainty."
@@ -88,17 +88,17 @@ agent_customization:
     - "Do not read Coauthor, Teaching-Agent, Development-Agent, or Learner Personas customizations."
   apply_rule: "Apply customization only as additive visual-design behavior. Never override base visual consistency, accessibility, uncertainty, or safety rules."
 commands:
-  /create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
-  /create-logo: "run task `tasks/create-logo.md`"
-  /create-image {description}: "run task `tasks/create-image.md` — generate prompt and save to assets/prompts/ (no browser required)"
-  /generate-image {slug?}: >-
+  :create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
+  :create-logo: "run task `tasks/create-logo.md`"
+  :create-image {description}: "run task `tasks/create-image.md` — generate prompt and save to assets/prompts/ (no browser required)"
+  :generate-image {slug?}: >-
     run task `tasks/generate-image.md`.
     With slug: execute that single saved prompt via browser.
     Without slug: show mode selection (single / sequential batch / automated batch) over all pending prompts in assets/prompts/.
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /help: "Show available actions"
-  /exit: "Say goodbye and abandon persona"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :help: "Show available actions"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   tasks:

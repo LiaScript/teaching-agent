@@ -29,22 +29,22 @@ The dashboard is **derived state**. It is never the source of truth.
 
 Run this task automatically after any task that changes project state:
 
-- `/init-course`
-- `/scaffold`
-- `/create-outline`
-- `/create-didactics`
-- `/configure-agent`
-- `/manage-templates`
-- `/create-agenda`
-- `/create-session`
-- `/promote-session`
-- `/coauthor-materials` after approval
-- `/quick-fix`
-- `/validate-course`
-- `/review-as-persona`
-- `/save-notes` or `/save-decision`
-- `/assemble-bundle`
-- `/create-project` or `/update-project`
+- `:init-course`
+- `:scaffold`
+- `:create-outline`
+- `:create-didactics`
+- `:configure-agent`
+- `:manage-templates`
+- `:create-agenda`
+- `:create-session`
+- `:promote-session`
+- `:coauthor-materials` after approval
+- `:quick-fix`
+- `:validate-course`
+- `:review-as-persona`
+- `:save-notes` or `:save-decision`
+- `:assemble-bundle`
+- `:create-project` or `:update-project`
 
 ## Steps
 
@@ -59,7 +59,7 @@ Run this task automatically after any task that changes project state:
    - Optional learner persona review status
 3. Ensure the main metadata header contains the imports required by the dashboard:
    - If the Mermaid LiaScript template is imported, render workflow diagrams as fenced code blocks with `@mermaid`.
-   - If Mermaid is not imported, either use plain Mermaid syntax supported by the target renderer or suggest `/manage-templates mermaid`.
+   - If Mermaid is not imported, either use plain Mermaid syntax supported by the target renderer or suggest `:manage-templates mermaid`.
 4. Ensure the main metadata header contains only minimal dashboard CSS:
    - Prefer one reusable `<article class="dashboard">`.
    - Use simple `<div class="dashboard-card">` sections.

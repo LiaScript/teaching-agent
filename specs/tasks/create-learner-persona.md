@@ -4,7 +4,7 @@
 
 Creates one or more **Learner Personas** — evidence-based fictional profiles of typical course participants.  
 Personas ground material design in the real constraints, skills, and motivations of the target audience,
-and serve as the basis for `/review-as-persona` feedback sessions.
+and serve as the basis for `:review-as-persona` feedback sessions.
 
 **Two modes:**
 
@@ -86,7 +86,7 @@ and serve as the basis for `/review-as-persona` feedback sessions.
     - Append as a new `#### Persona: {icon} {name}` subsection
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 14. Suggest next step:
-    > "Persona saved. Call `/review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
+    > "Persona saved. Call `:review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
 ---
 
@@ -174,6 +174,6 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 This task is invoked when:
 - The instructor wants a learner-centered perspective during course development
-- After `/create-didactics` when the target audience is defined
-- Before `/coauthor-materials` to anchor material design in learner reality
-- Before `/review-as-persona` — a persona must exist first
+- After `:create-didactics` when the target audience is defined
+- Before `:coauthor-materials` to anchor material design in learner reality
+- Before `:review-as-persona` — a persona must exist first

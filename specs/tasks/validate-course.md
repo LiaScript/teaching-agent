@@ -5,8 +5,8 @@
 Checks the consistency, completeness, and LiaScript syntax correctness of the project memory and course materials.
 Can be run in two modes:
 
-- **Session mode** (`/validate-course {number} {type}`) — checks a single material file after co-authoring
-- **Course mode** (`/validate-course`) — checks the entire course before publishing
+- **Session mode** (`:validate-course {number} {type}`) — checks a single material file after co-authoring
+- **Course mode** (`:validate-course`) — checks the entire course before publishing
 
 ## Inputs
 
@@ -40,7 +40,7 @@ Rules:
 
 ---
 
-## Session Mode Steps (`/validate-course {number} {type}`)
+## Session Mode Steps (`:validate-course {number} {type}`)
 
 1. Load `journal.md` → `## Course Context` for course type and conventions.
 2. Load `journal.md` → `## Agenda` to get the learning objectives for this session.
@@ -85,11 +85,11 @@ Rules:
 6. Create or replace the rendered `#### Validation Report` in the matching session subsection under `journal.md` → `## Sessions`.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
-8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `/coauthor-materials` to fix them.
+8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
 
 ---
 
-## Course Mode Steps (`/validate-course`)
+## Course Mode Steps (`:validate-course`)
 
 1. Load `journal.md` → `## Course Context` to understand course type and applicable conventions.
 2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply).
@@ -162,8 +162,8 @@ Rules:
 
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
 11. After all session validation reports and the latest summary are created: suggest next step.
-    - If issues exist: "Open `/coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `/validate-course`."
-    - If no issues: "Course is ready for publishing. Next step: `/agent development` → `/create-project`"
+    - If issues exist: "Open `:coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `:validate-course`."
+    - If no issues: "Course is ready for publishing. Next step: `:agent development` → `:create-project`"
 
 ---
 
@@ -173,8 +173,8 @@ Rules:
 
 | Result                 | Agent behavior                                                                                                                                                                                                          |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `journal.md` → `## Validation` and rerun `/validate-course`. `/create-project` and `/update-project` are locked until PASS." |
+| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `journal.md` → `## Validation` and rerun `:validate-course`. `:create-project` and `:update-project` are locked until PASS." |
 | 🟡 PASS with concerns | Ask: "There are open points, but no critical blockers. Do you want to proceed to publishing anyway? (Yes / No / Resolve issues first)"                                                                            |
-| 🟢 PASS               | Only if `Mode: course`: suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `/agent development` → `/create-project`"                                                                                          |
+| 🟢 PASS               | Only if `Mode: course`: suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `:agent development` → `:create-project`"                                                                                          |
 
-**Rule:** Never suggest or assist with `/create-project` or `/update-project` unless `journal.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.
+**Rule:** Never suggest or assist with `:create-project` or `:update-project` unless `journal.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.

@@ -26,7 +26,7 @@ course-bundle/
 ## Steps
 
 1. **Pre-flight check:** Confirm `journal.md` → `## Validation` → `### Latest Validation Summary` exists and shows `Mode: course` and `Result: PASS`.
-   - If missing, not `Mode: course`, or not `Result: PASS`: block bundling. State: "⛔ Please run `/validate-course` first and resolve all issues before creating the bundle."
+   - If missing, not `Mode: course`, or not `Result: PASS`: block bundling. State: "⛔ Please run `:validate-course` first and resolve all issues before creating the bundle."
 
 2. Read course title and abstract from `journal.md` → `## Outline`.
 
@@ -64,4 +64,4 @@ course-bundle/
 
 7. Confirm completion:
    > "Bundle created in `course-bundle/`. Contains `journal.md`, [N] material files, and [assets/ ✅ / no assets]."
-   > "Next step: `/agent development` → `/create-project` to publish the course."
+   > "Next step: `:agent development` → `:create-project` to publish the course."

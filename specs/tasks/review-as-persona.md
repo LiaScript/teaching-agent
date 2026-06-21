@@ -5,7 +5,7 @@
 The agent temporarily **embodies a learner persona** from `journal.md` → `## Agents` → `### Learner Personas` and reviews
 one session material from the perspective of that fictional learner.
 
-This is a **perspective-taking quality check** — not a technical syntax validation (that is `/validate-course`),
+This is a **perspective-taking quality check** — not a technical syntax validation (that is `:validate-course`),
 but the question: *"Would this person understand this? Does this work for them?"*
 
 After the structured review report is saved, the agent **stays in persona** for an open chat.
@@ -43,8 +43,8 @@ Rules:
 ## Steps
 
 1. Load only the named persona from `journal.md` → `## Agents` → `### Learner Personas`.
-   - If persona not found: list available personas and ask to select one, or offer to create one with `/create-learner-persona`.
-   - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `/create-learner-persona` first.
+   - If persona not found: list available personas and ask to select one, or offer to create one with `:create-learner-persona`.
+   - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `:create-learner-persona` first.
    - Do not read `journal.md` → `## Agents` → `### Coauthor` or any other persona body.
 
 2. Load `materials/{number}-{type}.md`.
@@ -154,20 +154,20 @@ Rules:
    - If the instructor asks a meta-question ("Was denkst du als Lernender…"), answer it in persona voice.
    - **Do not break character** until explicitly asked to exit.
 
-10. On exit (`exit`, `zurück`, `/exit-persona`, or explicit request):
+10. On exit (`exit`, `zurück`, `:exit-persona`, or explicit request):
     - Return to Teaching-Agent identity and voice.
     - Offer: "Should I save the follow-up conversation as a note?  
-      (`/save-notes summary persona-chat-[name]-[N]-[type]`)"
+      (`:save-notes summary persona-chat-[name]-[N]-[type]`)"
     - Suggest next step:
-      > "Use `/coauthor-materials {number} {type}` to fix the priority issues, or call
-      > `/review-as-persona [other name] {number} {type}` to get a second learner perspective."
+      > "Use `:coauthor-materials {number} {type}` to fix the priority issues, or call
+      > `:review-as-persona [other name] {number} {type}` to get a second learner perspective."
 
-## When to Use vs. /validate-course
+## When to Use vs. :validate-course
 
-| Check                           | `/validate-course`         | `/review-as-persona`          |
+| Check                           | `:validate-course`         | `:review-as-persona`          |
 | ------------------------------- | -------------------------- | ----------------------------- |
 | LiaScript syntax                | ✅                          | ❌                             |
-| Learning objectives covered     | ✅                          | ❌ (handled by /validate-course)|
+| Learning objectives covered     | ✅                          | ❌ (handled by :validate-course)|
 | Language level appropriate      | ❌                          | ✅                             |
 | Cognitive load / overload       | ❌                          | ✅                             |
 | Learner motivation / relevance  | ❌                          | ✅                             |
@@ -175,4 +175,4 @@ Rules:
 | Format matches learner habits   | ❌                          | ✅                             |
 | Accessibility barriers          | ❌                          | ✅                             |
 
-**Recommended sequence:** `/coauthor-materials` → `/validate-course` (syntax) → `/review-as-persona` (learner lens) → fix with `/coauthor-materials` if needed.
+**Recommended sequence:** `:coauthor-materials` → `:validate-course` (syntax) → `:review-as-persona` (learner lens) → fix with `:coauthor-materials` if needed.

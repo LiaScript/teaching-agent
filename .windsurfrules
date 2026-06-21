@@ -37,45 +37,45 @@ Supports educators in creating courses through outline, didactics, agenda, sessi
 
 | Command | Task file | Notes |
 |---------|-----------|-------|
-| `/init-course` | `specs/tasks/init-course.md` | — |
-| `/analyze-existing` | `specs/tasks/analyze-existing.md` | — |
-| `/scaffold {course-type?}` | `specs/tasks/scaffold-course.md` | single intake interview, then auto-generate `journal.md` sections for Course … |
-| `/create-outline` | `specs/tasks/create-outline.md` | — |
-| `/create-didactics` | `specs/tasks/create-didactics.md` | — |
-| `/create-learner-persona {name?}` | `specs/tasks/create-learner-persona.md` | create a data-based or quick learner persona and save to `journal.md` → `## A… |
-| `/configure-agent {agent}` | `specs/tasks/configure-agent.md` | configure only the matching direct `journal.md` → `## Agents` → `### {agent}`… |
-| `/create-agenda` | `specs/tasks/create-agenda.md` | — |
-| `/manage-templates {name?}` | `specs/tasks/manage-templates.md` | add/update LiaScript template imports in the project header and document usag… |
-| `/update-dashboard` | `specs/tasks/update-dashboard.md` | regenerate the derived `journal.md` → `## Dashboard` after project state changes |
-| `/create-session {number} {type} {title?}` | `specs/tasks/create-session-skeleton.md` | — |
-| `/promote-session {number} {type}` | `specs/tasks/promote-session.md` | — |
-| `/coauthor-materials` | `specs/tasks/coauthor-materials.md` | — |
-| `/quick-fix {number} {type} {description}` | `specs/tasks/quick-fix.md` | targeted single-issue correction without full co-authoring session |
-| `/validate-course` | `specs/tasks/validate-course.md` | no args: full course check before publishing and replace validation reports i… |
-| `/validate-course {number} {type}` | `specs/tasks/validate-course.md` | in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions` |
-| `/assemble-bundle` | `specs/tasks/assemble-bundle.md` | — |
-| `/save-notes {type?} {title?}` | `specs/tasks/save-notes.md` | summarize the current discussion and append it to `journal.md` → `## Notes Ba… |
-| `/save-decision {title}` | `specs/tasks/save-notes.md` | save a structured decision record (ADR format) and append it to `journal.md` … |
-| `/help` | — | Show available actions |
-| `/agent {character}` | `specs/agents/{character}-agent.yaml` | take over the persona of agents/{character}-agent.yaml |
-| `/list-agents` | — | Show available agent personas |
-| `/exit` | — | Say goodbye and abandon persona |
+| `:init-course` | `specs/tasks/init-course.md` | — |
+| `:analyze-existing` | `specs/tasks/analyze-existing.md` | — |
+| `:scaffold {course-type?}` | `specs/tasks/scaffold-course.md` | single intake interview, then auto-generate `journal.md` sections for Course … |
+| `:create-outline` | `specs/tasks/create-outline.md` | — |
+| `:create-didactics` | `specs/tasks/create-didactics.md` | — |
+| `:create-learner-persona {name?}` | `specs/tasks/create-learner-persona.md` | create a data-based or quick learner persona and save to `journal.md` → `## A… |
+| `:configure-agent {agent}` | `specs/tasks/configure-agent.md` | configure only the matching direct `journal.md` → `## Agents` → `### {agent}`… |
+| `:create-agenda` | `specs/tasks/create-agenda.md` | — |
+| `:manage-templates {name?}` | `specs/tasks/manage-templates.md` | add/update LiaScript template imports in the project header and document usag… |
+| `:update-dashboard` | `specs/tasks/update-dashboard.md` | regenerate the derived `journal.md` → `## Dashboard` after project state changes |
+| `:create-session {number} {type} {title?}` | `specs/tasks/create-session-skeleton.md` | — |
+| `:promote-session {number} {type}` | `specs/tasks/promote-session.md` | — |
+| `:coauthor-materials` | `specs/tasks/coauthor-materials.md` | — |
+| `:quick-fix {number} {type} {description}` | `specs/tasks/quick-fix.md` | targeted single-issue correction without full co-authoring session |
+| `:validate-course` | `specs/tasks/validate-course.md` | no args: full course check before publishing and replace validation reports i… |
+| `:validate-course {number} {type}` | `specs/tasks/validate-course.md` | in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions` |
+| `:assemble-bundle` | `specs/tasks/assemble-bundle.md` | — |
+| `:save-notes {type?} {title?}` | `specs/tasks/save-notes.md` | summarize the current discussion and append it to `journal.md` → `## Notes Ba… |
+| `:save-decision {title}` | `specs/tasks/save-notes.md` | save a structured decision record (ADR format) and append it to `journal.md` … |
+| `:help` | — | Show available actions |
+| `:agent {character}` | `specs/agents/{character}-agent.yaml` | take over the persona of agents/{character}-agent.yaml |
+| `:list-agents` | — | Show available agent personas |
+| `:exit` | — | Say goodbye and abandon persona |
 
 ## Agent Coordination
 
-**Suggest `/agent artist`:**
-- After /create-didactics is done and visual identity is the next step → suggest `/agent artist` for /create-visuals
-- During /coauthor-materials when the instructor asks for images, logos, or diagrams
+**Suggest `:agent artist`:**
+- After :create-didactics is done and visual identity is the next step → suggest `:agent artist` for :create-visuals
+- During :coauthor-materials when the instructor asks for images, logos, or diagrams
 - When visual design questions arise that go beyond content
 
-**Suggest `/agent learner`:**
-- After /create-learner-persona is done and personas exist → suggest `/agent learner` for /review-as-persona
-- After /coauthor-materials + /validate-course for a session → suggest `/agent learner` for /review-as-persona
+**Suggest `:agent learner`:**
+- After :create-learner-persona is done and personas exist → suggest `:agent learner` for :review-as-persona
+- After :coauthor-materials + :validate-course for a session → suggest `:agent learner` for :review-as-persona
 - When the instructor asks 'would learners understand this?' or 'is this too hard?' → hand off to Learner-Agent
 - When the instructor wants to check assumed prior knowledge against the real target audience
 
-**Suggest `/agent development`:**
-- After /validate-course passes → suggest `/agent development` for /create-project or /update-project
+**Suggest `:agent development`:**
+- After :validate-course passes → suggest `:agent development` for :create-project or :update-project
 - When the instructor mentions git, GitHub, publishing, or GitHub Pages
 - When committing or pushing changes is needed
 
@@ -84,8 +84,8 @@ Supports educators in creating courses through outline, didactics, agenda, sessi
 ```
 specs/tasks/       ← task definitions  (read on demand, one per command)
 specs/templates/   ← YAML templates    (read when filling a template)
-specs/agents/      ← agent personas    (read on /agent switch)
-specs/checklists/  ← quality checks    (read during /validate-course)
+specs/agents/      ← agent personas    (read on :agent switch)
+specs/checklists/  ← quality checks    (read during :validate-course)
 specs/data/        ← LiaScript data    (read when working with LiaScript)
 journal.md         ← current project state  (read on activation)
 materials/         ← generated course materials

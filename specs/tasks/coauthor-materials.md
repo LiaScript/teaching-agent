@@ -50,7 +50,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open document `materials/{number}-{type}.md`.
 7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Done column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 8. After approval, 🎛️ ask with structured question (single choice):
-   - **Yes, validate now** — run `/validate-course {number} {type}`
+   - **Yes, validate now** — run `:validate-course {number} {type}`
    - **Later** — skip validation, proceed directly to the next session
 
 ## Special Features

@@ -34,18 +34,18 @@ agent_coordination:
   role: "Workflow coordinator — knows when to involve other agents"
 
   suggest_artist_when:
-    - "After /create-didactics is done and visual identity is the next step → suggest `/agent artist` for /create-visuals"
-    - "During /coauthor-materials when the instructor asks for images, logos, or diagrams"
+    - "After :create-didactics is done and visual identity is the next step → suggest `:agent artist` for :create-visuals"
+    - "During :coauthor-materials when the instructor asks for images, logos, or diagrams"
     - "When visual design questions arise that go beyond content"
 
   suggest_development_when:
-    - "After /validate-course passes → suggest `/agent development` for /create-project or /update-project"
+    - "After :validate-course passes → suggest `:agent development` for :create-project or :update-project"
     - "When the instructor mentions git, GitHub, publishing, or GitHub Pages"
     - "When committing or pushing changes is needed"
 
   suggest_learner_when:
-    - "After /create-learner-persona is done and personas exist → suggest `/agent learner` for /review-as-persona"
-    - "After /coauthor-materials + /validate-course for a session → suggest `/agent learner` for /review-as-persona"
+    - "After :create-learner-persona is done and personas exist → suggest `:agent learner` for :review-as-persona"
+    - "After :coauthor-materials + :validate-course for a session → suggest `:agent learner` for :review-as-persona"
     - "When the instructor asks 'would learners understand this?' or 'is this too hard?' → hand off to Learner-Agent"
     - "When the instructor wants to check assumed prior knowledge against the real target audience"
 
@@ -61,9 +61,9 @@ agent_coordination:
     - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
 
   suggest_escalation_when:
-    - "Session count grows significantly beyond what was scoped in /init-course → suggest reviewing course type or splitting the course"
-    - "A /quick-fix grows into multi-section rework → escalate to /coauthor-materials for the full session"
-    - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running /validate-course before continuing"
+    - "Session count grows significantly beyond what was scoped in :init-course → suggest reviewing course type or splitting the course"
+    - "A :quick-fix grows into multi-section rework → escalate to :coauthor-materials for the full session"
+    - "Instructor changes a core concept mid-development (target audience, difficulty, course type) → flag consistency risk and suggest running :validate-course before continuing"
 
 interaction_mode:
   principle: "Use structured questions (vscode_askQuestions) for closed decisions; use free-form dialog for open content."
@@ -120,8 +120,8 @@ epistemic_rules:
 project_memory:
   canonical_file: "journal.md"
   skeleton: >
-    `templates/journal.md` — copied 1:1 (no edits, no added comments) by /init-course
-    or /scaffold when no journal.md exists. The file IS a valid LiaScript document:
+    `templates/journal.md` — copied 1:1 (no edits, no added comments) by :init-course
+    or :scaffold when no journal.md exists. The file IS a valid LiaScript document:
     its first HTML comment is the LiaScript metadata header (dashboard @style,
     default Mermaid import) and must stay the first comment in the file. It defines
     the binding document shape: Dashboard HTML shell plus one flat `* __Label:__`
@@ -129,7 +129,7 @@ project_memory:
   journal_formatting_rules:
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
     - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
-    - "Exceptions to the flat rule: `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
+    - "Exceptions to the flat rule: `## Dashboard` (generated HTML shell with fixed `###` dashboard-card headings only), `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews`), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: update the existing HTML structure in place via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never replace it with a plain table, never edit it manually, never copy a chat progress summary into it."
@@ -183,7 +183,7 @@ note_saving:
       - "Multiple alternatives were discussed and one was chosen"
       - "A contradiction with existing project memory was found and resolved"
       - "A research prompt was generated (offer to save it as research note)"
-      - "A /coauthor-materials session ends with instructor approval"
+      - "A :coauthor-materials session ends with instructor approval"
       - "A longer discussion produced a concrete conclusion"
     offer_format: |
       This was an important decision/insight. Should I save this?
@@ -192,29 +192,29 @@ note_saving:
       Yes / No / Adjust"
 
 commands:
-  /init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
-  /analyze-existing: "run task `tasks/analyze-existing.md`"
-  /scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `journal.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
-  /create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
-  /create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
-  /create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Agents` → `### Learner Personas`"
-  /configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching direct `journal.md` → `## Agents` → `### {agent}` subsection"
-  /create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
-  /manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
-  /update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
-  /create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
-  /promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
-  /coauthor-materials: "run task `tasks/coauthor-materials.md`"
-  /quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
-  /validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
-  /validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
-  /assemble-bundle: "run task `tasks/assemble-bundle.md`"
-  /save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
-  /save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
-  /help: "Show available actions"
-  /agent {character}: "take over the persona of agents/{character}-agent.yaml"
-  /list-agents: "Show available agent personas"
-  /exit: "Say goodbye and abandon persona"
+  :init-course: "run task `tasks/init-course.md` with `templates/course-context.yaml`"
+  :analyze-existing: "run task `tasks/analyze-existing.md`"
+  :scaffold {course-type?}: "run task `tasks/scaffold-course.md` — single intake interview, then auto-generate `journal.md` sections for Course Context, Outline, Didactics, Agenda, Sessions in one pass"
+  :create-outline: "run task `tasks/create-outline.md` with `templates/course-outline.yaml`"
+  :create-didactics: "run task `tasks/create-didactics.md` with `templates/course-didactics.yaml`"
+  :create-learner-persona {name?}: "run task `tasks/create-learner-persona.md` — create a data-based or quick learner persona and save to `journal.md` → `## Agents` → `### Learner Personas`"
+  :configure-agent {agent}: "run task `tasks/configure-agent.md` with `templates/agents.yaml` — configure only the matching direct `journal.md` → `## Agents` → `### {agent}` subsection"
+  :create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
+  :manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
+  :update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
+  :create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
+  :promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
+  :coauthor-materials: "run task `tasks/coauthor-materials.md`"
+  :quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
+  :validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
+  :validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
+  :assemble-bundle: "run task `tasks/assemble-bundle.md`"
+  :save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
+  :save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
+  :help: "Show available actions"
+  :agent {character}: "take over the persona of agents/{character}-agent.yaml"
+  :list-agents: "Show available agent personas"
+  :exit: "Say goodbye and abandon persona"
 
 dependencies:
   agents:
