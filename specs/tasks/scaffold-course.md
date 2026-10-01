@@ -49,6 +49,7 @@ Generated in sequence without interruption inside `journal.md`:
    > "Scaffold mode started. I will now ask you all the questions at once — afterwards, I will automatically generate the complete course structure. You can adjust everything afterwards."
 
 2. Collect all inputs using structured questions where options are fixed, free text where content is needed:
+   - If the skill `creativity` is available (see `data/skills.md`) and the instructor has only a vague idea, offer it once as an exploratory warm-up before the interview — never by default.
 
    **🎛️ Block 1 — Course basics (structured questions, one pass):**
    - Course type: lecture-series / self-paced / workshop / single-lesson
@@ -130,7 +131,10 @@ After each section is saved, print a brief progress line:
    >
    > "Next step: `:coauthor-materials` to start with Session 1."
 
-8. Offer a note save:
+8. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
+   1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
+   2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.
+9. Offer a note save:
    > "Should I save the course structure decisions as a Decision Note? (`:save-decision course-structure`)"
 
 ## Escalation Rules

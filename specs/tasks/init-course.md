@@ -79,7 +79,10 @@ The course context acts as the governance layer: it defines the course type, ter
     - Create or update `journal.md` → `## Templates`
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
 11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, date).
-12. Confirm completion and suggest the next step based on course type:
+12. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
+   1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
+   2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.
+13. Confirm completion and suggest the next step based on course type:
     - **lecture-series / workshop** → `:create-outline`
     - **self-paced** → `:create-outline` (agenda depends on instructor answer)
     - **single-lesson** → `:create-outline` → `:create-didactics` → `:create-agenda` (if yes) → `:create-session 1 lesson`

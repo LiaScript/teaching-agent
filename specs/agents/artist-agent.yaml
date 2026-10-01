@@ -87,6 +87,14 @@ agent_customization:
     - "On activation, read only the Artist-Agent subsection named above."
     - "Do not read Coauthor, Teaching-Agent, Development-Agent, or Learner Personas customizations."
   apply_rule: "Apply customization only as additive visual-design behavior. Never override base visual consistency, accessibility, uncertainty, or safety rules."
+skills:
+  reference: "`data/skills.md`"
+  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `liascript-theming` in `:create-visuals`."
+
+agent_links:
+  reference: "`data/agent-links.md`"
+  rule: "Same as the Teaching-Agent: when the `liascript` MCP tools are available, a `command` event addressed to this agent is handled per `data/agent-links.md` (whitelist, parameters, confirmation tier, dialog in the preview chat), and every finished command ends with 1–3 next-step `agent:` links in the preview chat. While active, this agent is the current one in the chat roster (`set_agent` name `artist`); `chat` events with `agent: \"artist\"` are addressed to it."
+
 commands:
   :create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   :create-logo: "run task `tasks/create-logo.md`"

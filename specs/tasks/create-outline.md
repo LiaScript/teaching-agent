@@ -23,6 +23,7 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 
 1. Read `journal.md` → `## Course Context` to determine course type and conventions.
 2. Collect title and target audience.
+   - If the skill `creativity` is available (see `data/skills.md`), 🎛️ offer once before collecting the remaining inputs: 1. structured interview (default) · 2. open exploratory ideation with `creativity` first, then condense its result into the inputs below. Run it only on request; the outline itself is still written by this task.
 3. Collect time commitment — adapted by course type:
    - **lecture-series**: required (e.g., semester hours/week, total hours)
    - **workshop**: required (e.g., 1-day, 2-day block)

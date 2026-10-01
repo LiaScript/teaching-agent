@@ -29,6 +29,7 @@ Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted chang
 
 3. **Mini-validation of the affected section:**
    - Run `tasks/validate-syntax.md` scoped to the changed area — do not restate syntax rules here.
+   - If the skill `liascript-syntax` is available (see `data/skills.md`), consult it when the fix touches a construct the cheat sheet does not cover.
    - Persona/tone consistent with `journal.md` → `## Didactics`?
    - No unintended regression in surrounding content?
 

@@ -19,6 +19,13 @@ Publishes new or changed content. Behavior branches hard on `journal.md` → `##
 - **single-file:** committed and pushed changes to GitHub; no other generated files
 - **multi-file:** updated `project.yaml` in the root folder (reflecting all current materials); committed and pushed changes; triggered GitHub Actions workflow to publish updates
 
+## Optional Skills
+
+Only if installed (see `data/skills.md`) — never install them:
+
+- `exporter-workflow` — use it next to `data/liascript-workflows.md` for `project.yaml`, the GitHub Actions workflow, and additional exports (PDF, SCORM, ePub, …). The rules of this task (e.g. `force_orphan: true`, confirmation before changes) stay binding.
+- `oersi-metadata` — 🎛️ offer once to add a `metadata.yml` so the course can be indexed as OER on OERSI (1. yes · 2. no). It is committed together with the other publishing files via `:manage-git`.
+
 ## Steps
 
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.

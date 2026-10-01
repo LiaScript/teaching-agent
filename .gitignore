@@ -1,0 +1,4 @@
+server/events.jsonl
+server/*.pid
+__pycache__/
+.mcp.json

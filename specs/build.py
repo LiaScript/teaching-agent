@@ -166,6 +166,23 @@ def _short_desc(desc: str) -> str:
     return text or "—"
 
 
+def _rules_section(title: str, block: dict | None) -> list[str]:
+    """Render a YAML block with summary, rules and reference as a section."""
+    if not block:
+        return []
+    lines = [f"## {title}", ""]
+    summary = (block.get("summary") or "").strip()
+    if summary:
+        lines += [summary, ""]
+    for rule in block.get("rules") or []:
+        lines.append(f"- {rule}")
+    reference = block.get("reference")
+    if reference:
+        lines += ["", f"**Reference:** {reference}"]
+    lines.append("")
+    return lines
+
+
 def _nav_content(target_key: str, target: dict, agent: dict) -> str:
     persona = agent.get("persona", {})
     commands = agent.get("commands", {})
@@ -249,6 +266,10 @@ def _nav_content(target_key: str, target: dict, agent: dict) -> str:
         for note in cross_agent_exceptions:
             lines.append(f"**Exception:** {note}")
             lines.append("")
+
+    # Rule blocks: summary, rules, reference
+    lines += _rules_section("LiaScript Skills", agent.get("skills"))
+    lines += _rules_section("Agent Links (LiaScript DevServer)", agent.get("agent_links"))
 
     # File layout
     lines += [

@@ -57,6 +57,7 @@ Use this task for both:
    - type-specific content
 
 5. Append the rendered entry to `journal.md` -> `## Notes Backup`.
+   - For research notes that cite literature: if the skill `reference-checker` is available (see `data/skills.md`) and web access exists, offer to verify the references before saving and add the summary to the note.
    - If `## Notes Backup` does not exist, create it near the end of `journal.md`.
    - Do not replace, reorder, or summarize existing entries.
    - Each note is one `###` subsection.

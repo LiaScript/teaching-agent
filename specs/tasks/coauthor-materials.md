@@ -20,6 +20,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 - Open questions or ideas from instructors (discussion points)
 - `tasks/validate-syntax.md` — optional self-check for LiaScript syntax while drafting, ahead of formal validation
 - `data/duration-heuristic.md` — optional self-check for whether the emerging content volume still matches the session's declared duration
+- Optional skills, only if installed (see `data/skills.md`): `liascript-syntax` as authoring reference next to `data/liascript-cheat-sheet.md`; `reference-checker` to verify sources before they are added to the material; `creativity` when the instructor asks for open-ended ideation on a narrative or scene
 
 ## Output
 

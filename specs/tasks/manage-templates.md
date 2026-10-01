@@ -42,6 +42,8 @@ Use this task when:
    - Do not duplicate existing imports
    - Keep existing metadata lines unchanged
 5. Create or update `journal.md` → `## Templates` using `templates/course-templates.yaml`.
+   - If no existing template provides what the instructor needs and the skill `template-development` is available (see `data/skills.md`), offer to build a project template with it. Document the result here like any other template.
+   - If the skill `liascript-syntax` is available (see `data/skills.md`), use it for correct usage examples.
    - Keep the overview text with the link to [topics/liascript-template](https://github.com/topics/liascript-template)
    - Create one `### {template_name}` subsection per template
    - Replace an existing template subsection if the same template name already exists

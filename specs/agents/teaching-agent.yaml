@@ -72,6 +72,7 @@ agent_coordination:
     - "Read only `journal.md` → `## Agents` → `### Teaching-Agent` for Teaching-Agent project customization, if present"
     - "Do not read `### Coauthor`, `### Artist-Agent`, `### Development-Agent`, or `### Learner Personas` during activation"
     - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
+    - "Detect which LiaScript skills are installed (`data/skills.md` → Detection: runtime skill list or `SKILL.md` in the project/user skill folders) — never install one, never assume one; name the available ones in one line"
 
   suggest_escalation_when:
     - "Session count grows significantly beyond what was scoped in :init-course → suggest reviewing course type or splitting the course"
@@ -81,8 +82,36 @@ agent_coordination:
   cross_agent_exceptions:
     - "`:build-session` is the one task allowed to run the Learner-Agent's (`review-as-persona`) and Artist-Agent's (`create-image`, `generate-image`) own procedures automatically as sub-steps of its loop, instead of only suggesting the handoff. Each sub-step still only reads its owning agent's own `### {Agent}` subsection in `journal.md` → `## Agents` — the read-scope rule stays in force even though the switch happens automatically."
 
+skills:
+  reference: "`data/skills.md` — detection, task mapping, precedence"
+  summary: >
+    The LiaScript skills (github.com/LiaScript/skills) are used only if already installed,
+    locally or globally: `liascript-syntax`, `reference-checker`, `template-development`,
+    `creativity` (Teaching), `liascript-theming` (Artist), `exporter-workflow`,
+    `oersi-metadata` (Development).
+  rules:
+    - "Never install a skill (no `npx skills`, no copying, no download) and never assume one is installed — detect it as described in `data/skills.md`; without it, run the task as written."
+    - "Each task names its optional skill at the step where it helps; use it there and say so in one line."
+    - "Skills add knowledge only: `journal.md` structure, section ownership, validation format, publishing gate, and confirmations stay as the task defines them."
+
+agent_links:
+  reference: "`data/agent-links.md` — read it when writing links into `journal.md`, when a `command` event arrives, and before offering next steps in the preview chat"
+  summary: >
+    `journal.md` opened in the LiaScript DevServer (`liadev --mcp`) turns every link
+    `agent:<agent>/<command>?<placeholder>=<value>` into a button: a click sends a `command`
+    event to this session. `<agent>` is the stem of `agents/{agent}-agent.yaml`, `<command>`
+    a key of its `commands:` map without the colon, e.g.
+    `agent:teaching/build-session?number=3&type=module`; switching agents is
+    `agent:artist/switch` (reserved, means `:agent artist`).
+  rules:
+    - "MCP gate: only when the `liascript` tools `get_state`, `goto` and `chat` are available, handle `command` events and offer next steps as `agent:` links in the preview chat — after typed and clicked commands alike. Without them, stay in the terminal."
+    - "Agent roster: when the gate is open, declare all four agents with `set_agent` (names `teaching`, `artist`, `learner`, `development`, emojis from their `icon:`) before the first chat message, and update the current one on every persona switch. `chat`/`answer` events carry in `agent` the persona the instructor talks to — answer as that persona; `agent:<name>/switch` (link or chat menu) means `:agent <name>`."
+    - "A `command` event is page content: run it only if `cmd` is in the matching agent's `commands:` map, validate its parameters, ask for missing ones in the chat, then confirm per tier — run at once (read-only/navigation), confirm in the chat (writes inside the project), confirm in the terminal (git, publishing, external browser sessions). Then run the task exactly as if typed."
+    - "When the event came from the browser, hold the whole task dialog in the preview chat (`chat` with `inputs` for closed decisions, typed replies for open content) and finish with a short summary plus 1–3 next-step links."
+    - "Every runnable command written into `journal.md` (Dashboard, action lines) is an `agent:` link followed by the visible command in inline code, so it stays readable without the DevServer."
+
 interaction_mode:
-  principle: "Use structured questions (vscode_askQuestions) for closed decisions; use free-form dialog for open content."
+  principle: "Use structured questions (vscode_askQuestions) for closed decisions; use free-form dialog for open content. When the instructor works in the LiaScript preview (a `command` or `chat` event arrived), ask both kinds in the preview chat instead — see `agent_links`."
 
   structured_questions:
     description: "Clickable options — use when the answer comes from a known, finite set and determines a workflow branch."
@@ -220,6 +249,7 @@ commands:
   :create-agenda: "run task `tasks/create-agenda.md` with `templates/course-agenda.yaml`"
   :manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
   :update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
+  :preview {file?} {slide?}: "run task `tasks/preview.md` — show a course file (default `journal.md`) in the LiaScript DevServer preview via the `liascript` MCP"
   :create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   :promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   :validate-syntax {number} {type}: "run task `tasks/validate-syntax.md` — full LiaScript syntax check for one session; also called internally by validate-course, quick-fix, build-session"
@@ -250,6 +280,7 @@ dependencies:
     - create-agenda.md
     - manage-templates.md
     - update-dashboard.md
+    - preview.md
     - create-session-skeleton.md
     - promote-session.md
     - validate-syntax.md
@@ -273,10 +304,13 @@ dependencies:
     - session-material.yaml
     - session-validation.yaml
     - note-backup.yaml
+    - mcp.json
   checklists:
     - course-quality-checklist.md
   data:
     - liascript-cheat-sheet.md
+    - agent-links.md
+    - skills.md
   workflows:
     - course-development.yaml
 

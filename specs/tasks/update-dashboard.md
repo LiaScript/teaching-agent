@@ -19,11 +19,14 @@ The dashboard is **derived state**. It is never the source of truth.
 - `journal.md` → `## Agents` → `### Learner Personas` headings, if present
 - `journal.md` → `## Validation` → `### Latest Validation Summary`, if present
 - `templates/project-dashboard.yaml`
+- `data/agent-links.md` — link format, action lines, and which commands fit which state
+- The `commands:` maps of `agents/*-agent.yaml` — the only commands that may appear as links
 
 ## Output
 
 - `journal.md` → `## Dashboard`
 - Optional minimal `@style` block in the main metadata header if dashboard classes are missing
+- The action lines (`<!-- class="journal-actions" -->` paragraphs) directly below the section headings listed in `data/agent-links.md`
 
 ## Automatic Trigger
 
@@ -51,7 +54,8 @@ Run this task automatically after any task that changes project state:
 1. Read the source sections listed above.
 2. Derive the current project status:
    - Current step
-   - Next useful commands
+   - Next useful commands (1–3), each with its concrete arguments and a one-line reason
+   - The most useful command per agent (Teaching, Artist, Learner, Development)
    - Course validation state
    - Publishing gate state
    - Session progress
@@ -64,10 +68,15 @@ Run this task automatically after any task that changes project state:
    - Prefer one reusable `<article class="dashboard">`.
    - Use simple `<div class="dashboard-card">` sections.
    - Use compact status classes such as `dashboard-status-done`, `dashboard-status-current`, and `dashboard-status-blocked`.
+   - Make sure the `a[href*="agent:"]` pill style and the `.journal-actions` class from `templates/journal.md` exist; copy them from there if missing.
    - Keep CSS generic and short; do not encode course-specific colors, text, or session names in CSS.
-5. Replace only `journal.md` → `## Dashboard`.
-6. Do not modify the source sections used to derive the dashboard.
-7. Confirm the dashboard was updated and name the next recommended command.
+5. Replace only `journal.md` → `## Dashboard`. Write every runnable command as an `agent:` link plus the visible command (`data/agent-links.md` → Markdown Format): Next Commands, the Agents card, the Next step column of Session Progress, and Open Blockers.
+6. Refresh the action lines:
+   - For every heading listed in `data/agent-links.md` → Action lines (core `##` sections and every `### {n}. {title}` under `## Sessions`): if a paragraph marked `<!-- class="journal-actions" -->` sits directly below the heading, replace it; if not, insert one there.
+   - Fill it with the commands from the table in `data/agent-links.md` that fit the current state, with concrete arguments (session number, type, persona names).
+   - If an action line ended up below a `#### Validation Report`, `#### Persona Reviews`, or `#### Images` block, move it back directly below the `###` heading.
+   - Touch nothing else in those sections: action lines are the only content of source sections this task may write.
+7. Confirm the dashboard was updated and name the next recommended command. If the MCP gate is open (`data/agent-links.md`), also post the Next Commands as `agent:` links to the preview chat (Chat Offers).
 
 ## Dashboard Structure
 
@@ -93,6 +102,14 @@ _Generated from the project sections below. Do not edit manually._
 <div class="dashboard-card">
 
 ### Next Commands
+
+...
+
+</div>
+
+<div class="dashboard-card">
+
+### Agents
 
 ...
 
@@ -149,6 +166,8 @@ _Generated from the project sections below. Do not edit manually._
 - The dashboard HTML shell already exists in `journal.md` (instantiated from `templates/journal.md`) — update its values **in place**; do not invent a new layout and never downgrade it to a plain Markdown table.
 - Never ask the instructor to update the dashboard manually.
 - Never use dashboard values as authority for workflow decisions.
+- Links only for commands that exist in an agent's `commands:` map and make sense in the current state — never `exit`, never a command whose prerequisites are missing (no `promote-session` without skeleton, no `create-project` before a course-mode PASS).
+- Session Progress is a compact table, not prose. Never copy a progress narrative into the dashboard.
 - If dashboard and source sections disagree, trust the source sections and regenerate the dashboard.
-- Mermaid `click` links are helpful but renderer-dependent; always include regular Markdown quick links as fallback.
+- Mermaid `click` links are helpful but renderer-dependent; always include regular Markdown quick links as fallback. Keep Mermaid `click` targets as `#anchor` links — Mermaid sanitizes `agent:` URIs.
 - Keep the dashboard near the top of `journal.md`, directly after the main course title.

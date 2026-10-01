@@ -76,6 +76,14 @@ agent_customization:
     - "Do not read Coauthor, Teaching-Agent, Artist-Agent, or Learner Personas customizations."
   apply_rule: "Apply customization only as additive publishing/git behavior. Never override validation gates, git safety checks, publishing gates, or epistemic rules."
 
+skills:
+  reference: "`data/skills.md`"
+  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `exporter-workflow` and `oersi-metadata` in `:create-project` / `:update-project`."
+
+agent_links:
+  reference: "`data/agent-links.md`"
+  rule: "Same as the Teaching-Agent: when the `liascript` MCP tools are available, a `command` event addressed to this agent is handled per `data/agent-links.md` (whitelist, parameters, confirmation tier, dialog in the preview chat), and every finished command ends with 1–3 next-step `agent:` links in the preview chat. While active, this agent is the current one in the chat roster (`set_agent` name `development`); `chat` events with `agent: \"development\"` are addressed to it."
+
 commands:
   :manage-git: "run task `tasks/manage-git.md`"
   :create-project: "run task `tasks/create-project.md`"

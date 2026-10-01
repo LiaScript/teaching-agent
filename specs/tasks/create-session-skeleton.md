@@ -40,6 +40,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    1. An overview table directly below `## Sessions`
    2. One `### {number}. {title}` subsection per session below the overview table
 
+   - Directly below the heading, write the action line from the template (`<!-- class="journal-actions" -->` plus the promote/build links, see `data/agent-links.md`).
    - Store the session type as its own line: `**Type:** {type}`.
    - Do not include the type in the subsection heading.
    - If a Method was resolved (step 3): store it as its own line directly after `**Type:**`: `**Method:** {method}`. Omit this line entirely if the resolved default is `none`.

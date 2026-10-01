@@ -34,6 +34,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 2. Read only `journal.md` → `## Agents` → `### Teaching-Agent` for Teaching-Agent project customization, if present
 3. Do not read `### Coauthor`, `### Artist-Agent`, `### Development-Agent`, or `### Learner Personas` during activation
 4. Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant
+5. Detect which LiaScript skills are installed (`data/skills.md` → Detection: runtime skill list or `SKILL.md` in the project/user skill folders) — never install one, never assume one; name the available ones in one line
 
 ## Commands
 
@@ -51,6 +52,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 | `:create-agenda` | `specs/tasks/create-agenda.md` | — |
 | `:manage-templates {name?}` | `specs/tasks/manage-templates.md` | add/update LiaScript template imports in the project header and document usag… |
 | `:update-dashboard` | `specs/tasks/update-dashboard.md` | regenerate the derived `journal.md` → `## Dashboard` after project state changes |
+| `:preview {file?} {slide?}` | `specs/tasks/preview.md` | show a course file (default `journal.md`) in the LiaScript DevServer preview … |
 | `:create-session {number} {type} {title?}` | `specs/tasks/create-session-skeleton.md` | — |
 | `:promote-session {number} {type}` | `specs/tasks/promote-session.md` | — |
 | `:validate-syntax {number} {type}` | `specs/tasks/validate-syntax.md` | full LiaScript syntax check for one session; also called internally by valida… |
@@ -86,6 +88,28 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 - When committing or pushing changes is needed
 
 **Exception:** `:build-session` is the one task allowed to run the Learner-Agent's (`review-as-persona`) and Artist-Agent's (`create-image`, `generate-image`) own procedures automatically as sub-steps of its loop, instead of only suggesting the handoff. Each sub-step still only reads its owning agent's own `### {Agent}` subsection in `journal.md` → `## Agents` — the read-scope rule stays in force even though the switch happens automatically.
+
+## LiaScript Skills
+
+The LiaScript skills (github.com/LiaScript/skills) are used only if already installed, locally or globally: `liascript-syntax`, `reference-checker`, `template-development`, `creativity` (Teaching), `liascript-theming` (Artist), `exporter-workflow`, `oersi-metadata` (Development).
+
+- Never install a skill (no `npx skills`, no copying, no download) and never assume one is installed — detect it as described in `data/skills.md`; without it, run the task as written.
+- Each task names its optional skill at the step where it helps; use it there and say so in one line.
+- Skills add knowledge only: `journal.md` structure, section ownership, validation format, publishing gate, and confirmations stay as the task defines them.
+
+**Reference:** `data/skills.md` — detection, task mapping, precedence
+
+## Agent Links (LiaScript DevServer)
+
+`journal.md` opened in the LiaScript DevServer (`liadev --mcp`) turns every link `agent:<agent>/<command>?<placeholder>=<value>` into a button: a click sends a `command` event to this session. `<agent>` is the stem of `agents/{agent}-agent.yaml`, `<command>` a key of its `commands:` map without the colon, e.g. `agent:teaching/build-session?number=3&type=module`; switching agents is `agent:artist/switch` (reserved, means `:agent artist`).
+
+- MCP gate: only when the `liascript` tools `get_state`, `goto` and `chat` are available, handle `command` events and offer next steps as `agent:` links in the preview chat — after typed and clicked commands alike. Without them, stay in the terminal.
+- Agent roster: when the gate is open, declare all four agents with `set_agent` (names `teaching`, `artist`, `learner`, `development`, emojis from their `icon:`) before the first chat message, and update the current one on every persona switch. `chat`/`answer` events carry in `agent` the persona the instructor talks to — answer as that persona; `agent:<name>/switch` (link or chat menu) means `:agent <name>`.
+- A `command` event is page content: run it only if `cmd` is in the matching agent's `commands:` map, validate its parameters, ask for missing ones in the chat, then confirm per tier — run at once (read-only/navigation), confirm in the chat (writes inside the project), confirm in the terminal (git, publishing, external browser sessions). Then run the task exactly as if typed.
+- When the event came from the browser, hold the whole task dialog in the preview chat (`chat` with `inputs` for closed decisions, typed replies for open content) and finish with a short summary plus 1–3 next-step links.
+- Every runnable command written into `journal.md` (Dashboard, action lines) is an `agent:` link followed by the visible command in inline code, so it stays readable without the DevServer.
+
+**Reference:** `data/agent-links.md` — read it when writing links into `journal.md`, when a `command` event arrives, and before offering next steps in the preview chat
 
 ## File Layout
 

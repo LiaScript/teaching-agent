@@ -12,6 +12,30 @@ template:
     - 'Derived state only; source sections remain authoritative.'
     - 'Use the Mermaid LiaScript template with `@mermaid` when imported.'
     - 'Keep CSS minimal and reusable in the main metadata header.'
+    - 'Every runnable command is written as an `agent:` link followed by the visible command, see `data/agent-links.md` → Markdown Format.'
+    - 'Labels in the course language (`## Course Context` → Language); commands and URIs stay in English.'
+  placeholders:
+    next_commands: |
+      1–3 numbered entries, most useful first:
+      1. [▶ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
+    agents: |
+      One paragraph per agent, in this order: 🎓 Teaching, 🎨 Artist, 🧑‍🎓 Learner, 🛠️ Development.
+      Each: `{icon} __{Agent}__ — {when it is useful now} · {one link}`. The link is that agent's most useful
+      command in the current state (e.g. `agent:artist/create-visuals` once Didactics exist,
+      `agent:learner/review-as-persona?name=…&number=…&type=…` once personas and material exist,
+      `agent:development/create-project` only when the publishing gate is PASS), otherwise the switch link
+      `agent:{agent}/switch`.
+    session_progress: |
+      A compact table, one row per session from `## Sessions` (or `## Agenda` rows without skeleton), no prose:
+      <!-- data-type="none" -->
+      | # | Title | Status | Next step |
+      |---|-------|--------|-----------|
+      | 3 | First Words | 🟡 skeleton | [▶ Promote](agent:teaching/promote-session?number=3&type=module) `:promote-session 3 module` |
+      Status: ⚪ planned (agenda only), 🟡 skeleton, 🟠 material, 🔍 validated, ✅ done.
+      Next step: create-session → promote-session (or build-session) → validate-course {n} {type} → learner/review-as-persona → none.
+      Without sessions: one line plus a link to `create-agenda` or `create-session`.
+    open_blockers: |
+      One line per blocker, each ending with the agent: link that resolves it. `None.` if there is none.
   sections:
     - id: dashboard
       title: Dashboard
@@ -48,6 +72,14 @@ template:
 
         <div class="dashboard-card">
 
+        ### Agents
+
+        {{agents}}
+
+        </div>
+
+        <div class="dashboard-card">
+
         ### Quality State
 
         {{quality_state}}
@@ -69,6 +101,10 @@ template:
         ### Session Progress
 
         {{session_progress}}
+             | # | Title | Status | Next step |
+             |---|-------|--------|-----------|
+             | 3 | {{title}} | 🟡 skeleton | [▶ Promote](agent:teaching/promote-session?number=3&type=module) `:promote-session 3 module` |
+             Without sessions: one line plus a link to `create-agenda` or `create-session`. -->
 
         </div>
 

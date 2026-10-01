@@ -39,6 +39,8 @@ Converts a **Session** into a detailed **Session Material**.
 6. Consider didactic inputs.
 7. Generate planned outline.
 8. Apply template.
+   - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as authoring reference for every LiaScript construct in the material; otherwise use `data/liascript-cheat-sheet.md`.
+   - If `journal.md` → `## Visual Identity` contains a `__LiaScript Theme:__` block, include it in the material's metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
 9. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
 10. Resolve the File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) and save accordingly:
     - **multi-file:** derive `{slug}` from the session title, create `materials/{number}-{slug}/README.md` (and its `assets/` subfolder on demand, not upfront).

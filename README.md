@@ -40,6 +40,8 @@ Accordingly, the material is written at a **beginner** level: every legal or tec
 - [The Workflow](#the-workflow)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Live Dashboard with the LiaScript DevServer](#live-dashboard-with-the-liascript-devserver)
+- [Optional LiaScript Skills](#optional-liascript-skills)
 - [Commands Reference](#commands-reference)
 - [Project Structure](#project-structure)
 - [Example Session](#example-session)
@@ -231,6 +233,75 @@ In every environment the agent introduces itself, reads `journal.md` if it exist
 
 ---
 
+## Live Dashboard with the LiaScript DevServer
+
+`journal.md` can be opened as a live control panel. The
+[LiaScript DevServer](https://github.com/LiaScript/LiaScript-DevServer) shows it in the
+browser with a chat on top, and every action link in it talks to your agent:
+
+```markdown
+[▶ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
+```
+
+A click sends `agent:<agent>/<command>?<parameters>` to the running agent — `teaching`,
+`artist`, `learner` or `development`, and one of that agent's commands. The agent checks the
+command, asks for missing details in the chat, confirms steps that change the project, runs
+the task, and answers in the chat with the next steps as links. When `journal.md` changes,
+the preview reloads. Without the DevServer the same lines simply show the command to type.
+
+The chat shows which agent you are talking to (🎓 Teaching, 🎨 Artist, 🧑‍🎓 Learner,
+🛠️ Development). Switch with its menu or a link like `[🎨 Artist](agent:artist/switch)`;
+what you type goes to the agent shown there.
+
+Links appear in the Dashboard (Next Commands, an Agents card, the next step of every
+session, open blockers) and as one action line below each section heading. They are written
+by `:update-dashboard`; the format is defined in
+[`specs/data/agent-links.md`](specs/data/agent-links.md).
+
+**Setup**
+
+1. Install the DevServer: `npm install -g @liascript/devserver`
+2. Copy [`specs/templates/mcp.json`](specs/templates/mcp.json) to `.mcp.json` in the project
+   root (`:init-course` and `:scaffold` offer to do it). The agent then starts
+   `liadev --mcp --live -i journal.md` by itself.
+3. Start your agent:
+   - **Claude Code** — clicks arrive immediately through
+     [channels](https://code.claude.com/docs/en/channels):
+     `claude --dangerously-load-development-channels server:liascript`
+   - **Codex, Gemini CLI, …** — register the same server in their MCP configuration
+     (Codex: raise `tool_timeout_sec`, a confirmation waits for your click). They receive
+     clicks through the `wait_for_event` tool.
+4. `:preview` opens `journal.md` in the browser; `:preview materials/03-…/README.md` shows a
+   session's material.
+
+What happens in the browser ends up as a prompt for your agent. The agent therefore only runs
+commands from its own command list, confirms every change in the chat, and asks in the
+terminal before anything touches git or publishing.
+
+---
+
+## Optional LiaScript Skills
+
+The agents use the [LiaScript skills](https://github.com/LiaScript/skills) when they are
+installed — in the project (`.claude/skills/`, `.agents/skills/`, …) or for your user
+(`~/.claude/skills/`, `~/.agents/skills/`, …). They never install a skill themselves and
+work without them, too.
+
+| Skill | Used by | Where |
+|---|---|---|
+| `liascript-syntax` | 🎓 Teaching | writing, fixing and validating materials |
+| `reference-checker` | 🎓 Teaching | checking a session's references during validation |
+| `template-development` | 🎓 Teaching | building your own template in `:manage-templates` |
+| `creativity` | 🎓 Teaching | optional open ideation in `:create-outline` and `:scaffold` |
+| `liascript-theming` | 🎨 Artist | a LiaScript theme from the visual identity in `:create-visuals` |
+| `exporter-workflow` | 🛠️ Development | `project.yaml`, GitHub Actions, exports |
+| `oersi-metadata` | 🛠️ Development | `metadata.yml` to list the course on OERSI |
+
+Install them yourself if you want them, e.g. `npx skills add LiaScript/skills`.
+Details: [`specs/data/skills.md`](specs/data/skills.md).
+
+---
+
 ## Commands Reference
 
 ### Teaching-Agent 🎓
@@ -245,7 +316,8 @@ In every environment the agent introduces itself, reads `journal.md` if it exist
 | `:create-learner-persona {name?}` | Build an evidence-based learner persona |
 | `:create-agenda` | Structure sessions / modules |
 | `:manage-templates {name?}` | Add & document LiaScript template imports |
-| `:update-dashboard` | Regenerate the derived `## Dashboard` |
+| `:update-dashboard` | Regenerate the derived `## Dashboard` and the action links in `journal.md` |
+| `:preview {file?} {slide?}` | Show `journal.md` or a material file in the LiaScript DevServer preview |
 | `:create-session {n} {type} {title?}` | Create a session skeleton |
 | `:promote-session {n} {type}` | Expand skeleton into a material document (`materials/{n}-{slug}/README.md` in multi-file mode, or a `##` chapter in root `README.md` in single-file mode — see `specs/data/file-structure-modes.md`) |
 | `:coauthor-materials` | Interactive content co-authoring in persona |

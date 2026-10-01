@@ -16,6 +16,12 @@ template:
       title: Title
       template: |
         ### {{number}}. {{title}}
+    - id: actions
+      title: Actions
+      template: |
+        <!-- class="journal-actions" -->
+        [▶ Promote](agent:teaching/promote-session?number={{number}}&type={{type}}) `:promote-session {{number}} {{type}}` · [▶ Build](agent:teaching/build-session?number={{number}}&type={{type}}) `:build-session {{number}} {{type}}`
+      note: 'Action line, see `data/agent-links.md`. Labels in the course language. `tasks/update-dashboard.md` refreshes it as the session progresses (validate, preview, quick-fix, persona review).'
     - id: type
       title: Type
       template: |

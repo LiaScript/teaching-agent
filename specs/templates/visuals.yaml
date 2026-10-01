@@ -79,6 +79,17 @@ template:
           4. Background: @color([HEX code]) - [usage: page background]
           5. Surface: @color([HEX code]) - [usage: content boxes, cards]
 
+    - id: liascript-theme
+      title: LiaScript Theme
+      optional: true
+      note: 'Only when the theme was generated with the skill `liascript-theming` (see `data/skills.md`) or written by hand. `promote-session` copies this block into every material header. Omit the bullet entirely otherwise.'
+      template: |
+        * __LiaScript Theme:__ {{source, e.g. "generated with liascript-theming from the website palette" or "bundled design: chalkboard"}}
+
+          ```text
+          {{the tested header lines: link: … / @style … @end / @custom … @end}}
+          ```
+
     - id: example-prompts
       title: Example Prompts
       template: |

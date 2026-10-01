@@ -20,6 +20,13 @@ Sets up publishing for the course. Behavior branches hard on `journal.md` → `#
 - **single-file:** nothing generated on disk; a confirmed git push and the LiaScript live-viewer URL
 - **multi-file:** `project.yaml` in the root folder (includes all materials as separate cards) and a GitHub Actions workflow for LiaScript export and publishing
 
+## Optional Skills
+
+Only if installed (see `data/skills.md`) — never install them:
+
+- `exporter-workflow` — use it next to `data/liascript-workflows.md` for `project.yaml`, the GitHub Actions workflow, and additional exports (PDF, SCORM, ePub, …). The rules of this task (e.g. `force_orphan: true`, confirmation before changes) stay binding.
+- `oersi-metadata` — 🎛️ offer once to add a `metadata.yml` so the course can be indexed as OER on OERSI (1. yes · 2. no). It is committed together with the other publishing files via `:manage-git`.
+
 ## Steps
 
 0. Load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
