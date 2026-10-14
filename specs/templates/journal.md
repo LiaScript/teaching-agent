@@ -1,210 +1,54 @@
 <!--
+language: en
 color: <span style="display:inline-block;width:1.5rem;height:1.5rem;background-color:@0;border:1px solid #ccc;border-radius:2px;vertical-align:middle;"></span> `@0`
 
-import: https://raw.githubusercontent.com/liaScript/mermaid_template/master/README.md
-
-@style
-.dashboard {
-  margin: 1.5rem 0 2rem;
-  padding: 1rem;
-  border: 1px solid #d7e0ea;
-  border-radius: 8px;
-  background: #f8fafc;
-}
-
-.dashboard-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.dashboard-card {
-  flex: 1 1 260px;
-  min-width: 240px;
-  padding: 1rem;
-  border: 1px solid #d7e0ea;
-  border-radius: 8px;
-  background: #ffffff;
-}
-
-.dashboard-card-wide {
-  flex-basis: 100%;
-}
-
-.dashboard-status {
-  display: inline-block;
-  padding: 0.18rem 0.5rem;
-  border-radius: 999px;
-  font-weight: 700;
-}
-
-.dashboard-status-done { background: #d8f5d0; color: #1b5e20; }
-.dashboard-status-current { background: #fff3bf; color: #7a4d00; }
-.dashboard-status-blocked { background: #ffe3e3; color: #8a1f1f; }
-
-.dashboard table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.dashboard th,
-.dashboard td {
-  padding: 0.35rem 0.45rem;
-  border-bottom: 1px solid #e5edf5;
-  text-align: left;
-}
-
-a[href*="agent:"] {
-  display: inline-block;
-  padding: 0.1rem 0.6rem;
-  border: 1px solid #1971c2;
-  border-radius: 999px;
-  background: #e7f5ff;
-  color: #0b4f8a;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-a[href*="agent:"]:hover { background: #1971c2; color: #ffffff; }
-
-.journal-actions {
-  padding: 0.4rem 0;
-  font-size: 0.9em;
-}
-
-@media (max-width: 600px) {
-  .dashboard-card {
-    flex-basis: 100%;
-    min-width: 0;
-  }
-}
-@end
+import: ./specs/dashboard/README.md
 -->
 
 # {{Course Working Title}}
 
 ## Dashboard
 
-<article class="dashboard">
-
-_Generated from the project sections below. Do not edit manually._
-
-<div class="dashboard-grid">
-
-<div class="dashboard-card">
-
-### Current State
-
-__Current step:__ <span class="dashboard-status dashboard-status-current">Project initialized</span>
-
-__Course validation:__ <span class="dashboard-status dashboard-status-blocked">not run</span>
-
-__Sessions complete:__ 0 / 0
-
-__Last updated:__ {{YYYY-MM-DD}}
-
-</div>
-
-<div class="dashboard-card">
-
-### Next Commands
-
-1. [▶ Start course](agent:teaching/init-course) `:init-course` — Course Context missing
-2. [▶ Fast track](agent:teaching/scaffold) `:scaffold` — one intake interview for all core sections
-3. [🔍 Analyze existing course](agent:teaching/analyze-existing) `:analyze-existing` — only to improve an existing course
-
-</div>
-
-<div class="dashboard-card">
-
-### Agents
-
-🎓 __Teaching-Agent__ — active by default · [▶ Help](agent:teaching/help) `:help`
-
-🎨 __Artist-Agent__ — after Didactics · [▶ Switch](agent:artist/switch) `:agent artist`
-
-🧑‍🎓 __Learner-Agent__ — needs a learner persona · [▶ Create persona](agent:teaching/create-learner-persona) `:create-learner-persona`
-
-🛠️ __Development-Agent__ — after course validation PASS · [▶ Switch](agent:development/switch) `:agent development`
-
-</div>
-
-<div class="dashboard-card">
-
-### Quality State
-
-<!-- data-type="none" -->
-| Area | State |
-| --- | --- |
-| Course context | <span class="dashboard-status dashboard-status-blocked">open</span> |
-| Templates | <span class="dashboard-status dashboard-status-blocked">open</span> |
-| Materials | <span class="dashboard-status dashboard-status-blocked">0 / 0</span> |
-| Course validation | <span class="dashboard-status dashboard-status-blocked">not run</span> |
-| Persona reviews | <span class="dashboard-status dashboard-status-current">optional</span> |
-
-</div>
-
-<div class="dashboard-card dashboard-card-wide">
-
-### Workflow Map
-
-```mermaid @mermaid
-flowchart LR
-  context[Course Context] --> outline[Outline]
-  outline --> didactics[Didactics]
-  didactics --> templates[Templates]
-  templates --> agenda[Agenda]
-  agenda --> sessions[Sessions]
-  sessions --> materials[Materials]
-  materials --> validation[Validation]
-  validation --> persona[Persona Reviews]
-  persona --> revision[Revision]
-  revision --> materials
-  validation --> publishing[Publishing]
-
-  class context current
-
-  classDef done fill:#d8f5d0,stroke:#2f8f46,color:#111
-  classDef current fill:#fff3bf,stroke:#d9480f,color:#111
-  classDef optional fill:#e7f5ff,stroke:#1971c2,color:#111
-
-  click context "#course-context" "Open Course Context"
-  click outline "#outline" "Open Outline"
-  click didactics "#didactics" "Open Didactics"
-  click templates "#templates" "Open Templates"
-  click agenda "#agenda" "Open Agenda"
-  click sessions "#sessions" "Open Sessions"
-  click validation "#validation" "Open Validation"
+```json @Dashboard.View
+{
+  "title": "Welcome – your course is still empty",
+  "context": "No topic, target group or time frame yet",
+  "subtitle": "In the first step you tell the assistant what you want to teach. Everything else builds on that frame.",
+  "next": {
+    "title": "Start a new course",
+    "why": "Topic, target group and format are the basis for learning objectives and material. The assistant asks for them one by one.",
+    "label": "Start course",
+    "href": "agent:teaching/init-course",
+    "command": ":init-course"
+  },
+  "unitsTitle": "Units",
+  "units": [],
+  "process": {
+    "title": "How your course comes together",
+    "description": "The steps from the topic to validated material. This overview always shows where we are.",
+    "steps": [
+      {"title": "Set the frame", "state": "current", "why": "Topic, target group, format and language shape everything that follows.", "next": "Click “Start course” and answer the questions."},
+      {"title": "Learning objectives and scope", "state": "planned", "why": "Clear objectives say what learners can do at the end."},
+      {"title": "Didactics", "state": "planned", "why": "Methods, task formats and support that fit the objectives."},
+      {"title": "Agenda", "state": "optional", "why": "Decided with the frame: order and duration of the units."},
+      {"title": "Create material", "state": "planned", "why": "Explanations, tasks and self-checks grow out of the planning."},
+      {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."}
+    ],
+    "note": "You can step back at any time. A draft only counts as finished once you have approved it."
+  },
+  "explore": [
+    {"icon": "⚡", "title": "Fast track", "description": "One interview fills context, objectives and didactics at once.", "label": "Fast track", "href": "agent:teaching/scaffold", "command": ":scaffold"},
+    {"icon": "🔍", "title": "Improve an existing course", "description": "Only if LiaScript material already exists and should be revised.", "label": "Analyze course", "href": "agent:teaching/analyze-existing", "command": ":analyze-existing"},
+    {"icon": "💬", "title": "Just ask", "description": "Ask in your own words whenever something is unclear.", "label": "What can the assistant do?", "href": "agent:teaching/help", "command": ":help"}
+  ],
+  "links": [
+    {"label": "Course Context", "href": "#course-context"},
+    {"label": "Outline", "href": "#outline"},
+    {"label": "Notes", "href": "#notes-backup"}
+  ],
+  "footer": "{{YYYY-MM-DD}} · new, empty project"
+}
 ```
-
-</div>
-
-<div class="dashboard-card dashboard-card-wide">
-
-### Session Progress
-
-_No sessions yet._ [▶ Create agenda](agent:teaching/create-agenda) `:create-agenda`
-
-</div>
-
-<div class="dashboard-card">
-
-### Open Blockers
-
-Course Context missing — [▶ Start course](agent:teaching/init-course) `:init-course`
-
-</div>
-
-<div class="dashboard-card">
-
-### Quick Links
-
-[Course Context](#course-context) · [Outline](#outline) · [Didactics](#didactics) · [Templates](#templates) · [Agenda](#agenda) · [Sessions](#sessions) · [Validation](#validation)
-
-</div>
-
-</div>
-</article>
 
 ---
 
@@ -236,8 +80,9 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
 * __Conventions & Standards:__
   1. Language: {{de | en | other}}
   2. Tone: {{formal | informal | conversational}}
-  3. Person: {{Sie | Du | you}}
-  4. Accessibility: {{required | optional}}
+  3. Person: {{Sie | Du | you}} — learners in the material
+  4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
+  5. Accessibility: {{required | optional}}
 
 * __LiaScript conventions:__
   - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
@@ -356,33 +201,30 @@ LiaScript templates used by this project are imported in the main metadata heade
 
 More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
 
-### {{template-name}}
+<section>
+
+### Dashboard
 
 * __Import:__
-  `{{raw README URL}}`
+  `./specs/dashboard/README.md`
 
 * __Header entry:__
-  `import: {{raw README URL}}`
+  `import: ./specs/dashboard/README.md`
 
 * __Purpose:__
-  {{what the template enables and why this project needs it}}
+  Renders the project overview (next step, units, work process, open points) from one JSON data block.
 
 * __Use when:__
-  1. {{situation}}
-  2. {{situation}}
-
-* __Basic example:__
-
-  ```text
-  {{minimal working example}}
-  ```
+  1. Showing the planning state in `## Dashboard` of `journal.md`
 
 * __How to use:__
-  1. {{step}}
-  2. {{step}}
+  1. Keep the import in the main metadata header.
+  2. Regenerate the data block with `:update-dashboard`; never edit it by hand.
 
 * __Special usage notes:__
-  1. {{caveats, e.g. unique canvas ids, macro variants}}
+  1. Component documentation and examples: `specs/dashboard/README.md`; check with `node specs/dashboard/validate-journal.mjs`.
+
+</section>
 
 ---
 
@@ -411,9 +253,6 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
 
-| # | Title | Type | Skeleton | Material | Done | Notes |
-|---|-------|------|----------|----------|------|-------|
-
 <!-- One subsection per session, structured like this:
 
 ### {{n}}. {{Session Title}}
@@ -434,14 +273,23 @@ _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:
 
 1. {{activity}}
 
+**Decisions:**
+
+1. {{instructor decision about this unit, with date — added during :coauthor-materials}}
+
 **References:**
 
 1. {{reference}}
 
 After :validate-course in session mode, a `#### Validation Report` block is
 inserted at the top of the subsection, directly after the action line. After :review-as-persona, a
-`#### Persona Reviews` block is appended.
+`#### Persona Reviews` block is appended. `#### Images` is created by :create-image
+only when the first image exists. Never use `#####` headings inside a session.
 -->
+
+<!-- data-type="none" -->
+| # | Title | Type | Skeleton | Material | Done | Notes |
+|---|-------|------|----------|----------|------|-------|
 
 ---
 
@@ -452,6 +300,8 @@ inserted at the top of the subsection, directly after the action line. After :re
 
 _Agent-specific project customizations and learner personas._
 _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
+
+<section>
 
 ### Coauthor
 
@@ -504,6 +354,8 @@ _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; e
   1. none
 * __Boundaries / Never:__
   1. Do not override validation gates, git safety, or publishing checks.
+
+</section>
 
 ### Learner Personas
 

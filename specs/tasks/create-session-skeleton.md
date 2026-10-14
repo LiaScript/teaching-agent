@@ -23,7 +23,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 
 ## Steps
 
-1. Collect session number, type, and optional title.
+1. Collect session number, type, and optional title. If the type slug is duplicated or equals a terminology word (`node specs/dashboard/validate-journal.mjs` reports `slug`), clean it up first in `## Didactics` and `## Agenda` (one line to the instructor) — before any material references it.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
    - Look up the given type in `journal.md` → `## Didactics` → `__Session Types:__`. If it doesn't match a defined slug, stop and ask — do not invent a type on the fly.
@@ -40,14 +40,16 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    1. An overview table directly below `## Sessions`
    2. One `### {number}. {title}` subsection per session below the overview table
 
-   - Directly below the heading, write the action line from the template (`<!-- class="journal-actions" -->` plus the promote/build links, see `data/agent-links.md`).
+   - Directly below the heading, write the action line from the template: exactly **one** main action (`coauthor-materials?number={n}`), followed by the `More actions` `<details>` block with the promote/build links — see `data/agent-links.md`.
    - Store the session type as its own line: `**Type:** {type}`.
    - Do not include the type in the subsection heading.
    - If a Method was resolved (step 3): store it as its own line directly after `**Type:**`: `**Method:** {method}`. Omit this line entirely if the resolved default is `none`.
    - `**Summary:**` and `**Content:**` are free text blocks and may contain more than one paragraph.
    - `**Activities:**` must be a numbered list.
    - `**References:**` must be a numbered list.
-   - End the subsection with an empty `#### Images` block (placeholder note); it is later filled by `:create-image` and rendered by `:generate-image`.
+   - Do **not** create an `#### Images` block — `:create-image` creates it when the first image exists (an empty `####` heading becomes an empty slide).
+   - Do not create a `**Decisions:**` list yet — `:coauthor-materials` adds it with the first decision.
+   - **Self-check before saving** (fix silently, then mention in one line what you adapted): the skeleton describes the material that will really be produced, not a wish list; new terms stay within the scope set in `## Didactics` (terms of later sessions are not used yet); every matching or assignment task has exactly one correct answer per item; the self-check shows what *each* learner can do (also in pair or group work); a closing proof or reward cannot be reached without doing the tasks, or the skeleton says how the instructor checks it.
 8. Update the overview table inside `journal.md` → `## Sessions`:
    - If `journal.md` → `## Sessions` does not exist yet, create it with the overview table first. Include a `Method` column only if `journal.md` → `## Didactics` → `__Default Session Method:__` is not `none`:
      ```

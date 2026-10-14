@@ -34,7 +34,7 @@ Each session has at most one current validation report, rendered from `templates
 Rules:
 - Store the report under the matching `### {number}. {title}` session subsection.
 - The report heading is always `#### Validation Report`.
-- Wrap the entire rendered report in a single `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide instead of splitting on every `#####`/`######` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide".
+- Wrap the entire rendered report in a single `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide". Inside the report, findings use **bold labels**, never `#####` headings; the technical part sits in `<details>` below a visible plain-language summary (template `layout`).
 - If the session already has a `#### Validation Report`, replace it completely.
 - Do not keep historical session validation reports.
 - Session mode does not update `journal.md` → `## Validation`.
@@ -75,7 +75,10 @@ Rules:
 
 5. Fill `templates/session-validation.yaml` for this session with:
    - Material path
-   - Result: PASS / FAIL / PASS with concerns
+   - Result: PASS / FAIL / PASS with concerns — apply `result_rules` of the template:
+     - **FAIL** if any required element (Session Type or Method `Erforderlich`, any `[mechanical]` item) is ❌.
+     - **PASS with concerns** only for gaps explicitly deferred to a *named later step* (e.g. images follow with the Artist-Agent). Name that step in the report.
+     - Otherwise **PASS**.
    - Mode: session
    - Date
    - Content findings
@@ -83,9 +86,11 @@ Rules:
    - Persona & style findings
    - LiaScript syntax findings
    - Template findings, if applicable
-   - Recommended actions
-   - Line references where possible
+   - Recommended actions — check them against the session's `**Decisions:**` list first; never recommend something the instructor has already decided against
+   - Page titles of the material as references — never line numbers
+   - The visible plain-language summary (`**Outcome:**`, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
 6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`.
+   Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns"); otherwise Done stays ❌.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.

@@ -15,6 +15,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 - Terminology & conventions from `journal.md` → `## Course Context`
 - LiaScript template usage rules from `journal.md` → `## Templates` (if present)
 - Currently open material document — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
+- Optional `{number}` (e.g. from the session's action line `agent:teaching/coauthor-materials?number=3`): work on that session; without it, take the currently open material or ask which session
 - Optionally, corresponding session subsection in `journal.md` → `## Sessions`
 - Didactic inputs from `journal.md` → `## Didactics` (concept, course type, difficulty; not the primary persona source)
 - Open questions or ideas from instructors (discussion points)
@@ -36,9 +37,11 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **Fallback only:** If `### Coauthor` is missing or inactive, load `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - **If the current session subsection in `journal.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
    - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
+   - **If the current session subsection contains `**Decisions:**`:** read it before suggesting anything — never re-propose what the instructor has already decided against.
 2. **Agent adopts the Coauthor role into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
+   - **Record decisions:** every decision the instructor makes about this session goes immediately, with date, into the session's `**Decisions:**` list in `journal.md` → `## Sessions` → `### {n}. {title}` (create it above `**References:**` if missing).
 
    **Critical engagement rules — always active:**
    - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
@@ -51,7 +54,12 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`).
-7. When the instructor **approves** the material for this session: update the overview table in `journal.md` → `## Sessions`, set the Done column to ✅ for the current session. Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+7. When the instructor **approves** the material for this session:
+   - Update the session's skeleton in `journal.md` → `## Sessions` → `### {n}. …` so that Summary, Content and Activities describe the material as it now is; show the changes in one line of the summary.
+   - In the overview table set **Material ✅**. **Done stays ❌** until `:validate-course {n} {type}` has written `Result: PASS` into this session's `#### Validation Report`.
+   - Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column.
+   - **If the session already has a `#### Validation Report`** (this was a revision after a check): run `:validate-course {n} {type}` right away without asking — the revision is only complete when the re-check passes. Skip step 8 then.
+   - Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 8. After approval, 🎛️ ask with structured question (single choice):
    - **Yes, validate now** — run `:validate-course {number} {type}`
    - **Later** — skip validation, proceed directly to the next session

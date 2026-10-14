@@ -45,7 +45,8 @@ Use this task when:
    - If no existing template provides what the instructor needs and the skill `template-development` is available (see `data/skills.md`), offer to build a project template with it. Document the result here like any other template.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it for correct usage examples.
    - Keep the overview text with the link to [topics/liascript-template](https://github.com/topics/liascript-template)
-   - Create one `### {template_name}` subsection per template
+   - Create one `### {template_name}` subsection per template, inside the section's single `<section>` … `</section>` wrapper (create the wrapper if missing; never remove it)
+   - Keep the `### Dashboard` entry — the Dashboard library import is part of every project
    - Replace an existing template subsection if the same template name already exists
 6. Include runnable examples where useful.
    - For Skulpt regular Python examples, include a Python code block followed by `@Skulpt.eval`

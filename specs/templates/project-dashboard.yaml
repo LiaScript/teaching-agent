@@ -1,128 +1,66 @@
 template:
   id: project-dashboard
   name: 'Project Dashboard'
-  version: 1.0
+  version: 2.0
   output:
     format: markdown
     filename: journal.md
     section: Dashboard
     replace_existing: true
-  title: 'Dashboard'
+  renderer:
+    import: ./specs/dashboard/README.md
+    macro: Dashboard.View
+    input: json-code-block
   notes:
     - 'Derived state only; source sections remain authoritative.'
-    - 'Use the Mermaid LiaScript template with `@mermaid` when imported.'
-    - 'Keep CSS minimal and reusable in the main metadata header.'
-    - 'Every runnable command is written as an `agent:` link followed by the visible command, see `data/agent-links.md` → Markdown Format.'
-    - 'Labels in the course language (`## Course Context` → Language); commands and URIs stay in English.'
-  placeholders:
-    next_commands: |
-      1–3 numbered entries, most useful first:
-      1. [▶ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
-    agents: |
-      One paragraph per agent, in this order: 🎓 Teaching, 🎨 Artist, 🧑‍🎓 Learner, 🛠️ Development.
-      Each: `{icon} __{Agent}__ — {when it is useful now} · {one link}`. The link is that agent's most useful
-      command in the current state (e.g. `agent:artist/create-visuals` once Didactics exist,
-      `agent:learner/review-as-persona?name=…&number=…&type=…` once personas and material exist,
-      `agent:development/create-project` only when the publishing gate is PASS), otherwise the switch link
-      `agent:{agent}/switch`.
-    session_progress: |
-      A compact table, one row per session from `## Sessions` (or `## Agenda` rows without skeleton), no prose:
-      <!-- data-type="none" -->
-      | # | Title | Status | Next step |
-      |---|-------|--------|-----------|
-      | 3 | First Words | 🟡 skeleton | [▶ Promote](agent:teaching/promote-session?number=3&type=module) `:promote-session 3 module` |
-      Status: ⚪ planned (agenda only), 🟡 skeleton, 🟠 material, 🔍 validated, ✅ done.
-      Next step: create-session → promote-session (or build-session) → validate-course {n} {type} → learner/review-as-persona → none.
-      Without sessions: one line plus a link to `create-agenda` or `create-session`.
-    open_blockers: |
-      One line per blocker, each ending with the agent: link that resolves it. `None.` if there is none.
+    - 'units[].state determines progress and totals; no separate counters.'
+    - 'Exactly one highlighted next action, with why.'
+    - 'A draft or a pending review never counts as done.'
+    - 'With zero units show a global process and an honest empty state.'
+    - '`agent:` links additionally need `command` as the readable command, see `data/agent-links.md`.'
+    - 'No hand-written HTML, CSS, JavaScript, tables or Mermaid — the layout belongs to `dashboard/`.'
+    - 'Visible texts in the course language (`## Course Context` → Language); commands and URIs stay in English.'
+  fields:
+    title: 'Course title from Outline / Course Context'
+    context: 'Target group and time frame'
+    subtitle: 'Current state of work in plain words; no repeated counters'
+    notice: 'Optional: provisional sample data or pending decisions'
+    unitsTitle: 'Label from `## Course Context` → Terminology (sessions-called)'
+    units:
+      - id: 'Stable number from Sessions / Agenda'
+        title: 'Unit title'
+        state: 'planned | current | draft | review | revision | done'
+        summary: 'Short, verifiable state'
+        href: 'Anchor of the `### {n}. {title}` subsection, once a skeleton exists'
+        process:
+          title: 'Unit title'
+          steps:
+            - title: 'Understandable work step'
+              state: 'planned | current | draft | review | revision | done | optional'
+              why: 'Why this step is needed for the material'
+              result: 'Optional: what actually exists'
+              next: 'Optional: what to do next'
+              statusLabel: 'Optional: plain-language refinement of the state'
+          note: 'Optional: loops back or special cases'
+    selected: 'Optional: id of the recommended unit'
+    process: 'Global process with the same shape, while no unit exists yet'
+    next:
+      title: 'What we do next'
+      why: 'Which result this step makes possible'
+      label: 'Understandable action label'
+      href: 'Allowed `agent:` link or section anchor'
+      command: 'Readable command; required for `agent:` links'
+    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?}'
+    plan: 'Provisional planning {title?, note, rows: [{label, text}]} — only while no agenda exists'
+    explore: 'Optional action cards with icon/title/description/label/href/command'
+    links: 'Section links with label/href (full heading slug)'
+    footer: 'Date of the derived state'
   sections:
     - id: dashboard
       title: Dashboard
       template: |
         ## Dashboard
 
-        <article class="dashboard">
-
-        _Generated from the project sections below. Do not edit manually._
-
-        <div class="dashboard-grid">
-
-        <div class="dashboard-card">
-
-        ### Current State
-
-        __Current step:__ <span class="dashboard-status dashboard-status-current">{{current_step}}</span>
-
-        __Course validation:__ <span class="dashboard-status {{validation_status_class}}">{{validation_status}}</span>
-
-        __Sessions complete:__ {{sessions_complete}} / {{sessions_total}}
-
-        __Last updated:__ {{date}}
-
-        </div>
-
-        <div class="dashboard-card">
-
-        ### Next Commands
-
-        {{next_commands}}
-
-        </div>
-
-        <div class="dashboard-card">
-
-        ### Agents
-
-        {{agents}}
-
-        </div>
-
-        <div class="dashboard-card">
-
-        ### Quality State
-
-        {{quality_state}}
-
-        </div>
-
-        <div class="dashboard-card dashboard-card-wide">
-
-        ### Workflow Map
-
-        ```mermaid @mermaid
-        {{workflow_map}}
+        ```json @Dashboard.View
+        {{dashboard_json}}
         ```
-
-        </div>
-
-        <div class="dashboard-card dashboard-card-wide">
-
-        ### Session Progress
-
-        {{session_progress}}
-             | # | Title | Status | Next step |
-             |---|-------|--------|-----------|
-             | 3 | {{title}} | 🟡 skeleton | [▶ Promote](agent:teaching/promote-session?number=3&type=module) `:promote-session 3 module` |
-             Without sessions: one line plus a link to `create-agenda` or `create-session`. -->
-
-        </div>
-
-        <div class="dashboard-card">
-
-        ### Open Blockers
-
-        {{open_blockers}}
-
-        </div>
-
-        <div class="dashboard-card">
-
-        ### Quick Links
-
-        {{quick_links}}
-
-        </div>
-
-        </div>
-        </article>

@@ -7,6 +7,9 @@ template:
     filename: journal.md
     section: Templates
   title: 'Templates'
+  notes:
+    - 'All template entries sit inside one `<section>` … `</section>` wrapper directly after the overview text, so they stay on the `## Templates` slide and out of the table of contents. Add new entries inside the wrapper; never remove it.'
+    - 'The `### Dashboard` entry (`import: ./specs/dashboard/README.md`) is part of every project and stays documented here.'
   sections:
     - id: overview
       title: Overview

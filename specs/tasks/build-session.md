@@ -23,7 +23,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - Fully promoted, validated material for the session
 - `#### Validation Report` and (if personas exist) `#### Persona Reviews` in the matching `journal.md` → `## Sessions` subsection
 - Real images inserted, replacing placeholders
-- Session marked ✅ Done in the `## Sessions` overview table; dashboard updated
+- Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") in its `#### Validation Report`; dashboard updated
 - A closing summary: iterations spent per loop, final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
 
 ## Steps
@@ -66,7 +66,7 @@ For each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}`
 
 ### 4. Finalize
 
-Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (if not already). Run `tasks/update-dashboard.md`. Report the closing summary described in Output above.
+Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (if not already) — only if its `#### Validation Report` says `Result: PASS`; with "PASS with concerns" Done stays ❌ and the closing summary names the deferred step. Run `tasks/update-dashboard.md`. Report the closing summary described in Output above.
 
 ## Cross-agent execution note
 

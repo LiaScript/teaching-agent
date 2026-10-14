@@ -25,8 +25,8 @@ The course context acts as the governance layer: it defines the course type, ter
 
 1. Welcome the instructor and briefly explain the workflow.
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
-   - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`@style`, imports) and must remain the first comment.
-   - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, and the dashboard date.
+   - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
+   - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, the header's `language:` (course language code, step 7), and `## Dashboard` (via `tasks/update-dashboard.md`).
    - If `journal.md` already exists, leave it untouched and only work on the sections below.
 3. 🎛️ Ask for the **course type** (structured question — single choice):
    1. **lecture-series** – Semester course / lecture series with instructor
@@ -68,17 +68,18 @@ The course context acts as the governance layer: it defines the course type, ter
 7. 🎛️ Ask about project-level conventions in one structured pass (multi-select where applicable):
    - Language: de / en / other (+ free text if other)
    - Tone: formal / informal / conversational
-   - Person: Sie / Du / you
+   - Person: Sie / Du / you — how *learners* are addressed in the material
+   - Instructor Address: how the agents address the instructor (default: the formal form of the course language, unless the instructor offers otherwise) — never derived from Person
    - Accessibility: required / optional / not needed
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 8. Fill the `templates/course-context.yaml` template with the collected inputs, including the `__File Structure:__` field (mode + session folder naming) from step 6.
-9. Save the generated context by replacing the content of `journal.md` → `## Course Context` — keep it **flat** (`* __Label:__` bullets only, no sub-headings), exactly as the skeleton prescribes.
+9. **Before saving:** show a short summary of everything that will be written (this step and step 10), with "Save" / "Change something" — the single write confirmation of this task. Then save the generated context by replacing the content of `journal.md` → `## Course Context` — keep it **flat** (`* __Label:__` bullets only, no sub-headings), exactly as the skeleton prescribes.
 10. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
     - Add `import: {url}` to the main metadata header if missing
     - Create or update `journal.md` → `## Templates`
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
-11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, date).
+11. Set `language:` in the metadata header to the course language code, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
 12. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
    2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.

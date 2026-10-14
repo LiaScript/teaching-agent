@@ -1,7 +1,7 @@
 template:
   id: session-validation
   name: 'Session Validation Report'
-  version: 1.0
+  version: 1.1
   output:
     format: markdown
     filename: journal.md
@@ -10,11 +10,40 @@ template:
     heading: "#### Validation Report"
     replace_existing: true
   title: 'Session {{number}} Validation'
+  layout: |
+    One slide only. Write:
+    1. `#### Validation Report` (tasks find it by the start of the heading line).
+    2. Visible, in the course language and in plain words: `**Outcome:**` with the result and date,
+       then `**What works:**` and `**Still missing:**` as short lists — refer to page titles
+       of the material, never to line numbers (also not inside the details).
+    3. `<details><summary>Technical report</summary>` with `__Date:__`, `__Material:__`, `__Result:__`,
+       `__Mode:__` (English keys, read by tasks and the publishing gate) and the findings as **bold
+       labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
+  result_rules:
+    - '**FAIL** if any required element (Session Type or Method `Erforderlich`, any `[mechanical]` checklist item) is ❌.'
+    - '**PASS with concerns** only for gaps explicitly deferred to a *named later step* (e.g. images follow with the Artist-Agent) — name that step in the report.'
+    - 'Otherwise **PASS**.'
   sections:
     - id: report-heading
       title: Report Heading
       template: |
         #### Validation Report
+    - id: summary
+      title: Summary for the instructor
+      template: |
+        **Outcome:** {{passed | not passed | passed – {{later step}} still follows}} ({{date}})
+
+        **What works:**
+
+        - {{plain-language finding, with page titles of the material}}
+
+        **Still missing:**
+
+        - {{point}} – {{when, or in which step}}
+
+        <details>
+        <summary>Technical report</summary>
+
     - id: metadata
       title: Metadata
       template: |
@@ -25,26 +54,31 @@ template:
     - id: content
       title: Content
       template: |
-        ##### Content
+        **Content:**
         - {{content_findings}}
     - id: type-consistency
       title: Type Consistency
       template: |
-        ##### Type Consistency
+        **Type Consistency:**
         - Session Type: {{type}} — Erforderlich (from `## Didactics` → `__Session Types:__`): {{required_elements}}
         - {{type_consistency_findings}}
     - id: persona-style
       title: Persona & Style
       template: |
-        ##### Persona & Style
+        **Persona & Style:**
         - {{persona_style_findings}}
     - id: liascript-syntax
       title: LiaScript Syntax
       template: |
-        ##### LiaScript Syntax
+        **LiaScript Syntax:**
         - {{liascript_syntax_findings}}
     - id: recommended-actions
       title: Recommended Actions
       template: |
-        ##### Recommended Actions
+        **Recommended Actions:**
         1. {{recommended_actions}}
+    - id: details-end
+      title: End of technical details
+      template: |
+
+        </details>

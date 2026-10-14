@@ -253,10 +253,12 @@ The chat shows which agent you are talking to (🎓 Teaching, 🎨 Artist, 🧑�
 🛠️ Development). Switch with its menu or a link like `[🎨 Artist](agent:artist/switch)`;
 what you type goes to the agent shown there.
 
-Links appear in the Dashboard (Next Commands, an Agents card, the next step of every
-session, open blockers) and as one action line below each section heading. They are written
-by `:update-dashboard`; the format is defined in
-[`specs/data/agent-links.md`](specs/data/agent-links.md).
+Links appear in the Dashboard (the one recommended next step, further options, open points)
+and as one action line below each section heading. The Dashboard is a JSON data block that
+the local LiaScript library [`specs/dashboard/`](specs/dashboard/README.md) renders via
+`@Dashboard.View`; it and the action lines are written by `:update-dashboard`, the link format
+is defined in [`specs/data/agent-links.md`](specs/data/agent-links.md). Check the data block
+with `node specs/dashboard/validate-journal.mjs`.
 
 **Setup**
 

@@ -78,6 +78,9 @@
 - [ ] [pedagogical] References included per section where claims are made
 - [ ] [pedagogical] Didactic inputs from `journal.md` → `## Didactics` reflected (methods, learning phases)
 - [ ] [pedagogical] Learning objectives from `journal.md` → `## Agenda` addressed in content
+- [ ] [pedagogical] Self-check uses different examples, pictures or wording than the practice tasks (tests understanding, not recognition)
+- [ ] [pedagogical] A closing proof or reward is reachable only after solving the tasks, or the material says how the instructor checks it; praise does not appear after "show solution"
+- [ ] [pedagogical] Question texts *and* answer options can be read aloud where the target group needs it
 - [ ] [mechanical] Each session's content satisfies its declared Session Type's `Erforderlich` checklist from `## Didactics` → `__Session Types:__`
 - [ ] [mechanical] Each session's content satisfies its declared Session Method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
 - [ ] [mechanical] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is always advisory, never a fail by itself

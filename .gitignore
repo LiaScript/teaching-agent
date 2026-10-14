@@ -2,3 +2,8 @@ server/events.jsonl
 server/*.pid
 __pycache__/
 .mcp.json
+
+# Screenshots der Dashboard-Prüfung
+specs/dashboard/artifacts/
+test/dashboard/artifacts/
+.playwright-mcp/

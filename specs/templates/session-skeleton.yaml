@@ -20,8 +20,15 @@ template:
       title: Actions
       template: |
         <!-- class="journal-actions" -->
+        [▶ Work out together](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
+
+        <details>
+        <summary>More actions</summary>
+
         [▶ Promote](agent:teaching/promote-session?number={{number}}&type={{type}}) `:promote-session {{number}} {{type}}` · [▶ Build](agent:teaching/build-session?number={{number}}&type={{type}}) `:build-session {{number}} {{type}}`
-      note: 'Action line, see `data/agent-links.md`. Labels in the course language. `tasks/update-dashboard.md` refreshes it as the session progresses (validate, preview, quick-fix, persona review).'
+
+        </details>
+      note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the `<details>` block. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
     - id: type
       title: Type
       template: |
@@ -51,15 +58,16 @@ template:
 
         1. [Exercise, discussion, reflection, or learner action]
         2. [Exercise, discussion, reflection, or learner action]
+    - id: decisions
+      title: Decisions
+      template: |
+        **Decisions:**
+
+        1. [Decision of the instructor about this session, with date]
+      note: 'Filled by `:coauthor-materials` whenever the instructor decides something about this session; read by `:coauthor-materials` and `:validate-course` before recommending anything. Omit until the first decision exists.'
     - id: references
       title: References & Sources
       template: |
         **References:**
 
         1. [Relevant source or material]
-    - id: images
-      title: Images
-      template: |
-        #### Images
-
-        _Filled by `:create-image` (Artist-Agent). One `<section>` per image belonging to this session; rendered by `:generate-image`. Empty until the first image prompt is created._

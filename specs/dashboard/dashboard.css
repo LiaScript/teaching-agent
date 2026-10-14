@@ -1,0 +1,198 @@
+.lia-dashboard {
+  --dashboard-bg: #ffffff;
+  --dashboard-soft: #f5f7f6;
+  --dashboard-ink: #253c35;
+  --dashboard-muted: #566c63;
+  --dashboard-border: #dce5e0;
+  --dashboard-accent: #245f48;
+  --dashboard-accent-soft: #e8f3ed;
+  --dashboard-current: #79551c;
+  --dashboard-current-soft: #fff4df;
+  --dashboard-revision: #923e32;
+  --dashboard-revision-soft: #fdece8;
+  color: var(--dashboard-ink);
+  font-size: inherit;
+  line-height: 1.6;
+  max-width: 1100px;
+  margin: 1.2em auto;
+  background: var(--dashboard-bg);
+  border: 1px solid var(--dashboard-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.lia-dashboard *, .lia-dashboard *::before, .lia-dashboard *::after { box-sizing: border-box; }
+.lia-dashboard h2, .lia-dashboard h3, .lia-dashboard h4 { color: inherit; line-height: 1.35; margin: 0; }
+.lia-dashboard h2 { font-size: clamp(1.7em, 3.5vw, 2.4em); font-weight: 750; }
+.lia-dashboard h3 { font-size: 1.2em; font-weight: 700; }
+.lia-dashboard h4 { font-size: 1em; font-weight: 700; }
+.lia-dashboard p { margin: .55em 0; }
+.lia-dashboard .dashboard-eyebrow { color: var(--dashboard-muted); font-size: .8em; letter-spacing: .07em; text-transform: uppercase; margin: 0 0 .5em; font-weight: 650; }
+.lia-dashboard .dashboard-hero { padding: clamp(1.3em, 4vw, 2.4em); }
+.lia-dashboard .dashboard-context { color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-intro { max-width: 65ch; font-size: 1.08em; margin-top: 1em; }
+.lia-dashboard .dashboard-notice { color: var(--dashboard-muted); font-size: .85em; }
+.lia-dashboard .dashboard-next { margin-top: 1.4em; padding-top: 1em; border-top: 1px solid var(--dashboard-border); }
+.lia-dashboard .dashboard-why { max-width: 70ch; color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-action-link { display: flex; flex-wrap: wrap; align-items: center; gap: .7em; margin-top: .9em; }
+.lia-dashboard .dashboard-button { display: inline-flex; align-items: center; justify-content: space-between; gap: 1em; border: 1px solid var(--dashboard-accent); border-radius: 7px; padding: .6em 1em; color: var(--dashboard-accent); background: var(--dashboard-bg); text-decoration: none; font-weight: 650; }
+.lia-dashboard .dashboard-button-primary { color: #fff; background: var(--dashboard-accent); }
+.lia-dashboard .dashboard-button:hover { text-decoration: underline; text-underline-offset: .2em; }
+.lia-dashboard .dashboard-command { color: var(--dashboard-muted); font-size: .75em; background: var(--dashboard-soft); padding: .18em .4em; border-radius: 4px; overflow-wrap: anywhere; }
+.lia-dashboard .dashboard-progress { padding: 1em clamp(1.3em, 4vw, 2.4em); border-top: 1px solid var(--dashboard-border); border-bottom: 1px solid var(--dashboard-border); background: var(--dashboard-soft); display: flex; gap: 1em; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.lia-dashboard .dashboard-progress h3 { font-size: .9em; }
+.lia-dashboard .dashboard-progress p { margin: .15em 0 0; font-size: .9em; color: var(--dashboard-muted); }
+.lia-dashboard progress { flex: 0 1 240px; width: 240px; height: .5em; border: 0; border-radius: 99px; accent-color: var(--dashboard-accent); overflow: hidden; background: var(--dashboard-border); }
+.lia-dashboard progress::-webkit-progress-bar { background: var(--dashboard-border); border-radius: 99px; }
+.lia-dashboard progress::-webkit-progress-value { background: var(--dashboard-accent); border-radius: 99px; }
+.lia-dashboard progress::-moz-progress-bar { background: var(--dashboard-accent); border-radius: 99px; }
+.lia-dashboard .dashboard-workspace { display: grid; grid-template-columns: minmax(230px, .85fr) minmax(0, 1.4fr); }
+.lia-dashboard .dashboard-units { padding: 1.5em; border-right: 1px solid var(--dashboard-border); }
+.lia-dashboard .dashboard-hint { color: var(--dashboard-muted); font-size: .85em; }
+.lia-dashboard .dashboard-unit-list { padding: 0; margin: 1em 0 0; list-style: none; }
+.lia-dashboard .dashboard-unit-item { padding: 0; margin: .55em 0; }
+.lia-dashboard .dashboard-unit { display: flex; align-items: flex-start; gap: .75em; width: 100%; padding: .85em; border: 1px solid var(--dashboard-border); border-radius: 8px; background: var(--dashboard-bg); color: var(--dashboard-ink); font: inherit; text-align: left; }
+.lia-dashboard button.dashboard-unit { cursor: pointer; }
+.lia-dashboard button.dashboard-unit:hover { background: var(--dashboard-soft); }
+.lia-dashboard .dashboard-unit-selected { border-color: var(--dashboard-accent); background: var(--dashboard-accent-soft); box-shadow: inset 3px 0 var(--dashboard-accent); }
+.lia-dashboard .dashboard-unit-number { display: inline-grid; place-items: center; min-width: 1.8em; height: 1.8em; background: var(--dashboard-soft); color: var(--dashboard-muted); border-radius: 6px; font-size: .85em; }
+.lia-dashboard .dashboard-unit-content { min-width: 0; display: flex; align-items: flex-start; gap: .35em; flex-direction: column; }
+.lia-dashboard .dashboard-unit-summary { color: var(--dashboard-muted); font-size: .82em; }
+.lia-dashboard .dashboard-status { display: inline-flex; align-items: center; gap: .35em; font-size: .75em; line-height: 1.4; font-weight: 600; color: var(--dashboard-muted); background: var(--dashboard-soft); border-radius: 99px; padding: .2em .55em; }
+.lia-dashboard .dashboard-status-done { color: var(--dashboard-accent); background: var(--dashboard-accent-soft); }
+.lia-dashboard .dashboard-status-current, .lia-dashboard .dashboard-status-review { color: var(--dashboard-current); background: var(--dashboard-current-soft); }
+.lia-dashboard .dashboard-status-revision { color: var(--dashboard-revision); background: var(--dashboard-revision-soft); }
+.lia-dashboard .dashboard-process { padding: 1.5em; }
+.lia-dashboard .dashboard-process-description { color: var(--dashboard-muted); font-size: .9em; }
+.lia-dashboard .dashboard-step-list { list-style: none; padding: 0; margin: 1.3em 0 0; }
+.lia-dashboard .dashboard-step { position: relative; display: grid; grid-template-columns: 1.75em minmax(0, 1fr); gap: .65em; padding: .9em .7em .9em 0; }
+.lia-dashboard .dashboard-step:not(:last-child)::after { content: ""; position: absolute; width: 1px; background: var(--dashboard-border); left: .85em; top: 2.7em; bottom: -.25em; }
+.lia-dashboard .dashboard-step-marker { display: grid; place-items: center; align-self: start; border: 1px solid var(--dashboard-border); border-radius: 50%; width: 1.75em; height: 1.75em; background: var(--dashboard-bg); color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-step-done .dashboard-step-marker { background: var(--dashboard-accent-soft); color: var(--dashboard-accent); border-color: var(--dashboard-accent); }
+.lia-dashboard .dashboard-step-current { background: var(--dashboard-current-soft); border-radius: 8px; padding-left: .5em; margin: .25em 0; }
+.lia-dashboard .dashboard-step-current .dashboard-step-marker { color: var(--dashboard-current); border-color: var(--dashboard-current); }
+.lia-dashboard .dashboard-step-current::after { left: 1.35em; }
+.lia-dashboard .dashboard-step-heading { display: flex; align-items: center; flex-wrap: wrap; gap: .45em .75em; }
+.lia-dashboard .dashboard-step-why, .lia-dashboard .dashboard-result { font-size: .85em; color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-step-next { font-size: .85em; }
+.lia-dashboard .dashboard-process-note { border-top: 1px solid var(--dashboard-border); padding-top: .8em; font-size: .8em; color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-empty { padding: .8em 0; color: var(--dashboard-muted); font-size: .9em; }
+.lia-dashboard .dashboard-explore { border-top: 1px solid var(--dashboard-border); padding: 0 1.5em; }
+.lia-dashboard .dashboard-explore summary { padding: 1em 0; cursor: pointer; font-weight: 650; }
+.lia-dashboard .dashboard-explore-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1em; padding-bottom: 1em; }
+.lia-dashboard .dashboard-action { padding: 1em; background: var(--dashboard-soft); border-radius: 8px; }
+.lia-dashboard .dashboard-action p { font-size: .85em; color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-card { padding: 1.5em; }
+.lia-dashboard .dashboard-links { border-top: 1px solid var(--dashboard-border); padding: .7em 1.5em 1em; display: flex; flex-wrap: wrap; gap: .6em 1.1em; }
+.lia-dashboard .dashboard-links .dashboard-button { font-size: .85em; border: 0; padding: .1em 0; text-decoration: underline; }
+.lia-dashboard .dashboard-footer { font-size: .75em; color: var(--dashboard-muted); padding: 0 1.5em 1em; }
+.lia-dashboard.dashboard-error { padding: 1.2em; color: var(--dashboard-revision); }
+.lia-dashboard a:focus-visible, .lia-dashboard button:focus-visible, .lia-dashboard summary:focus-visible { outline: 3px solid var(--dashboard-current); outline-offset: 3px; }
+.lia-dashboard.dashboard-component { padding: .75em; }
+.lia-dashboard.dashboard-component .dashboard-hero { padding: 1em; }
+@media (max-width: 720px) {
+  .lia-dashboard .dashboard-workspace { grid-template-columns: minmax(0, 1fr); }
+  .lia-dashboard .dashboard-units { border-right: 0; border-bottom: 1px solid var(--dashboard-border); }
+  .lia-dashboard .dashboard-units, .lia-dashboard .dashboard-process { padding: 1.2em; }
+  .lia-dashboard .dashboard-explore-grid { grid-template-columns: minmax(0, 1fr); }
+  .lia-dashboard .dashboard-progress progress { flex-basis: 100%; width: 100%; }
+}
+@media (prefers-color-scheme: dark) {
+  .lia-dashboard {
+    --dashboard-bg: #17231f;
+    --dashboard-soft: #202e28;
+    --dashboard-ink: #e2ebe6;
+    --dashboard-muted: #b1c4b9;
+    --dashboard-border: #3c5045;
+    --dashboard-accent: #99d8b5;
+    --dashboard-accent-soft: #253e30;
+    --dashboard-current: #f1ca88;
+    --dashboard-current-soft: #3b3020;
+    --dashboard-revision: #efb0a0;
+    --dashboard-revision-soft: #422c27;
+  }
+  .lia-dashboard .dashboard-button-primary { color: #17231f; }
+}
+
+/* Start-Knopf auf der Titelfolie des Journals */
+.journal-start a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  background: #245f48;
+  color: #ffffff !important;
+  font-weight: 700;
+  text-decoration: none;
+}
+.journal-start a:hover,
+.journal-start a:focus-visible { background: #17473a; outline: 3px solid #f2c94c; outline-offset: 2px; }
+
+/* Noch zu entscheiden */
+.lia-dashboard .dashboard-decisions { margin: 0; padding: 1em 1.5em; border-top: 1px solid var(--dashboard-border); background: #fff8e6; }
+.lia-dashboard .dashboard-decisions h3 { margin: 0 0 .4em; font-size: 1em; }
+.lia-dashboard .dashboard-decisions ul { margin: 0; padding-left: 1.2em; }
+.lia-dashboard .dashboard-decisions li { margin: .25em 0; }
+.lia-dashboard .dashboard-decision-why { color: var(--dashboard-muted, #55625c); }
+
+/* Vorläufige Planung, solange keine Einheiten angelegt sind */
+.lia-dashboard .dashboard-plan h4 { margin: .2em 0 .3em; }
+.lia-dashboard .dashboard-plan-note { margin: 0 0 .6em; font-size: .9em; color: var(--dashboard-muted, #55625c); }
+.lia-dashboard .dashboard-plan dl { margin: 0; }
+.lia-dashboard .dashboard-plan dl > div { display: grid; grid-template-columns: minmax(5.5em, auto) 1fr; gap: .6em; padding: .45em 0; border-bottom: 1px solid var(--dashboard-border); }
+.lia-dashboard .dashboard-plan dt { font-weight: 650; }
+.lia-dashboard .dashboard-plan dd { margin: 0; }
+
+@media (prefers-color-scheme: dark) {
+  .lia-dashboard .dashboard-decisions { background: #2b2a1d; }
+}
+.lia-dashboard .dashboard-decisions-prepare { background: #eef6f1; }
+.lia-dashboard .dashboard-decision-how { display: block; margin-top: .15em; font-size: .92em; }
+.lia-dashboard .dashboard-internal { padding: .6em 1.5em; border-top: 1px solid var(--dashboard-border); font-size: .9em; color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-internal summary { cursor: pointer; }
+@media (prefers-color-scheme: dark) {
+  .lia-dashboard .dashboard-decisions-prepare { background: #1d2b24; }
+}
+.lia-dashboard .dashboard-unit-steps { display: block; font-size: .85em; color: var(--dashboard-muted); }
+
+/* Aktionen sind Buttons, Verweise bleiben Links.
+   Jeder agent:-Link startet eine Aktion des Assistenten und wird deshalb als
+   Button gezeigt; der lesbare Befehl daneben bleibt klein sichtbar. */
+:root {
+  --journal-action: #245f48;
+  --journal-action-ink: #ffffff;
+  --journal-action-soft: #e8f3ed;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --journal-action: #8fd3b4; --journal-action-ink: #10241c; --journal-action-soft: #1d2b24; }
+}
+a[href^="agent:"]:not(.dashboard-button) {
+  display: inline-flex;
+  align-items: center;
+  gap: .35em;
+  margin: .15em .1em;
+  padding: .3em .85em;
+  border: 1.5px solid var(--journal-action);
+  border-radius: 7px;
+  background: var(--journal-action-soft);
+  color: var(--journal-action) !important;
+  font-weight: 650;
+  line-height: 1.4;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+a[href^="agent:"]:not(.dashboard-button):hover {
+  background: var(--journal-action);
+  color: var(--journal-action-ink) !important;
+}
+a[href^="agent:"]:not(.dashboard-button):focus-visible {
+  outline: 3px solid #f2c94c;
+  outline-offset: 2px;
+}
+a[href^="agent:"]:not(.dashboard-button) + code {
+  border: none !important;
+  background: transparent !important;
+  font-size: .75em;
+  opacity: .75;
+  margin-right: .6em;
+}
+.journal-actions { margin: .2em 0 .8em; }

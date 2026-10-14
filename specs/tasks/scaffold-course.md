@@ -84,7 +84,7 @@ Generated in sequence without interruption inside `journal.md`:
 
 Run each step silently (no approval prompts between steps):
 
-1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`@style`, imports) and must remain the first comment.
+1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment. Set `language:` to the course language code.
 2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well). Set `__File Structure:__` from the course type default in `data/file-structure-modes.md` (single-lesson → single-file, all others → multi-file) and mention the default in the Phase 3 completion summary so the instructor can override it.
 3. Replace the content of `journal.md` → `## Outline`.
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet.
@@ -95,7 +95,7 @@ Run each step silently (no approval prompts between steps):
    - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
    - One `### {number}. {title}` subsection per session below the overview table
 8. Fill each session subsection using `templates/session-skeleton.yaml`.
-9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update the `## Dashboard` HTML shell in place (current step, next commands, quality state, session progress, workflow map states, date).
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 
 After each section is saved, print a brief progress line:
 ```

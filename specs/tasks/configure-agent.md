@@ -34,7 +34,7 @@ rewrite, summarize, or infer settings from sibling agent subsections.
    - Development-Agent reads/writes only `### Development-Agent`
 
 3. If `journal.md` -> `## Agents` does not exist, create it from `templates/agents.yaml`.
-   If the selected `### {agent}` subsection is missing, create only that subsection from `templates/agents.yaml`.
+   If the selected `### {agent}` subsection is missing, create only that subsection from `templates/agents.yaml`, inside the `## Agents` `<section>` … `</section>` wrapper.
 
 4. Ask what should be customized:
    - Behavior additions

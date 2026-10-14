@@ -97,8 +97,16 @@ in any renderer (VS Code, GitHub, LiaScript without DevServer):
   `👁` (preview), or the agent icon for a switch (`🎨` Artist, `🧑‍🎓` Learner,
   `🛠️` Development, `🎓` Teaching).
 - Then the command in inline code, exactly as the instructor would type it.
-- Then, only in Next Commands and Session Progress, ` — ` plus a short reason.
+- Then, only in chat offers, ` — ` plus a short reason.
 - Never use `<button data-agent=…>`; the Markdown link is the only format.
+
+### Dashboard data
+
+`## Dashboard` holds one JSON block rendered by the Dashboard library
+(`specs/dashboard/`). There an action is data, not a Markdown link: `href`
+(the `agent:` URI) plus `command` (the readable command). The library renders a
+normal anchor with the readable command right after it. Whitelist,
+prerequisites and confirmation tiers apply unchanged.
 
 ### Action lines below headings
 
@@ -136,12 +144,12 @@ Rules for action lines:
 | `## Templates` | `manage-templates` |
 | `## Agenda` | `create-agenda` |
 | `## Sessions` | `create-session` (without params — asked in chat), `validate-course` |
-| `### {n}. {title}` | state-dependent: `create-session`/`promote-session`/`build-session`, `validate-course {n} {type}`, `validate-syntax`, `preview` (material), `quick-fix` (description asked in chat), `learner/review-as-persona` (one per persona, max 2) |
+| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n} {type}`; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>More actions</summary>` block right after the action line |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
 | `## Validation` | `validate-course`, `development/create-project` (only if the publishing gate is PASS) |
 | `## Notes Backup` | `save-notes`, `save-decision` |
 
-`## Dashboard` has no action line — its cards are the actions. `## Analysis
+`## Dashboard` has no action line — its data block carries the actions. `## Analysis
 Status` gets none.
 
 ## Confirmation Tiers
@@ -151,10 +159,54 @@ page content (and course scripts) can forge any link.
 
 | Tier | Commands | Behavior |
 |---|---|---|
-| **run** | `switch`, `help`, `list-agents`, `list-learners`, `agent`, `preview`, `update-dashboard`, `validate-syntax` | Run immediately. Read-only, navigation, or derived state only. |
+| **run** | `switch`, `help`, `list-agents`, `list-learners`, `agent`, `preview`, `update-dashboard`, `validate-syntax`, `validate-course {number} {type}` (session mode only) | Run immediately. Read-only, navigation, or derived state only. |
+| **start interview** | `init-course`, `scaffold`, `coauthor-materials`, `create-outline`, `create-didactics`, `create-agenda`, `create-learner-persona`, `configure-agent`, `save-notes`, `save-decision` | Start the dialog immediately, without a start confirmation. The task's own **save confirmation** (summary of what will be written + "Save" / "Change something") is the single write confirmation; if the task file has no such step, insert it before the first write. Nothing is written before it. |
 | **confirm in chat** | every other command that only writes inside the project (`journal.md`, `materials/`, `assets/`, root `README.md`) | Ask in the preview chat (see Handling step 3) before running. |
 | **confirm in terminal** | `manage-git`, `create-project`, `update-project`, `generate-image` | Runs git, publishing, or external browser sessions. Post a chat note that confirmation is waiting in the terminal, then ask there. |
 | **never via link** | `exit`, unknown commands | Do not run. Answer in the chat that this action is not available as a link. |
+
+## Chat Conduct
+
+Applies whenever the dialog runs in the preview chat. Write in the course
+language (`## Course Context` → Language).
+
+- **Address:** address the instructor as `## Course Context` → `Instructor Address`
+  says. `Person` is how *learners* are addressed in the material — never use it
+  for the instructor.
+- **First contact / general questions** ("What should I do here?"): at most 5
+  short lines — what this is, what happens next, exactly one action link. Do not
+  ask content questions the next task will ask anyway, and do not list the whole workflow.
+- **Point, don't describe:** before referring to the overview or a section,
+  `goto` that slide, **check with `get_state`** that file and slide are right
+  (switching between `journal.md` and a material file may land on the last
+  visited slide — then `goto` again), and only then say that you opened it.
+  Never describe a place on the page ("on the left you see …") without navigating there.
+- **Progress feedback:** before any step that takes longer than a few seconds
+  (reading files, writing sections), send a one-line status.
+- **Echo decisions:** after a form answer, start the next message with a short
+  echo of the choice ("✓ …"), because the chat does not show clicked buttons as messages.
+- **Report the save first:** right after writing confirmed content send
+  "✅ Saved: …", then a one-line status while the overview is updated. Never
+  leave a status line standing for more than a minute without a follow-up.
+- **Name things as the overview does:** use its group titles (open decisions,
+  preparation before use) — never JSON field names.
+- **Every click gets an answer:** each `command` event gets its own chat reply
+  within seconds — also when the same task is already running ("We are already
+  on it — continue here: …"). Never drop a click silently.
+- **Forms:** at most 4 questions per form, each with a plain-language label;
+  `checkbox` where several answers can apply. Ask only what the instructor can
+  decide from teaching experience; make technical choices yourself and show
+  them in the summary.
+- **Superseded forms:** when you post a revised proposal, say that the previous
+  version is superseded. If an `answer` event refers to an older `ask` than your
+  latest one, do not act on it; ask for an answer in the new form.
+- **Nothing unseen gets saved:** everything that will be written (incl. lesson
+  splits, review lines) appears as text in the summary before "Save". Content
+  questions never share a form with "Save".
+- **Plain language:** never show command names, slugs, file names or section
+  keys in the chat text, except as the inline code right after an action link.
+  Use the course's own words (`## Course Context` → Terminology) instead of
+  workflow jargon (journal, slug, persona, template, session).
 
 ## Handling Events
 
@@ -233,8 +285,8 @@ step, post the next steps to the chat:
 - [🎨 Switch to Artist](agent:artist/switch) `:agent artist`
 ```
 
-- Use the same next steps as the Dashboard's Next Commands card — one source of
-  truth, derived by `tasks/update-dashboard.md`.
+- Lead with the Dashboard's `next` action — one source of truth, derived by
+  `tasks/update-dashboard.md`.
 - For a closed choice between continuations, a blocking `inputs` form is fine
   too; links are preferred because they also work later.
 - Never offer `exit` or unknown commands; never put secrets, absolute paths

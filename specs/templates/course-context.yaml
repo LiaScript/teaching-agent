@@ -41,8 +41,9 @@ template:
         * __Conventions & Standards:__
           1. Language: [de | en | other]
           2. Tone: [formal | informal | conversational]
-          3. Person: [Sie | Du | you]
-          4. Accessibility: [required | optional]
+          3. Person: [Sie | Du | you] — how learners are addressed in the material
+          4. Instructor Address: [Sie | Du | you] — how the agents address the instructor (chat, dashboard)
+          5. Accessibility: [required | optional]
 
         * __LiaScript conventions:__
           - [list project-specific rules here]
