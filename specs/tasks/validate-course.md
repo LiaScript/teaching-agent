@@ -75,10 +75,7 @@ Rules:
 
 5. Fill `templates/session-validation.yaml` for this session with:
    - Material path
-   - Result: PASS / FAIL / PASS with concerns — apply `result_rules` of the template:
-     - **FAIL** if any required element (Session Type or Method `Erforderlich`, any `[mechanical]` item) is ❌.
-     - **PASS with concerns** only for gaps explicitly deferred to a *named later step* (e.g. images follow with the Artist-Agent). Name that step in the report.
-     - Otherwise **PASS**.
+   - Result: PASS / FAIL / PASS with concerns — apply `result_rules` of the template in their order (deferrals ⏳ decided in the first run; other ❌ on required/mechanical → FAIL; open pedagogical ❌ → PASS with concerns; otherwise PASS). Publishing metadata (contact address) is ⏳ "before publishing" in session mode, never ❌.
    - Mode: session
    - Date
    - Content findings
@@ -86,13 +83,14 @@ Rules:
    - Persona & style findings
    - LiaScript syntax findings
    - Template findings, if applicable
-   - Recommended actions — check them against the session's `**Decisions:**` list first; never recommend something the instructor has already decided against
+   - Recommended actions — check them against the session's decisions list (`data-key="decisions"`) first; never recommend something the instructor has already decided against
    - Page titles of the material as references — never line numbers
    - The visible plain-language summary (`**Outcome:**`, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
 6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`.
    Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns"); otherwise Done stays ❌.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
-7. If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
+7. **Chat summary:** name every ❌, every ⏳ with its step, and every `[pedagogical]` finding (also those you consider minor) in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
+   If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
 
 ---

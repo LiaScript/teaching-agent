@@ -7,6 +7,15 @@ template:
     filename: journal.md
     section: Outline
   title: 'Course Outline'
+  layout: |
+    The section is read by the instructor. Write it like this:
+    - Bullet labels carry a translation in the course language after an en dash, English key first
+      (e.g. `* __Learning Objectives – <translation>:__`), so tasks still find the key.
+    - Content in the course language, plain words, no slugs, no file names, no template paths.
+    - Escape a number at the start of a line that is not a list item (`3\. grade` → write `3\.`),
+      otherwise Markdown turns it into a numbered list.
+    - Objectives as a numbered list; the session → objective → self-check overview as a list or a table
+      with at most 3 columns.
   sections:
     - id: title
       title: Title

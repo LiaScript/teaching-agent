@@ -439,6 +439,23 @@ Composer of the 9th:
 - One question = one learning goal.
 - Optional feedback (explanation after the answer).
 
+**Quizzes for young learners / self-checks**
+
+```lia
+<!-- data-hint-button="1" data-max-trials="2" data-solution-button="false" -->
+Which one is right?
+
+- [( )] option A
+- [(X)] option B
+    [[?]] a hint in plain words
+```
+
+- `data-hint-button="1"`: hint button after the 1st wrong try; `data-max-trials="2"`: the solution is shown automatically after the 2nd wrong try.
+- `data-solution-button="false"` hides the "show solution" button. **Without it the button is visible from the start**, also when `data-max-trials` is set.
+- Free-text tasks: always `data-solution-button="false"`.
+- Read answer options aloud with inline playback on the option (`{|>}{option text}`) instead of repeating them in the question text.
+- The fixed feedback texts of the player (e.g. "the correct answer has not been given yet") cannot be changed per quiz; announce them in the material if the learners need it.
+
 ---
 
 ## 10b) Surveys – Feedback without Solutions

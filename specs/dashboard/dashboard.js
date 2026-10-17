@@ -12,12 +12,12 @@
       "state.review": "Zur Durchsicht", "state.revision": "Überarbeiten", "state.done": "Abgeschlossen", "state.optional": "Bei Bedarf",
       view: "Ansehen", eyebrow: "Unterrichtsplan", next: "Als Nächstes:", why: "Warum?", progress: "Fortschritt",
       progressEmpty: "Noch keine Einheit angelegt. Der Fortschritt wird sichtbar, sobald Einheiten entstehen.",
-      progressText: (done, total) => `${done} von ${total} ${total === 1 ? "Einheit ist" : "Einheiten sind"} abgeschlossen`,
-      units: "Meine Einheiten", unitsHint: "Eine Einheit auswählen, um ihren Arbeitsstand zu sehen.",
+      progressText: (done, total, u = { one: "Einheit", many: "Einheiten" }) => `${done} von ${total} ${total === 1 ? `${u.one} ist` : `${u.many} sind`} abgeschlossen`,
+      units: "Meine Einheiten", unitsHint: "Antippen, um den Arbeitsstand zu sehen.",
       unitsEmpty: "Noch keine Unterrichtseinheit angelegt.", unitsEmptyNext: "Zuerst stimmen wir die Lernziele und die Lernaktivitäten ab.",
       showProcess: "Prozess ansehen", steps: (done, total) => `${done} von ${total} Schritten`,
       processEyebrow: "So entsteht das Material", processTitle: "Unser Arbeitsstand", result: "Liegt vor:", nextStep: "Nächster Schritt:",
-      processEmpty: "Für diese Einheit ist noch kein detaillierter Prozess eingetragen.", plan: "Bauplan ansehen",
+      processEmpty: "Hierfür ist noch kein detaillierter Ablauf eingetragen.", plan: "Planung ansehen",
       decide: "Noch zu entscheiden", prepare: "Vor dem Einsatz vorbereiten", how: "So geht's:",
       internal: n => `Für Profis: ${n} interne ${n === 1 ? "Notiz" : "Notizen"} des Assistenten`,
       preview: "Vorläufige Planung", explore: "Weitere Möglichkeiten", sections: "Planungsbereiche",
@@ -28,12 +28,12 @@
       "state.review": "In review", "state.revision": "Needs revision", "state.done": "Done", "state.optional": "Optional",
       view: "Open", eyebrow: "Course plan", next: "Next:", why: "Why?", progress: "Progress",
       progressEmpty: "No unit created yet. Progress appears as soon as units exist.",
-      progressText: (done, total) => `${done} of ${total} ${total === 1 ? "unit is" : "units are"} done`,
-      units: "My units", unitsHint: "Select a unit to see its progress.",
+      progressText: (done, total, u = { one: "unit", many: "units" }) => `${done} of ${total} ${total === 1 ? `${u.one} is` : `${u.many} are`} done`,
+      units: "My units", unitsHint: "Select one to see its progress.",
       unitsEmpty: "No unit created yet.", unitsEmptyNext: "First we agree on the learning objectives and activities.",
       showProcess: "show process", steps: (done, total) => `${done} of ${total} steps`,
       processEyebrow: "How the material is made", processTitle: "Where we are", result: "Ready:", nextStep: "Next step:",
-      processEmpty: "No detailed process recorded for this unit yet.", plan: "Open unit plan",
+      processEmpty: "No detailed process recorded yet.", plan: "Open the plan",
       decide: "To decide", prepare: "Prepare before use", how: "How:",
       internal: n => `For experts: ${n} internal ${n === 1 ? "note" : "notes"} of the assistant`,
       preview: "Provisional plan", explore: "More options", sections: "Planning sections",
@@ -198,12 +198,12 @@
     </header>`;
   }
 
-  function progress(completed, total, label = t("progress")) {
+  function progress(completed, total, label = t("progress"), unitLabel) {
     if (!Number.isInteger(total) || !Number.isInteger(completed) || completed < 0 || total < completed) {
       throw new Error("Progress needs valid values: done / total.");
     }
     if (!total) return `<section class="dashboard-progress"><h3>${escape(label)}</h3><p>${t("progressEmpty")}</p></section>`;
-    const text = t("progressText", completed, total);
+    const text = unitLabel?.one && unitLabel?.many ? t("progressText", completed, total, unitLabel) : t("progressText", completed, total);
     return `<section class="dashboard-progress"><div><h3>${escape(label)}</h3><p>${text}</p></div><progress value="${completed}" max="${total}" aria-label="${text}"></progress></section>`;
   }
 
@@ -231,7 +231,7 @@
 
   function process(input) {
     const data = processData(input);
-    return `<section class="dashboard-process" aria-live="polite"><p class="dashboard-eyebrow">${escape(data.eyebrow || t("processEyebrow"))}</p><h3>${escape(data.title || t("processTitle"))}</h3>${data.description ? `<p class="dashboard-process-description">${escape(data.description)}</p>` : ""}${data.steps.length ? `<ol class="dashboard-step-list">${data.steps.map(step => `<li class="dashboard-step dashboard-step-${step.state}"${step.state === "current" ? ' aria-current="step"' : ""}><span class="dashboard-step-marker" aria-hidden="true">${states[step.state]}</span><div><div class="dashboard-step-heading"><h4>${escape(step.title)}</h4>${status(step.state, step.statusLabel)}</div>${step.result ? `<p class="dashboard-result"><strong>${t("result")}</strong> ${escape(step.result)}</p>` : ""}${step.why ? `<p class="dashboard-step-why">${escape(step.why)}</p>` : ""}${step.next ? `<p class="dashboard-step-next"><strong>${t("nextStep")}</strong> ${escape(step.next)}</p>` : ""}</div></li>`).join("")}</ol>` : `<p class="dashboard-empty">${t("processEmpty")}</p>`}${data.note ? `<p class="dashboard-process-note">${escape(data.note)}</p>` : ""}${input.href ? `<p class="dashboard-process-link">${actionLink({ label: t("plan"), href: input.href })}</p>` : ""}</section>`;
+    return `<section class="dashboard-process" aria-live="polite"><p class="dashboard-eyebrow">${escape(data.eyebrow || t("processEyebrow"))}</p><h3>${escape(data.title || t("processTitle"))}</h3>${data.description ? `<p class="dashboard-process-description">${escape(data.description)}</p>` : ""}${data.steps.length ? `<ol class="dashboard-step-list">${data.steps.map(step => `<li class="dashboard-step dashboard-step-${step.state}"${step.state === "current" ? ' aria-current="step"' : ""}><span class="dashboard-step-marker" aria-hidden="true">${states[step.state]}</span><div><div class="dashboard-step-heading"><h4>${escape(step.title)}</h4>${status(step.state, step.statusLabel)}</div>${step.result ? `<p class="dashboard-result"><strong>${t("result")}</strong> ${escape(step.result)}</p>` : ""}${step.why ? `<p class="dashboard-step-why">${escape(step.why)}</p>` : ""}${step.next ? `<p class="dashboard-step-next"><strong>${t("nextStep")}</strong> ${escape(step.next)}</p>` : ""}</div></li>`).join("")}</ol>` : `<p class="dashboard-empty">${t("processEmpty")}</p>`}${data.note ? `<p class="dashboard-process-note">${escape(data.note)}</p>` : ""}${input.href ? `<p class="dashboard-process-link">${actionLink({ label: input.planLabel || t("plan"), href: input.href })}</p>` : ""}</section>`;
   }
 
   function decisionItem(item) {
@@ -259,9 +259,9 @@
   function viewContent(model, viewId) {
     const selected = model.units.find(item => item.id === model.selected);
     const selectedProcess = selected
-      ? { ...selected.process, title: selected.process.title || selected.title, href: selected.href }
+      ? { ...selected.process, title: selected.process.title || selected.title, href: selected.href, planLabel: null }
       : model.process;
-    return `${hero(model, viewId)}${decisions(model.decisions, model.decisionsTitle)}${progress(model.completed, model.total, model.progressTitle)}<div class="dashboard-workspace">${units(model, viewId)}${process(selectedProcess)}</div>${explore(model.explore, model.exploreTitle)}${model.links.length ? `<nav class="dashboard-links" aria-label="${t("sections")}">${model.links.map(item => actionLink(item, viewId)).join("")}</nav>` : ""}${model.footer ? `<p class="dashboard-footer">${escape(model.footer)}</p>` : ""}`;
+    return `${hero(model, viewId)}${decisions(model.decisions, model.decisionsTitle)}${progress(model.completed, model.total, model.progressTitle, model.unitLabel)}<div class="dashboard-workspace">${units(model, viewId)}${process(selectedProcess)}</div>${explore(model.explore, model.exploreTitle)}${model.links.length ? `<nav class="dashboard-links" aria-label="${t("sections")}">${model.links.map(item => actionLink(item, viewId)).join("")}</nav>` : ""}${model.footer ? `<p class="dashboard-footer">${escape(model.footer)}</p>` : ""}`;
   }
 
   function view(id, input) {

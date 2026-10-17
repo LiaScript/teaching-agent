@@ -37,11 +37,13 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **Fallback only:** If `### Coauthor` is missing or inactive, load `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - **If the current session subsection in `journal.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
    - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
-   - **If the current session subsection contains `**Decisions:**`:** read it before suggesting anything — never re-propose what the instructor has already decided against.
+   - **If the current session subsection contains the decisions list (`<!-- data-key="decisions" -->`, older journals `**Decisions:**`):** read it before suggesting anything — never re-propose what the instructor has already decided against.
 2. **Agent adopts the Coauthor role into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
-   - **Record decisions:** every decision the instructor makes about this session goes immediately, with date, into the session's `**Decisions:**` list in `journal.md` → `## Sessions` → `### {n}. {title}` (create it above `**References:**` if missing).
+   - **Fact check before showing:** before you show a draft piece, list its factual statements for yourself and check each against a named source (use `reference-checker` if installed). A simplification must stay true at the learners' level (never "A becomes C" when the source says "A → B → C"). No absolute or frightening claims ("soon there will be none left") unless the source states them. Mark every statement you could not verify as *unverified* in the chat; material with unverified statements is approved only if the instructor explicitly accepts that, and the session's references list the sources.
+   - **New rule → re-check:** when the instructor adopts a wording or style rule (also a project-wide one), apply it at once to **all** pieces drafted so far, show every hit with the fix in bold, and only then continue.
+   - **Record decisions:** the decisions list holds only dated decisions (open points go to the overview as `decide` or `internal`). Every decision the instructor makes about this session goes immediately, with date, into the session's decisions list (`data-key="decisions"`, label in the course language) in `journal.md` → `## Sessions` → `### {n}. {title}` (create it above `**References:**` if missing).
 
    **Critical engagement rules — always active:**
    - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
@@ -53,7 +55,8 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
    - Positive feedback only when it is genuinely earned and specific
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
-6. At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`).
+6. **Before writing the consolidated draft**, self-check it against the *Session Materials* items of `checklists/course-quality-checklist.md` (facts, self-check wording differs from practice, word list covers every word needed to answer, everything learners must read can be read aloud, closing reward only after solving, quiz settings from `data/liascript-cheat-sheet.md` → Quizzes for young learners) and report the result in one line. Material files are changed only with the file-edit tool, never with shell scripts or heredocs.
+   At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`).
 7. When the instructor **approves** the material for this session:
    - Update the session's skeleton in `journal.md` → `## Sessions` → `### {n}. …` so that Summary, Content and Activities describe the material as it now is; show the changes in one line of the summary.
    - In the overview table set **Material ✅**. **Done stays ❌** until `:validate-course {n} {type}` has written `Result: PASS` into this session's `#### Validation Report`.

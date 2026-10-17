@@ -257,8 +257,19 @@ Links appear in the Dashboard (the one recommended next step, further options, o
 and as one action line below each section heading. The Dashboard is a JSON data block that
 the local LiaScript library [`specs/dashboard/`](specs/dashboard/README.md) renders via
 `@Dashboard.View`; it and the action lines are written by `:update-dashboard`, the link format
-is defined in [`specs/data/agent-links.md`](specs/data/agent-links.md). Check the data block
-with `node specs/dashboard/validate-journal.mjs`.
+is defined in [`specs/data/agent-links.md`](specs/data/agent-links.md). The agent writes the
+data block only through `node specs/dashboard/write-dashboard.mjs <draft.json>` (checks the
+draft, replaces the block in one write, then validates); `node specs/dashboard/validate-journal.mjs`
+checks it on its own, including every `#` link against the real LiaScript heading anchors and
+raw placeholders in visible commands.
+
+To try a unit the way learners see it, `:try-as-learner {number}` opens the learner view of
+the preview with a learning companion (a historical teacher via `find_teacher`, or the course's
+guiding figure); it exists only in the preview, learners get no chat with published material.
+
+**Checks for the specs themselves:** `node --test specs/check-specs.mjs` guards the key rules
+found in the tandem tests against regressions (and scenario data leaking into the specs);
+`node specs/dashboard/check.mjs` tests the Dashboard library.
 
 **Setup**
 

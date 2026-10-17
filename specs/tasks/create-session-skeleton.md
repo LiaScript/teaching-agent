@@ -40,17 +40,18 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    1. An overview table directly below `## Sessions`
    2. One `### {number}. {title}` subsection per session below the overview table
 
-   - Directly below the heading, write the action line from the template: exactly **one** main action (`coauthor-materials?number={n}`), followed by the `More actions` `<details>` block with the promote/build links — see `data/agent-links.md`.
-   - Store the session type as its own line: `**Type:** {type}`.
+   - Directly below the heading, write the action line from the template: exactly **one** main action (`coauthor-materials?number={n}`) — see `data/agent-links.md`.
+   - Then the visible line with kind and checklist (display names in the course language), followed by the technical `<details>` block with `**Type:** {type}`, `**Method:** {method}` and the further commands.
+   - Visible bold labels are **only in the course language**, no abbreviations (no "UDL"). Each carries its English key invisibly in the attribute comment directly above it (`<!-- data-key="summary" -->`); tasks find a label by that key (older journals: by the English label).
    - Do not include the type in the subsection heading.
-   - If a Method was resolved (step 3): store it as its own line directly after `**Type:**`: `**Method:** {method}`. Omit this line entirely if the resolved default is `none`.
-   - `**Summary:**` and `**Content:**` are free text blocks and may contain more than one paragraph.
+   - If a Method was resolved (step 3): `**Method:** {method}` directly after `**Type:**` inside the `<details>` block. Omit this line entirely if the resolved default is `none`.
+   - Summary and content (`data-key` `summary`, `content`) are free text blocks and may contain more than one paragraph.
    - `**Activities:**` must be a numbered list.
    - `**References:**` must be a numbered list.
    - Do **not** create an `#### Images` block — `:create-image` creates it when the first image exists (an empty `####` heading becomes an empty slide).
    - Do not create a `**Decisions:**` list yet — `:coauthor-materials` adds it with the first decision.
-   - **Self-check before saving** (fix silently, then mention in one line what you adapted): the skeleton describes the material that will really be produced, not a wish list; new terms stay within the scope set in `## Didactics` (terms of later sessions are not used yet); every matching or assignment task has exactly one correct answer per item; the self-check shows what *each* learner can do (also in pair or group work); a closing proof or reward cannot be reached without doing the tasks, or the skeleton says how the instructor checks it.
-8. Update the overview table inside `journal.md` → `## Sessions`:
+   - **Self-check before saving** (adapt, then name every change in one line; ask before dropping or replacing anything the instructor asked for): the skeleton describes the material that will really be produced, not a wish list; new terms stay within the scope set in `## Didactics` (terms of later sessions are not used yet); every matching or assignment task has exactly one correct answer per item; every task, including extension tasks, can be solved with the material the learners get (text, pictures); every support need named in `## Course Context` or `## Outline` (language support, learning support) has a concrete measure in this unit; the self-check shows what *each* learner can do (also in pair or group work); a closing proof or reward cannot be reached without doing the tasks, or the skeleton says how the instructor checks it.
+8. Update the overview inside `journal.md` → `## Sessions`: a visible status list in the course language (one line per unit: "{n}. {title} – skeleton ✅ · material open", translated), followed by the technical overview table inside `<details><summary>{"Technical overview", translated}</summary> … </details>`:
    - If `journal.md` → `## Sessions` does not exist yet, create it with the overview table first. Include a `Method` column only if `journal.md` → `## Didactics` → `__Default Session Method:__` is not `none`:
      ```
      | # | Title | Type | Method | Skeleton | Material | Done | Notes |
@@ -60,3 +61,4 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - If a row for this session already exists, update the Skeleton column to ✅.
    - Keep the overview table before all `### {number}. {title}` subsections.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+10. **Show the new unit** (MCP gate open): after the overview is updated, `goto` the new unit by heading (`section: "### {number}. {title}"`, check with `get_state`), say in one line what the instructor sees there, and offer the next step (work out the material together).

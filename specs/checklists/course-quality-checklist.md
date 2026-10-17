@@ -76,11 +76,15 @@
 - [ ] [mechanical] All skeletons promoted to materials
 - [ ] [mechanical] Outline with subchapters present
 - [ ] [pedagogical] References included per section where claims are made
+- [ ] [pedagogical] Every factual statement is correct at the stated level of simplification and traceable to a listed reference; no frightening or absolute claims without a source
+- [ ] [mechanical] Quizzes follow `data/liascript-cheat-sheet.md` → Quizzes for young learners where the target group needs it (no visible "show solution" button before the first try)
 - [ ] [pedagogical] Didactic inputs from `journal.md` → `## Didactics` reflected (methods, learning phases)
 - [ ] [pedagogical] Learning objectives from `journal.md` → `## Agenda` addressed in content
 - [ ] [pedagogical] Self-check uses different examples, pictures or wording than the practice tasks (tests understanding, not recognition)
 - [ ] [pedagogical] A closing proof or reward is reachable only after solving the tasks, or the material says how the instructor checks it; praise does not appear after "show solution"
 - [ ] [pedagogical] Question texts *and* answer options can be read aloud where the target group needs it
+- [ ] [pedagogical] Matrix/table quizzes have short column headers (one or two words) or are transposed so the options fit a narrow screen
+- [ ] [pedagogical] Hints and instructions never point to positions ("above", "below") across slides; they name the page title
 - [ ] [mechanical] Each session's content satisfies its declared Session Type's `Erforderlich` checklist from `## Didactics` → `__Session Types:__`
 - [ ] [mechanical] Each session's content satisfies its declared Session Method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
 - [ ] [mechanical] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is always advisory, never a fail by itself

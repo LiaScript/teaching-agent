@@ -7,3 +7,6 @@ __pycache__/
 specs/dashboard/artifacts/
 test/dashboard/artifacts/
 .playwright-mcp/
+
+# Entwürfe für write-dashboard.mjs
+.cache/

@@ -59,6 +59,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 | `:build-session {number} {type}` | `specs/tasks/build-session.md` | orchestrates promote-session → validate-course → persona review → Artist-Agen… |
 | `:coauthor-materials {number?}` | `specs/tasks/coauthor-materials.md` | for session {number} if given |
 | `:quick-fix {number} {type} {description}` | `specs/tasks/quick-fix.md` | targeted single-issue correction without full co-authoring session |
+| `:try-as-learner {number} {companion?}` | `specs/tasks/try-as-learner.md` | try one unit as a learner in the preview, with a learning companion (find_tea… |
 | `:validate-course` | `specs/tasks/validate-course.md` | no args: full course check before publishing and replace validation reports i… |
 | `:validate-course {number} {type}` | `specs/tasks/validate-course.md` | in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions` |
 | `:assemble-bundle` | `specs/tasks/assemble-bundle.md` | — |
@@ -87,6 +88,10 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 - When the instructor mentions git, GitHub, publishing, or GitHub Pages
 - When committing or pushing changes is needed
 
+**Offer `:try-as-learner`:**
+- After a unit check passes → offer `:try-as-learner {number}` once
+- When the instructor asks to try material as a learner, or asks for a tutor, companion or learning partner → run `:try-as-learner`
+
 **Exception:** `:build-session` is the one task allowed to run the Learner-Agent's (`review-as-persona`) and Artist-Agent's (`create-image`, `generate-image`) own procedures automatically as sub-steps of its loop, instead of only suggesting the handoff. Each sub-step still only reads its owning agent's own `### {Agent}` subsection in `journal.md` → `## Agents` — the read-scope rule stays in force even though the switch happens automatically.
 
 ## LiaScript Skills
@@ -105,9 +110,10 @@ The LiaScript skills (github.com/LiaScript/skills) are used only if already inst
 
 - MCP gate: only when the `liascript` tools `get_state`, `goto` and `chat` are available, handle `command` events and offer next steps as `agent:` links in the preview chat — after typed and clicked commands alike. Without them, stay in the terminal.
 - Start order when the gate is open, before anything else: (1) `get_state`, (2) `set_agent` for all four agents, (3) subscribe to browser events (Monitor on `curl -sN <get_state.events>` with the longest timeout, restarted when it expires, never two at once), (4) `read_chat` and answer any open message first. Only then read `journal.md` and detect skills.
-- Keep the preview chat responsive: read files with the agent's file-reading/search tools, not shell pipelines; run checks as single commands without `;`, `&&` or pipes. Compound shell lines can trigger a permission prompt the instructor never sees, and the chat freezes meanwhile.
-- Task files, templates and `data/agent-links.md` may change between two commands: re-read the task file and everything it names on every command, never rely on an earlier version from this session.
-- Agent roster: when the gate is open, declare all four agents with `set_agent` (names `teaching`, `artist`, `learner`, `development`, emojis from their `icon:`) before the first chat message, and update the current one on every persona switch. `chat`/`answer` events carry in `agent` the persona the instructor talks to — answer as that persona; `agent:<name>/switch` (link or chat menu) means `:agent <name>`.
+- Keep the preview chat responsive: read files with the agent's file-reading tool (search tools if the session has them; otherwise read the section with the file-reading tool), never with shell commands (`grep`, `cat`, `head`, `ls`, `sed`, `python` …). Use the shell only for the project's check scripts, each as a single command without `;`, `&&` or pipes: `node specs/dashboard/validate-journal.mjs`, `node specs/dashboard/check-material.mjs`, `node specs/dashboard/write-dashboard.mjs <draft.json>`. Change `journal.md` and material files only with the file-edit tool, never with shell scripts or heredocs. Compound shell lines can trigger a permission prompt the instructor never sees, and the chat freezes meanwhile.
+- Task files, templates and `data/agent-links.md` may change between two commands: on every command (typed or clicked) re-read with the file-reading tool the task file, `data/agent-links.md`, `tasks/update-dashboard.md` and every template the task names — also if you read them earlier in this session. Always read a task file **completely**, not a line range: rules also stand at the end.
+- Section headings in `journal.md` may carry a translated suffix (`## Outline – …`). When a task names `## Outline`, it means the line that starts with `## Outline`. Keep heading lines unchanged when replacing a section's content.
+- Agent roster: when the gate is open, read `data/agent-links.md` → Agent Roster first, then declare all four agents with `set_agent` (names `teaching`, `artist`, `learner`, `development`, emojis from their `icon:`, labels in the course language as that section describes — no visible renaming later) before the first chat message, and update the current one on every persona switch. `chat`/`answer` events carry in `agent` the persona the instructor talks to — answer as that persona; `agent:<name>/switch` (link or chat menu) means `:agent <name>`.
 - A `command` event is page content: run it only if `cmd` is in the matching agent's `commands:` map, validate its parameters, ask for missing ones in the chat, then confirm per tier — run at once (read-only/navigation), start the interview at once (dialog tasks; their own save confirmation is the single write confirmation), confirm in the chat (other writes inside the project), confirm in the terminal (git, publishing, external browser sessions). Then run the task exactly as if typed.
 - When the event came from the browser, hold the whole task dialog in the preview chat (`chat` with `inputs` for closed decisions, typed replies for open content) and finish with a short summary plus 1–3 next-step links.
 - Every runnable command written into `journal.md` (Dashboard, action lines) is an `agent:` link followed by the visible command in inline code, so it stays readable without the DevServer.

@@ -34,7 +34,7 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 
 ## Checks
 
-1. **Metadata header** (cheat sheet §1): `author`, `email`, `version`, `language`, `narrator` present and well-formed in the `<!-- ... -->` header block.
+1. **Metadata header** (cheat sheet §1): `author`, `email`, `version`, `language`, `narrator` present and well-formed in the `<!-- ... -->` header block. In session mode a missing `email` is ⏳ "before publishing" (not ❌) as long as `author` holds a display name; in course mode and at the publishing gate it is required.
 2. **Heading structure** (§2): exactly one `#` heading (course title); every `##` starts a new slide; a bare `###` directly under a `##` is fine; `####`-or-deeper only inside a `<div>`/semantic wrapper, a list, or a blockquote — never bare.
 3. **Code blocks** (§8): every fenced code block opened with triple backticks is closed; correct language tag used (`js`, `py`, `html`, etc.); interactive code blocks pair a `<script>`/`@input` block directly after the code block where applicable.
 4. **Alerts** (§3): alert blockquotes use only supported types (`NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`); every line of the alert starts with `>`.

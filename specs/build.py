@@ -245,12 +245,14 @@ def _nav_content(target_key: str, target: dict, agent: dict) -> str:
     suggest_artist  = coord.get("suggest_artist_when") or []
     suggest_learner = coord.get("suggest_learner_when") or []
     suggest_dev     = coord.get("suggest_development_when") or []
-    if suggest_artist or suggest_learner or suggest_dev:
+    suggest_try     = coord.get("suggest_try_as_learner_when") or []
+    if suggest_artist or suggest_learner or suggest_dev or suggest_try:
         lines += ["## Agent Coordination", ""]
         for label, items in [
             ("Suggest `:agent artist`", suggest_artist),
             ("Suggest `:agent learner`", suggest_learner),
             ("Suggest `:agent development`", suggest_dev),
+            ("Offer `:try-as-learner`", suggest_try),
         ]:
             if items:
                 lines.append(f"**{label}:**")

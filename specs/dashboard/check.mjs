@@ -54,9 +54,9 @@ test("texts remain text and command links retain their readable fallback", () =>
 });
 
 test("open decisions and the provisional plan render and validate", () => {
-  const model = dashboard.buildModel({ title: "X", decisions: ["Ein Link oder mehrere?", { title: "Zeitbedarf", why: "Rahmen sagt 4 Stunden" }], plan: { note: "vorläufig", rows: [{ label: "Stunde 1", text: "Bienenvolk" }] } });
+  const model = dashboard.buildModel({ title: "X", decisions: ["Ein Link oder mehrere?", { title: "Zeitbedarf", why: "Rahmen sagt 4 Stunden" }], plan: { note: "vorläufig", rows: [{ label: "Stunde 1", text: "Wolkenarten" }] } });
   assert.equal(model.decisions.length, 2);
-  const html = dashboard.renderComponent("View", "t", { lang: "de", title: "X", decisions: ["A"], plan: { rows: [{ label: "Stunde 1", text: "Bienenvolk" }] } });
+  const html = dashboard.renderComponent("View", "t", { lang: "de", title: "X", decisions: ["A"], plan: { rows: [{ label: "Stunde 1", text: "Wolkenarten" }] } });
   assert.match(html, /Noch zu entscheiden/);
   assert.match(html, /Stunde 1/);
   assert.throws(() => dashboard.buildModel({ plan: { rows: [{ label: "Stunde 1" }] } }));
@@ -77,7 +77,7 @@ test("open points are grouped by role; internal notes stay collapsed", () => {
 
 test("a selected unit links to its plan in the process panel", () => {
   const html = dashboard.renderComponent("View", "u", { lang: "de", title: "X", units: [{ id: 1, title: "Stunde 1", state: "current", href: "#1.-stunde-1" }] });
-  assert.match(html, /href="#1\.-stunde-1"[^>]*>Bauplan ansehen/);
+  assert.match(html, /href="#1\.-stunde-1"[^>]*>Planung ansehen/);
 });
 
 test("unit cards count finished process steps", () => {
@@ -89,4 +89,13 @@ test("texts follow the course language; English is the fallback", () => {
   assert.match(dashboard.renderComponent("View", "de1", { lang: "de", title: "X" }), /Fortschritt/);
   assert.match(dashboard.renderComponent("View", "en1", { lang: "en", title: "X" }), /Progress/);
   assert.match(dashboard.renderComponent("View", "xx1", { lang: "fr", title: "X" }), /Progress/);
+});
+
+test("unit label follows the course terminology", () => {
+  const html = dashboard.renderComponent("View", "u", { lang: "de", title: "X", unitLabel: { one: "Modul", many: "Module" }, units: [{ id: "1", title: "A", state: "done" }, { id: "2", title: "B", state: "planned" }] });
+  assert.match(html, /1 von 2 Module sind abgeschlossen/);
+  const plain = dashboard.renderComponent("View", "v", { lang: "de", title: "X", units: [{ id: "1", title: "A", state: "planned" }] });
+  assert.match(plain, /0 von 1 Einheit ist abgeschlossen/);
+  const linked = dashboard.renderComponent("View", "w", { lang: "de", title: "X", unitLabel: { one: "Modul", many: "Module" }, units: [{ id: "1", title: "A", state: "current", href: "#a" }] });
+  assert.match(linked, />Planung ansehen /);
 });

@@ -8,7 +8,25 @@ template:
     section: Didactics
   title: 'Course Didactics'
   notes:
-    - 'Render as ONE flat bullet list under `## Didactics` — the section titles below are internal structure, never headings.'
+    - 'Never use headings under `## Didactics` — the section titles below are internal structure; follow `layout` (visible part + `<details>`).'
+  layout: |
+    Write the section for the instructor first, technical keys last:
+    1. One bold lead line in the course language, e.g. "**Lesson design:** confirmed on {date}." (translated).
+    2. Visible, in the course language only (no slugs, enum words, file names or English method names);
+       labels keep the English key first and a translation after an en dash:
+       * __Didactic Concept – <translation>:__ numbered phases of a lesson, partner work, notes for the instructor
+       * __Professor Persona – <translation of "guiding figure">:__ who guides the learners (the key is historical;
+         it never means a professor — the persona type is set in Course Context)
+       * __Language style – <translation>:__ how the material talks
+       * __Lesson types – <translation>:__ one line per type: name in the course language — when it is used — what it must contain
+       * __Difficulty – <translation>:__ in teacher words
+       * __Persona Voice Sample – <translation>:__ as a quote
+       Short paragraphs or lists, at most about 3 sentences per item.
+    3. `<details><summary>{"Technical settings for the assistant", translated}</summary>` with the machine fields
+       (`Teaching Style`, `Course Type` copied from Course Context, `Didactic Framework`, `Default Session Method`,
+       `Session Types` with slugs, `Difficulty Level`), then `</details>`.
+    Session Type slugs: lowercase ASCII words in the course language, unique, never equal to a word in
+    Course Context → Terminology.
   sections:
     - id: didactic-concept
       title: Didactic Concept

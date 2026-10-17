@@ -106,6 +106,32 @@ for (const row of sessions.matchAll(/^\|\s*(\d+)\s*\|(.*)\|\s*$/gm)) {
     if (!/#### Validation Report[\s\S]*?__Result:__\s*PASS(?!\s*with)/.test(block)) problems.push(`unit ${row[1]}: "Done ✅" without a passed check (Validation Report with "Result: PASS" – not "with concerns" – is missing)`);
   }
 }
+// Anchors: LiaScript builds a slide anchor from the full heading text – lower
+// case, "-" and spaces collapse to single "-", punctuation (".", "?", "–") stays.
+// An unknown anchor silently opens slide 1; a bare slide number (#10) breaks as
+// soon as a slide is added above it.
+const headingBody = source.replace(/^<!--[\s\S]*?-->/, "").replace(/```[\s\S]*?```/g, "")
+  .replace(/<section>[\s\S]*?<\/section>/g, "").replace(/<!--[\s\S]*?-->/g, "");
+const anchorOf = text => "#" + text.trim().toLowerCase().replace(/-/g, " ").split(/\s+/).filter(Boolean).join("-");
+const anchors = new Set([...headingBody.matchAll(/^#{1,6}\s+(.+)$/gm)].map(match => anchorOf(match[1])));
+const hrefs = [];
+(function walk(value) {
+  if (Array.isArray(value)) value.forEach(walk);
+  else if (value && typeof value === "object") Object.entries(value).forEach(([key, item]) => key === "href" && typeof item === "string" ? hrefs.push(item) : walk(item));
+})(JSON.parse(source.match(/```json @Dashboard\.View\n([\s\S]*?)\n```/)?.[1] ?? "{}"));
+for (const href of hrefs.filter(item => item.startsWith("#"))) {
+  if (/^#\d+$/.test(href)) problems.push(`link ${href} is a bare slide number – use the heading anchor (it moves when slides are added)`);
+  else if (!anchors.has(decodeURIComponent(href).toLowerCase())) problems.push(`link ${href} matches no heading – LiaScript opens slide 1 instead (anchor = full heading text, lower case, spaces → "-", punctuation kept)`);
+}
+// Visible commands must not show raw placeholders like {description}.
+for (const href of hrefs) if (/\{[a-z_-]+\??\}/i.test(href)) problems.push(`link ${href} contains a raw placeholder – pass the value or omit the parameter`);
+(function walkCommands(value) {
+  if (Array.isArray(value)) value.forEach(walkCommands);
+  else if (value && typeof value === "object") Object.entries(value).forEach(([key, item]) => key === "command" && typeof item === "string" ? (/\{[a-z_-]+\??\}/i.test(item) && problems.push(`command "${item}" shows a raw placeholder – use the value or a translated hint like <what?>`)) : walkCommands(item));
+})(JSON.parse(source.match(/```json @Dashboard\.View\n([\s\S]*?)\n```/)?.[1] ?? "{}"));
+for (const line of source.split("\n").filter(line => /class="journal-actions"/.test(line) || /^\[.*\]\(agent:/.test(line))) {
+  for (const code of line.matchAll(/`(:[^`]*)`/g)) if (/\{[a-z_-]+\??\}/i.test(code[1])) problems.push(`action line shows a raw placeholder: ${code[1]}`);
+}
 const agendaRows = (section("Agenda").match(/^\|\s*\d+\s*\|/gm) ?? []).length;
 if (agendaRows && model.total !== agendaRows) problems.push(`the agenda has ${agendaRows} rows, the dashboard shows ${model.total} units`);
 if (problems.length) {

@@ -26,6 +26,7 @@ template:
     subtitle: 'Current state of work in plain words; no repeated counters'
     notice: 'Optional: provisional sample data or pending decisions'
     unitsTitle: 'Label from `## Course Context` → Terminology (sessions-called)'
+    unitLabel: '{one, many}: the word for one unit and for several, in the course language, from `## Course Context` → Terminology (sessions-called) — used in the progress line'
     units:
       - id: 'Stable number from Sessions / Agenda'
         title: 'Unit title'

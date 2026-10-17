@@ -22,7 +22,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
     "title": "Den Materialentwurf für SQL erstellen",
     "why": "Lernziele und Lernaktivitäten liegen bereits vor. Jetzt entstehen konkrete Aufgaben und Hilfen.",
     "label": "SQL-Prozess ansehen",
-    "href": "#2",
+    "href": "#dashboard",
     "selectUnit": 3
   },
   "units": [

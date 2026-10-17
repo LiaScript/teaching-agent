@@ -29,20 +29,20 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - **self-paced**: modular, learner-driven, self-check oriented
    - **workshop**: activity-driven, collaborative, time-boxed
    - **single-lesson**: focused, compact, single arc
-3a. 🎛️ Propose a **Didactic Framework** from `data/didactic-methods.md` → "Course Frameworks", based on course type. Let the instructor confirm or change it. This is documentation/vocabulary only — it does not change any later step's behavior.
+3a. Choose a **Didactic Framework** from `data/didactic-methods.md` → "Course Frameworks" yourself, based on course type. It is documentation only: do **not** ask the instructor; name it only inside the technical details. Ask only if the instructor uses such terms themselves.
 3b. Define `__Session Types:__` (see `data/session-types.md` for the full mechanism):
    - **single-lesson**: default to one type named after `lectures-called`; skip the discussion unless the instructor wants to split the lesson into sub-types.
    - **all other course types**: 🎛️ propose the default Session Types for this course type from the table in `data/session-types.md`, each with slug, one-line criterion, and a 2–3 item required-elements checklist. Let the instructor confirm or edit.
    - 💬 Grounding check (mandatory, do not skip): ask the instructor to name one concretely planned session and which Session Type it would get, and why. If the answer doesn't fit any proposed type, revise the types before continuing — don't let an unfitting default stand.
-3c. 🎛️ Propose a **Default Session Method** from `data/didactic-methods.md` → "Session Methods", based on course type — include the option to pick **`none`** (no specific method, opt out entirely). Let the instructor confirm, change, or opt out. This becomes the course-wide default; `:create-agenda` can override it per session later.
+   - Display names in the course language; slugs as defined in the template layout (lowercase ASCII words in the course language, not English defaults).
+
+3c. Choose a **Default Session Method** yourself (several may be combined as "a + b") from `data/didactic-methods.md` → "Session Methods", based on course type — **`none`** is allowed. Do not ask; mention it in plain words in the summary only if it changes what the learners do. This becomes the course-wide default; `:create-agenda` can override it per session later.
 4. 💬 Describe the instructor persona (expertise, role, background) — free text, discuss with instructor.
-5. 🎛️ Define teaching style (structured question — single choice with optional free-text addition):
-   - humorous / academic / practical / conversational / mixed
-6. 🎛️ Set difficulty level (structured question — single choice):
-   - beginner / intermediate / advanced
+5. Derive the teaching style from `## Course Context` (Tone) and confirm it only as one line of the summary.
+6. Derive the difficulty level from target group and outline; confirm it only as one line of the summary.
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
-9. Save the generated didactics by replacing the content of `journal.md` → `## Didactics` — flat `* __Label:__` bullets only (including `* __Persona Voice Sample:__`), no sub-headings.
+9. **Before saving** show the complete section as the instructor will read it (after a change: the whole new version with the changed parts in bold, never only the changes), with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Didactics` using the `layout` of `templates/course-didactics.yaml` (visible part in the course language, technical fields in `<details>`), no sub-headings.
 10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection:
     - Set `* __Customization Status:__ active`
     - Set `* __Role / Persona:__` from `## Didactics` → `__Professor Persona:__`

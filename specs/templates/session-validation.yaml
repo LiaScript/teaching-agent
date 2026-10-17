@@ -12,37 +12,40 @@ template:
   title: 'Session {{number}} Validation'
   layout: |
     One slide only. Write:
-    1. `#### Validation Report` (tasks find it by the start of the heading line).
-    2. Visible, in the course language and in plain words: `**Outcome:**` with the result and date,
-       then `**What works:**` and `**Still missing:**` as short lists — refer to page titles
-       of the material, never to line numbers (also not inside the details).
-    3. `<details><summary>Technical report</summary>` with `__Date:__`, `__Material:__`, `__Result:__`,
+    1. `#### Validation Report – {{"Validation report", translated}}` (tasks find it by the start of the heading line).
+    2. Visible, in the course language and in plain words (every label translated): outcome with result and date,
+       then what works and what is still missing as short lists — refer to page titles of the material,
+       never to line numbers (also not inside the details), never to items by number only ("decision 3"):
+       give a short title instead. Use the instructor's words for what learners see.
+    3. `<details><summary>{{"Technical report", translated}}</summary>` with `__Date:__`, `__Material:__`, `__Result:__`,
        `__Mode:__` (English keys, read by tasks and the publishing gate) and the findings as **bold
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
   result_rules:
-    - '**FAIL** if any required element (Session Type or Method `Erforderlich`, any `[mechanical]` checklist item) is ❌.'
-    - '**PASS with concerns** only for gaps explicitly deferred to a *named later step* (e.g. images follow with the Artist-Agent) — name that step in the report.'
-    - 'Otherwise **PASS**.'
+    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable are only (a) media still to be produced in a named later step (images, audio) and (b) publishing metadata needed only for publishing (contact address, license).'
+    - '2. Any other ❌ on a required element (Session Type or Method `Erforderlich`) or a `[mechanical]` item → **FAIL**.'
+    - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
+    - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step).'
+    - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead.'
   sections:
     - id: report-heading
       title: Report Heading
       template: |
-        #### Validation Report
+        #### Validation Report – {{"Validation report", translated}}
     - id: summary
       title: Summary for the instructor
       template: |
-        **Outcome:** {{passed | not passed | passed – {{later step}} still follows}} ({{date}})
+        **{{"Outcome", translated}}:** {{passed | not passed | passed – {{later step}} still follows}} ({{date}})
 
-        **What works:**
+        **{{"What works", translated}}:**
 
         - {{plain-language finding, with page titles of the material}}
 
-        **Still missing:**
+        **{{"Still missing", translated}}:**
 
         - {{point}} – {{when, or in which step}}
 
         <details>
-        <summary>Technical report</summary>
+        <summary>{{"Technical report", translated}}</summary>
 
     - id: metadata
       title: Metadata

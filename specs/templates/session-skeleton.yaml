@@ -20,54 +20,66 @@ template:
       title: Actions
       template: |
         <!-- class="journal-actions" -->
-        [▶ Work out together](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
-
+        [▶ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
+      note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
+    - id: kind
+      title: Kind (visible)
+      template: |
+        <!-- data-key="kind" -->
+        **{{"Kind", translated}}:** {{display name of the type in the course language}} · **{{"Checklist", translated}}:** {{display name of the method in the course language, or "none" translated}}
+    - id: type
+      title: Type (technical)
+      template: |
         <details>
-        <summary>More actions</summary>
+        <summary>{{"Technical settings and more actions", translated}}</summary>
+
+        **Type:** {{type}}
+
+        **Method:** {{method}}
 
         [▶ Promote](agent:teaching/promote-session?number={{number}}&type={{type}}) `:promote-session {{number}} {{type}}` · [▶ Build](agent:teaching/build-session?number={{number}}&type={{type}}) `:build-session {{number}} {{type}}`
 
         </details>
-      note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the `<details>` block. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
-    - id: type
-      title: Type
-      template: |
-        **Type:** {{type}}
       note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Erforderlich` checklist.'
     - id: method
       title: Method
       template: |
-        **Method:** {{method}}
+        (inside the technical `<details>` block of `type`, see above)
       note: '{{method}} is a slug from `data/didactic-methods.md` → "Session Methods", resolved from the matching Agenda row if an agenda exists, otherwise from `journal.md` → `## Didactics` → `__Default Session Method:__`. Omit this line entirely if the default is `none`. Content must satisfy that method''s `Erforderlich` checklist, independently of the Type checklist above.'
     - id: summary
       title: Summary
       template: |
-        **Summary:**
+        <!-- data-key="summary" -->
+        **{{"Summary", translated}}:**
 
         [Short overview, reference to agenda, relevance, didactics. May contain more than one paragraph.]
     - id: content
       title: Content
       template: |
-        **Content:**
+        <!-- data-key="content" -->
+        **{{"Content", translated}}:**
 
         [Placeholder for main topics or assignments. May contain more than one paragraph.]
     - id: activities
       title: Activities
       template: |
-        **Activities:**
+        <!-- data-key="activities" -->
+        **{{"Activities", translated}}:**
 
         1. [Exercise, discussion, reflection, or learner action]
         2. [Exercise, discussion, reflection, or learner action]
     - id: decisions
       title: Decisions
       template: |
-        **Decisions:**
+        <!-- data-key="decisions" -->
+        **{{"Decisions", translated}}:**
 
         1. [Decision of the instructor about this session, with date]
       note: 'Filled by `:coauthor-materials` whenever the instructor decides something about this session; read by `:coauthor-materials` and `:validate-course` before recommending anything. Omit until the first decision exists.'
     - id: references
       title: References & Sources
       template: |
-        **References:**
+        <!-- data-key="references" -->
+        **{{"References", translated}}:**
 
         1. [Relevant source or material]

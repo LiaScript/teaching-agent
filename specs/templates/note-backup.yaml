@@ -7,7 +7,7 @@ template:
     filename: journal.md
     section: Notes Backup
     append: true
-    heading: '### {{type_label}}: {{descriptive_title}} ({{date}})'
+    heading: '### {{type_label, translated into the course language}}: {{descriptive_title}} ({{date}})'
   title: 'Notes Backup Entry'
   notes:
     - 'Append rendered entries to `journal.md` -> `## Notes Backup`; never replace existing entries.'

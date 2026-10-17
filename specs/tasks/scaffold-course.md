@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Runs all structural setup steps in one automated pass — without stopping for approval after each step.
+Runs all structural setup steps in one automated pass — after **one** confirmed draft of all sections, without further approval prompts between the generation steps. Offered only on the instructor's request (see `data/agent-links.md` → One way to start).
 
 The instructor answers all questions **upfront in a single intake interview**. The agent then creates one `journal.md` containing the `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`, and `## Sessions` sections. Co-authoring (`:coauthor-materials`) starts after the scaffold is complete.
 
@@ -51,9 +51,11 @@ Generated in sequence without interruption inside `journal.md`:
 2. Collect all inputs using structured questions where options are fixed, free text where content is needed:
    - If the skill `creativity` is available (see `data/skills.md`) and the instructor has only a vague idea, offer it once as an exploratory warm-up before the interview — never by default.
 
+   **Rules for all blocks:** reuse what is known (chat via `read_chat`, `journal.md`) as prefilled assumptions instead of asking again; ask in the instructor's own terms (the teacher questions of `tasks/init-course.md` steps 3, 4 and 6 — scope + how learners work, target group, file structure as a teacher question, terminology, audience override); option labels in the course language, never slugs; follow `data/agent-links.md` → Chat Conduct → Forms.
+
    **🎛️ Block 1 — Course basics (structured questions, one pass):**
-   - Course type: lecture-series / self-paced / workshop / single-lesson
-   - Language: de / en / other (+ free text if other)
+   - Course type: as two teacher questions (scope + how learners work), mapped as in `tasks/init-course.md` step 3
+   - Language: prefilled with the language the instructor writes in
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you
    - Accessibility: required / optional / not needed
@@ -72,20 +74,22 @@ Generated in sequence without interruption inside `journal.md`:
    **🎛️ Block 4 — Structure (structured questions):**
    - Agenda needed? (for self-paced / single-lesson): yes / no
    - Session approach after scaffold: iterative (one at a time) / batch (all at once)
-   - Session count: 💬 free text (number + optional titles, or leave for auto-generation)
+   - Session count and length: 💬 ask for exact numbers (how many units, minutes each). Never offer ranges and never compute a middle value; if the instructor gives a range, ask which number to plan with.
+   - File structure: teacher question from `tasks/init-course.md` step 6
    - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
 
-3. Present a **summary of all inputs** and ask for confirmation:
-   > "Summary: [display all inputs]. Should I generate the structure now? (Yes / Adjust)"
+3. **Draft before saving.** Generate the complete content of every section that Phase 2 will write (Course Context incl. technical choices such as persona type, pacing, file structure; Outline incl. objectives; Didactics incl. framework, method, level; Agenda; session list with titles, durations and core content) and show it in the chat **before** anything is written — one compact block per section in plain course language, technical choices named in plain words. Nothing may be saved that is not in this draft (`data/agent-links.md` → "Nothing unseen gets saved").
+   - Every number and every unit in the draft must come from the instructor's answers. Mark anything you added yourself as a suggestion ("Suggestion: …") and ask about it; never present it as decided.
+   - Then ask "Save" / "Change something" as the single write confirmation (its own form, no content questions in it).
 
-4. If adjustments needed: ask which block to revise, update, confirm again.
+4. If adjustments needed: ask what to change, update the draft, show the changed parts (bold), confirm again.
 
 ### Phase 2: Automated Generation
 
-Run each step silently (no approval prompts between steps):
+Write exactly the confirmed draft — no additions, no silently filled details. Run each step without approval prompts between steps:
 
 1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment. Set `language:` to the course language code.
-2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well). Set `__File Structure:__` from the course type default in `data/file-structure-modes.md` (single-lesson → single-file, all others → multi-file) and mention the default in the Phase 3 completion summary so the instructor can override it.
+2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well). Set `__File Structure:__` from the instructor's answer to the file-structure question. Follow the layout of `templates/course-context.yaml` (confirmed summary first, technical keys in `<details>`).
 3. Replace the content of `journal.md` → `## Outline`.
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet.
 5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
@@ -139,7 +143,9 @@ After each section is saved, print a brief progress line:
 
 ## Escalation Rules
 
-- If a required input is missing and cannot be reasonably inferred: **pause and ask** — do not guess.
+- If a required input is missing: **pause and ask** — do not guess, do not average ranges, do not add units or stations.
+- Promises made in the chat after saving (e.g. "I will plan for X") must be written to the journal (Additional Notes or the matching section) in the same step, or not made.
+- Provenance notes (`_Filled by …_`) name the task that actually wrote the section (`:scaffold`).
 - If the session count is unusually high (>12 for a single-lesson or >20 overall): flag it and ask to confirm before continuing.
 - If course type is `improve-existing`: redirect to `:analyze-existing` instead.
 

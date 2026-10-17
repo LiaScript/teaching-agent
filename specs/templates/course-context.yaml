@@ -7,6 +7,16 @@ template:
     filename: journal.md
     section: Course Context
   title: 'Course Context'
+  layout: |
+    Write the section in this order:
+    1. One bold lead line in the course language, e.g. "**Course frame:** confirmed on {date}." (translated).
+    2. The confirmed summary table from the chat, word for word, with labels in the course language and no slugs
+       (header row "| Item | Decided |", translated), preceded by the line `<!-- data-type="none" -->`
+       so LiaScript does not offer charts or sorting.
+    3. `<details><summary>{"Technical settings for the assistant", translated}</summary>` containing all
+       `* __Label:__` blocks below (keys stay English so tasks can read them), then `</details>`.
+    The table and the technical block must say the same; if they would differ, ask the instructor before saving.
+    Never store notes about the instructor's computer or preview browser (e.g. missing voices) — they are not course facts.
   sections:
     - id: course-type
       title: Course Type
@@ -14,6 +24,7 @@ template:
         * __Course Type:__
           1. Type: [lecture-series | self-paced | workshop | single-lesson | improve-existing]
           2. Working Title: [optional working title]
+          3. Target Group: [short: who learns, how many, where — details follow in `## Outline`]
 
     - id: profile
       title: Course Profile

@@ -42,6 +42,11 @@ Run this task automatically after any task that changes project state:
 
 ## Steps
 
+0. **Sign of life first** (MCP gate open): when called right after a save, the
+   calling task has already sent "✅ Saved: …". Send a status "Updating the
+   overview …" (translated) **before** reading and generating anything. Never
+   generate the dashboard data while the last visible sign of life is older
+   than about 30 seconds.
 1. Read the source sections listed above — now, not from memory. Identify course
    title, target audience, duration and file structure. Empty placeholders
    (`{{...}}`, "not yet filled") do not count as completed planning. Keep sample
@@ -51,15 +56,23 @@ Run this task automatically after any task that changes project state:
    from `## Course Context` → `__File Structure:__`; in single-file mode inspect
    the matching chapter of the root `README.md`.
 3. Derive a display state for each unit:
-   - `planned` — in the agenda or skeleton only, not yet worked out
-   - `current` — the next recommended unit, actively being developed
+   - `planned` — in the agenda or skeleton only, not yet worked out. The
+     recommended next unit without a skeleton stays `planned`; mark it with
+     `selected` and make it the `next` action.
+   - `current` — a unit that has a skeleton or material and is being worked
+     on now, or on which a task is running
    - `draft` — a material draft exists
    - `review` — feedback, instructor approval or a re-check is still pending
      (material revised after a check and waiting for the re-check is `review`, not `draft`)
    - `revision` — the latest review or validation requires changes
+   - Validation result → unit state: FAIL → `revision`; re-check pending →
+     `review` (only while the instructor or a check actually has something to
+     look at); PASS with concerns or PASS with ⏳ items → `current` with
+     `statusLabel` = "passed – {later step}" (translated); PASS + Done ✅ → `done`.
    - `done` — only with `Result: PASS` (not "with concerns") in the unit's
      `#### Validation Report` **and** Done ✅ in the overview table. Never infer it from a heading.
-   Optional process steps may use `optional`.
+   Optional process steps may use `optional`. A unit's `summary` never
+   contradicts its state.
 4. Build the material process for each unit from actual evidence: `title`,
    `state`, `why`; optionally `result`, `next`, `statusLabel`. Typical steps are
    objectives → activities → material draft → instructor review → validation and
@@ -79,6 +92,8 @@ Run this task automatically after any task that changes project state:
    - Numbers that disagree between sections (number of units, lessons, minutes).
    - Session Type slugs that are duplicated or equal a terminology word.
    - Preparation tasks for the instructor recorded in a section (equipment, printouts, accounts).
+   - Agenda phases led by the instructor outside the material (opening, closing,
+     one-to-one talks, checklists to print) → `prepare`, with `how`.
    Never fix foreign sections silently — listing them is this task's job. Every
    item gets a unique `key` (the hint key printed by the validation script, e.g.
    `provisional`, `slug`, `preparation`, `file-structure`; several items for one
@@ -94,8 +109,15 @@ Run this task automatically after any task that changes project state:
    counts from `units[].state`. An empty project uses `units: []` plus a global
    `process`; it shows no fake 0/1 or invalid percentage.
 8. Keep the `## Dashboard` heading line unchanged and replace the whole JSON block
-   below it **in one edit** (not field by field — every edit reloads an open
-   preview). Ensure the template import exists once in the header; CSS and
+   below it **in one write**: write the complete JSON with the file-write tool
+   to `.cache/dashboard.json` and run `node specs/dashboard/write-dashboard.mjs
+   .cache/dashboard.json` (on its own). It checks the data, replaces the whole
+   block in one step and runs the validation of step 9; never edit the block
+   field by field, never with shell heredocs or inline scripts. Fill
+   `unitLabel` (`{one, many}`) and `unitsTitle` from `## Course Context` →
+   Terminology in the course language. Keep the translated suffix of
+   `## Sessions` and `## Agenda` in line with that terminology and update
+   `links` in the same run. Ensure the template import exists once in the header; CSS and
    JavaScript are owned by the library. Document the template in `## Templates`
    via the `tasks/manage-templates.md` procedure if it is missing there.
 9. **Validate** with `node specs/dashboard/validate-journal.mjs` (run from the
@@ -138,14 +160,26 @@ Run this task automatically after any task that changes project state:
 - Keep one data set for the composed view; do not repeat numeric progress in the
   subtitle — describe the state in words.
 - Write all visible texts in the course language (`## Course Context` →
-  Language) and address the instructor as `## Course Context` →
-  `Instructor Address` says. `Person` is the learners' address in the material
+  Language; while that is still empty, the header's `language:`) and address
+  the instructor as `## Course Context` → `Instructor Address` says (while
+  empty: the formal form of that language). For the empty project keep the
+  meaning of the template texts and translate them, including a real date in
+  `footer` instead of a placeholder. `Person` is the learners' address in the material
   and is never used for dashboard texts.
 - Plain language for the instructor: no command names, slugs, file names or
   section keys in `title`, `subtitle`, `why`, `label` or `description` — those
   belong only in `command` and `href`.
 - Use the terminology from `## Course Context` → `__Terminology:__`
   (`sessions-called`) for `unitsTitle` and all unit wording.
+- The JSON block is only ever written through `specs/dashboard/write-dashboard.mjs` (step 8) — one write, never field by field.
+- Exactly one definition of "finished" per project, stated once in
+  `process.note` (finished = validation PASS and Done ✅). Process-step `why`
+  texts never define "finished". On every run re-read all existing texts of
+  the data (`why`, `note`, `summary`, `subtitle`) against the current rules and
+  rewrite contradicting ones — the previous block is not a template.
+- Use "finished/done" only for units with a validation PASS. Instructor approval is "approved", never "finished" — in process steps, `why` texts and `note`.
+- `next.title` uses exactly the name of the current process step as shown in
+  the process panel (same words in `next`, `steps` and chat offers).
 - Keep the global process steps stable from the empty journal on: the agenda step
   is listed as `optional` until `Agenda required` is set, then `planned` (yes) or
   removed with a `note` (no). Never let the number of steps change without a `note`.
@@ -158,8 +192,14 @@ Run this task automatically after any task that changes project state:
   with `coauthor-materials`. Offer `build-session` (automatic loop) only after one
   unit has been worked out together and approved.
 - Each unit with a skeleton gets `href` to its `### {n}. {title}` subsection in
-  `## Sessions` (anchor slug of the heading).
-- Section links in `links` use the full heading slug of the current heading line.
+  `## Sessions` (anchor of the heading, see below).
+- **Anchors (LiaScript):** an anchor is the full heading text in lower case,
+  spaces and "-" collapsed to single "-", **punctuation kept** ("." "?" "–" ":").
+  Examples: `## Outline – Learning goals` → `#outline-–-learning-goals`;
+  `### 3. Why do leaves fall?` → `#3.-why-do-leaves-fall?`. An unknown anchor
+  silently opens slide 1, a bare slide number (`#10`) breaks when slides are
+  added — use neither. `validate-journal.mjs` checks every `#` link.
+- Section links in `links` use the anchor of the current heading line.
 - Publishing remains gated by `## Validation` → `### Latest Validation Summary`:
   `Mode: course` and `Result: PASS`.
 - Keep `## Dashboard` near the top of `journal.md`, directly after the course title.

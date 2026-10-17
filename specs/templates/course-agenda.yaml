@@ -7,6 +7,20 @@ template:
     filename: journal.md
     section: Agenda
   title: 'Course Agenda'
+  layout: |
+    Write the section for the instructor first, technical keys last:
+    1. One bold lead line in the course language ("Schedule confirmed on {date}", translated).
+    2. Visible, labels with the English key first and a translation after an en dash, content in the
+       course language without slugs, method names, file names or section keys:
+       * __Overview – <translation>:__ at most 3 sentences
+       * __Time Budget – <translation>:__ the calculation per time slot (slot length − setup − wrap-up =
+         working time), sum of the mandatory units, buffer, phases outside the material (opening, closing)
+       * the units table, preceded by `<!-- data-type="none" -->`, at most 5 columns in this order:
+         No. · Title (mandatory/optional) · Time · Kind (display name from Session Types) · Objectives
+    3. `<details><summary>{"Technical settings for the assistant", translated}</summary>` with a technical
+       table (No. · type slug · method slug · material path), then `</details>`. Omit the method column
+       when every unit uses the default method; say so in one sentence instead.
+    Use only keys defined below; do not invent new keys.
   sections:
     - id: overview
       title: Overview

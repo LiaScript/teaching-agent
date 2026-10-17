@@ -7,6 +7,11 @@ import: ./specs/dashboard/README.md
 
 # {{Course Working Title}}
 
+This is where your course plan grows. You bring your teaching idea; the assistant in the chat helps you turn it into learning objectives, activities and finished material. You check every proposal and decide what is kept. **Nothing is saved without your confirmation.**
+
+<!-- class="journal-start" -->
+[Open the overview →](#dashboard)
+
 ## Dashboard
 
 ```json @Dashboard.View
@@ -62,6 +67,7 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
 * __Course Type:__
   1. Type: {{lecture-series | self-paced | workshop | single-lesson | improve-existing}}
   2. Working Title: {{working title}}
+  3. Target Group: {{who learns, how many, where}}
 
 * __Terminology:__
   1. sessions-called: {{session | unit | block | lesson | ...}}
@@ -249,7 +255,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 ## Sessions
 
 <!-- class="journal-actions" -->
-[▶ New session](agent:teaching/create-session) `:create-session {number} {type}` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
+[▶ New session](agent:teaching/create-session) `:create-session <number> <type>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
 
@@ -296,7 +302,7 @@ only when the first image exists. Never use `#####` headings inside a session.
 ## Agents
 
 <!-- class="journal-actions" -->
-[▶ Configure agent](agent:teaching/configure-agent) `:configure-agent {agent}` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
+[▶ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
 
 _Agent-specific project customizations and learner personas._
 _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
@@ -372,7 +378,8 @@ _Replaced by `:validate-course` (course mode). The `### Latest Validation Summar
 
 ### Latest Validation Summary
 
-_Not yet run — run `:validate-course`. Format defined in `tasks/validate-course.md`, course mode step 9 (Date, Mode, Course type, Result, findings, recommended actions)._
+<!-- Not yet run. Format: tasks/validate-course.md, course mode step 9. When the language switches, replace the visible line below with its translation. -->
+Course check not yet run. Unit checks are under "Sessions"; the course check runs before publishing.
 
 ---
 
@@ -385,7 +392,7 @@ _Only used for improve-existing courses — filled by `:analyze-existing`._
 ## Notes Backup
 
 <!-- class="journal-actions" -->
-[▶ Save notes](agent:teaching/save-notes) `:save-notes` · [▶ Save decision](agent:teaching/save-decision) `:save-decision {title}`
+[▶ Save notes](agent:teaching/save-notes) `:save-notes` · [▶ Save decision](agent:teaching/save-decision) `:save-decision <title>`
 
 _Appended to by `:save-notes` and `:save-decision` from `templates/note-backup.yaml`._
 _Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._
