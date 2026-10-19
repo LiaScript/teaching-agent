@@ -77,6 +77,24 @@ template:
       template: |
         **LiaScript Syntax:**
         - {{liascript_syntax_findings}}
+    - id: method-consistency
+      title: Method Consistency
+      template: |
+        **Method Consistency:** (omit the field if no Session Method is in use)
+        - Session Method: {{method}} — Erforderlich (from `data/didactic-methods.md`): {{method_required_elements}}
+        - {{method_findings}}
+    - id: duration
+      title: Duration (advisory)
+      template: |
+        **Duration (advisory):** estimate {{estimate}} min vs. declared {{declared}} min — {{within 70–150 % | hint: …}}
+    - id: references-check
+      title: Reference Check
+      template: |
+        **Reference Check:** {{reference-checker summary (✅ / ⚠️ / 🚨 counts, every 🚨 entry), or "not checked – skill or web access missing"}}
+    - id: templates
+      title: Templates
+      template: |
+        **Templates:** {{template findings, or "no templates in use"}}
     - id: recommended-actions
       title: Recommended Actions
       template: |

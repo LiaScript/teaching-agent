@@ -49,6 +49,7 @@ Rules:
 1. Load `journal.md` → `## Course Context` for course type and conventions.
 2. Load `journal.md` → `## Agenda` to get the learning objectives for this session.
 3. Load `data/liascript-cheat-sheet.md` as syntax reference. If the skill `liascript-syntax` is available (see `data/skills.md`), use it as second reference (see `tasks/validate-syntax.md`).
+3b. Load `checklists/course-quality-checklist.md` and apply **every** item of the categories that concern one unit — Session Subsections, Session Materials, LiaScript Syntax — for this session, also items the checks below do not repeat. A session PASS must not hide a `[mechanical]` item the course check would fail later.
 4. Open the material document for this session — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode — and check:
 
    **Content checks:**
@@ -82,7 +83,7 @@ Rules:
    - Type consistency findings
    - Persona & style findings
    - LiaScript syntax findings
-   - Template findings, if applicable
+   - Method consistency, the duration hint, the reference check summary and template findings — each in its own field of the template, also when there is nothing to report there
    - Recommended actions — check them against the session's decisions list (`data-key="decisions"`) first; never recommend something the instructor has already decided against
    - Page titles of the material as references — never line numbers
    - The visible plain-language summary (`**Outcome:**`, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
@@ -98,7 +99,7 @@ Rules:
 ## Course Mode Steps (`:validate-course`)
 
 1. Load `journal.md` → `## Course Context` to understand course type and applicable conventions.
-2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply).
+2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply). The steps below group the checks; **every** applicable checklist item is applied, also one no step names — report it under the closest category of the summary.
 3. Load `data/liascript-cheat-sheet.md` as syntax reference. If the skill `liascript-syntax` is available (see `data/skills.md`), use it as second reference (see `tasks/validate-syntax.md`).
 
 4. **Check Context & Foundation:**

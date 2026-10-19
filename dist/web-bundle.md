@@ -3443,6 +3443,7 @@ Rules:
 1. Load `journal.md` → `## Course Context` for course type and conventions.
 2. Load `journal.md` → `## Agenda` to get the learning objectives for this session.
 3. Load `data/liascript-cheat-sheet.md` as syntax reference. If the skill `liascript-syntax` is available (see `data/skills.md`), use it as second reference (see `tasks/validate-syntax.md`).
+3b. Load `checklists/course-quality-checklist.md` and apply **every** item of the categories that concern one unit — Session Subsections, Session Materials, LiaScript Syntax — for this session, also items the checks below do not repeat. A session PASS must not hide a `[mechanical]` item the course check would fail later.
 4. Open the material document for this session — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode — and check:
 
    **Content checks:**
@@ -3476,7 +3477,7 @@ Rules:
    - Type consistency findings
    - Persona & style findings
    - LiaScript syntax findings
-   - Template findings, if applicable
+   - Method consistency, the duration hint, the reference check summary and template findings — each in its own field of the template, also when there is nothing to report there
    - Recommended actions — check them against the session's decisions list (`data-key="decisions"`) first; never recommend something the instructor has already decided against
    - Page titles of the material as references — never line numbers
    - The visible plain-language summary (`**Outcome:**`, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
@@ -3492,7 +3493,7 @@ Rules:
 ## Course Mode Steps (`:validate-course`)
 
 1. Load `journal.md` → `## Course Context` to understand course type and applicable conventions.
-2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply).
+2. Load `checklists/course-quality-checklist.md` — apply only the checks relevant for this course type (skip sections marked with conditions that don't apply). The steps below group the checks; **every** applicable checklist item is applied, also one no step names — report it under the closest category of the summary.
 3. Load `data/liascript-cheat-sheet.md` as syntax reference. If the skill `liascript-syntax` is available (see `data/skills.md`), use it as second reference (see `tasks/validate-syntax.md`).
 
 4. **Check Context & Foundation:**
@@ -3606,6 +3607,7 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 ## Inputs
 
 - `number`
+- File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` — checks 1 and 2 differ by mode
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - The material document for this session — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `data/liascript-cheat-sheet.md` as the syntax reference
@@ -3628,8 +3630,8 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 
 ## Checks
 
-1. **Metadata header** (cheat sheet §1): `author`, `email`, `version`, `language`, `narrator` present and well-formed in the `<!-- ... -->` header block. In session mode a missing `email` is ⏳ "before publishing" (not ❌) as long as `author` holds a display name; in course mode and at the publishing gate it is required.
-2. **Heading structure** (§2): exactly one `#` heading (course title); every `##` starts a new slide; a bare `###` directly under a `##` is fine; `####`-or-deeper only inside a `<div>`/semantic wrapper, a list, or a blockquote — never bare.
+1. **Metadata header** (cheat sheet §1): `author`, `email`, `version`, `language`, `narrator` present and well-formed in the `<!-- ... -->` header block — multi-file: the material document's own header; single-file: the one shared header of root `README.md` (a session's `##` chapter has no header of its own and is never ❌ for it). In session mode a missing `email` is ⏳ "before publishing" (not ❌) as long as `author` holds a display name; in course mode and at the publishing gate it is required.
+2. **Heading structure** (§2): multi-file: exactly one `#` heading (course title) per material document; single-file: exactly one `#` in root `README.md`, and a session's chapter starts with its `##` heading and contains no `#`; every `##` starts a new slide; a bare `###` directly under a `##` is fine; `####`-or-deeper only inside a `<div>`/semantic wrapper, a list, or a blockquote — never bare.
 3. **Code blocks** (§8): every fenced code block opened with triple backticks is closed; correct language tag used (`js`, `py`, `html`, etc.); interactive code blocks pair a `<script>`/`@input` block directly after the code block where applicable.
 4. **Alerts** (§3): alert blockquotes use only supported types (`NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`); every line of the alert starts with `>`.
 5. **Citations** (§3): citation blockquotes have a `--` source line, preceded by an empty `>` line.
@@ -4956,6 +4958,24 @@ template:
       template: |
         **LiaScript Syntax:**
         - {{liascript_syntax_findings}}
+    - id: method-consistency
+      title: Method Consistency
+      template: |
+        **Method Consistency:** (omit the field if no Session Method is in use)
+        - Session Method: {{method}} — Erforderlich (from `data/didactic-methods.md`): {{method_required_elements}}
+        - {{method_findings}}
+    - id: duration
+      title: Duration (advisory)
+      template: |
+        **Duration (advisory):** estimate {{estimate}} min vs. declared {{declared}} min — {{within 70–150 % | hint: …}}
+    - id: references-check
+      title: Reference Check
+      template: |
+        **Reference Check:** {{reference-checker summary (✅ / ⚠️ / 🚨 counts, every 🚨 entry), or "not checked – skill or web access missing"}}
+    - id: templates
+      title: Templates
+      template: |
+        **Templates:** {{template findings, or "no templates in use"}}
     - id: recommended-actions
       title: Recommended Actions
       template: |
