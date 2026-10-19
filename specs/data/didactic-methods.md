@@ -27,7 +27,7 @@ Set once in `journal.md` → `## Didactics` → `__Didactic Framework:__`. Pure 
 | workshop | Constructive Alignment | Activities are the core of a workshop — they must stay tightly bound to objectives. |
 | single-lesson | Backward Design | A compact lesson benefits from a tight objective → assessment → content chain. |
 
-As with Session Types, this is a starting suggestion, not a fixed default — the instructor confirms or changes it.
+The agent chooses it at `:create-didactics` (documentation only, named in the technical details, not asked); the instructor can change it any time.
 
 ## 2) Session Methods
 
@@ -68,7 +68,7 @@ learners can access and demonstrate understanding.
 | workshop | Cognitive Load Pacing (`cognitive-load`) | High interactivity risks overload without deliberate pacing. |
 | single-lesson | Gagné's Nine Events (`gagne`) | A compact single arc benefits from a tight, clear structure. |
 
-As with Session Types, this is a starting suggestion the instructor confirms, edits, or opts out of (`none`) at `:create-didactics`, and can override per session at `:create-agenda`.
+The agent chooses it at `:create-didactics` (`none` is allowed) without asking and mentions it only if it changes what the learners do; `:create-agenda` may pick another method for a single session the same way. The instructor can change either at any time.
 
 ## 3) Validation Mechanisms (already implemented — reference only)
 

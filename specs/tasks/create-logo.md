@@ -33,6 +33,7 @@ Creates a professional, actionable prompt that can be used with AI image generat
    - Technical specifications (scalable, suitable for digital/print)
 7. Present the prompt in a clear, actionable format.
 8. Save the complete prompt into `journal.md` → `## Visual Identity` → `__Example Prompts:__` as the `1. Logo:` entry (replace the existing placeholder/prompt). Confirm: "Logo prompt saved: `journal.md` → `## Visual Identity` → `__Example Prompts:__`"
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format
 

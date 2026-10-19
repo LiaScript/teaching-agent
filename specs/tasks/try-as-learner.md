@@ -21,6 +21,7 @@ This is a try-out in the preview, not a feature for learners: learners do not ge
 
 ## Steps
 
+0. **Preview required.** This task needs the MCP gate (`liascript` tools `get_state`, `goto`, `chat`, see `data/agent-links.md`). Without it, do not offer it; if the instructor asks, say in one line that trying a unit as a learner needs the LiaScript DevServer preview (`liadev --mcp`) and offer `:review-as-persona` as the terminal alternative.
 1. **Trigger.** Run when the instructor asks to try the material as a learner, or asks for a tutor, companion or learning partner — or offer it once after a unit check has passed. Tier: *start interview* (no start confirmation).
 2. **Honest frame** (1–2 sentences, plain words): the companion exists only in this preview. With the planned publishing path (name it: web page, learning-platform package …) learners have no chat. Say what can be carried over into the material later (step 7).
 3. **Choose the companion** (one form, plus one free line):

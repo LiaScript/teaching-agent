@@ -88,7 +88,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 - When committing or pushing changes is needed
 
 **Offer `:try-as-learner`:**
-- After a unit check passes → offer `:try-as-learner {number}` once
+- After a unit check passes → offer `:try-as-learner {number}` once (only when the MCP gate is open; it runs in the preview)
 - When the instructor asks to try material as a learner, or asks for a tutor, companion or learning partner → run `:try-as-learner`
 
 **Exception:** `:build-session` is the one task allowed to run the Learner-Agent's (`review-as-persona`) and Artist-Agent's (`create-image`, `generate-image`) own procedures automatically as sub-steps of its loop, instead of only suggesting the handoff. Each sub-step still only reads its owning agent's own `### {Agent}` subsection in `journal.md` → `## Agents` — the read-scope rule stays in force even though the switch happens automatically.

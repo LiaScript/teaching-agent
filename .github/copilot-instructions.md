@@ -111,7 +111,7 @@ agent_coordination:
     - "When committing or pushing changes is needed"
 
   suggest_try_as_learner_when:
-    - "After a unit check passes → offer `:try-as-learner {number}` once"
+    - "After a unit check passes → offer `:try-as-learner {number}` once (only when the MCP gate is open; it runs in the preview)"
     - "When the instructor asks to try material as a learner, or asks for a tutor, companion or learning partner → run `:try-as-learner`"
   suggest_learner_when:
     - "After :create-learner-persona is done and personas exist → suggest `:agent learner` for :review-as-persona"
@@ -1137,7 +1137,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
        - **Yes** — Create agenda to plan the structure
        - **No** — Proceed directly to `:create-session`
        - **Later** — Skip agenda, create it later
-       If no: redirect to `:create-session`. If yes: continue.
+       If no: redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called, lectures-called) and pacing model.
 2. Read learning objectives from the outline.
@@ -1149,7 +1149,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 - All agenda descriptions reflect this style.
 
 5. Define sessions/modules using the terminology from `journal.md` → `## Course Context`. Assign each one a type slug from `journal.md` → `## Didactics` → `__Session Types:__` — never a hardcoded `lecture`/`exercise`.
-   - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]`: assign each session the default Session Method, pre-selected. 🎛️ Ask per session whether a different method from `data/didactic-methods.md` fits better for that specific session — keep the default unless the instructor picks something else. Do not ask this at all when the default is `none`.
+   - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]`: assign each session the default Session Method. Choose a different method from `data/didactic-methods.md` for a session yourself only if it fits clearly better; do not ask about methods (`tasks/create-didactics.md` step 3c). Mention a change in plain words in one line of the summary, and only if it changes what the learners do. Skip all of this when the default is `none`.
 5a. **Clarify the file structure** if `## Course Context` → `__File Structure:__` conflicts with what the instructor confirmed or was never asked as a teacher question: ask it as in `tasks/init-course.md` step 6 and update only the technical `File Structure` field plus the matching table row, after confirmation.
 5b. **Clean up Session Type slugs before writing them:** run `node specs/dashboard/validate-journal.mjs`; if it reports `slug` (a duplicated slug) or `type-name` (a display name equal to a terminology word), the fix belongs to `## Didactics` — change it there only with its own confirmation (see `data/agent-links.md` → "Changing another section"), then use the result in the agenda.
 5c. **Net working time per time slot:** if the course runs in fixed slots (lessons, workshop blocks, labs), compute the working time per slot before distributing activities: subtract setup (getting devices, logging in, opening the material) and wrap-up (saving, collecting, tidying). If the instructor has not given these times, propose a default (for a school lesson about 5 minutes setup and 2–3 minutes wrap-up), say that it is an assumption, and show it as its own line in the **first** proposal so the instructor confirms it together with the times. Place whole-group phases (opening, closing) and activities bound to the instructor (one-to-one talks, listening to explanations) explicitly in the plan.
@@ -1288,6 +1288,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
     - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
+13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format
 
@@ -1597,6 +1598,7 @@ Creates a professional, actionable prompt that can be used with AI image generat
    - Technical specifications (scalable, suitable for digital/print)
 7. Present the prompt in a clear, actionable format.
 8. Save the complete prompt into `journal.md` → `## Visual Identity` → `__Example Prompts:__` as the `1. Logo:` entry (replace the existing placeholder/prompt). Confirm: "Logo prompt saved: `journal.md` → `## Visual Identity` → `__Example Prompts:__`"
+9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format
 
@@ -2179,6 +2181,8 @@ Batch complete.
 ❌  0 failed
 ```
 If any failures: list slugs, suggest `:generate-image {slug}` to retry individually.
+
+After single or batch mode: Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ---
 
@@ -3073,6 +3077,7 @@ This is a try-out in the preview, not a feature for learners: learners do not ge
 
 ## Steps
 
+0. **Preview required.** This task needs the MCP gate (`liascript` tools `get_state`, `goto`, `chat`, see `data/agent-links.md`). Without it, do not offer it; if the instructor asks, say in one line that trying a unit as a learner needs the LiaScript DevServer preview (`liadev --mcp`) and offer `:review-as-persona` as the terminal alternative.
 1. **Trigger.** Run when the instructor asks to try the material as a learner, or asks for a tutor, companion or learning partner — or offer it once after a unit check has passed. Tier: *start interview* (no start confirmation).
 2. **Honest frame** (1–2 sentences, plain words): the companion exists only in this preview. With the planned publishing path (name it: web page, learning-platform package …) learners have no chat. Say what can be carried over into the material later (step 7).
 3. **Choose the companion** (one form, plus one free line):
@@ -3144,6 +3149,8 @@ Run this task automatically after any task that changes project state:
 - `:validate-course`, `:review-as-persona`
 - `:save-notes` or `:save-decision`
 - `:create-project` or `:update-project`
+- Artist-Agent: `:create-visuals`, `:create-logo`, `:create-image`, `:generate-image`
+- `:try-as-learner` when it saved changes (they go through `:quick-fix`, which triggers this task)
 
 ## Steps
 
@@ -5706,7 +5713,7 @@ Set once in `journal.md` → `## Didactics` → `__Didactic Framework:__`. Pure 
 | workshop | Constructive Alignment | Activities are the core of a workshop — they must stay tightly bound to objectives. |
 | single-lesson | Backward Design | A compact lesson benefits from a tight objective → assessment → content chain. |
 
-As with Session Types, this is a starting suggestion, not a fixed default — the instructor confirms or changes it.
+The agent chooses it at `:create-didactics` (documentation only, named in the technical details, not asked); the instructor can change it any time.
 
 ## 2) Session Methods
 
@@ -5747,7 +5754,7 @@ learners can access and demonstrate understanding.
 | workshop | Cognitive Load Pacing (`cognitive-load`) | High interactivity risks overload without deliberate pacing. |
 | single-lesson | Gagné's Nine Events (`gagne`) | A compact single arc benefits from a tight, clear structure. |
 
-As with Session Types, this is a starting suggestion the instructor confirms, edits, or opts out of (`none`) at `:create-didactics`, and can override per session at `:create-agenda`.
+The agent chooses it at `:create-didactics` (`none` is allowed) without asking and mentions it only if it changes what the learners do; `:create-agenda` may pick another method for a single session the same way. The instructor can change either at any time.
 
 ## 3) Validation Mechanisms (already implemented — reference only)
 

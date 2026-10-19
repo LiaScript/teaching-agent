@@ -40,6 +40,8 @@ Run this task automatically after any task that changes project state:
 - `:validate-course`, `:review-as-persona`
 - `:save-notes` or `:save-decision`
 - `:create-project` or `:update-project`
+- Artist-Agent: `:create-visuals`, `:create-logo`, `:create-image`, `:generate-image`
+- `:try-as-learner` when it saved changes (they go through `:quick-fix`, which triggers this task)
 
 ## Steps
 

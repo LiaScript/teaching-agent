@@ -297,6 +297,8 @@ Batch complete.
 ```
 If any failures: list slugs, suggest `:generate-image {slug}` to retry individually.
 
+After single or batch mode: Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+
 ---
 
 ## Relation to :create-image

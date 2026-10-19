@@ -57,7 +57,7 @@ agent_coordination:
     - "When committing or pushing changes is needed"
 
   suggest_try_as_learner_when:
-    - "After a unit check passes → offer `:try-as-learner {number}` once"
+    - "After a unit check passes → offer `:try-as-learner {number}` once (only when the MCP gate is open; it runs in the preview)"
     - "When the instructor asks to try material as a learner, or asks for a tutor, companion or learning partner → run `:try-as-learner`"
   suggest_learner_when:
     - "After :create-learner-persona is done and personas exist → suggest `:agent learner` for :review-as-persona"

@@ -33,7 +33,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
        - **Yes** — Create agenda to plan the structure
        - **No** — Proceed directly to `:create-session`
        - **Later** — Skip agenda, create it later
-       If no: redirect to `:create-session`. If yes: continue.
+       If no: redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called, lectures-called) and pacing model.
 2. Read learning objectives from the outline.
@@ -45,7 +45,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 - All agenda descriptions reflect this style.
 
 5. Define sessions/modules using the terminology from `journal.md` → `## Course Context`. Assign each one a type slug from `journal.md` → `## Didactics` → `__Session Types:__` — never a hardcoded `lecture`/`exercise`.
-   - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]`: assign each session the default Session Method, pre-selected. 🎛️ Ask per session whether a different method from `data/didactic-methods.md` fits better for that specific session — keep the default unless the instructor picks something else. Do not ask this at all when the default is `none`.
+   - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]`: assign each session the default Session Method. Choose a different method from `data/didactic-methods.md` for a session yourself only if it fits clearly better; do not ask about methods (`tasks/create-didactics.md` step 3c). Mention a change in plain words in one line of the summary, and only if it changes what the learners do. Skip all of this when the default is `none`.
 5a. **Clarify the file structure** if `## Course Context` → `__File Structure:__` conflicts with what the instructor confirmed or was never asked as a teacher question: ask it as in `tasks/init-course.md` step 6 and update only the technical `File Structure` field plus the matching table row, after confirmation.
 5b. **Clean up Session Type slugs before writing them:** run `node specs/dashboard/validate-journal.mjs`; if it reports `slug` (a duplicated slug) or `type-name` (a display name equal to a terminology word), the fix belongs to `## Didactics` — change it there only with its own confirmation (see `data/agent-links.md` → "Changing another section"), then use the result in the agenda.
 5c. **Net working time per time slot:** if the course runs in fixed slots (lessons, workshop blocks, labs), compute the working time per slot before distributing activities: subtract setup (getting devices, logging in, opening the material) and wrap-up (saving, collecting, tidying). If the instructor has not given these times, propose a default (for a school lesson about 5 minutes setup and 2–3 minutes wrap-up), say that it is an assumption, and show it as its own line in the **first** proposal so the instructor confirms it together with the times. Place whole-group phases (opening, closing) and activities bound to the instructor (one-to-one talks, listening to explanations) explicitly in the plan.
