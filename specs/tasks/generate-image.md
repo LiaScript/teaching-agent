@@ -23,6 +23,8 @@ Requires the **chrome-devtools MCP server** to be active and Chrome running with
 - Downloaded images saved to the exact path already recorded in that entry's `__Datei:__` field (written by `:create-image`, mode-resolved per `data/file-structure-modes.md` — do not re-derive independently)
 - Confirmation per image; batch summary at the end
 
+**Called from `:build-session` Step 3:** its single terminal confirmation covers all images of that run; skip the per-image and Start / Cancel confirmations below. Run only for the slugs it passes.
+
 ## MCP Setup (required)
 
 ```bash

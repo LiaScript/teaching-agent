@@ -974,7 +974,13 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `#### Validation Report` and (if personas exist) `#### Persona Reviews` in the matching `journal.md` → `## Sessions` subsection
 - Real images inserted, replacing placeholders
 - Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item in its `#### Validation Report`; dashboard updated
-- A closing summary: iterations spent per loop, final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
+- A closing summary: iterations spent per loop, every applied fix (page title, before → after), final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
+
+## Confirmations
+
+- The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only.
+- Nothing stays unseen: the closing summary lists every applied fix with page title and before → after.
+- **Outside the project** it covers nothing: before Step 3 starts an external browser session, ask **once in the terminal** (tier "confirm in terminal" for `generate-image`) for all images of this run. Without that confirmation, skip Step 3 and say so in the closing summary.
 
 ## Steps
 
@@ -994,15 +1000,15 @@ d. If any `[mechanical]`-tagged item (per `checklists/course-quality-checklist.m
 
 e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is recorded (such as the "possibly too short" duration flag): do not auto-fix. Carry it forward into Step 2. If no personas exist to weigh in (Step 2 will be skipped), surface it directly in the closing report instead.
 
-**Loop:** Repeat b–d until every `[mechanical]` item passes, or after 5 iterations — whichever comes first. On hitting the cap: stop, list the remaining `[mechanical]` FAIL items, and report to the instructor instead of continuing to Step 2. See `CLAUDE.md` → "Iteration Pattern" for the general convention.
+**Loop:** Repeat c–d until every `[mechanical]` item passes, or after 5 iterations — whichever comes first. On hitting the cap: stop, list the remaining `[mechanical]` FAIL items, and report to the instructor instead of continuing to Step 2. See `CLAUDE.md` → "Iteration Pattern" for the general convention.
 
 ### 2. Persona review loop `[only if journal.md → ## Agents → ### Learner Personas contains at least one persona]`
 
 a. For each persona, run `tasks/review-as-persona.md {name} {number}` in **report-only mode**: perform its steps 1–7 (produce and save the structured `#### Persona Reviews` report) and skip steps 8–10 (the persistent in-character follow-up chat) — there is no one present to chat with during an automated loop. The instructor can start that chat separately afterward by calling `:review-as-persona` directly.
 
-b. If any persona's priority issues (`data-key="priority"`) include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` (isolated issue) or by re-running Step 1 (broader issue), using the same "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. If a fix needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d.
+b. If any persona's priority issues (`data-key="priority"`) include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` if it is an isolated issue, using the "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. A broader issue needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d — never regenerate the material to fix it.
 
-c. After fixes, re-run Step 1 and then this step again for **all** personas (not just the one that raised the concern, to catch regressions).
+c. After fixes, re-run Step 1c–1d — never 1a or 1b: regenerating would discard every fix of this run — and then this step again for **all** personas (not just the one that raised the concern, to catch regressions).
 
 **Loop:** Repeat a–c until no persona raises a blocking concern, or after 3 rounds — whichever comes first. On hitting the cap: stop, list the unresolved persona concerns, and report to the instructor.
 
@@ -1012,7 +1018,7 @@ c. After fixes, re-run Step 1 and then this step again for **all** personas (not
 
 Runs **once**, only if Steps 1 and 2 both finished clean (did not stop early on a cap or an escalation). If either loop stopped early, do not proceed — the closing report from that step is the end of this run.
 
-For each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}` (single mode, scoped to this session's own images — not the global batch mode, which would also process other sessions' pending images) to generate, download, and insert the real image, replacing the placeholder. This runs automatically, without an extra confirmation, once content and persona checks are clean.
+For each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}` (single mode, scoped to this session's own images — not the global batch mode, which would also process other sessions' pending images) to generate, download, and insert the real image, replacing the placeholder. Start only after the single terminal confirmation described in "Confirmations".
 
 ### 4. Finalize
 
@@ -1990,6 +1996,8 @@ Requires the **chrome-devtools MCP server** to be active and Chrome running with
 - Downloaded images saved to the exact path already recorded in that entry's `__Datei:__` field (written by `:create-image`, mode-resolved per `data/file-structure-modes.md` — do not re-derive independently)
 - Confirmation per image; batch summary at the end
 
+**Called from `:build-session` Step 3:** its single terminal confirmation covers all images of that run; skip the per-image and Start / Cancel confirmations below. Run only for the slugs it passes.
+
 ## MCP Setup (required)
 
 ```bash
@@ -2651,6 +2659,8 @@ Minimal overhead for small, targeted changes (typos, broken syntax, swapping one
 - Short inline confirmation of what was changed and PASS/FAIL of mini-validation
 
 ## Steps
+
+**Called from `:build-session`** (mechanical items only): skip the scope confirmation of step 1 and the save confirmation — the start confirmation of `:build-session` covers them — and return the change (page title, before → after) to the caller for its closing summary. Escalation (step 5) still stops the caller.
 
 1. **Scope confirmation:** State what will be changed and the acceptance criterion:
    - "I will [describe the change] in [material document]. The change is complete when [condition]. Correct? (Yes / Adjust scope)"
@@ -3544,7 +3554,7 @@ Rules:
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
-8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
+8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
 
@@ -3621,6 +3631,8 @@ Rules:
 ---
 
 ### Iteration (mechanical checks only)
+
+Applies only when `:validate-course` runs directly in course mode. Called as a sub-procedure (e.g. by `:build-session` in session mode), it runs once and returns — the caller's own loop iterates, so loops never nest.
 
 **Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes, or after 5 iterations — whichever comes first.
 
@@ -5441,7 +5453,7 @@ page content (and course scripts) can forge any link.
 | **run** | `switch`, `help`, `list-agents`, `list-learners`, `agent`, `preview`, `update-dashboard`, `validate-syntax`, `validate-course {number}` (session mode only) | Run immediately. Read-only, navigation, or derived state only. |
 | **start interview** | `init-course`, `scaffold`, `coauthor-materials`, `try-as-learner`, `create-outline`, `create-didactics`, `create-agenda`, `create-learner-persona`, `configure-agent`, `save-notes`, `save-decision` | Start the dialog immediately, without a start confirmation. The task's own **save confirmation** (summary of what will be written + "Save" / "Change something") is the single write confirmation; if the task file has no such step, insert it before the first write. Nothing is written before it — with one exception: `init-course` may create `journal.md` as a byte-for-byte copy of `templates/journal.md` before the first question (setup without any content from the instructor, so the preview can show it during the interview). |
 | **confirm in chat** | every other command that only writes inside the project (`journal.md`, `materials/`, `assets/`, root `README.md`) | Ask in the preview chat (see Handling step 3) before running. |
-| **confirm in terminal** | `manage-git`, `create-project`, `update-project`, `generate-image` | Runs git, publishing, or external browser sessions. Post a chat note that confirmation is waiting in the terminal, then ask there. |
+| **confirm in terminal** | `manage-git`, `create-project`, `update-project`, `generate-image` (also inside `build-session`: one confirmation before its image step) | Runs git, publishing, or external browser sessions. Post a chat note that confirmation is waiting in the terminal, then ask there. |
 | **never via link** | `exit`, unknown commands | Do not run. Answer in the chat that this action is not available as a link. |
 
 ## Chat Conduct

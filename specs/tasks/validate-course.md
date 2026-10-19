@@ -91,7 +91,7 @@ Rules:
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
-8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
+8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
 
@@ -168,6 +168,8 @@ Rules:
 ---
 
 ### Iteration (mechanical checks only)
+
+Applies only when `:validate-course` runs directly in course mode. Called as a sub-procedure (e.g. by `:build-session` in session mode), it runs once and returns — the caller's own loop iterates, so loops never nest.
 
 **Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes, or after 5 iterations — whichever comes first.
 

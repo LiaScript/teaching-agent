@@ -25,7 +25,13 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `#### Validation Report` and (if personas exist) `#### Persona Reviews` in the matching `journal.md` → `## Sessions` subsection
 - Real images inserted, replacing placeholders
 - Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item in its `#### Validation Report`; dashboard updated
-- A closing summary: iterations spent per loop, final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
+- A closing summary: iterations spent per loop, every applied fix (page title, before → after), final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
+
+## Confirmations
+
+- The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only.
+- Nothing stays unseen: the closing summary lists every applied fix with page title and before → after.
+- **Outside the project** it covers nothing: before Step 3 starts an external browser session, ask **once in the terminal** (tier "confirm in terminal" for `generate-image`) for all images of this run. Without that confirmation, skip Step 3 and say so in the closing summary.
 
 ## Steps
 
@@ -45,15 +51,15 @@ d. If any `[mechanical]`-tagged item (per `checklists/course-quality-checklist.m
 
 e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is recorded (such as the "possibly too short" duration flag): do not auto-fix. Carry it forward into Step 2. If no personas exist to weigh in (Step 2 will be skipped), surface it directly in the closing report instead.
 
-**Loop:** Repeat b–d until every `[mechanical]` item passes, or after 5 iterations — whichever comes first. On hitting the cap: stop, list the remaining `[mechanical]` FAIL items, and report to the instructor instead of continuing to Step 2. See `CLAUDE.md` → "Iteration Pattern" for the general convention.
+**Loop:** Repeat c–d until every `[mechanical]` item passes, or after 5 iterations — whichever comes first. On hitting the cap: stop, list the remaining `[mechanical]` FAIL items, and report to the instructor instead of continuing to Step 2. See `CLAUDE.md` → "Iteration Pattern" for the general convention.
 
 ### 2. Persona review loop `[only if journal.md → ## Agents → ### Learner Personas contains at least one persona]`
 
 a. For each persona, run `tasks/review-as-persona.md {name} {number}` in **report-only mode**: perform its steps 1–7 (produce and save the structured `#### Persona Reviews` report) and skip steps 8–10 (the persistent in-character follow-up chat) — there is no one present to chat with during an automated loop. The instructor can start that chat separately afterward by calling `:review-as-persona` directly.
 
-b. If any persona's priority issues (`data-key="priority"`) include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` (isolated issue) or by re-running Step 1 (broader issue), using the same "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. If a fix needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d.
+b. If any persona's priority issues (`data-key="priority"`) include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` if it is an isolated issue, using the "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. A broader issue needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d — never regenerate the material to fix it.
 
-c. After fixes, re-run Step 1 and then this step again for **all** personas (not just the one that raised the concern, to catch regressions).
+c. After fixes, re-run Step 1c–1d — never 1a or 1b: regenerating would discard every fix of this run — and then this step again for **all** personas (not just the one that raised the concern, to catch regressions).
 
 **Loop:** Repeat a–c until no persona raises a blocking concern, or after 3 rounds — whichever comes first. On hitting the cap: stop, list the unresolved persona concerns, and report to the instructor.
 
@@ -63,7 +69,7 @@ c. After fixes, re-run Step 1 and then this step again for **all** personas (not
 
 Runs **once**, only if Steps 1 and 2 both finished clean (did not stop early on a cap or an escalation). If either loop stopped early, do not proceed — the closing report from that step is the end of this run.
 
-For each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}` (single mode, scoped to this session's own images — not the global batch mode, which would also process other sessions' pending images) to generate, download, and insert the real image, replacing the placeholder. This runs automatically, without an extra confirmation, once content and persona checks are clean.
+For each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}` (single mode, scoped to this session's own images — not the global batch mode, which would also process other sessions' pending images) to generate, download, and insert the real image, replacing the placeholder. Start only after the single terminal confirmation described in "Confirmations".
 
 ### 4. Finalize
 

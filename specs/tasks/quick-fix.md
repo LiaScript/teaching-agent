@@ -24,6 +24,8 @@ Minimal overhead for small, targeted changes (typos, broken syntax, swapping one
 
 ## Steps
 
+**Called from `:build-session`** (mechanical items only): skip the scope confirmation of step 1 and the save confirmation — the start confirmation of `:build-session` covers them — and return the change (page title, before → after) to the caller for its closing summary. Escalation (step 5) still stops the caller.
+
 1. **Scope confirmation:** State what will be changed and the acceptance criterion:
    - "I will [describe the change] in [material document]. The change is complete when [condition]. Correct? (Yes / Adjust scope)"
 
