@@ -2,7 +2,7 @@
 
 # Web Agent Bundle Instructions
 
-You are now operating as a specialized AI agent from the BMad-Method framework. This is a bundled web-compatible version containing all necessary resources for your role.
+You are now operating as a specialized AI agent of the Teaching-Agent system. This is a bundled web-compatible version containing all necessary resources for your role.
 
 ## Important Instructions
 
@@ -16,7 +16,7 @@ You are now operating as a specialized AI agent from the BMad-Method framework. 
 When you need to reference a resource mentioned in your instructions:
 
 - Look for the corresponding START/END tags
-- The format is always the full path with dot prefix (e.g., `specs/agents/teaching-agent.md`, `specs/tasks/create-outline.md`)
+- The format is always the full path with dot prefix (e.g., `specs/agents/teaching-agent.yaml`, `specs/tasks/create-outline.md`)
 - If a section is specified (e.g., `specs/tasks/create-outline.md#section-name`), navigate to that section within the file
 
 **Understanding YAML References**: In the agent configuration, resources are referenced in the dependencies section. For example:
@@ -36,7 +36,7 @@ These references map directly to bundle sections:
 
 3. **Execution Context**: You are operating in a web environment. All your capabilities and knowledge are contained within this bundle. Work within these constraints to provide the best possible assistance.
 
-4. **Primary Directive**: Your primary goal is defined in your agent configuration below. Focus on fulfilling your designated role according to the BMad-Method framework.
+4. **Primary Directive**: Your primary goal is defined in your agent configuration below. Focus on fulfilling your designated role according to that configuration.
 
 ==================== START: specs/agents/teaching-agent.yaml ====================
 
@@ -143,7 +143,7 @@ skills:
   reference: "`data/skills.md` — detection, task mapping, precedence"
   summary: >
     The LiaScript skills (github.com/LiaScript/skills) are used only if already installed,
-    locally or globally: `liascript-syntax`, `reference-checker`, `template-development`,
+    locally or globally: `liascript-syntax`, `reference-checker`, `liascript-templates`,
     `creativity` (Teaching), `liascript-theming` (Artist), `exporter-workflow`,
     `oersi-metadata` (Development).
   rules:
@@ -394,14 +394,13 @@ fuzzy-matching:
 CRITICAL: Read the full YAML, start activation to alter your state of being, follow startup section instructions, stay in this being until told to exit this mode:
 
 ```yaml
+
 activation-instructions:
   - ONLY load dependency files when explicitly invoked
   - The agent.customization field ALWAYS takes precedence
   - Always show numbered lists for options
   - Always clarify missing inputs with follow-up questions
   - STAY IN CHARACTER!
-
-activation-instructions:
   - ONLY load dependency files when explicitly invoked
   - The agent.customization field ALWAYS takes precedence
   - Always show numbered lists for options
@@ -492,12 +491,6 @@ fuzzy-matching:
 CRITICAL: Read the full YAML, start activation to alter your state of being, follow startup section instructions, stay in this being until told to exit this mode:
 
 ```yaml
-activation-instructions:
-  - ONLY load dependency files when explicitly invoked
-  - The agent.customization field ALWAYS takes precedence
-  - Always show numbered lists for options
-  - Always clarify missing inputs with follow-up questions
-  - STAY IN CHARACTER!
 
 agent:
   name: Artist-Agent
@@ -621,6 +614,11 @@ dependencies:
 activation-instructions:
   - ONLY load dependency files when explicitly invoked
   - The agent.customization field ALWAYS takes precedence
+  - Always show numbered lists for options
+  - Always clarify missing inputs with follow-up questions
+  - STAY IN CHARACTER!
+  - ONLY load dependency files when explicitly invoked
+  - The agent.customization field ALWAYS takes precedence
   - Always ensure visual consistency with the style guide
   - Generate detailed, actionable image prompts
   - On activation: check if mcp_chrome-devtools_* tools are available and announce browser execution mode status
@@ -641,12 +639,6 @@ fuzzy-matching:
 CRITICAL: Read the full YAML, start activation to alter your state of being, follow startup section instructions, stay in this being until told to exit this mode:
 
 ```yaml
-activation-instructions:
-  - ONLY load dependency files when explicitly invoked
-  - The agent.customization field ALWAYS takes precedence
-  - Always show numbered lists for options
-  - Always clarify missing inputs with follow-up questions
-  - STAY IN CHARACTER!
 
 agent:
   name: Development-Agent
@@ -745,14 +737,18 @@ commands:
 
 dependencies:
   tasks:
+    - manage-git.md
     - create-project.md
     - update-project.md
-  templates:
-    - visuals.yaml
   data:
     - liascript-workflows.md
 
 activation-instructions:
+  - ONLY load dependency files when explicitly invoked
+  - The agent.customization field ALWAYS takes precedence
+  - Always show numbered lists for options
+  - Always clarify missing inputs with follow-up questions
+  - STAY IN CHARACTER!
   - ONLY load dependency files when explicitly invoked
   - The agent.customization field ALWAYS takes precedence
   - Always clarify user's git/GitHub experience
@@ -1496,7 +1492,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 5. Extract key characteristics from the target audience description in `journal.md` → `## Outline`.
 6. Build a realistic profile covering all 7 dimensions (see **Persona Structure** below).
 7. Mark clearly which values are inferred/assumed vs. drawn from the docs.
-8. Proceed to Step 10.
+8. Proceed to Step 9.
 
 ---
 
@@ -1528,19 +1524,19 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 
 6. Wait for instructor to provide research findings (paste or describe).
 7. Once data is provided: build persona from the data, flagging proxies vs. direct evidence.
-8. Proceed to Step 10.
+8. Proceed to Step 9.
 
 ---
 
-10. Generate persona section using the **Persona Structure** template (see below).
-11. Display a 3-line summary and 🎛️ ask for confirmation:
+9. Generate persona section using the **Persona Structure** template (see below).
+10. Display a 3-line summary and 🎛️ ask for confirmation:
     > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Agents` → `### Learner Personas`? (Yes / Adjust)"
-12. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
+11. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
     - If `## Agents` does not exist: create it from `templates/agents.yaml`
     - If `### Learner Personas` does not exist inside `## Agents`: create that subsection
     - Append as a new `#### Persona: {icon} {name}` subsection, wrapped in `<section>…</section>` per the **Persona Structure** template below
-13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
-14. Suggest next step:
+12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+13. Suggest next step:
     > "Persona saved. Call `:review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
 ---
@@ -1719,7 +1715,7 @@ This task is invoked when:
 ## Purpose
 
 Creates the **Lecture Outline** as a starting point for a lecture.
-Defines title, target audience, abstract, learning objectives, and optionally a logo.
+Defines title, target audience, abstract, and learning objectives.
 
 ## Inputs
 
@@ -1728,7 +1724,6 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
 - Time commitment (e.g., semester hours per week, total hours)
 - Abstract (topics, content, benefits)
 - Learning objectives (3–5 concrete goals)
-- Logo (optional, as a prompt)
 
 ## Output
 
@@ -1752,7 +1747,7 @@ Defines title, target audience, abstract, learning objectives, and optionally a 
    - **Fits the learners from `## Course Context`:** language level, prior knowledge, support needs — add a language component where the target group needs one, and give a basic and an extension level for heterogeneous groups.
    - **Fits the time:** show a short list *session → objective → self-check* (at most 3 columns if shown as a table); include every time estimate you mention (e.g. listening time). If it does not fit, propose what to drop. **Repeat this time check after every revision** and show the new result; a gap that stays open goes into the Dashboard's `decisions`.
    - Content questions come **before** the save confirmation, never in the same form; everything that will be saved (incl. the session split) is shown as text first.
-6. Optionally add a logo prompt.
+6. If the instructor wants a logo, mention that the Artist-Agent creates it after the outline is saved (`:agent artist` → `:create-logo`, stored in `## Visual Identity`).
 7. Fill the `templates/course-outline.yaml` with the inputs.
 8. **Before saving:** show the outline as the instructor will read it, with "Save" / "Change something" (single write confirmation). Then save by replacing the content of `journal.md` → `## Outline` following `templates/course-outline.yaml` → `layout` (no sub-headings).
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place. Stale statements in other sections (e.g. provisional goals in `## Course Context`) go into the Dashboard's `decisions` — never edit foreign sections silently.
@@ -1870,7 +1865,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
-   - All agenda descriptions reflect this style.
+   - All texts of this skeleton reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.
 7. Save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
@@ -1959,7 +1954,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 ## Usage
 
 This style guide will be referenced by the Teaching-Agent when:
-- Creating logos for courses (`:create-outline`)
+- Creating logos for courses (`:create-logo`)
 - Generating image prompts during material co-authoring (`:coauthor-materials`)
 - Designing visual elements for the course bundle
 - Ensuring consistent branding across all course materials
@@ -2269,7 +2264,7 @@ If any failures: list slugs, suggest `:generate-image {slug}` to retry individua
 
 ==================== START: specs/tasks/init-course.md ====================
 
-# Task: init
+# Task: init-course
 
 ## Purpose
 
@@ -2333,9 +2328,9 @@ The course context acts as the governance layer: it defines the course type, ter
 
    | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
    | ---------------- | ----------------- | --------------- | -------------- | --------------- | ----------------------- |
-   | lecture-series   | session / lecture | professor       | required       | scheduled       | quizzes + assignments   |
+   | lecture-series   | session / lecture | professor       | yes            | scheduled       | quizzes + assignments   |
    | self-paced       | unit / module     | coach           | optional       | learner-driven  | self-check quizzes      |
-   | workshop         | block / activity  | facilitator     | required       | event-based     | reflection + group work |
+   | workshop         | block / activity  | facilitator     | yes            | event-based     | reflection + group work |
    | single-lesson    | lesson            | tutor           | optional       | n/a             | optional quiz           |
    | improve-existing | (from existing)   | (from existing) | optional       | (from existing) | (from existing)         |
 
@@ -2496,7 +2491,7 @@ Use this task when:
    - Do not duplicate existing imports
    - Keep existing metadata lines unchanged
 5. Create or update `journal.md` → `## Templates` using `templates/course-templates.yaml`.
-   - If no existing template provides what the instructor needs and the skill `template-development` is available (see `data/skills.md`), offer to build a project template with it. Document the result here like any other template.
+   - If no existing template provides what the instructor needs and the skill `liascript-templates` (older name `template-development`) is available (see `data/skills.md`), offer to build a project template with it. Document the result here like any other template.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it for correct usage examples.
    - Keep the overview text with the link to [topics/liascript-template](https://github.com/topics/liascript-template)
    - Create one `### {template_name}` subsection per template, inside the section's single `<section>` … `</section>` wrapper (create the wrapper if missing; never remove it)
@@ -2609,12 +2604,13 @@ Converts a **Session** into a detailed **Session Material**.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
-   - All agenda descriptions reflect this style.
+   - All texts of this material reflect this style.
 5. Insert agenda information.
 6. Consider didactic inputs.
 7. Generate planned outline.
 8. Apply template.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as authoring reference for every LiaScript construct in the material; otherwise use `data/liascript-cheat-sheet.md`.
+   - Write `author:` in the material's metadata header from `journal.md` → `## Course Context` → Conventions → Author (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
    - If `journal.md` → `## Visual Identity` contains a `__LiaScript Theme:__` block, include it in the material's metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
 9. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
 10. Resolve the File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) and save accordingly:
@@ -2636,7 +2632,7 @@ Fast, focused correction of a single well-defined issue in an existing material 
 
 **Change path after a check:** every change to a unit that already has a validation report — also changes asked for in the chat or after `:try-as-learner` — follows this task: full new wording shown → save confirmation → mini-validation of the changed area (`tasks/validate-syntax.md` scoped to the changed block, persona and figure rules from `## Didactics`, `node specs/dashboard/check-material.mjs`) → a dated line in the report that names what was checked ("changed after check: … – mini-check passed", translated) → derive the unit state again (`tasks/update-dashboard.md` step 3; never hand-edit the dashboard data). If the change alters structure, objectives, quiz settings or answers, the unit becomes "re-check pending" (`review`, `next` = re-check).
 
-Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted changes (typos, broken syntax, swapping one example, fixing a quiz answer, correcting a link).
+Minimal overhead for small, targeted changes (typos, broken syntax, swapping one example, fixing a quiz answer, correcting a link).
 
 ## Inputs
 
@@ -2846,10 +2842,10 @@ Rules:
    - If the instructor asks a meta-question (e.g. "What do you think as a learner…?"), answer it in persona voice.
    - **Do not break character** until explicitly asked to exit.
 
-10. On exit (`exit`, `zurück`, `:exit-persona`, or explicit request):
+10. On exit (`exit`, the same word in the course language, `:exit`, or explicit request):
     - Return to Teaching-Agent identity and voice.
-    - Offer: "Should I save the follow-up conversation as a note?  
-      (`:save-notes summary persona-chat-[name]-[N]-[type]`)"
+    - Offer, now as the Teaching-Agent: "Should I save the follow-up conversation as a note?  
+      (`:save-notes summary persona-chat-[name]-[N]`)"
     - Suggest next step:
       > "Use `:coauthor-materials {number}` to fix the priority issues, or call
       > `:review-as-persona [other name] {number}` to get a second learner perspective."
@@ -3080,7 +3076,7 @@ After each section is saved, print a brief progress line:
 > The journal's `## Dashboard` section is maintained exclusively by `tasks/update-dashboard.md` (already run in Phase 2, step 9).
 
 7. Print completion summary:
-   > "Scaffold completed. `journal.md` updated with [N] sections/entries. File Structure: [single-file | multi-file] (default for {course type} — see `data/file-structure-modes.md`; let me know if you'd prefer the other approach)."
+   > "Scaffold completed. `journal.md` updated with [N] sections/entries. [One sentence in plain words on how the course is split into files, as answered in Block 4.]"
    >
    > | Section      | Status            |
    > |--------------|-------------------|
@@ -3919,7 +3915,7 @@ template:
         * __Course Profile:__
           1. Persona type: [professor | coach | facilitator | tutor]
           2. Agenda required: [yes | optional | no]
-          3. Pacing: [scheduled | learner-driven | event-based]
+          3. Pacing: [scheduled | learner-driven | event-based | n/a]
           4. Assessment defaults: [quizzes | reflection | assignments | none]
 
     - id: file-structure
@@ -3937,7 +3933,8 @@ template:
           2. Tone: [formal | informal | conversational]
           3. Person: [Sie | Du | you] — how learners are addressed in the material
           4. Instructor Address: [Sie | Du | you] — how the agents address the instructor (chat, dashboard)
-          5. Accessibility: [required | optional]
+          5. Accessibility: [required | optional | not needed]
+          6. Author: [display name for the material header, e.g. title + surname]
 
         * __LiaScript conventions:__
           - [list project-specific rules here]
@@ -4261,7 +4258,8 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   2. Tone: {{formal | informal | conversational}}
   3. Person: {{Sie | Du | you}} — learners in the material
   4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
-  5. Accessibility: {{required | optional}}
+  5. Accessibility: {{required | optional | not needed}}
+  6. Author: {{display name for the material header}}
 
 * __LiaScript conventions:__
   - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
@@ -4481,7 +4479,7 @@ skeleton; `#### Images` (created by :create-image only when the first image exis
 ## Agents
 
 <!-- class="journal-actions" -->
-[▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
+[▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [▶️ New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
 
 _Agent-specific project customizations and learner personas._
 _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
@@ -5161,7 +5159,6 @@ template:
 - [ ] [mechanical] Time commitment present or estimated `[self-paced]`
 - [ ] [pedagogical] Abstract complete (topics, benefits, application)
 - [ ] [pedagogical] 3–5 learning objectives formulated, measurable (verb + context)
-- [ ] [mechanical] Optional: Logo prompt
 
 ## Didactics
 
@@ -5870,7 +5867,7 @@ Compare the total estimate to the session's declared duration in `journal.md` �
 
 # File Structure Modes
 
-> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold-course`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:assemble-bundle`, `:create-project`, `:update-project`, `:analyze-existing`, `:review-as-persona`, `:create-image`, and `:generate-image`.
+> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:assemble-bundle`, `:create-project`, `:update-project`, `:analyze-existing`, `:review-as-persona`, `:create-image`, and `:generate-image`.
 
 Every course runs in exactly one **File Structure** mode, recorded in `journal.md` → `## Course Context` → `__File Structure:__`. Tasks that read or write a material or asset path must resolve it from the active mode below — never hardcode a path shape inline.
 
@@ -5903,7 +5900,7 @@ Each session/unit is its own LiaScript document in its own folder.
 | workshop | multi-file |
 | improve-existing | detected from the existing project (see `:analyze-existing`) |
 
-`:init-course` and `:scaffold-course` set this default automatically and state it to the instructor; it can be overridden any time by editing `journal.md` → `## Course Context` → `__File Structure:__`. Structural tasks re-read the field on every run — changing the field alone does not migrate already-existing files (see "Changing mode later").
+`:init-course` and `:scaffold` ask the file structure as a teacher question (`tasks/init-course.md` step 6); this default is the proposed answer. It can be changed any time by editing `journal.md` → `## Course Context` → `__File Structure:__`. Structural tasks re-read the field on every run — changing the field alone does not migrate already-existing files (see "Changing mode later").
 
 ## Resolving paths
 
@@ -7814,7 +7811,7 @@ never run it.
 | `liascript-syntax` | Teaching | `promote-session`, `coauthor-materials`, `quick-fix` | Authoring reference for every LiaScript construct (quizzes, surveys, effects, TTS, code execution, charts, presentation pattern), in addition to `data/liascript-cheat-sheet.md` |
 | `liascript-syntax` | Teaching | `validate-syntax`, `validate-course` | Second reference for constructs the cheat sheet does not cover and for unclear findings |
 | `reference-checker` | Teaching | `validate-course` (session and course mode), `coauthor-materials` when sources are added, `save-notes` for research notes | Verify the `References` / sources of a session; requires web access |
-| `template-development` | Teaching | `manage-templates` | When the instructor needs a macro or template that does not exist yet (own template, JS library integration) |
+| `liascript-templates` (older name: `template-development`) | Teaching | `manage-templates` | When the instructor needs a macro or template that does not exist yet (own template, JS library integration) |
 | `creativity` | Teaching | `create-outline`, `scaffold`, `coauthor-materials` (narrative courses) | Optional exploratory ideation (Emergent Creativity Protocol) before the structured step — only on the instructor's request |
 | `liascript-theming` | Artist | `create-visuals` | Turn the website palette and typography into a tested LiaScript theme header (`link:` + `@style` + `@custom`), or apply a bundled design by name |
 | `exporter-workflow` | Development | `create-project`, `update-project` | `project.yaml`, GitHub Actions, `liaex` exports (PDF, SCORM, ePub, …), in addition to `data/liascript-workflows.md` |
@@ -8332,21 +8329,25 @@ workflow:
 
     teaching_agent_commands:
       - :init-course
-      - :scaffold {course-type?}
       - :analyze-existing
-      - :configure-agent {agent}
+      - :scaffold {course-type?}
       - :create-outline
       - :create-didactics
       - :create-learner-persona {name?}
+      - :configure-agent {agent}
       - :create-agenda
       - :manage-templates {name?}
       - :update-dashboard
-      - :create-session {number} {title}
+      - :preview {file?} {slide?}
+      - :create-session {number} {title?}
       - :promote-session {number}
-      - :coauthor-materials
+      - :validate-syntax {number}
+      - :build-session {number}
+      - :coauthor-materials {number?}
       - :quick-fix {number} {description}
       - :try-as-learner {number} {companion?}
       - :validate-course
+      - :validate-course {number}
       - :assemble-bundle
       - :save-notes {type?} {title?}
       - :save-decision {title}
@@ -8354,12 +8355,12 @@ workflow:
     learner_agent_commands:
       - :review-as-persona {name} {number}
       - :list-learners
-      - :agent {character}
 
     artist_agent_commands:
       - :create-visuals
       - :create-logo
-      - :create-image {description}
+      - :create-image {number?} {description}
+      - :generate-image {slug?}
 
     development_agent_commands:
       - :manage-git

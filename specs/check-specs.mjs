@@ -59,6 +59,19 @@ test("material paths use the title slug, never the session type", () => {
   assert.deepEqual(hits.map(([path, line]) => `${path.slice(specs.length + 1)}: ${line.trim()}`), []);
 });
 
+test("the workflow quick reference lists every agent command with its signature", () => {
+  const generic = new Set([":agent", ":help", ":exit", ":list-agents"]);
+  const workflow = read("workflows/course-development.yaml");
+  for (const agent of ["teaching", "artist", "learner", "development"]) {
+    const keys = [...read(`agents/${agent}-agent.yaml`).matchAll(/^\s{2}(:[\w-]+[^:\n]*):/gm)].map(match => match[1].trim())
+      .filter(key => !generic.has(key.split(" ")[0]));
+    const list = workflow.split(`${agent}_agent_commands:`)[1]?.split(/\n\s*\n/)[0] ?? "";
+    const listed = [...list.matchAll(/^\s*- (:.+)$/gm)].map(match => match[1].trim());
+    assert.deepEqual(keys.filter(key => !listed.includes(key)), [], `${agent}: missing in quick_reference`);
+    assert.deepEqual(listed.filter(key => !keys.includes(key) && !generic.has(key.split(" ")[0])), [], `${agent}: unknown in quick_reference`);
+  }
+});
+
 test("reports inside sessions and the course summary use bold labels, not ##### headings", () => {
   for (const file of ["tasks/review-as-persona.md", "tasks/validate-course.md", "templates/session-validation.yaml"]) {
     const headings = read(file).split("\n").filter(line => /^\s*#{5,6}\s/.test(line));

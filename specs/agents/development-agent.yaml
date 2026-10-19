@@ -95,10 +95,9 @@ commands:
 
 dependencies:
   tasks:
+    - manage-git.md
     - create-project.md
     - update-project.md
-  templates:
-    - visuals.yaml
   data:
     - liascript-workflows.md
 

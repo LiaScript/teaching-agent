@@ -1,6 +1,6 @@
 # File Structure Modes
 
-> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold-course`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:assemble-bundle`, `:create-project`, `:update-project`, `:analyze-existing`, `:review-as-persona`, `:create-image`, and `:generate-image`.
+> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:assemble-bundle`, `:create-project`, `:update-project`, `:analyze-existing`, `:review-as-persona`, `:create-image`, and `:generate-image`.
 
 Every course runs in exactly one **File Structure** mode, recorded in `journal.md` → `## Course Context` → `__File Structure:__`. Tasks that read or write a material or asset path must resolve it from the active mode below — never hardcode a path shape inline.
 
@@ -33,7 +33,7 @@ Each session/unit is its own LiaScript document in its own folder.
 | workshop | multi-file |
 | improve-existing | detected from the existing project (see `:analyze-existing`) |
 
-`:init-course` and `:scaffold-course` set this default automatically and state it to the instructor; it can be overridden any time by editing `journal.md` → `## Course Context` → `__File Structure:__`. Structural tasks re-read the field on every run — changing the field alone does not migrate already-existing files (see "Changing mode later").
+`:init-course` and `:scaffold` ask the file structure as a teacher question (`tasks/init-course.md` step 6); this default is the proposed answer. It can be changed any time by editing `journal.md` → `## Course Context` → `__File Structure:__`. Structural tasks re-read the field on every run — changing the field alone does not migrate already-existing files (see "Changing mode later").
 
 ## Resolving paths
 

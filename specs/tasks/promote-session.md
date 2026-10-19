@@ -35,12 +35,13 @@ Converts a **Session** into a detailed **Session Material**.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
-   - All agenda descriptions reflect this style.
+   - All texts of this material reflect this style.
 5. Insert agenda information.
 6. Consider didactic inputs.
 7. Generate planned outline.
 8. Apply template.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as authoring reference for every LiaScript construct in the material; otherwise use `data/liascript-cheat-sheet.md`.
+   - Write `author:` in the material's metadata header from `journal.md` → `## Course Context` → Conventions → Author (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
    - If `journal.md` → `## Visual Identity` contains a `__LiaScript Theme:__` block, include it in the material's metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
 9. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
 10. Resolve the File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) and save accordingly:

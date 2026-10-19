@@ -88,7 +88,8 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   2. Tone: {{formal | informal | conversational}}
   3. Person: {{Sie | Du | you}} — learners in the material
   4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
-  5. Accessibility: {{required | optional}}
+  5. Accessibility: {{required | optional | not needed}}
+  6. Author: {{display name for the material header}}
 
 * __LiaScript conventions:__
   - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
@@ -308,7 +309,7 @@ skeleton; `#### Images` (created by :create-image only when the first image exis
 ## Agents
 
 <!-- class="journal-actions" -->
-[▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
+[▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [▶️ New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
 
 _Agent-specific project customizations and learner personas._
 _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._

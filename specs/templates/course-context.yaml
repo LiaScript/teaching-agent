@@ -36,7 +36,7 @@ template:
         * __Course Profile:__
           1. Persona type: [professor | coach | facilitator | tutor]
           2. Agenda required: [yes | optional | no]
-          3. Pacing: [scheduled | learner-driven | event-based]
+          3. Pacing: [scheduled | learner-driven | event-based | n/a]
           4. Assessment defaults: [quizzes | reflection | assignments | none]
 
     - id: file-structure
@@ -54,7 +54,8 @@ template:
           2. Tone: [formal | informal | conversational]
           3. Person: [Sie | Du | you] — how learners are addressed in the material
           4. Instructor Address: [Sie | Du | you] — how the agents address the instructor (chat, dashboard)
-          5. Accessibility: [required | optional]
+          5. Accessibility: [required | optional | not needed]
+          6. Author: [display name for the material header, e.g. title + surname]
 
         * __LiaScript conventions:__
           - [list project-specific rules here]

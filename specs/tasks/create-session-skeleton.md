@@ -32,7 +32,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
-   - All agenda descriptions reflect this style.
+   - All texts of this skeleton reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.
 7. Save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.

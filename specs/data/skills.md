@@ -43,7 +43,7 @@ never run it.
 | `liascript-syntax` | Teaching | `promote-session`, `coauthor-materials`, `quick-fix` | Authoring reference for every LiaScript construct (quizzes, surveys, effects, TTS, code execution, charts, presentation pattern), in addition to `data/liascript-cheat-sheet.md` |
 | `liascript-syntax` | Teaching | `validate-syntax`, `validate-course` | Second reference for constructs the cheat sheet does not cover and for unclear findings |
 | `reference-checker` | Teaching | `validate-course` (session and course mode), `coauthor-materials` when sources are added, `save-notes` for research notes | Verify the `References` / sources of a session; requires web access |
-| `template-development` | Teaching | `manage-templates` | When the instructor needs a macro or template that does not exist yet (own template, JS library integration) |
+| `liascript-templates` (older name: `template-development`) | Teaching | `manage-templates` | When the instructor needs a macro or template that does not exist yet (own template, JS library integration) |
 | `creativity` | Teaching | `create-outline`, `scaffold`, `coauthor-materials` (narrative courses) | Optional exploratory ideation (Emergent Creativity Protocol) before the structured step — only on the instructor's request |
 | `liascript-theming` | Artist | `create-visuals` | Turn the website palette and typography into a tested LiaScript theme header (`link:` + `@style` + `@custom`), or apply a bundled design by name |
 | `exporter-workflow` | Development | `create-project`, `update-project` | `project.yaml`, GitHub Actions, `liaex` exports (PDF, SCORM, ePub, …), in addition to `data/liascript-workflows.md` |

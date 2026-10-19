@@ -6,7 +6,7 @@ Fast, focused correction of a single well-defined issue in an existing material 
 
 **Change path after a check:** every change to a unit that already has a validation report — also changes asked for in the chat or after `:try-as-learner` — follows this task: full new wording shown → save confirmation → mini-validation of the changed area (`tasks/validate-syntax.md` scoped to the changed block, persona and figure rules from `## Didactics`, `node specs/dashboard/check-material.mjs`) → a dated line in the report that names what was checked ("changed after check: … – mini-check passed", translated) → derive the unit state again (`tasks/update-dashboard.md` step 3; never hand-edit the dashboard data). If the change alters structure, objectives, quiz settings or answers, the unit becomes "re-check pending" (`review`, `next` = re-check).
 
-Equivalent to BMAD's "Quick Flow" — minimal overhead for small, targeted changes (typos, broken syntax, swapping one example, fixing a quiz answer, correcting a link).
+Minimal overhead for small, targeted changes (typos, broken syntax, swapping one example, fixing a quiz answer, correcting a link).
 
 ## Inputs
 

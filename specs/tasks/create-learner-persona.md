@@ -41,7 +41,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 5. Extract key characteristics from the target audience description in `journal.md` → `## Outline`.
 6. Build a realistic profile covering all 7 dimensions (see **Persona Structure** below).
 7. Mark clearly which values are inferred/assumed vs. drawn from the docs.
-8. Proceed to Step 10.
+8. Proceed to Step 9.
 
 ---
 
@@ -73,19 +73,19 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 
 6. Wait for instructor to provide research findings (paste or describe).
 7. Once data is provided: build persona from the data, flagging proxies vs. direct evidence.
-8. Proceed to Step 10.
+8. Proceed to Step 9.
 
 ---
 
-10. Generate persona section using the **Persona Structure** template (see below).
-11. Display a 3-line summary and 🎛️ ask for confirmation:
+9. Generate persona section using the **Persona Structure** template (see below).
+10. Display a 3-line summary and 🎛️ ask for confirmation:
     > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Agents` → `### Learner Personas`? (Yes / Adjust)"
-12. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
+11. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
     - If `## Agents` does not exist: create it from `templates/agents.yaml`
     - If `### Learner Personas` does not exist inside `## Agents`: create that subsection
     - Append as a new `#### Persona: {icon} {name}` subsection, wrapped in `<section>…</section>` per the **Persona Structure** template below
-13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
-14. Suggest next step:
+12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+13. Suggest next step:
     > "Persona saved. Call `:review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
 
 ---

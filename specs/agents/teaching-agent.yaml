@@ -89,7 +89,7 @@ skills:
   reference: "`data/skills.md` — detection, task mapping, precedence"
   summary: >
     The LiaScript skills (github.com/LiaScript/skills) are used only if already installed,
-    locally or globally: `liascript-syntax`, `reference-checker`, `template-development`,
+    locally or globally: `liascript-syntax`, `reference-checker`, `liascript-templates`,
     `creativity` (Teaching), `liascript-theming` (Artist), `exporter-workflow`,
     `oersi-metadata` (Development).
   rules:

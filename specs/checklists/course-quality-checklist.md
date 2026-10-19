@@ -22,7 +22,6 @@
 - [ ] [mechanical] Time commitment present or estimated `[self-paced]`
 - [ ] [pedagogical] Abstract complete (topics, benefits, application)
 - [ ] [pedagogical] 3–5 learning objectives formulated, measurable (verb + context)
-- [ ] [mechanical] Optional: Logo prompt
 
 ## Didactics
 

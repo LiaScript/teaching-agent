@@ -121,7 +121,7 @@ After each section is saved, print a brief progress line:
 > The journal's `## Dashboard` section is maintained exclusively by `tasks/update-dashboard.md` (already run in Phase 2, step 9).
 
 7. Print completion summary:
-   > "Scaffold completed. `journal.md` updated with [N] sections/entries. File Structure: [single-file | multi-file] (default for {course type} — see `data/file-structure-modes.md`; let me know if you'd prefer the other approach)."
+   > "Scaffold completed. `journal.md` updated with [N] sections/entries. [One sentence in plain words on how the course is split into files, as answered in Block 4.]"
    >
    > | Section      | Status            |
    > |--------------|-------------------|

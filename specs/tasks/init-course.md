@@ -1,4 +1,4 @@
-# Task: init
+# Task: init-course
 
 ## Purpose
 
@@ -62,9 +62,9 @@ The course context acts as the governance layer: it defines the course type, ter
 
    | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
    | ---------------- | ----------------- | --------------- | -------------- | --------------- | ----------------------- |
-   | lecture-series   | session / lecture | professor       | required       | scheduled       | quizzes + assignments   |
+   | lecture-series   | session / lecture | professor       | yes            | scheduled       | quizzes + assignments   |
    | self-paced       | unit / module     | coach           | optional       | learner-driven  | self-check quizzes      |
-   | workshop         | block / activity  | facilitator     | required       | event-based     | reflection + group work |
+   | workshop         | block / activity  | facilitator     | yes            | event-based     | reflection + group work |
    | single-lesson    | lesson            | tutor           | optional       | n/a             | optional quiz           |
    | improve-existing | (from existing)   | (from existing) | optional       | (from existing) | (from existing)         |
 

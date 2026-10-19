@@ -90,19 +90,28 @@ def _read_file_bundle(file: Path, name: str) -> str:
         content = f"```yaml\n{content}\n```"
 
     if name.startswith("agents/"):
+        generic = "".join([
+            "  - ONLY load dependency files when explicitly invoked\n",
+            "  - The agent.customization field ALWAYS takes precedence\n",
+            "  - Always show numbered lists for options\n",
+            "  - Always clarify missing inputs with follow-up questions\n",
+            "  - STAY IN CHARACTER!\n",
+        ])
+        body = content.replace("```yaml", "")
+        # Agents with their own activation-instructions get the generic rules merged in, not a duplicate key.
+        key = re.compile(r"^activation-instructions:\n", re.M)
+        if key.search(body):
+            head, body = "", key.sub(lambda match: match.group(0) + generic, body, count=1)
+        else:
+            head = "activation-instructions:\n" + generic
         content = "".join([
             "## Agent Definition\n\n",
             "CRITICAL: Read the full YAML, start activation to alter your state of being, "
             "follow startup section instructions, stay in this being until told to exit this mode:",
             "\n\n",
             "```yaml\n",
-            "activation-instructions:\n",
-            "  - ONLY load dependency files when explicitly invoked\n",
-            "  - The agent.customization field ALWAYS takes precedence\n",
-            "  - Always show numbered lists for options\n",
-            "  - Always clarify missing inputs with follow-up questions\n",
-            "  - STAY IN CHARACTER!\n",
-            content.replace("```yaml", ""),
+            head,
+            body,
         ])
 
     if content and name != MAIN_MD:

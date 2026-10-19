@@ -299,7 +299,7 @@ Jeder Schritt hat `title` und `state`; `why`, `result`, `next` und `statusLabel`
 
 @Dashboard.Card(Bisher festgehalten, Drei Lernziele liegen als Entwurf vor.)
 
-@Dashboard.Action(🎓, Unterstützung, Welche Möglichkeiten gibt es?, Ansehen, agent:teaching/help, :help)
+@Dashboard.Action(💬, Unterstützung, Welche Möglichkeiten gibt es?, Ansehen, agent:teaching/help, :help)
 
 Parameter mit Kommas in Backticks einschließen:
 
@@ -311,7 +311,7 @@ Zusätzliche Aktionen erscheinen aufklappbar. Eine leere Liste erzeugt keinen un
 
 ```json @Dashboard.Explore
 [
-  {"icon": "🎓", "title": "Unterstützung", "description": "Möglichkeiten für die Unterrichtsplanung ansehen.", "label": "Ansehen", "href": "agent:teaching/help", "command": ":help"}
+  {"icon": "💬", "title": "Unterstützung", "description": "Möglichkeiten für die Unterrichtsplanung ansehen.", "label": "Ansehen", "href": "agent:teaching/help", "command": ":help"}
 ]
 ```
 

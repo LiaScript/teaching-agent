@@ -484,21 +484,25 @@ workflow:
 
     teaching_agent_commands:
       - :init-course
-      - :scaffold {course-type?}
       - :analyze-existing
-      - :configure-agent {agent}
+      - :scaffold {course-type?}
       - :create-outline
       - :create-didactics
       - :create-learner-persona {name?}
+      - :configure-agent {agent}
       - :create-agenda
       - :manage-templates {name?}
       - :update-dashboard
-      - :create-session {number} {title}
+      - :preview {file?} {slide?}
+      - :create-session {number} {title?}
       - :promote-session {number}
-      - :coauthor-materials
+      - :validate-syntax {number}
+      - :build-session {number}
+      - :coauthor-materials {number?}
       - :quick-fix {number} {description}
       - :try-as-learner {number} {companion?}
       - :validate-course
+      - :validate-course {number}
       - :assemble-bundle
       - :save-notes {type?} {title?}
       - :save-decision {title}
@@ -506,12 +510,12 @@ workflow:
     learner_agent_commands:
       - :review-as-persona {name} {number}
       - :list-learners
-      - :agent {character}
 
     artist_agent_commands:
       - :create-visuals
       - :create-logo
-      - :create-image {description}
+      - :create-image {number?} {description}
+      - :generate-image {slug?}
 
     development_agent_commands:
       - :manage-git

@@ -150,10 +150,10 @@ Rules:
    - If the instructor asks a meta-question (e.g. "What do you think as a learner…?"), answer it in persona voice.
    - **Do not break character** until explicitly asked to exit.
 
-10. On exit (`exit`, `zurück`, `:exit-persona`, or explicit request):
+10. On exit (`exit`, the same word in the course language, `:exit`, or explicit request):
     - Return to Teaching-Agent identity and voice.
-    - Offer: "Should I save the follow-up conversation as a note?  
-      (`:save-notes summary persona-chat-[name]-[N]-[type]`)"
+    - Offer, now as the Teaching-Agent: "Should I save the follow-up conversation as a note?  
+      (`:save-notes summary persona-chat-[name]-[N]`)"
     - Suggest next step:
       > "Use `:coauthor-materials {number}` to fix the priority issues, or call
       > `:review-as-persona [other name] {number}` to get a second learner perspective."
