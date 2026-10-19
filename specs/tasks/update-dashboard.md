@@ -79,7 +79,9 @@ Run this task automatically after any task that changes project state:
    revision. Checks may return the work to an earlier step. A generated draft is
    not instructor approval, and a session PASS is not a course publication PASS.
 5. Choose **exactly one** prominent next action (`next`) with an understandable
-   `title`, `why`, `label`, `href` and readable `command`. Check prerequisites
+   `title`, `why`, `label`, `href`, readable `command` and `icon` (the action
+   symbol from `data/agent-links.md` → Markdown Format; the same for actions in
+   `decisions` and `explore`). Check prerequisites
    first: no session creation before Session Types exist, no separate agenda when
    the profile says `Agenda required: no`, no promotion without a skeleton, no
    publication before a course-mode PASS. Put further optional actions in `explore`.

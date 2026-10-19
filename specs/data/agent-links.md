@@ -132,8 +132,11 @@ in any renderer (VS Code, GitHub, LiaScript without DevServer):
 
 `## Dashboard` holds one JSON block rendered by the Dashboard library
 (`specs/dashboard/`). There an action is data, not a Markdown link: `href`
-(the `agent:` URI) plus `command` (the readable command). The library renders a
-normal anchor with the readable command right after it. Whitelist,
+(the `agent:` URI) plus `command` (the readable command) plus `icon` — the same
+symbol a Markdown label would start with (see Markdown Format: `▶`, `↻`, `🔍`,
+`👁`, or the agent icon). The library renders a button with the icon before the
+label and the readable command right after it; without `icon` an `agent:` button
+shows `▶`. Whitelist,
 prerequisites and confirmation tiers apply unchanged.
 
 ### Action lines below headings

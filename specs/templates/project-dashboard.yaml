@@ -47,14 +47,15 @@ template:
     selected: 'Optional: id of the recommended unit; empty string "" opens the whole-course view'
     process: 'Global course process with the same shape — always present, also once units exist'
     next:
+      icon: 'Action symbol as in Markdown labels (`▶` run, `↻` revise, `🔍` check, `👁` preview, agent icon for a switch); default `▶`'
       title: 'What we do next'
       why: 'Which result this step makes possible'
       label: 'Understandable action label'
       href: 'Allowed `agent:` link or section anchor'
       command: 'Readable command; required for `agent:` links'
-    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?}'
+    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?, icon?}'
     plan: 'Provisional planning {title?, note, rows: [{label, text}]} — only while no agenda exists'
-    explore: 'Optional action cards with icon/title/description/label/href/command'
+    explore: 'Optional action cards with icon/title/description/label/href/command; icon is shown in the button, same symbols as `next.icon`'
     links: 'Section links with label/href (full heading slug)'
     footer: 'Date of the derived state'
   sections:

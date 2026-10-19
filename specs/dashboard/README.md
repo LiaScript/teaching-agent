@@ -295,7 +295,7 @@ Jeder Schritt hat `title` und `state`; `why`, `result`, `next` und `statusLabel`
 
 ## Card und Action
 
-`Card(Titel, Text)` und `Action(Symbol, Titel, Beschreibung, Aktionslabel, Link, Befehl)` stellen zusätzliche Hinweise oder Möglichkeiten dar. Texte werden als Text behandelt, nicht als frei eingefügtes HTML.
+`Card(Titel, Text)` und `Action(Symbol, Titel, Beschreibung, Aktionslabel, Link, Befehl)` stellen zusätzliche Hinweise oder Möglichkeiten dar. Das Symbol steht im Button vor dem Aktionslabel; in `Dashboard.View` übernehmen `next`, `decisions` und `explore` es aus dem Feld `icon`. Ohne Symbol zeigt ein `agent:`-Button `▶`, ein Abschnittslink (`#…`) bleibt ohne Symbol. Texte werden als Text behandelt, nicht als frei eingefügtes HTML.
 
 @Dashboard.Card(Bisher festgehalten, Drei Lernziele liegen als Entwurf vor.)
 

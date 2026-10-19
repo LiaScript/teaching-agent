@@ -3259,7 +3259,9 @@ Run this task automatically after any task that changes project state:
    revision. Checks may return the work to an earlier step. A generated draft is
    not instructor approval, and a session PASS is not a course publication PASS.
 5. Choose **exactly one** prominent next action (`next`) with an understandable
-   `title`, `why`, `label`, `href` and readable `command`. Check prerequisites
+   `title`, `why`, `label`, `href`, readable `command` and `icon` (the action
+   symbol from `data/agent-links.md` → Markdown Format; the same for actions in
+   `decisions` and `explore`). Check prerequisites
    first: no session creation before Session Types exist, no separate agenda when
    the profile says `Agenda required: no`, no promotion without a skeleton, no
    publication before a course-mode PASS. Put further optional actions in `explore`.
@@ -4240,7 +4242,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
 ## Course Context
 
 <!-- class="journal-actions" -->
-[↻ Revise context](agent:teaching/init-course) `:init-course` · [🔍 Analyze existing course](agent:teaching/analyze-existing) `:analyze-existing`
+[✏️ Revise context](agent:teaching/init-course) `:init-course` · [🔍 Analyze existing course](agent:teaching/analyze-existing) `:analyze-existing`
 
 _Filled by `:init-course` from `templates/course-context.yaml`._
 
@@ -4281,7 +4283,7 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
 ## Outline
 
 <!-- class="journal-actions" -->
-[↻ Revise outline](agent:teaching/create-outline) `:create-outline`
+[✏️ Revise outline](agent:teaching/create-outline) `:create-outline`
 
 _Filled by `:create-outline` from `templates/course-outline.yaml`._
 
@@ -4307,7 +4309,7 @@ _Filled by `:create-outline` from `templates/course-outline.yaml`._
 ## Didactics
 
 <!-- class="journal-actions" -->
-[↻ Revise didactics](agent:teaching/create-didactics) `:create-didactics` · [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals`
+[✏️ Revise didactics](agent:teaching/create-didactics) `:create-didactics` · [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals`
 
 _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 
@@ -4379,7 +4381,7 @@ _Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
 ## Templates
 
 <!-- class="journal-actions" -->
-[▶ Manage templates](agent:teaching/manage-templates) `:manage-templates`
+[▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
 _Managed by `:manage-templates` from `templates/course-templates.yaml`._
 
@@ -4417,7 +4419,7 @@ More community templates can be found at [topics/liascript-template](https://git
 ## Agenda
 
 <!-- class="journal-actions" -->
-[↻ Revise agenda](agent:teaching/create-agenda) `:create-agenda`
+[✏️ Revise agenda](agent:teaching/create-agenda) `:create-agenda`
 
 _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
 
@@ -4435,7 +4437,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 ## Sessions
 
 <!-- class="journal-actions" -->
-[▶ New session](agent:teaching/create-session) `:create-session <number> <type>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
+[▶️ New session](agent:teaching/create-session) `:create-session <number> <type>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
 
@@ -4482,7 +4484,7 @@ only when the first image exists. Never use `#####` headings inside a session.
 ## Agents
 
 <!-- class="journal-actions" -->
-[▶ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
+[▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
 
 _Agent-specific project customizations and learner personas._
 _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
@@ -4572,7 +4574,7 @@ _Only used for improve-existing courses — filled by `:analyze-existing`._
 ## Notes Backup
 
 <!-- class="journal-actions" -->
-[▶ Save notes](agent:teaching/save-notes) `:save-notes` · [▶ Save decision](agent:teaching/save-decision) `:save-decision <title>`
+[▶️ Save notes](agent:teaching/save-notes) `:save-notes` · [▶️ Save decision](agent:teaching/save-decision) `:save-decision <title>`
 
 _Appended to by `:save-notes` and `:save-decision` from `templates/note-backup.yaml`._
 _Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._
@@ -4749,14 +4751,15 @@ template:
     selected: 'Optional: id of the recommended unit; empty string "" opens the whole-course view'
     process: 'Global course process with the same shape — always present, also once units exist'
     next:
+      icon: 'Action symbol as in Markdown labels (`▶` run, `↻` revise, `🔍` check, `👁` preview, agent icon for a switch); default `▶`'
       title: 'What we do next'
       why: 'Which result this step makes possible'
       label: 'Understandable action label'
       href: 'Allowed `agent:` link or section anchor'
       command: 'Readable command; required for `agent:` links'
-    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?}'
+    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?, icon?}'
     plan: 'Provisional planning {title?, note, rows: [{label, text}]} — only while no agenda exists'
-    explore: 'Optional action cards with icon/title/description/label/href/command'
+    explore: 'Optional action cards with icon/title/description/label/href/command; icon is shown in the button, same symbols as `next.icon`'
     links: 'Section links with label/href (full heading slug)'
     footer: 'Date of the derived state'
   sections:
@@ -4842,7 +4845,7 @@ template:
       title: Actions
       template: |
         <!-- class="journal-actions" -->
-        [▶ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
+        [▶️ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
       note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
     - id: kind
       title: Kind (visible)
@@ -4859,7 +4862,7 @@ template:
 
         **Method:** {{method}}
 
-        [▶ Promote](agent:teaching/promote-session?number={{number}}&type={{type}}) `:promote-session {{number}} {{type}}` · [▶ Build](agent:teaching/build-session?number={{number}}&type={{type}}) `:build-session {{number}} {{type}}`
+        [▶️ Promote](agent:teaching/promote-session?number={{number}}&type={{type}}) `:promote-session {{number}} {{type}}` · [▶️ Build](agent:teaching/build-session?number={{number}}&type={{type}}) `:build-session {{number}} {{type}}`
 
         </details>
       note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Erforderlich` checklist.'
@@ -5357,8 +5360,11 @@ in any renderer (VS Code, GitHub, LiaScript without DevServer):
 
 `## Dashboard` holds one JSON block rendered by the Dashboard library
 (`specs/dashboard/`). There an action is data, not a Markdown link: `href`
-(the `agent:` URI) plus `command` (the readable command). The library renders a
-normal anchor with the readable command right after it. Whitelist,
+(the `agent:` URI) plus `command` (the readable command) plus `icon` — the same
+symbol a Markdown label would start with (see Markdown Format: `▶`, `↻`, `🔍`,
+`👁`, or the agent icon). The library renders a button with the icon before the
+label and the readable command right after it; without `icon` an `agent:` button
+shows `▶`. Whitelist,
 prerequisites and confirmation tiers apply unchanged.
 
 ### Action lines below headings

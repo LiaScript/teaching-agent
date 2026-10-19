@@ -36,6 +36,7 @@
 .lia-dashboard .dashboard-action-link { display: flex; flex-wrap: wrap; align-items: center; gap: .7em; margin-top: .9em; }
 .lia-dashboard .dashboard-button { display: inline-flex; align-items: center; justify-content: space-between; gap: 1em; border: 1px solid var(--dashboard-accent); border-radius: 7px; padding: .6em 1em; color: var(--dashboard-accent); background: var(--dashboard-bg); text-decoration: none; font-weight: 650; }
 .lia-dashboard .dashboard-button-primary { color: #fff; background: var(--dashboard-accent); }
+.lia-dashboard .dashboard-button-icon { display: inline-block; margin-right: .15em; }
 .lia-dashboard .dashboard-button:hover { text-decoration: underline; text-underline-offset: .2em; }
 .lia-dashboard .dashboard-command { color: var(--dashboard-muted); font-size: .75em; background: var(--dashboard-soft); padding: .18em .4em; border-radius: 4px; overflow-wrap: anywhere; }
 .lia-dashboard .dashboard-progress { padding: 1em clamp(1.3em, 4vw, 2.4em); border-top: 1px solid var(--dashboard-border); border-bottom: 1px solid var(--dashboard-border); background: var(--dashboard-soft); display: flex; gap: 1em; align-items: center; justify-content: space-between; flex-wrap: wrap; }

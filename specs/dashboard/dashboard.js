@@ -190,7 +190,10 @@
     if (!item) return "";
     const select = viewId && item.selectUnit != null
       ? ` data-dashboard-select="${escape(item.selectUnit)}"` : "";
-    return `<span class="dashboard-action-link"><a class="dashboard-button${primary ? " dashboard-button-primary" : ""}" href="${escape(resolveLink(item.href))}"${select}>${escape(item.label || item.title || t("view"))} <span aria-hidden="true">→</span></a>${item.command ? ` <code class="dashboard-command">${escape(item.command)}</code>` : ""}</span>`;
+    const icon = item.icon || (item.href.startsWith("agent:") ? "▶" : "");
+    const text = escape(item.label || item.title || t("view"));
+    const label = icon ? `<span class="dashboard-button-label"><span class="dashboard-button-icon" aria-hidden="true">${escape(icon)}</span> ${text}</span>` : text;
+    return `<span class="dashboard-action-link"><a class="dashboard-button${primary ? " dashboard-button-primary" : ""}" href="${escape(resolveLink(item.href))}"${select}>${label} <span aria-hidden="true">→</span></a>${item.command ? ` <code class="dashboard-command">${escape(item.command)}</code>` : ""}</span>`;
   }
 
   function hero(input, viewId) {
@@ -219,7 +222,7 @@
   }
 
   function action(input) {
-    return `<article class="dashboard-action"><h4>${input.icon ? `<span aria-hidden="true">${escape(input.icon)}</span> ` : ""}${escape(input.title)}</h4><p>${escape(input.description)}</p>${actionLink(input)}</article>`;
+    return `<article class="dashboard-action"><h4>${escape(input.title)}</h4><p>${escape(input.description)}</p>${actionLink(input)}</article>`;
   }
 
   function unit(input, selected = false, viewId) {
