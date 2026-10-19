@@ -24,6 +24,7 @@ const required = {
   "tasks/validate-course.md": ["Chat summary", "result_rules"],
   "tasks/update-dashboard.md": ["punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["Change path after a check"],
+  "tasks/validate-syntax.md": ["Findings returned to a caller never contain line numbers"],
   "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback"],
   "data/agent-links.md": ["Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
   "data/liascript-cheat-sheet.md": ["data-solution-button=\"false\""],

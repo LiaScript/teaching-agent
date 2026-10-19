@@ -19,16 +19,16 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 
 ## Output
 
-- A structured findings list: rule, ✅/❌, line reference where possible.
-- **When called as a sub-procedure:** return the findings list to the calling task — do not write to `journal.md` directly; the caller decides where the combined report lands (e.g. inside `#### Validation Report`).
-- **When run standalone via `:validate-syntax`:** report the findings to the instructor directly in chat; no `journal.md` write.
+- A structured findings list: rule, ✅/❌, and the page title (slide heading) of the material where the finding is.
+- **When called as a sub-procedure:** return the findings list to the calling task — do not write to `journal.md` directly; the caller decides where the combined report lands (e.g. inside `#### Validation Report`). Findings returned to a caller never contain line numbers — the validation report refers to page titles only (`templates/session-validation.yaml`), and `validate-journal.mjs` rejects reports that cite lines.
+- **When run standalone via `:validate-syntax`:** report the findings to the instructor directly in chat; no `journal.md` write. Here a line number may follow the page title in parentheses.
 
 ## Steps
 
 1. Resolve the material document (or the given narrower scope) per the Inputs above.
 2. Load `data/liascript-cheat-sheet.md` as the syntax reference.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as second reference for constructs the cheat sheet does not cover and for unclear findings. The check list below and the findings format stay as defined here.
-3. Run every check below against the material, noting rule, ✅/❌, and line reference where possible.
+3. Run every check below against the material, noting rule, ✅/❌, and the page title of each finding.
 4. If invoked as a sub-procedure: return the findings list to the caller — do not ask the instructor anything.
 5. If invoked directly: report the findings using the Output Format below.
 
@@ -54,18 +54,18 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 Syntax check: {material path}
 
 1. Metadata header — ✅/❌ [findings]
-2. Heading structure — ✅/❌ [findings, line refs]
-3. Code blocks — ✅/❌ [findings, line refs]
-4. Alerts — ✅/❌ [findings, line refs]
-5. Citations — ✅/❌ [findings, line refs]
-6. Animations & TTS — ✅/❌ [findings, line refs]
-7. Media alt text — ✅/❌ [findings, line refs]
-8. Diagrams — ✅/❌ [findings, line refs]
-9. Formulas — ✅/❌ [findings, line refs]
-10. Quizzes & surveys — ✅/❌ [findings, line refs]
-11. Includes — ✅/❌ [findings, line refs]
-12. Variables & macros — ✅/❌ [findings, line refs]
-13. HTML blocks — ✅/❌ [findings, line refs]
+2. Heading structure — ✅/❌ [findings, page titles]
+3. Code blocks — ✅/❌ [findings, page titles]
+4. Alerts — ✅/❌ [findings, page titles]
+5. Citations — ✅/❌ [findings, page titles]
+6. Animations & TTS — ✅/❌ [findings, page titles]
+7. Media alt text — ✅/❌ [findings, page titles]
+8. Diagrams — ✅/❌ [findings, page titles]
+9. Formulas — ✅/❌ [findings, page titles]
+10. Quizzes & surveys — ✅/❌ [findings, page titles]
+11. Includes — ✅/❌ [findings, page titles]
+12. Variables & macros — ✅/❌ [findings, page titles]
+13. HTML blocks — ✅/❌ [findings, page titles]
 
 Result: PASS / FAIL (N issues)
 ```
