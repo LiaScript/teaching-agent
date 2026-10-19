@@ -1,5 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import vm from "node:vm";
 import "./dashboard.js";
 
 const dashboard = globalThis.LiaDashboard;
@@ -115,6 +117,42 @@ test("texts follow the course language; English is the fallback", () => {
   assert.match(dashboard.renderComponent("View", "de1", { lang: "de", title: "X" }), /Fortschritt/);
   assert.match(dashboard.renderComponent("View", "en1", { lang: "en", title: "X" }), /Progress/);
   assert.match(dashboard.renderComponent("View", "xx1", { lang: "fr", title: "X" }), /Progress/);
+});
+
+test("labels translate the fixed texts for any course language", () => {
+  const html = dashboard.renderComponent("View", "fr1", { lang: "fr", title: "X",
+    labels: { progress: "Progression", unitsHint: "Choisissez une unité.", "state.done": "Terminé",
+      progressText: { one: "{done} sur {total} {unit} est terminé", many: "{done} sur {total} {unit} sont terminés" },
+      steps: "{done} sur {total} étapes" },
+    unitLabel: { one: "module", many: "modules" },
+    units: [{ id: "1", title: "A", state: "done" }, { id: "2", title: "B", state: "current", process: { steps: [{ title: "S", state: "done" }] } }] });
+  assert.match(html, /<h3>Progression<\/h3>/);
+  assert.match(html, /Choisissez une unité\./);
+  assert.match(html, /Terminé/);
+  assert.match(html, /1 sur 2 modules est terminé/);
+  assert.match(html, /1 sur 1 étapes/);
+  assert.match(html, /Course plan/, "keys without a label keep the built-in fallback");
+});
+
+test("labels are checked: unknown keys, wrong shapes and placeholders fail", () => {
+  assert.throws(() => dashboard.buildModel({ labels: "Progression" }), /labels/);
+  assert.throws(() => dashboard.buildModel({ labels: { progres: "Progression" } }), /progres/);
+  assert.throws(() => dashboard.buildModel({ labels: { progress: { one: "a", many: "b" } } }), /progress/);
+  assert.throws(() => dashboard.buildModel({ labels: { steps: { one: "{done}" } } }), /steps/);
+  assert.throws(() => dashboard.buildModel({ labels: { steps: "{fait} sur {total}" } }), /\{fait\}/);
+  assert.doesNotThrow(() => dashboard.buildModel({ labels: { internal: { one: "{n} note", many: "{n} notes" } } }));
+});
+
+test("labels survive switching the selected unit", () => {
+  const listeners = [];
+  const root = { dataset: { dashboardView: "fr2" }, innerHTML: "", querySelectorAll: () => [] };
+  const page = { CustomEvent: class {}, document: { addEventListener: (type, fn) => listeners.push(fn), dispatchEvent: () => {}, documentElement: {} } };
+  vm.runInNewContext(readFileSync(new URL("./dashboard.js", import.meta.url), "utf8"), page);
+  page.LiaDashboard.renderComponent("View", "fr2", { lang: "fr", title: "X", labels: { result: "Disponible :" },
+    units: [{ id: "1", title: "A", state: "current" }, { id: "2", title: "B", state: "planned", process: { steps: [{ title: "S", state: "done", result: "R" }] } }] });
+  const control = { dataset: { dashboardSelect: "2" }, closest: () => root };
+  listeners.forEach(fn => fn({ target: { closest: () => control }, preventDefault() {} }));
+  assert.match(root.innerHTML, /Disponible :/);
 });
 
 test("unit label follows the course terminology", () => {

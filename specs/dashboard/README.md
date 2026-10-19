@@ -321,7 +321,7 @@ Zusätzliche Aktionen erscheinen aufklappbar. Eine leere Liste erzeugt keinen un
 2. `Dashboard.View` hält Zähler, Fortschrittsanzeige und Auswahl konsistent. Unbekannte Zustände und doppelte Einheiten-IDs erzeugen einen sichtbaren Datenhinweis.
 3. Eine Auswahl verändert ausschließlich die Ansicht. Es gibt keine Schreibzugriffe auf Journal, Materialien oder Lernfortschritt.
 4. Lokale CSS-Variablen, responsives Layout und ein dunkles Farbschema sind enthalten. Eine Anpassung an manuell gewählte LiaScript-Themes ist ein späterer Schritt.
-5. Die Oberfläche verwendet zunächst deutsche Standardbeschriftungen. Titel, Gründe und mehrere Bereichsbeschriftungen kommen aus den Daten.
+5. Feste Beschriftungen sind auf Deutsch und Englisch eingebaut (Sprache aus `lang`, sonst aus dem `lang` der Seite, Rückfall: Englisch). Für jede andere Sprache liefert das Feld `labels` die Beschriftungen. Titel, Gründe und mehrere Bereichsbeschriftungen kommen aus den Daten.
 
 Für eine spätere öffentliche Distribution sollen sowohl ein fester Tag/Commit als auch die aktuelle Entwicklungsfassung angeboten werden. Der Prototyp wird zunächst lokal importiert.
 
@@ -338,4 +338,21 @@ link: ./dashboard.css
 
 Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, klein, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <entwurf.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
 
-Optionale Felder für die Kursterminologie: `unitsTitle` (Überschrift der Einheitenliste) und `unitLabel: {one, many}` (Wörter in der Fortschrittszeile, z. B. „1 von 4 Kapiteln“). Die Browserprüfung (`check-browser.mjs`) braucht feste Testdaten (leeres und gefülltes Journal) und gehört deshalb zum Testaufbau, nicht in `specs/`.
+Optionale Felder für die Kursterminologie: `unitsTitle` (Überschrift der Einheitenliste) und `unitLabel: {one, many}` (Wörter in der Fortschrittszeile, z. B. „1 von 4 Kapiteln“).
+
+Optionales Feld `labels` für Kurssprachen ohne eingebaute Beschriftungen: ein Objekt, das feste Texte nach Schlüssel ersetzt. Fehlende Schlüssel fallen auf die eingebaute Sprache zurück. Ein spezielleres Datenfeld (`eyebrow`, `unitsTitle`, `progressTitle`, `decisionsTitle`, `exploreTitle`, `courseLabel`, `emptyUnits`) hat Vorrang vor `labels`.
+
+- Einfache Texte: `state.planned`, `state.current`, `state.draft`, `state.review`, `state.revision`, `state.done`, `state.optional`, `view`, `eyebrow`, `next`, `why`, `progress`, `progressEmpty`, `units`, `unitsHint`, `unitsEmpty`, `unitsEmptyNext`, `course`, `courseSummary`, `showProcess`, `processEyebrow`, `processTitle`, `result`, `nextStep`, `processEmpty`, `plan`, `decide`, `prepare`, `how`, `preview`, `explore`, `sections`, `error`.
+- Zähltexte, als Text oder als `{one, many}` (gewählt nach der ersten Zahl): `progressText` mit `{done}`, `{total}`, `{unit}` (Wort aus `unitLabel`, gewählt nach `{total}`), `steps` mit `{done}`, `{total}`, `internal` mit `{n}`.
+
+```json
+"labels": {
+  "progress": "Progression",
+  "progressText": { "one": "{done} sur {total} {unit} est terminé", "many": "{done} sur {total} {unit} sont terminés" },
+  "steps": "{done} sur {total} étapes"
+}
+```
+
+Unbekannte Schlüssel, falsche Formen und unbekannte Platzhalter erzeugen einen Datenhinweis; `write-dashboard.mjs` und `validate-journal.mjs` lehnen den Datensatz dann ab.
+
+Die Browserprüfung (`check-browser.mjs`) braucht feste Testdaten (leeres und gefülltes Journal) und gehört deshalb zum Testaufbau, nicht in `specs/`.

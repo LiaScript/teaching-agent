@@ -3299,7 +3299,10 @@ Run this task automatically after any task that changes project state:
    block in one step and runs the validation of step 9; never edit the block
    field by field, never with shell heredocs or inline scripts. Fill
    `unitLabel` (`{one, many}`) and `unitsTitle` from `## Course Context` →
-   Terminology in the course language. Keep the translated suffix of
+   Terminology in the course language. If the course language is neither
+   German nor English, also fill `labels` with all fixed texts of the library
+   in the course language (keys and placeholders: `specs/dashboard/README.md`
+   → `labels`); otherwise leave `labels` out. Keep the translated suffix of
    `## Sessions` and `## Agenda` in line with that terminology and update
    `links` in the same run. Ensure the template import exists once in the header; CSS and
    JavaScript are owned by the library. Document the template in `## Templates`
@@ -4732,6 +4735,7 @@ template:
     notice: 'Optional: provisional sample data or pending decisions'
     unitsTitle: 'Label from `## Course Context` → Terminology (sessions-called)'
     unitLabel: '{one, many}: the word for one unit and for several, in the course language, from `## Course Context` → Terminology (sessions-called) — used in the progress line'
+    labels: 'Only when the course language is neither German nor English: every fixed text of the library translated, keyed as listed in `specs/dashboard/README.md` → `labels`; counted texts as {one, many} with the placeholders listed there'
     units:
       - id: 'Stable number from Sessions / Agenda'
         title: 'Unit title'

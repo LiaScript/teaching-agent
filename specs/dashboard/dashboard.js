@@ -12,7 +12,8 @@
       "state.review": "Zur Durchsicht", "state.revision": "Überarbeiten", "state.done": "Abgeschlossen", "state.optional": "Bei Bedarf",
       view: "Ansehen", eyebrow: "Unterrichtsplan", next: "Als Nächstes:", why: "Warum?", progress: "Fortschritt",
       progressEmpty: "Noch keine Einheit angelegt. Der Fortschritt wird sichtbar, sobald Einheiten entstehen.",
-      progressText: (done, total, u = { one: "Einheit", many: "Einheiten" }) => `${done} von ${total} ${total === 1 ? `${u.one} ist` : `${u.many} sind`} abgeschlossen`,
+      unitWords: { one: "Einheit", many: "Einheiten" },
+      progressText: (done, total, u = TEXT.de.unitWords) => `${done} von ${total} ${total === 1 ? `${u.one} ist` : `${u.many} sind`} abgeschlossen`,
       units: "Meine Einheiten", unitsHint: "Antippen, um den Arbeitsstand zu sehen.",
       unitsEmpty: "Noch keine Unterrichtseinheit angelegt.", unitsEmptyNext: "Zuerst stimmen wir die Lernziele und die Lernaktivitäten ab.",
       course: "Gesamter Kurs", courseSummary: "Überblick über die Kursplanung",
@@ -29,7 +30,8 @@
       "state.review": "In review", "state.revision": "Needs revision", "state.done": "Done", "state.optional": "Optional",
       view: "Open", eyebrow: "Course plan", next: "Next:", why: "Why?", progress: "Progress",
       progressEmpty: "No unit created yet. Progress appears as soon as units exist.",
-      progressText: (done, total, u = { one: "unit", many: "units" }) => `${done} of ${total} ${total === 1 ? `${u.one} is` : `${u.many} are`} done`,
+      unitWords: { one: "unit", many: "units" },
+      progressText: (done, total, u = TEXT.en.unitWords) => `${done} of ${total} ${total === 1 ? `${u.one} is` : `${u.many} are`} done`,
       units: "My units", unitsHint: "Select one to see its progress.",
       unitsEmpty: "No unit created yet.", unitsEmptyNext: "First we agree on the learning objectives and activities.",
       course: "Whole course", courseSummary: "Overview of the course planning",
@@ -42,14 +44,55 @@
       error: "The overview could not be displayed."
     }
   };
+  // Placeholders a counted label may use, in the order of the arguments of t().
+  const COUNTED = { progressText: ["done", "total"], steps: ["done", "total"], internal: ["n"] };
+  const PLACEHOLDERS = { progressText: ["done", "total", "unit"], steps: ["done", "total"], internal: ["n"] };
   let lang = "en";
+  let labels = {};
   function useLanguage(input) {
     const wanted = String(input?.lang || global.document?.documentElement?.lang || "en").slice(0, 2).toLowerCase();
     lang = Object.hasOwn(TEXT, wanted) ? wanted : "en";
+    labels = input?.labels && typeof input.labels === "object" && !Array.isArray(input.labels) ? input.labels : {};
+  }
+  function fill(key, label, args) {
+    const [count, total, unitLabel] = args;
+    const template = typeof label === "string" ? label : label[count === 1 ? "one" : "many"];
+    const values = Object.fromEntries(COUNTED[key].map((name, index) => [name, args[index]]));
+    if (key === "progressText") {
+      const words = unitLabel?.one && unitLabel?.many ? unitLabel : TEXT[lang].unitWords ?? TEXT.en.unitWords;
+      values.unit = total === 1 ? words.one : words.many;
+    }
+    return template.replace(/\{(\w+)\}/g, (match, name) => Object.hasOwn(values, name) ? values[name] : match);
   }
   function t(key, ...args) {
+    if (Object.hasOwn(labels, key) && validLabel(key, labels[key])) {
+      return Object.hasOwn(COUNTED, key) ? fill(key, labels[key], args) : labels[key];
+    }
     const value = TEXT[lang][key] ?? TEXT.en[key];
     return typeof value === "function" ? value(...args) : value;
+  }
+  function validLabel(key, value) {
+    if (typeof value === "string") return value.trim() !== "";
+    return Object.hasOwn(COUNTED, key) && typeof value?.one === "string" && typeof value?.many === "string";
+  }
+  // Own labels for the fixed texts, so that every course language can be shown.
+  function labelsData(input) {
+    if (input == null) return {};
+    if (typeof input !== "object" || Array.isArray(input)) throw new Error("labels must be an object of texts.");
+    Object.entries(input).forEach(([key, value]) => {
+      if (key === "unitWords" || !Object.hasOwn(TEXT.en, key)) throw new Error(`Unknown label: ${key}`);
+      if (!validLabel(key, value)) {
+        throw new Error(Object.hasOwn(COUNTED, key)
+          ? `Label ${key} must be a text or {one, many}.` : `Label ${key} must be a text.`);
+      }
+      const texts = typeof value === "string" ? [value] : [value.one, value.many];
+      texts.forEach(text => (text.match(/\{[^}]*\}/g) ?? []).forEach(placeholder => {
+        if (!(PLACEHOLDERS[key] ?? []).includes(placeholder.slice(1, -1))) {
+          throw new Error(`Label ${key} uses the unknown placeholder ${placeholder}.`);
+        }
+      }));
+    });
+    return input;
   }
   const views = new Map();
   const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({
@@ -176,7 +219,8 @@
       explore: (input.explore ?? []).map(actionData),
       links: (input.links ?? []).map(actionData),
       decisions: decisionsData(input.decisions),
-      plan: planData(input.plan)
+      plan: planData(input.plan),
+      labels: labelsData(input.labels)
     };
   }
 
@@ -326,7 +370,7 @@
       if (!isCourse && !model?.units.some(item => item.id === selected)) return;
       event.preventDefault();
       model.selected = selected;
-      useLanguage({ lang: model.lang });
+      useLanguage(model);
       root.innerHTML = viewContent(model, id);
       Array.from(root.querySelectorAll("button[data-dashboard-select]"))
         .find(button => button.dataset.dashboardSelect === selected)?.focus({ preventScroll: true });
