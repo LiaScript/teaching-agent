@@ -18,7 +18,7 @@ const required = {
   "tasks/scaffold-course.md": ["Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
   "tasks/create-outline.md": ["Start from the instructor's goal", "Repeat this time check after every revision"],
   "tasks/create-didactics.md": ["do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`", "merge, never overwrite", "data-from=\"didactics\""],
-  "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary"],
+  "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary", "If later: stop here", "do not ask about methods"],
   "tasks/create-session-skeleton.md": ["data-key", "Show the new unit", "can be solved with the material the learners get"],
   "tasks/coauthor-materials.md": ["Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first"],
   "tasks/validate-course.md": ["Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
@@ -32,7 +32,7 @@ const required = {
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["Findings returned to a caller never contain line numbers", "is never ❌ for it"],
-  "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback"],
+  "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback", "Preview required"],
   "data/agent-links.md": ["Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
   "data/liascript-cheat-sheet.md": ["data-solution-button=\"false\""],
   "templates/course-context.yaml": ["layout:", "Target Group"],
@@ -42,8 +42,8 @@ const required = {
   "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "never\n        relative to another optional block"],
   "templates/session-validation.yaml": ["Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
   "templates/journal.md": ["journal-start", "Target Group", "## Publishing"],
-  "workflows/course-development.yaml": [":try-as-learner", "change path", "One way to start", "write-dashboard.mjs"],
-  "agents/teaching-agent.yaml": [":try-as-learner", "starts with `## Outline`", "read a task file **completely**"],
+  "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
+  "agents/teaching-agent.yaml": [":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**"],
 };
 
 for (const [file, phrases] of Object.entries(required)) {
@@ -76,6 +76,22 @@ test("the workflow quick reference lists every agent command with its signature"
     assert.deepEqual(keys.filter(key => !listed.includes(key)), [], `${agent}: missing in quick_reference`);
     assert.deepEqual(listed.filter(key => !keys.includes(key) && !generic.has(key.split(" ")[0])), [], `${agent}: unknown in quick_reference`);
   }
+});
+
+test("Artist tasks that write journal.md refresh the dashboard and are listed as its triggers", () => {
+  const triggers = read("tasks/update-dashboard.md").split("## Automatic Trigger")[1]?.split("\n## ")[0] ?? "";
+  for (const task of ["create-visuals", "create-logo", "create-image", "generate-image"]) {
+    assert.ok(read(`tasks/${task}.md`).includes("tasks/update-dashboard.md"), `${task} does not run update-dashboard`);
+    assert.ok(triggers.includes(`:${task}`), `${task} is missing in the update-dashboard trigger list`);
+  }
+});
+
+test("session methods are chosen by the agent, never asked for per session", () => {
+  const methods = read("data/didactic-methods.md");
+  for (const old of ["confirms or changes it", "confirms, edits, or opts out", "default pre-selected"]) {
+    assert.ok(!methods.includes(old), `data/didactic-methods.md still says "${old}"`);
+  }
+  assert.ok(!/Ask per session/i.test(read("tasks/create-agenda.md")), "create-agenda asks per session again");
 });
 
 test("reports inside sessions and the course summary use bold labels, not ##### headings", () => {
