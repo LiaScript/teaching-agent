@@ -7,15 +7,15 @@ Creates professional, actionable prompts for AI image generators that maintain v
 
 ## Command
 
-`:create-image {number} {type} {description}` — `{number} {type}` identify the target session; `{description}` is what should be visualized.
+`:create-image {number?} {description}` — `{number}` identifies the target session; `{description}` is what should be visualized.
 
-- If `{number} {type}` are omitted and exactly **one** session exists in `journal.md` → `## Sessions`, use that session without asking.
-- If `{number} {type}` are omitted and **multiple** sessions exist, ask which session the image belongs to (numbered list).
+- If `{number}` is omitted and exactly **one** session exists in `journal.md` → `## Sessions`, use that session without asking.
+- If `{number}` is omitted and **multiple** sessions exist, ask which session the image belongs to (numbered list).
 
 ## Inputs
 
 - User description: what should be visualized (provided as command parameter)
-- Target session: `{number} {type}` → the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
+- Target session: `{number}` → the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - Image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet)
 - Website color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet)
 - Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)

@@ -255,7 +255,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 ## Sessions
 
 <!-- class="journal-actions" -->
-[▶️ New session](agent:teaching/create-session) `:create-session <number> <type>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
+[▶️ New session](agent:teaching/create-session) `:create-session <number>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
 

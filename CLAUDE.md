@@ -53,15 +53,15 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 | `:manage-templates {name?}` | `specs/tasks/manage-templates.md` | add/update LiaScript template imports in the project header and document usag… |
 | `:update-dashboard` | `specs/tasks/update-dashboard.md` | regenerate the derived `journal.md` → `## Dashboard` after project state changes |
 | `:preview {file?} {slide?}` | `specs/tasks/preview.md` | show a course file (default `journal.md`) in the LiaScript DevServer preview … |
-| `:create-session {number} {type} {title?}` | `specs/tasks/create-session-skeleton.md` | — |
-| `:promote-session {number} {type}` | `specs/tasks/promote-session.md` | — |
-| `:validate-syntax {number} {type}` | `specs/tasks/validate-syntax.md` | full LiaScript syntax check for one session; also called internally by valida… |
-| `:build-session {number} {type}` | `specs/tasks/build-session.md` | orchestrates promote-session → validate-course → persona review → Artist-Agen… |
+| `:create-session {number} {title?}` | `specs/tasks/create-session-skeleton.md` | — |
+| `:promote-session {number}` | `specs/tasks/promote-session.md` | — |
+| `:validate-syntax {number}` | `specs/tasks/validate-syntax.md` | full LiaScript syntax check for one session; also called internally by valida… |
+| `:build-session {number}` | `specs/tasks/build-session.md` | orchestrates promote-session → validate-course → persona review → Artist-Agen… |
 | `:coauthor-materials {number?}` | `specs/tasks/coauthor-materials.md` | for session {number} if given |
-| `:quick-fix {number} {type} {description}` | `specs/tasks/quick-fix.md` | targeted single-issue correction without full co-authoring session |
+| `:quick-fix {number} {description}` | `specs/tasks/quick-fix.md` | targeted single-issue correction without full co-authoring session |
 | `:try-as-learner {number} {companion?}` | `specs/tasks/try-as-learner.md` | try one unit as a learner in the preview, with a learning companion (find_tea… |
 | `:validate-course` | `specs/tasks/validate-course.md` | no args: full course check before publishing and replace validation reports i… |
-| `:validate-course {number} {type}` | `specs/tasks/validate-course.md` | in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions` |
+| `:validate-course {number}` | `specs/tasks/validate-course.md` | in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions` |
 | `:assemble-bundle` | `specs/tasks/assemble-bundle.md` | — |
 | `:save-notes {type?} {title?}` | `specs/tasks/save-notes.md` | summarize the current discussion and append it to `journal.md` → `## Notes Ba… |
 | `:save-decision {title}` | `specs/tasks/save-notes.md` | save a structured decision record (ADR format) and append it to `journal.md` … |
@@ -106,7 +106,7 @@ The LiaScript skills (github.com/LiaScript/skills) are used only if already inst
 
 ## Agent Links (LiaScript DevServer)
 
-`journal.md` opened in the LiaScript DevServer (`liadev --mcp`) turns every link `agent:<agent>/<command>?<placeholder>=<value>` into a button: a click sends a `command` event to this session. `<agent>` is the stem of `agents/{agent}-agent.yaml`, `<command>` a key of its `commands:` map without the colon, e.g. `agent:teaching/build-session?number=3&type=module`; switching agents is `agent:artist/switch` (reserved, means `:agent artist`).
+`journal.md` opened in the LiaScript DevServer (`liadev --mcp`) turns every link `agent:<agent>/<command>?<placeholder>=<value>` into a button: a click sends a `command` event to this session. `<agent>` is the stem of `agents/{agent}-agent.yaml`, `<command>` a key of its `commands:` map without the colon, e.g. `agent:teaching/build-session?number=3`; switching agents is `agent:artist/switch` (reserved, means `:agent artist`).
 
 - MCP gate: only when the `liascript` tools `get_state`, `goto` and `chat` are available, handle `command` events and offer next steps as `agent:` links in the preview chat — after typed and clicked commands alike. Without them, stay in the terminal.
 - Start order when the gate is open, before anything else: (1) `get_state`, (2) `set_agent` for all four agents, (3) subscribe to browser events (Monitor on `curl -sN <get_state.events>` with the longest timeout, restarted when it expires, never two at once), (4) `read_chat` and answer any open message first. Only then read `journal.md` and detect skills.

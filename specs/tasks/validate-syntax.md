@@ -6,13 +6,14 @@ The single source of truth for LiaScript syntax validation of one material docum
 
 ## Command
 
-`:validate-syntax {number} {type}` — checks LiaScript syntax for one session's material document.
+`:validate-syntax {number}` — checks LiaScript syntax for one session's material document.
 
 This task is also invoked internally (not just via the command) by `tasks/validate-course.md` (session and course mode), `tasks/quick-fix.md` (mini-validation), and `tasks/build-session.md` (content loop) — those tasks call it as a sub-procedure rather than repeating the checks below.
 
 ## Inputs
 
-- `number`, `type`
+- `number`
+- the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - The material document for this session — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `data/liascript-cheat-sheet.md` as the syntax reference
 - Optionally, a narrower scope (e.g. "only the changed section") when called by `quick-fix.md`

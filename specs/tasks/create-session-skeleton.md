@@ -8,7 +8,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 ## Inputs
 
 - number: session number
-- type: session type slug, one of `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`)
+- the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - title (optional)
 - Didactic concept from `journal.md` → `## Didactics`
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
@@ -23,10 +23,10 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 
 ## Steps
 
-1. Collect session number, type, and optional title. If the type slug is duplicated or equals a terminology word (`node specs/dashboard/validate-journal.mjs` reports `slug`), clean it up first in `## Didactics` and `## Agenda` (one line to the instructor) — before any material references it.
+1. Collect session number and optional title. Resolve the session's type from the number (`data/session-types.md` → "Resolving a session's type"); without an agenda this is the one place that may ask for it.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
-   - Look up the given type in `journal.md` → `## Didactics` → `__Session Types:__`. If it doesn't match a defined slug, stop and ask — do not invent a type on the fly.
+   - Look up the resolved type in `journal.md` → `## Didactics` → `__Session Types:__`. If it doesn't match a defined slug, stop and ask — do not invent a type on the fly.
    - Note its `Erforderlich` (required elements) checklist; Activities/Content in step 5 must satisfy it.
    - Resolve the session's Method: if `journal.md` → `## Agenda` exists and has a Method column, use this session's value from there; otherwise use `journal.md` → `## Didactics` → `__Default Session Method:__`. If that default is `none`, skip Method entirely — no line is stored, no checklist applies. Note the method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Type checklist above.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**

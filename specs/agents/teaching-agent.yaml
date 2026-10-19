@@ -104,7 +104,7 @@ agent_links:
     `agent:<agent>/<command>?<placeholder>=<value>` into a button: a click sends a `command`
     event to this session. `<agent>` is the stem of `agents/{agent}-agent.yaml`, `<command>`
     a key of its `commands:` map without the colon, e.g.
-    `agent:teaching/build-session?number=3&type=module`; switching agents is
+    `agent:teaching/build-session?number=3`; switching agents is
     `agent:artist/switch` (reserved, means `:agent artist`).
   rules:
     - "MCP gate: only when the `liascript` tools `get_state`, `goto` and `chat` are available, handle `command` events and offer next steps as `agent:` links in the preview chat — after typed and clicked commands alike. Without them, stay in the terminal."
@@ -259,15 +259,15 @@ commands:
   :manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports in the project header and document usage in `journal.md` → `## Templates`"
   :update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
   :preview {file?} {slide?}: "run task `tasks/preview.md` — show a course file (default `journal.md`) in the LiaScript DevServer preview via the `liascript` MCP"
-  :create-session {number} {type} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
-  :promote-session {number} {type}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
-  :validate-syntax {number} {type}: "run task `tasks/validate-syntax.md` — full LiaScript syntax check for one session; also called internally by validate-course, quick-fix, build-session"
-  :build-session {number} {type}: "run task `tasks/build-session.md` — orchestrates promote-session → validate-course → persona review → Artist-Agent images as one bounded loop per session"
+  :create-session {number} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
+  :promote-session {number}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
+  :validate-syntax {number}: "run task `tasks/validate-syntax.md` — full LiaScript syntax check for one session; also called internally by validate-course, quick-fix, build-session"
+  :build-session {number}: "run task `tasks/build-session.md` — orchestrates promote-session → validate-course → persona review → Artist-Agent images as one bounded loop per session"
   :coauthor-materials {number?}: "run task `tasks/coauthor-materials.md` — for session {number} if given"
-  :quick-fix {number} {type} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
+  :quick-fix {number} {description}: "run task `tasks/quick-fix.md` — targeted single-issue correction without full co-authoring session"
   :try-as-learner {number} {companion?}: "run task `tasks/try-as-learner.md` — try one unit as a learner in the preview, with a learning companion (find_teacher, learner view), then debrief"
-  :validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number} {type}: session-level syntax + content check after coauthor"
-  :validate-course {number} {type}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
+  :validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number}: session-level syntax + content check after coauthor"
+  :validate-course {number}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
   :assemble-bundle: "run task `tasks/assemble-bundle.md`"
   :save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
   :save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"

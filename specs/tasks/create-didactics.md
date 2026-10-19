@@ -34,7 +34,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - **single-lesson**: default to one type named after `lectures-called`; skip the discussion unless the instructor wants to split the lesson into sub-types.
    - **all other course types**: 🎛️ propose the default Session Types for this course type from the table in `data/session-types.md`, each with slug, one-line criterion, and a 2–3 item required-elements checklist. Let the instructor confirm or edit.
    - 💬 Grounding check (mandatory, do not skip): ask the instructor to name one concretely planned session and which Session Type it would get, and why. If the answer doesn't fit any proposed type, revise the types before continuing — don't let an unfitting default stand.
-   - Display names in the course language; slugs as defined in the template layout (lowercase ASCII words in the course language, not English defaults).
+   - Display names in the course language; slugs as defined in the template layout (lowercase ASCII words in the course language, not English defaults). With more than one type, no display name equals a Terminology word (`sessions-called`, `lectures-called`) — choose another name before proposing (e.g. "Lernmodul" when units are called "Modul").
 
 3c. Choose a **Default Session Method** yourself (several may be combined as "a + b") from `data/didactic-methods.md` → "Session Methods", based on course type — **`none`** is allowed. Do not ask; mention it in plain words in the summary only if it changes what the learners do. This becomes the course-wide default; `:create-agenda` can override it per session later.
 4. 💬 Describe the instructor persona (expertise, role, background) — free text, discuss with instructor.

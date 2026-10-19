@@ -5,7 +5,7 @@
 Checks the consistency, completeness, and LiaScript syntax correctness of the project memory and course materials.
 Can be run in two modes:
 
-- **Session mode** (`:validate-course {number} {type}`) — checks a single material file after co-authoring
+- **Session mode** (`:validate-course {number}`) — checks a single material file after co-authoring
 - **Course mode** (`:validate-course`) — checks the entire course before publishing
 
 ## Inputs
@@ -44,7 +44,7 @@ Rules:
 
 ---
 
-## Session Mode Steps (`:validate-course {number} {type}`)
+## Session Mode Steps (`:validate-course {number}`)
 
 1. Load `journal.md` → `## Course Context` for course type and conventions.
 2. Load `journal.md` → `## Agenda` to get the learning objectives for this session.
@@ -170,7 +170,7 @@ Rules:
 
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
 11. After all session validation reports and the latest summary are created: suggest next step.
-    - If issues exist: "Open `:coauthor-materials {number} {type}` to resolve the issues in Session X, then rerun `:validate-course`."
+    - If issues exist: "Open `:coauthor-materials {number}` to resolve the issues in Session X, then rerun `:validate-course`."
     - If no issues: "Course is ready for publishing. Next step: `:agent development` → `:create-project`"
 
 ---

@@ -21,7 +21,7 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 ```
 
 - **Display name** — free text, in the course's language/terminology.
-- **Slug** — short, stable, filename-safe (lowercase, no spaces). Computed once when the type is defined; do not rename later without checking existing file references (same rule as the session-folder slug in `data/file-structure-modes.md`).
+- **Slug** — short, stable, filename-safe (lowercase, no spaces). It appears only in technical details, never in commands or links. Computed once when the type is defined; do not rename later without checking existing file references (same rule as the session-folder slug in `data/file-structure-modes.md`).
 - **Criterion** — one sentence: what makes a session this type, not another.
 - **Erforderlich** (required elements) — 2–3 concrete, checkable items. This is what turns the type from a label into something `:validate-course` can actually check.
 
@@ -36,11 +36,22 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 | workshop | **Input** (`input`) — kurzer Theorieblock · **Aktivität** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
 | single-lesson | Usually **one** type only (named after `lectures-called`); skip the discussion step unless the instructor wants to split the lesson into sub-types |
 
+## Resolving a session's type
+
+Session commands identify a session by its number alone (`:promote-session 3`, `:validate-course 3`, `:review-as-persona Finn 3`); the type is never a command parameter, so it can neither be mistyped nor contradict the plan. Resolve it in this order:
+
+1. The session's subsection in `journal.md` → `## Sessions` (`**Type:**` in its technical details), once a skeleton exists.
+2. Otherwise the session's row in the technical table of `journal.md` → `## Agenda`.
+3. Otherwise (only `:create-session` without an agenda): if the course has exactly one Session Type, use it; else ask the instructor once, offering the display names from `## Didactics` → `__Session Types:__`.
+
+- If subsection and agenda disagree, say so and ask which is right before continuing — never pick one silently.
+- An extra type argument (older typed commands, a `type` parameter in older `agent:` links) is accepted only if it matches the resolved type; otherwise stop and ask.
+
 ## Where the slug is used
 
 - `journal.md` → `## Sessions` overview table `Type` column, and `**Type:** {slug}` inside each session subsection
 - `journal.md` → `## Agenda` sessions table `Type` column
-- `:create-session`, `:promote-session`, `:quick-fix`, `:review-as-persona` — the `type` input parameter is one of the slugs defined here, not a hardcoded `lecture`/`exercise`
+- `:create-session`, `:promote-session`, `:build-session`, `:validate-course`, `:validate-syntax`, `:quick-fix`, `:review-as-persona`, `:create-image` — resolve the type from the session number (see "Resolving a session's type"); it is one of the slugs defined here, never a hardcoded `lecture`/`exercise`
 - Material/asset paths never contain the type: they use the title slug (`materials/{number}-{slug}/`, see `data/file-structure-modes.md`)
 
 ## Enforcement loop

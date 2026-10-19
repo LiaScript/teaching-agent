@@ -7,7 +7,8 @@ Converts a **Session** into a detailed **Session Material**.
 
 ## Inputs
 
-- number, type (session type slug from `journal.md` → `## Didactics` → `__Session Types:__`, see `data/session-types.md`)
+- number
+- the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - skeleton: matching `### {number}. {title}` subsection from `journal.md` → `## Sessions`
 - didactics: content from `journal.md` → `## Didactics`
 - agenda: content from `journal.md` → `## Agenda`

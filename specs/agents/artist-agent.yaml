@@ -98,7 +98,7 @@ agent_links:
 commands:
   :create-visuals: "run task `tasks/create-visuals.md` with `templates/visuals.yaml`"
   :create-logo: "run task `tasks/create-logo.md`"
-  :create-image {number} {type} {description}: "run task `tasks/create-image.md` — generate prompt and save as a `<section>` in the target session's `#### Images` block in journal.md (no browser required). Session args optional when only one session exists."
+  :create-image {number?} {description}: "run task `tasks/create-image.md` — generate prompt and save as a `<section>` in the target session's `#### Images` block in journal.md (no browser required). Session args optional when only one session exists."
   :generate-image {slug?}: >-
     run task `tasks/generate-image.md`.
     With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via browser.

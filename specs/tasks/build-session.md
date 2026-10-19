@@ -8,11 +8,12 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 
 ## Command
 
-`:build-session {number} {type}`
+`:build-session {number}`
 
 ## Inputs
 
-- `number`, `type`
+- `number`
+- the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - `journal.md` → `## Sessions` — session skeleton (created if missing, see Step 0)
 - `journal.md` → `## Agenda` — declared duration for this session
 - `journal.md` → `## Agents` → `### Learner Personas` — if present, drives Step 2
@@ -34,13 +35,13 @@ If `journal.md` → `## Sessions` has no `### {number}. {title}` subsection yet,
 
 ### 1. Content loop (mechanical gate)
 
-a. **First iteration only:** if the session's overview-table `Material` column is already ✅, ask the instructor before regenerating — `:promote-session` replaces the material wholesale and would silently discard any prior co-authoring. Otherwise, run `tasks/promote-session.md {number} {type}` to generate the full material.
+a. **First iteration only:** if the session's overview-table `Material` column is already ✅, ask the instructor before regenerating — `:promote-session` replaces the material wholesale and would silently discard any prior co-authoring. Otherwise, run `tasks/promote-session.md {number}` to generate the full material.
 
-b. **First iteration only:** identify spots in the freshly generated material that would benefit from an image (diagrams, illustrations, header art) and run `tasks/create-image.md {number} {type} {description}` for each one, producing prompt-ready placeholders in this session's `#### Images` block. Keep the list of `{image-slug}`s created here — Step 3 needs it.
+b. **First iteration only:** identify spots in the freshly generated material that would benefit from an image (diagrams, illustrations, header art) and run `tasks/create-image.md {number} {description}` for each one, producing prompt-ready placeholders in this session's `#### Images` block. Keep the list of `{image-slug}`s created here — Step 3 needs it.
 
-c. Run `tasks/validate-course.md {number} {type}` (session mode) — this internally calls `tasks/validate-syntax.md` and applies `data/duration-heuristic.md`, and writes `#### Validation Report`.
+c. Run `tasks/validate-course.md {number}` (session mode) — this internally calls `tasks/validate-syntax.md` and applies `data/duration-heuristic.md`, and writes `#### Validation Report`.
 
-d. If any `[mechanical]`-tagged item (per `checklists/course-quality-checklist.md`) is FAIL: run `:quick-fix {number} {type} {description}` for each one. If a `:quick-fix` call escalates to `:coauthor-materials` per its own step 5 rule: **stop this loop immediately** and hand off to the instructor — do not invoke `:coauthor-materials` automatically, it requires a human in the loop.
+d. If any `[mechanical]`-tagged item (per `checklists/course-quality-checklist.md`) is FAIL: run `:quick-fix {number} {description}` for each one. If a `:quick-fix` call escalates to `:coauthor-materials` per its own step 5 rule: **stop this loop immediately** and hand off to the instructor — do not invoke `:coauthor-materials` automatically, it requires a human in the loop.
 
 e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is recorded (such as the "possibly too short" duration flag): do not auto-fix. Carry it forward into Step 2. If no personas exist to weigh in (Step 2 will be skipped), surface it directly in the closing report instead.
 
@@ -48,7 +49,7 @@ e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is rec
 
 ### 2. Persona review loop `[only if journal.md → ## Agents → ### Learner Personas contains at least one persona]`
 
-a. For each persona, run `tasks/review-as-persona.md {name} {number} {type}` in **report-only mode**: perform its steps 1–7 (produce and save the structured `#### Persona Reviews` report) and skip steps 8–10 (the persistent in-character follow-up chat) — there is no one present to chat with during an automated loop. The instructor can start that chat separately afterward by calling `:review-as-persona` directly.
+a. For each persona, run `tasks/review-as-persona.md {name} {number}` in **report-only mode**: perform its steps 1–7 (produce and save the structured `#### Persona Reviews` report) and skip steps 8–10 (the persistent in-character follow-up chat) — there is no one present to chat with during an automated loop. The instructor can start that chat separately afterward by calling `:review-as-persona` directly.
 
 b. If any persona's `Priority Issues` include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` (isolated issue) or by re-running Step 1 (broader issue), using the same "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. If a fix needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d.
 

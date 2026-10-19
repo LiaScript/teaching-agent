@@ -240,7 +240,7 @@ In every environment the agent introduces itself, reads `journal.md` if it exist
 browser with a chat on top, and every action link in it talks to your agent:
 
 ```markdown
-[▶️ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
+[▶️ Build session 3](agent:teaching/build-session?number=3) `:build-session 3` — material missing
 ```
 
 A click sends `agent:<agent>/<command>?<parameters>` to the running agent — `teaching`,
@@ -331,11 +331,11 @@ Details: [`specs/data/skills.md`](specs/data/skills.md).
 | `:manage-templates {name?}` | Add & document LiaScript template imports |
 | `:update-dashboard` | Regenerate the derived `## Dashboard` and the action links in `journal.md` |
 | `:preview {file?} {slide?}` | Show `journal.md` or a material file in the LiaScript DevServer preview |
-| `:create-session {n} {type} {title?}` | Create a session skeleton |
-| `:promote-session {n} {type}` | Expand skeleton into a material document (`materials/{n}-{slug}/README.md` in multi-file mode, or a `##` chapter in root `README.md` in single-file mode — see `specs/data/file-structure-modes.md`) |
+| `:create-session {n} {title?}` | Create a session skeleton |
+| `:promote-session {n}` | Expand skeleton into a material document (`materials/{n}-{slug}/README.md` in multi-file mode, or a `##` chapter in root `README.md` in single-file mode — see `specs/data/file-structure-modes.md`) |
 | `:coauthor-materials` | Interactive content co-authoring in persona |
-| `:quick-fix {n} {type} {description}` | Targeted single-issue correction |
-| `:validate-course [{n} {type}]` | Full course check, or single-session check |
+| `:quick-fix {n} {description}` | Targeted single-issue correction |
+| `:validate-course [{n}]` | Full course check, or single-session check |
 | `:assemble-bundle` | Package everything into `course-bundle/` |
 | `:save-notes {type?} {title?}` | Save a summary / research / decision note |
 | `:save-decision {title}` | Save a structured decision record (ADR) |
@@ -355,7 +355,7 @@ Details: [`specs/data/skills.md`](specs/data/skills.md).
 
 | Command | Purpose |
 |---------|---------|
-| `:review-as-persona {name} {n} {type}` | Review a material as a specific learner persona |
+| `:review-as-persona {name} {n}` | Review a material as a specific learner persona |
 | `:list-learners` | List defined learner personas |
 
 ### Development-Agent 🛠️

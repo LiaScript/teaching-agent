@@ -25,7 +25,7 @@ Dashboard and in the session action lines (see `data/agent-links.md`).
 1. Resolve `file` (and `slide`) as described above. The path must stay inside
    the project root and end in `.md`; otherwise stop and say why.
 2. If the file does not exist yet, say so and offer the command that creates it
-   (e.g. `:promote-session {number} {type}`) — as an `agent:` link in the chat
+   (e.g. `:promote-session {number}`) — as an `agent:` link in the chat
    when the MCP gate is open.
 3. **MCP gate open** (`liascript` tools available, see `data/agent-links.md`):
    - Call `get_state`. If a browser is connected, use it; otherwise follow the

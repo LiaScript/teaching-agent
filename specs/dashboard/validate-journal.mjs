@@ -20,7 +20,7 @@ function section(key) {
 // Heuristic hints. Every hint must appear in the Dashboard under `decisions`
 // with the same `key` (or `{key}-{topic}`), or be resolved in the source sections.
 // Older journals used German keys; they are accepted as aliases.
-const aliases = { "file-structure": ["dateistruktur"], provisional: ["vorgemerkt"], preparation: ["vorbereitung"], slug: [] };
+const aliases = { "file-structure": ["dateistruktur"], provisional: ["vorgemerkt"], preparation: ["vorbereitung"], slug: [], "type-name": [] };
 
 function findHints() {
   const hints = [];
@@ -41,9 +41,12 @@ function findHints() {
   const slugs = [...didactics.matchAll(/slug:\s*`([^`]+)`/g)].map(match => match[1]);
   const duplicates = slugs.filter((slug, index) => slugs.indexOf(slug) !== index);
   if (duplicates.length) hints.push({ key: "slug", text: `Duplicate Session Type slug: ${[...new Set(duplicates)].join(", ")}` });
-  const terms = [...context.matchAll(/(?:sessions|lectures)-called:\s*([\w-]+)/g)].map(match => match[1].toLowerCase());
-  const clash = slugs.filter(slug => terms.includes(slug.toLowerCase()));
-  if (clash.length) hints.push({ key: "slug", text: `Session Type slug equals a terminology word: ${clash.join(", ")}` });
+  // Slugs only appear in technical details; what the instructor sees is the display name. With
+  // several types, a display name equal to a terminology word reads as "Modul 3 · Kind: Modul".
+  const terms = [...context.matchAll(/(?:sessions|lectures)-called:\s*([\p{L}\w-]+)/gu)].map(match => match[1].toLowerCase());
+  const names = [...didactics.matchAll(/__([^_\n]+)__\s*\(slug:/g)].map(match => match[1].trim());
+  const shown = names.length > 1 ? names.filter(name => terms.includes(name.toLowerCase())) : [];
+  if (shown.length) hints.push({ key: "type-name", text: `Session Type display name equals a terminology word: ${shown.join(", ")}` });
   const sources = [context, didactics, section("Agenda")].join("\n");
   if (/Hinweis für die Lehrkraft|besorgen|vorbereiten:|note for the instructor|to prepare:|instructor must prepare/i.test(sources)) {
     hints.push({ key: "preparation", kind: "prepare", text: "A section records a preparation task for the instructor" });

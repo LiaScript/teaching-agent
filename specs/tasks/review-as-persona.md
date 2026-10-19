@@ -16,7 +16,7 @@ or simply get a feel for how this learner experiences the material.
 
 - `{name}` — persona name (must exist in `journal.md` → `## Agents` → `### Learner Personas`)
 - `{number}` — session number
-- `{type}` — session type slug, one of `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`)
+- the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - The material document to review — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `journal.md` → `## Agents` → `### Learner Personas` → matching `#### Persona: {icon} {name}` only
 - `journal.md` → `## Agenda` — learning objectives for this session
@@ -164,8 +164,8 @@ Rules:
     - Offer: "Should I save the follow-up conversation as a note?  
       (`:save-notes summary persona-chat-[name]-[N]-[type]`)"
     - Suggest next step:
-      > "Use `:coauthor-materials {number} {type}` to fix the priority issues, or call
-      > `:review-as-persona [other name] {number} {type}` to get a second learner perspective."
+      > "Use `:coauthor-materials {number}` to fix the priority issues, or call
+      > `:review-as-persona [other name] {number}` to get a second learner perspective."
 
 ## When to Use vs. :validate-course
 

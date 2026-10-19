@@ -25,8 +25,9 @@ template:
     3. `<details><summary>{"Technical settings for the assistant", translated}</summary>` with the machine fields
        (`Teaching Style`, `Course Type` copied from Course Context, `Didactic Framework`, `Default Session Method`,
        `Session Types` with slugs, `Difficulty Level`), then `</details>`.
-    Session Type slugs: lowercase ASCII words in the course language, unique, never equal to a word in
-    Course Context → Terminology.
+    Session Type slugs: lowercase ASCII words in the course language, unique; they appear only in technical
+    details, never in commands. With more than one Session Type, no display name equals a word in
+    Course Context → Terminology (a unit list must never read "Modul 3 · Kind: Modul").
   sections:
     - id: didactic-concept
       title: Didactic Concept

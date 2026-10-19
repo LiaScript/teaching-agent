@@ -92,13 +92,13 @@ Run this task automatically after any task that changes project state:
    - Provisional entries ("provisional", "to be decided") in a section whose topic
      has since been saved elsewhere.
    - Numbers that disagree between sections (number of units, lessons, minutes).
-   - Session Type slugs that are duplicated or equal a terminology word.
+   - Session Type slugs that are duplicated (`slug`), or — with several types — a type display name equal to a terminology word (`type-name`).
    - Preparation tasks for the instructor recorded in a section (equipment, printouts, accounts).
    - Agenda phases led by the instructor outside the material (opening, closing,
      one-to-one talks, checklists to print) → `prepare`, with `how`.
    Never fix foreign sections silently — listing them is this task's job. Every
    item gets a unique `key` (the hint key printed by the validation script, e.g.
-   `provisional`, `slug`, `preparation`, `file-structure`; several items for one
+   `provisional`, `slug`, `type-name`, `preparation`, `file-structure`; several items for one
    hint use `{hint}-{topic}`) and a `kind`:
    - `decide` — the instructor must decide; `how` says where and how.
    - `prepare` — the instructor must do or get something before using the material; `how` says how.

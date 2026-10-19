@@ -59,12 +59,12 @@ Suggest images for visualization, either as a search term or as a concrete image
    At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`).
 7. When the instructor **approves** the material for this session:
    - Update the session's skeleton in `journal.md` → `## Sessions` → `### {n}. …` so that Summary, Content and Activities describe the material as it now is; show the changes in one line of the summary.
-   - In the overview table set **Material ✅**. **Done stays ❌** until `:validate-course {n} {type}` has written `Result: PASS` into this session's `#### Validation Report`.
+   - In the overview table set **Material ✅**. **Done stays ❌** until `:validate-course {n}` has written `Result: PASS` into this session's `#### Validation Report`.
    - Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column.
-   - **If the session already has a `#### Validation Report`** (this was a revision after a check): run `:validate-course {n} {type}` right away without asking — the revision is only complete when the re-check passes. Skip step 8 then.
+   - **If the session already has a `#### Validation Report`** (this was a revision after a check): run `:validate-course {n}` right away without asking — the revision is only complete when the re-check passes. Skip step 8 then.
    - Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 8. After approval, 🎛️ ask with structured question (single choice):
-   - **Yes, validate now** — run `:validate-course {number} {type}`
+   - **Yes, validate now** — run `:validate-course {number}`
    - **Later** — skip validation, proceed directly to the next session
 
 ## Special Features

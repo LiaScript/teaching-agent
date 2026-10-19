@@ -79,9 +79,10 @@ function checkJournal(text) {
 }
 
 // A small journal with two units, an agenda and a session with a validation report.
-function journal({ agenda, outcome = "**Outcome:** passed (2026-10-19)", units = 2 } = {}) {
+function journal({ agenda, outcome = "**Outcome:** passed (2026-10-19)", units = 2, context = "", didactics = "" } = {}) {
   const data = { title: "X", units: Array.from({ length: units }, (_, i) => ({ id: String(i + 1), title: `U${i + 1}`, state: "planned", ...(i === 0 ? { href: "#1.-intro" } : {}) })) };
-  return ["<!--\nlanguage: fr\n-->", "# X", "## Dashboard", "```json @Dashboard.View", JSON.stringify(data), "```",
+  return ["<!--\nlanguage: fr\n-->", "# X", "## Course Context", context, "## Didactics", didactics,
+    "## Dashboard", "```json @Dashboard.View", JSON.stringify(data), "```",
     "## Agenda", agenda ?? [
       "__Time Budget – Budget :__", "", "| 1 | 90 min − 10 min = 80 min |", "", "<!-- data-type=\"none\" -->",
       "  | No. | Titre | Durée |", "  |---|---|---|", ...Array.from({ length: units }, (_, i) => `  | ${i + 1} | U${i + 1} | 45 min |`), "",
@@ -102,6 +103,32 @@ test("the journal check counts only the visible units table of the agenda", () =
   const fewer = checkJournal(journal({ units: 3 }).replace("  | 3 | U3 | 45 min |\n", ""));
   assert.equal(fewer.status, 2, fewer.output);
   assert.match(fewer.output, /the agenda has 2 rows, the dashboard shows 3 units/);
+});
+
+test("a type's display name must not repeat the unit word; its slug may", () => {
+  const context = "* __Terminology:__\n  1. sessions-called: Einheit\n  2. lectures-called: Modul";
+  const types = (...names) => "* __Session Types:__\n" + names.map(([name, slug], i) => `  ${i + 1}. __${name}__ (slug: \`${slug}\`) — x`).join("\n");
+  const slugOnly = checkJournal(journal({ context, didactics: types(["Lernmodul", "modul"], ["Selbstcheck", "selbstcheck"]) }));
+  assert.equal(slugOnly.status, 0, slugOnly.output);
+  const shown = checkJournal(journal({ context, didactics: types(["Modul", "lernmodul"], ["Selbstcheck", "selbstcheck"]) }));
+  assert.equal(shown.status, 2, shown.output);
+  assert.match(shown.output, /\[type-name\].*Modul/);
+  const single = checkJournal(journal({ context, didactics: types(["Modul", "modul"]) }));
+  assert.equal(single.status, 0, single.output);
+});
+
+test("session commands identify a unit by its number; the type is never a parameter", () => {
+  const keys = ["teaching", "artist", "learner", "development"].flatMap(agent =>
+    [...read(`agents/${agent}-agent.yaml`).matchAll(/^\s{2}(:[\w-]+[^:\n]*):/gm)].map(match => match[1]));
+  assert.deepEqual(keys.filter(key => /\{type\??\}/.test(key) && !key.startsWith(":save-notes")), []);
+  const walk = dir => readdirSync(dir).flatMap(name => {
+    const path = join(dir, name);
+    return statSync(path).isDirectory() ? (name === "node_modules" ? [] : walk(path)) : [path];
+  });
+  const files = [...walk(specs).filter(path => /\.(md|ya?ml)$/.test(path)), join(specs, "..", "README.md")];
+  const hits = files.flatMap(path => readFileSync(path, "utf8").split("\n").map(line => [path, line]))
+    .filter(([, line]) => /[?&]type=|\{\{?number\}?\} \{\{?type\}?\}|\{n\} \{type\}|<number> <type>/.test(line));
+  assert.deepEqual(hits.map(([path, line]) => `${path.slice(specs.length + 1)}: ${line.trim().slice(0, 100)}`), []);
 });
 
 test("the journal check finds the visible outcome in any course language", () => {

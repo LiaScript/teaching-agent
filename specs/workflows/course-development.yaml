@@ -185,10 +185,10 @@ workflow:
         iterative:
           description: "Create one session at a time, fully develop it, then move to next"
           sequence:
-            - command: :create-session {number} {type} {title}
+            - command: :create-session {number} {title}
               output: "journal.md → ## Sessions"
               notes: "Create skeleton subsection for session N and update the Sessions overview table"
-            - command: :promote-session {number} {type}
+            - command: :promote-session {number}
               output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
               notes: "Convert skeleton to full material"
             - command: :coauthor-materials
@@ -201,7 +201,7 @@ workflow:
               command: :create-image {description}
               optional: true
               notes: "Create image prompts during coauthoring as needed"
-            - command: :validate-course {number} {type}
+            - command: :validate-course {number}
               notes: |
                 Session-level check after coauthor approval:
                 - LiaScript syntax, learning objectives, persona tone, factual correctness
@@ -215,13 +215,13 @@ workflow:
                 - Learning companion chosen in a portrait form (`find_teacher`), the course's guiding figure, or none
                 - Learner view with a one-sentence AI notice; help after mistakes follows the quiz settings
                 - Debriefing afterwards; the companion's best help can be turned into static material
-            - command: :quick-fix {number} {type} {description}
+            - command: :quick-fix {number} {description}
               optional: true
               notes: |
                 Every change to a unit that already has a validation report (also after a try-out) follows the change path:
                 full wording shown → save → mini-check → dated line in the report → unit state derived again
             - agent: learner
-              command: :review-as-persona {name} {number} {type}
+              command: :review-as-persona {name} {number}
               optional: true
               condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: |
@@ -238,11 +238,11 @@ workflow:
         batch:
           description: "Create all skeletons first, then promote all, then coauthor all"
           sequence:
-            - command: :create-session {number} {type} {title}
+            - command: :create-session {number} {title}
               output: "journal.md → ## Sessions"
               notes: "Create all session skeleton subsections and update the Sessions overview table"
               repeat: for all sessions
-            - command: :promote-session {number} {type}
+            - command: :promote-session {number}
               output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
               notes: "Promote all skeletons to materials"
               repeat: for all sessions
@@ -253,7 +253,7 @@ workflow:
                 - Add images via artist-agent when needed
                 - Mark each session complete before moving to next
               repeat: for all materials
-            - command: :validate-course {number} {type}
+            - command: :validate-course {number}
               notes: "Session-level check per material after coauthor approval"
               repeat: for all materials
             - command: :try-as-learner {number} {companion?}
@@ -261,7 +261,7 @@ workflow:
               notes: "Try a checked unit as a learner with a learning companion (preview only)"
               repeat: for chosen materials
             - agent: learner
-              command: :review-as-persona {name} {number} {type}
+              command: :review-as-persona {name} {number}
               optional: true
               condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: "Learner-perspective review per material; saves each report under that session's `#### Persona Reviews`"
@@ -287,7 +287,7 @@ workflow:
         - Replaces `journal.md` → `## Validation` → `### Latest Validation Summary` with `Mode: course`, PASS/FAIL, and issue count
 
         Feedback loop if issues found:
-        - Open :coauthor-materials {number} {type} for affected sessions
+        - Open :coauthor-materials {number} for affected sessions
         - Agent loads the matching session's `#### Validation Report` and works through issues
         - Re-run :validate-course after fixes until report is clean
         - Instructor confirms "Report ist akzeptabel" to exit loop
@@ -493,10 +493,10 @@ workflow:
       - :create-agenda
       - :manage-templates {name?}
       - :update-dashboard
-      - :create-session {number} {type} {title}
-      - :promote-session {number} {type}
+      - :create-session {number} {title}
+      - :promote-session {number}
       - :coauthor-materials
-      - :quick-fix {number} {type} {description}
+      - :quick-fix {number} {description}
       - :try-as-learner {number} {companion?}
       - :validate-course
       - :assemble-bundle
@@ -504,7 +504,7 @@ workflow:
       - :save-decision {title}
 
     learner_agent_commands:
-      - :review-as-persona {name} {number} {type}
+      - :review-as-persona {name} {number}
       - :list-learners
       - :agent {character}
 
