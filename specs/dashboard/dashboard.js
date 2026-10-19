@@ -180,7 +180,8 @@
       if (!entry.title) throw new Error("An open point needs a title.");
       entry.kind = entry.kind ?? "decide";
       if (!decisionKinds.includes(entry.kind)) throw new Error(`Unknown kind of open point: ${entry.kind}`);
-      return entry;
+      // Check the link now: a broken one would otherwise only fail when the whole view renders.
+      return entry.href == null ? entry : actionData(entry);
     });
   }
 
@@ -202,7 +203,7 @@
       if (ids.has(id)) throw new Error(`Duplicate unit id: ${id}`);
       ids.add(id);
       if (!unit.title) throw new Error("A unit needs a title.");
-      return { ...unit, id, state: state(unit.state), process: processData(unit.process) };
+      return { ...unit, id, state: state(unit.state), process: processData(unit.process), ...(unit.href == null ? {} : { href: actionData({ href: unit.href }).href }) };
     });
     const globalProcess = processData(input.process);
     const selected = input.selected == null

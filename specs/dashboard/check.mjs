@@ -55,6 +55,14 @@ test("texts remain text and command links retain their readable fallback", () =>
   assert.throws(() => dashboard.buildModel({ next: { href: "agent:teaching/help" } }));
 });
 
+test("links of open points and units are checked with the data, not only when rendering", () => {
+  assert.throws(() => dashboard.buildModel({ decisions: [{ title: "A", how: "B", href: "agent:teaching/create-outline" }] }), /readable command/);
+  assert.throws(() => dashboard.buildModel({ decisions: [{ title: "A", how: "B", href: "javascript:alert(1)" }] }), /not supported/);
+  assert.throws(() => dashboard.buildModel({ units: [{ id: 1, title: "A", href: "javascript:alert(1)" }] }), /not supported/);
+  assert.doesNotThrow(() => dashboard.buildModel({ units: [{ id: 1, title: "A", href: "#1.-a" }],
+    decisions: [{ title: "A", how: "B", href: "agent:teaching/create-outline", command: ":create-outline" }, { title: "C", how: "D" }] }));
+});
+
 test("open decisions and the provisional plan render and validate", () => {
   const model = dashboard.buildModel({ title: "X", decisions: ["Ein Link oder mehrere?", { title: "Zeitbedarf", why: "Rahmen sagt 4 Stunden" }], plan: { note: "vorläufig", rows: [{ label: "Stunde 1", text: "Wolkenarten" }] } });
   assert.equal(model.decisions.length, 2);
