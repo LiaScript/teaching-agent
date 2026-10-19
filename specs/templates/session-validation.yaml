@@ -26,7 +26,8 @@ template:
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step).'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
-    - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead.'
+    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding, a decision in `## Notes Backup` (`:save-decision`). List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
+    - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead. Accepting a concern is a recorded decision, not a re-grade.'
   sections:
     - id: report-heading
       title: Report Heading

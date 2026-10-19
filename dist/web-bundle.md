@@ -3654,7 +3654,7 @@ Rules:
 | Result                 | Agent behavior                                                                                                                                                                                                          |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `journal.md` → `## Validation` and rerun `:validate-course`. `:create-project` and `:update-project` are locked until PASS." |
-| 🟡 PASS with concerns | Ask: "There are open points, but no critical blockers. Do you want to proceed to publishing anyway? (Yes / No / Resolve issues first)"                                                                            |
+| 🟡 PASS with concerns | Publishing stays locked. List every open concern in plain words and go through them one at a time: fix it now (`:quick-fix`, or `:coauthor-materials {number}` for broader changes) or accept it as is with a short reason. Record each accepted concern with the save confirmation — session finding: a dated entry in that session's decisions list; course-level finding: `:save-decision`. Then rerun `:validate-course`: accepted concerns no longer count (see `result_rules` in `templates/session-validation.yaml`). Never offer "publish anyway". |
 | 🟢 PASS               | Only if `Mode: course`: suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `:agent development` → `:create-project`"                                                                                          |
 
 **Rule:** Never suggest or assist with `:create-project` or `:update-project` unless `journal.md` → `## Validation` → `### Latest Validation Summary` contains both `Mode: course` and `Result: PASS` — regardless of how the instructor asks.
@@ -4948,7 +4948,8 @@ template:
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step).'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
-    - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead.'
+    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding, a decision in `## Notes Backup` (`:save-decision`). List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
+    - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead. Accepting a concern is a recorded decision, not a re-grade.'
   sections:
     - id: report-heading
       title: Report Heading
@@ -8117,7 +8118,7 @@ workflow:
         Publishing Gate (enforced):
         - `Mode: course` + PASS → proceed to :create-project or :assemble-bundle
         - FAIL → publishing commands blocked until re-validation passes
-        - PASS with concerns → instructor decides explicitly
+        - PASS with concerns → publishing stays blocked; the instructor fixes or accepts each concern individually (recorded as a decision), then re-validates
 
     # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations
@@ -8150,7 +8151,7 @@ workflow:
       optional: true
       condition: user_requests_publishing AND updates_to_existing_project
       notes: |
-        Only when the instructor explicitly wants to publish updates. Branches the same way as :create-project:
+        Only when the instructor explicitly wants to publish updates, and only with the same Publishing Gate as :create-project (`Mode: course` + `Result: PASS`). Branches the same way as :create-project:
         - single-file: commit and push the changed README.md/assets/ — the existing viewer URL reflects the update automatically
         - multi-file: update project.yaml with new/changed materials, commit and push, trigger the GitHub Pages workflow
 

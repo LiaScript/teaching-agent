@@ -297,7 +297,7 @@ workflow:
         Publishing Gate (enforced):
         - `Mode: course` + PASS → proceed to :create-project or :assemble-bundle
         - FAIL → publishing commands blocked until re-validation passes
-        - PASS with concerns → instructor decides explicitly
+        - PASS with concerns → publishing stays blocked; the instructor fixes or accepts each concern individually (recorded as a decision), then re-validates
 
     # Phase 6: Publishing (optional, user-initiated)
     - step: git_operations
@@ -330,7 +330,7 @@ workflow:
       optional: true
       condition: user_requests_publishing AND updates_to_existing_project
       notes: |
-        Only when the instructor explicitly wants to publish updates. Branches the same way as :create-project:
+        Only when the instructor explicitly wants to publish updates, and only with the same Publishing Gate as :create-project (`Mode: course` + `Result: PASS`). Branches the same way as :create-project:
         - single-file: commit and push the changed README.md/assets/ — the existing viewer URL reflects the update automatically
         - multi-file: update project.yaml with new/changed materials, commit and push, trigger the GitHub Pages workflow
 
