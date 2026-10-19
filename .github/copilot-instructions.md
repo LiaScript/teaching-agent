@@ -1170,6 +1170,7 @@ rewrite, summarize, or infer settings from sibling agent subsections.
    - Do not override base agent YAML.
    - Do not override workflow gates, validation rules, safety rules, epistemic rules, or publishing gates.
    - If the instructor requests an override, save it as a rejected boundary note instead of applying it.
+   - In `### Coauthor`, entries ending with `<!-- data-from="didactics" -->` are derived by `:create-didactics` and replaced when the didactics change. Entries added here never get that marker. If the instructor rewrites a marked entry, remove the marker — the entry is theirs from then on and stays.
 
 6. **Before saving:** show the complete new content of the selected subsection (changed parts in bold, a rejected override as its boundary note) with "Save" / "Change something" — the single write confirmation of this task. Nothing is written before it.
 
@@ -1300,7 +1301,9 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
 9. **Before saving** show the complete section as the instructor will read it (after a change: the whole new version with the changed parts in bold, never only the changes), with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Didactics` using the `layout` of `templates/course-didactics.yaml` (visible part in the course language, technical fields in `<details>`), no sub-headings.
-10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection:
+10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection — **merge, never overwrite** what the instructor added:
+    - Every entry this step derives ends with the invisible marker `<!-- data-from="didactics" -->`. Replace only marked entries; keep every entry without the marker (added via `:configure-agent`) unchanged and in place.
+    - The changes to `### Coauthor` are part of step 9's save summary, in future tense ("When you save, I will also adjust the co-author: …", translated) — nothing in it changes unseen, and no separate confirmation is needed.
     - Set `* __Customization Status:__ active`
     - Set `* __Role / Persona:__` from `## Didactics` → `__Professor Persona:__`
     - Set `* __Behavior Additions:__` from the teaching style, didactic concept, and project-specific coauthoring needs
@@ -3046,7 +3049,7 @@ Generated in sequence without interruption inside `journal.md`:
    - File structure: teacher question from `tasks/init-course.md` step 6
    - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
 
-3. **Draft before saving.** Generate the complete content of every section that Phase 2 will write (Course Context incl. technical choices such as persona type, pacing, file structure; Outline incl. objectives; Didactics incl. framework, method, level; Agenda; session list with titles, durations and core content) and show it in the chat **before** anything is written — one compact block per section in plain course language, technical choices named in plain words. Nothing may be saved that is not in this draft (`data/agent-links.md` → "Nothing unseen gets saved").
+3. **Draft before saving.** Generate the complete content of every section that Phase 2 will write (Course Context incl. technical choices such as persona type, pacing, file structure; Outline incl. objectives; Didactics incl. framework, method, level; the Coauthor entries derived from it (step 4b); Agenda; session list with titles, durations and core content) and show it in the chat **before** anything is written — one compact block per section in plain course language, technical choices named in plain words. Nothing may be saved that is not in this draft (`data/agent-links.md` → "Nothing unseen gets saved").
    - Every number and every unit in the draft must come from the instructor's answers. Mark anything you added yourself as a suggestion ("Suggestion: …") and ask about it; never present it as decided.
    - Then ask "Save" / "Change something" as the single write confirmation (its own form, no content questions in it).
 

@@ -79,7 +79,7 @@ Generated in sequence without interruption inside `journal.md`:
    - File structure: teacher question from `tasks/init-course.md` step 6
    - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
 
-3. **Draft before saving.** Generate the complete content of every section that Phase 2 will write (Course Context incl. technical choices such as persona type, pacing, file structure; Outline incl. objectives; Didactics incl. framework, method, level; Agenda; session list with titles, durations and core content) and show it in the chat **before** anything is written — one compact block per section in plain course language, technical choices named in plain words. Nothing may be saved that is not in this draft (`data/agent-links.md` → "Nothing unseen gets saved").
+3. **Draft before saving.** Generate the complete content of every section that Phase 2 will write (Course Context incl. technical choices such as persona type, pacing, file structure; Outline incl. objectives; Didactics incl. framework, method, level; the Coauthor entries derived from it (step 4b); Agenda; session list with titles, durations and core content) and show it in the chat **before** anything is written — one compact block per section in plain course language, technical choices named in plain words. Nothing may be saved that is not in this draft (`data/agent-links.md` → "Nothing unseen gets saved").
    - Every number and every unit in the draft must come from the instructor's answers. Mark anything you added yourself as a suggestion ("Suggestion: …") and ask about it; never present it as decided.
    - Then ask "Save" / "Change something" as the single write confirmation (its own form, no content questions in it).
 

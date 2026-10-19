@@ -43,7 +43,9 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 7. Set the delivery format consistent with the course type.
 8. Fill the `templates/course-didactics.yaml` template with the results.
 9. **Before saving** show the complete section as the instructor will read it (after a change: the whole new version with the changed parts in bold, never only the changes), with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Didactics` using the `layout` of `templates/course-didactics.yaml` (visible part in the course language, technical fields in `<details>`), no sub-headings.
-10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection:
+10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection — **merge, never overwrite** what the instructor added:
+    - Every entry this step derives ends with the invisible marker `<!-- data-from="didactics" -->`. Replace only marked entries; keep every entry without the marker (added via `:configure-agent`) unchanged and in place.
+    - The changes to `### Coauthor` are part of step 9's save summary, in future tense ("When you save, I will also adjust the co-author: …", translated) — nothing in it changes unseen, and no separate confirmation is needed.
     - Set `* __Customization Status:__ active`
     - Set `* __Role / Persona:__` from `## Didactics` → `__Professor Persona:__`
     - Set `* __Behavior Additions:__` from the teaching style, didactic concept, and project-specific coauthoring needs
