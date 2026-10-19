@@ -30,6 +30,7 @@ The course context acts as the governance layer: it defines the course type, ter
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
    - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, the header's `language:` (course language code, step 7), and `## Dashboard` (via `tasks/update-dashboard.md`).
+   - This copy is the only write allowed before the save confirmation in step 9 (`data/agent-links.md` → confirmation tiers): it contains nothing the instructor said. Every content change waits for step 9.
    - If `journal.md` already exists, leave it untouched and only work on the sections below.
 3. 🎛️ Ask for the course type as **two short questions in the instructor's own terms** (one form, skip what is already known from step 1). Show only plain labels in the course language, never the type slugs. Phrase the options for the instructor's setting (school, university, adult education) — e.g. "lesson" vs. "session", "pupils" vs. "participants":
 

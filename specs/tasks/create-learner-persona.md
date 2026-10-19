@@ -78,15 +78,15 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 ---
 
 9. Generate persona section using the **Persona Structure** template (see below).
-10. Display a 3-line summary and 🎛️ ask for confirmation:
-    > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Agents` → `### Learner Personas`? (Yes / Adjust)"
+10. Show the complete persona exactly as it will be saved — every dimension, with inferred values marked as such — and 🎛️ ask for confirmation ("Nothing unseen gets saved", `data/agent-links.md`):
+    > "This is [Icon] [Name] as I would save it. Save to the learner personas? (Save / Change something)"
 11. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
     - If `## Agents` does not exist: create it from `templates/agents.yaml`
     - If `### Learner Personas` does not exist inside `## Agents`: create that subsection
     - Append as a new `#### Persona: {icon} {name}` subsection, wrapped in `<section>…</section>` per the **Persona Structure** template below
 12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 13. Suggest next step:
-    > "Persona saved. Call `:review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
+    > "Persona saved. Call `:review-as-persona [Name] [number]` to use [Icon] [Name] as a reviewer for a session."
 
 ---
 

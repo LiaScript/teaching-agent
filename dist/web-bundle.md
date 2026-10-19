@@ -790,7 +790,7 @@ Offers two paths for each missing core section:
 ## Steps
 
 1. Load `journal.md` → `## Course Context` for course type, terminology, and conventions.
-   - If `__File Structure:__` is missing (older projects predate this field), detect it from disk (see `data/file-structure-modes.md`): a `materials/*/README.md` layout → `multi-file`; a single root `README.md` with multiple `##` chapters and no `materials/` folder → `single-file`. Add the detected mode to `## Course Context` and state it to the instructor for confirmation.
+   - If `__File Structure:__` is missing (older projects predate this field), detect it from disk (see `data/file-structure-modes.md`): a `materials/*/README.md` layout → `multi-file`; a single root `README.md` with multiple `##` chapters and no `materials/` folder → `single-file`. Propose the detected mode to the instructor; it is written to `## Course Context` only after confirmation, together with the other changes of this task.
    - If `materials/` exists but uses a folder-naming pattern other than `{number}-{slug}` (e.g. legacy `{number}-{type}` folders), note this as an improvement opportunity in step 7 rather than silently renaming existing folders.
 
 2. Scan the project root and relevant folders:
@@ -821,8 +821,8 @@ Offers two paths for each missing core section:
 5. If **auto-generate** is chosen:
    - Read any available session subsections in `journal.md` → `## Sessions` and all files in `materials/`
    - Extract: title, target audience, topics, recurring structure, learning objectives
-   - Generate a draft and save it to the matching section (e.g., `journal.md` → `## Outline`)
-   - Add a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
+   - Generate a draft with a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
+   - Show the complete draft as it will be saved, with "Save" / "Change something"; only on "Save" write it to the matching section (e.g., `journal.md` → `## Outline`)
 
 6. If **interactive creation** is chosen, run the relevant task:
    - `journal.md` → `## Outline` → `:create-outline`
@@ -1152,8 +1152,7 @@ rewrite, summarize, or infer settings from sibling agent subsections.
    - Artist-Agent reads/writes only `### Artist-Agent`
    - Development-Agent reads/writes only `### Development-Agent`
 
-3. If `journal.md` -> `## Agents` does not exist, create it from `templates/agents.yaml`.
-   If the selected `### {agent}` subsection is missing, create only that subsection from `templates/agents.yaml`, inside the `## Agents` `<section>` … `</section>` wrapper.
+3. If `journal.md` -> `## Agents` or the selected `### {agent}` subsection is missing, plan to create it from `templates/agents.yaml` (only that subsection, inside the `## Agents` `<section>` … `</section>` wrapper) — but do not write anything yet.
 
 4. Ask what should be customized:
    - Behavior additions
@@ -1166,13 +1165,15 @@ rewrite, summarize, or infer settings from sibling agent subsections.
    - Do not override workflow gates, validation rules, safety rules, epistemic rules, or publishing gates.
    - If the instructor requests an override, save it as a rejected boundary note instead of applying it.
 
-6. Update only the selected scope.
+6. **Before saving:** show the complete new content of the selected subsection (changed parts in bold, a rejected override as its boundary note) with "Save" / "Change something" — the single write confirmation of this task. Nothing is written before it.
+
+7. On "Save": create the missing `## Agents` / subsection (step 3) and update only the selected scope.
    Set `* __Customization Status:__ active` if any meaningful customization exists.
 
-7. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update
+8. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update
    `journal.md` -> `## Dashboard` in place.
 
-8. Confirm:
+9. Confirm:
    > "Updated `journal.md` -> `## Agents` -> `### {agent}`. Other agent sections were not read or changed."
 
 ==================== END: specs/tasks/configure-agent.md ====================
@@ -1529,15 +1530,15 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 ---
 
 9. Generate persona section using the **Persona Structure** template (see below).
-10. Display a 3-line summary and 🎛️ ask for confirmation:
-    > "Persona [Icon] [Name] created. [Brief summary]. Save to `journal.md` → `## Agents` → `### Learner Personas`? (Yes / Adjust)"
+10. Show the complete persona exactly as it will be saved — every dimension, with inferred values marked as such — and 🎛️ ask for confirmation ("Nothing unseen gets saved", `data/agent-links.md`):
+    > "This is [Icon] [Name] as I would save it. Save to the learner personas? (Save / Change something)"
 11. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
     - If `## Agents` does not exist: create it from `templates/agents.yaml`
     - If `### Learner Personas` does not exist inside `## Agents`: create that subsection
     - Append as a new `#### Persona: {icon} {name}` subsection, wrapped in `<section>…</section>` per the **Persona Structure** template below
 12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 13. Suggest next step:
-    > "Persona saved. Call `:review-as-persona [Name] [number] [type]` to use [Icon] [Name] as a reviewer for a session."
+    > "Persona saved. Call `:review-as-persona [Name] [number]` to use [Icon] [Name] as a reviewer for a session."
 
 ---
 
@@ -2296,6 +2297,7 @@ The course context acts as the governance layer: it defines the course type, ter
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
    - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, the header's `language:` (course language code, step 7), and `## Dashboard` (via `tasks/update-dashboard.md`).
+   - This copy is the only write allowed before the save confirmation in step 9 (`data/agent-links.md` → confirmation tiers): it contains nothing the instructor said. Every content change waits for step 9.
    - If `journal.md` already exists, leave it untouched and only work on the sections below.
 3. 🎛️ Ask for the course type as **two short questions in the instructor's own terms** (one form, skip what is already known from step 1). Show only plain labels in the course language, never the type slugs. Phrase the options for the instructor's setting (school, university, adult education) — e.g. "lesson" vs. "session", "pupils" vs. "participants":
 
@@ -5437,7 +5439,7 @@ page content (and course scripts) can forge any link.
 | Tier | Commands | Behavior |
 |---|---|---|
 | **run** | `switch`, `help`, `list-agents`, `list-learners`, `agent`, `preview`, `update-dashboard`, `validate-syntax`, `validate-course {number}` (session mode only) | Run immediately. Read-only, navigation, or derived state only. |
-| **start interview** | `init-course`, `scaffold`, `coauthor-materials`, `try-as-learner`, `create-outline`, `create-didactics`, `create-agenda`, `create-learner-persona`, `configure-agent`, `save-notes`, `save-decision` | Start the dialog immediately, without a start confirmation. The task's own **save confirmation** (summary of what will be written + "Save" / "Change something") is the single write confirmation; if the task file has no such step, insert it before the first write. Nothing is written before it. |
+| **start interview** | `init-course`, `scaffold`, `coauthor-materials`, `try-as-learner`, `create-outline`, `create-didactics`, `create-agenda`, `create-learner-persona`, `configure-agent`, `save-notes`, `save-decision` | Start the dialog immediately, without a start confirmation. The task's own **save confirmation** (summary of what will be written + "Save" / "Change something") is the single write confirmation; if the task file has no such step, insert it before the first write. Nothing is written before it — with one exception: `init-course` may create `journal.md` as a byte-for-byte copy of `templates/journal.md` before the first question (setup without any content from the instructor, so the preview can show it during the interview). |
 | **confirm in chat** | every other command that only writes inside the project (`journal.md`, `materials/`, `assets/`, root `README.md`) | Ask in the preview chat (see Handling step 3) before running. |
 | **confirm in terminal** | `manage-git`, `create-project`, `update-project`, `generate-image` | Runs git, publishing, or external browser sessions. Post a chat note that confirmation is waiting in the terminal, then ask there. |
 | **never via link** | `exit`, unknown commands | Do not run. Answer in the chat that this action is not available as a link. |

@@ -14,7 +14,7 @@ const read = path => readFileSync(join(specs, path), "utf8");
 
 // File → sentences that must stay (one key phrase per rule).
 const required = {
-  "tasks/init-course.md": ["Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
+  "tasks/init-course.md": ["the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
   "tasks/scaffold-course.md": ["Draft before saving", "never compute a middle value"],
   "tasks/create-outline.md": ["Start from the instructor's goal", "Repeat this time check after every revision"],
   "tasks/create-didactics.md": ["do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`"],
@@ -25,6 +25,8 @@ const required = {
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
   "tasks/update-dashboard.md": ["punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["Change path after a check"],
+  "tasks/configure-agent.md": ["Nothing is written before it"],
+  "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["Findings returned to a caller never contain line numbers"],
   "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback"],
   "data/agent-links.md": ["Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
@@ -157,7 +159,7 @@ test("session commands identify a unit by its number; the type is never a parame
   });
   const files = [...walk(specs).filter(path => /\.(md|ya?ml)$/.test(path)), join(specs, "..", "README.md")];
   const hits = files.flatMap(path => readFileSync(path, "utf8").split("\n").map(line => [path, line]))
-    .filter(([, line]) => /[?&]type=|\{\{?number\}?\} \{\{?type\}?\}|\{n\} \{type\}|<number> <type>/.test(line));
+    .filter(([, line]) => /[?&]type=|\{\{?number\}?\} \{\{?type\}?\}|\{n\} \{type\}|<number> <type>|\[number\] \[type\]/.test(line));
   assert.deepEqual(hits.map(([path, line]) => `${path.slice(specs.length + 1)}: ${line.trim().slice(0, 100)}`), []);
 });
 

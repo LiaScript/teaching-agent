@@ -23,7 +23,7 @@ Offers two paths for each missing core section:
 ## Steps
 
 1. Load `journal.md` → `## Course Context` for course type, terminology, and conventions.
-   - If `__File Structure:__` is missing (older projects predate this field), detect it from disk (see `data/file-structure-modes.md`): a `materials/*/README.md` layout → `multi-file`; a single root `README.md` with multiple `##` chapters and no `materials/` folder → `single-file`. Add the detected mode to `## Course Context` and state it to the instructor for confirmation.
+   - If `__File Structure:__` is missing (older projects predate this field), detect it from disk (see `data/file-structure-modes.md`): a `materials/*/README.md` layout → `multi-file`; a single root `README.md` with multiple `##` chapters and no `materials/` folder → `single-file`. Propose the detected mode to the instructor; it is written to `## Course Context` only after confirmation, together with the other changes of this task.
    - If `materials/` exists but uses a folder-naming pattern other than `{number}-{slug}` (e.g. legacy `{number}-{type}` folders), note this as an improvement opportunity in step 7 rather than silently renaming existing folders.
 
 2. Scan the project root and relevant folders:
@@ -54,8 +54,8 @@ Offers two paths for each missing core section:
 5. If **auto-generate** is chosen:
    - Read any available session subsections in `journal.md` → `## Sessions` and all files in `materials/`
    - Extract: title, target audience, topics, recurring structure, learning objectives
-   - Generate a draft and save it to the matching section (e.g., `journal.md` → `## Outline`)
-   - Add a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
+   - Generate a draft with a draft marker at the top: `> **Draft (auto-generated from existing materials)** — please review and update`
+   - Show the complete draft as it will be saved, with "Save" / "Change something"; only on "Save" write it to the matching section (e.g., `journal.md` → `## Outline`)
 
 6. If **interactive creation** is chosen, run the relevant task:
    - `journal.md` → `## Outline` → `:create-outline`
