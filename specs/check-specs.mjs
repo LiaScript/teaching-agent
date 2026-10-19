@@ -25,6 +25,7 @@ const required = {
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
   "tasks/update-dashboard.md": ["punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["Change path after a check", "Called from `:build-session`"],
+  "tasks/generate-image.md": ["never by its name", "Only once the file exists"],
   "tasks/build-session.md": ["Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],

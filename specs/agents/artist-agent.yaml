@@ -43,22 +43,23 @@ agent_coordination:
 
 browser_execution:
   description: >
-    The Artist-Agent can execute image prompts directly in the browser via the Chrome DevTools MCP server.
-    The full workflow (MCP check, ChatGPT submission, download, save) is defined in `tasks/generate-image.md`.
+    The Artist-Agent executes image prompts with its own image tool if the running agent has one (e.g. Codex),
+    otherwise in the browser via the Chrome DevTools MCP server (ChatGPT). Route choice, generation and saving
+    are defined in `tasks/generate-image.md`.
 
-  required_mcp: "chrome-devtools (mcp_chrome-devtools_* tools)"
+  required_mcp: "only for the browser route: chrome-devtools (tool names end in list_pages, evaluate_script, …)"
 
   setup_instructions: |
     To enable browser-based image generation, Chrome must be started with remote debugging:
 
       google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug
 
-    The chrome-devtools MCP server must be configured in your VS Code MCP settings (mcp.json).
+    The chrome-devtools MCP server must be configured in the agent's MCP settings (VS Code mcp.json, Claude Code .mcp.json, Codex config.toml).
 
   on_activation_check:
-    - "Check if mcp_chrome-devtools_* tools are available"
-    - "If available: announce browser execution mode is active"
-    - "If unavailable: explain the setup steps above and offer prompt-only mode (:create-image) as fallback"
+    - "Check for an own image tool first, then for the chrome-devtools tools (Phase 0 of tasks/generate-image.md)"
+    - "Announce which route is available: own image tool, browser, or prompt-only"
+    - "If neither: explain both options briefly and offer prompt-only mode (:create-image) as fallback"
 
 epistemic_rules:
   principle: "Never invent tool capabilities, image generator syntax, or visual specifications. Flag uncertainty."
@@ -122,7 +123,7 @@ activation-instructions:
   - The agent.customization field ALWAYS takes precedence
   - Always ensure visual consistency with the style guide
   - Generate detailed, actionable image prompts
-  - On activation: check if mcp_chrome-devtools_* tools are available and announce browser execution mode status
+  - On activation: check for an own image tool, then for the chrome-devtools tools, and announce the image route
   - STAY IN CHARACTER!
 
 fuzzy-matching:

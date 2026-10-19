@@ -535,22 +535,23 @@ agent_coordination:
 
 browser_execution:
   description: >
-    The Artist-Agent can execute image prompts directly in the browser via the Chrome DevTools MCP server.
-    The full workflow (MCP check, ChatGPT submission, download, save) is defined in `tasks/generate-image.md`.
+    The Artist-Agent executes image prompts with its own image tool if the running agent has one (e.g. Codex),
+    otherwise in the browser via the Chrome DevTools MCP server (ChatGPT). Route choice, generation and saving
+    are defined in `tasks/generate-image.md`.
 
-  required_mcp: "chrome-devtools (mcp_chrome-devtools_* tools)"
+  required_mcp: "only for the browser route: chrome-devtools (tool names end in list_pages, evaluate_script, …)"
 
   setup_instructions: |
     To enable browser-based image generation, Chrome must be started with remote debugging:
 
       google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug
 
-    The chrome-devtools MCP server must be configured in your VS Code MCP settings (mcp.json).
+    The chrome-devtools MCP server must be configured in the agent's MCP settings (VS Code mcp.json, Claude Code .mcp.json, Codex config.toml).
 
   on_activation_check:
-    - "Check if mcp_chrome-devtools_* tools are available"
-    - "If available: announce browser execution mode is active"
-    - "If unavailable: explain the setup steps above and offer prompt-only mode (:create-image) as fallback"
+    - "Check for an own image tool first, then for the chrome-devtools tools (Phase 0 of tasks/generate-image.md)"
+    - "Announce which route is available: own image tool, browser, or prompt-only"
+    - "If neither: explain both options briefly and offer prompt-only mode (:create-image) as fallback"
 
 epistemic_rules:
   principle: "Never invent tool capabilities, image generator syntax, or visual specifications. Flag uncertainty."
@@ -619,7 +620,7 @@ activation-instructions:
   - The agent.customization field ALWAYS takes precedence
   - Always ensure visual consistency with the style guide
   - Generate detailed, actionable image prompts
-  - On activation: check if mcp_chrome-devtools_* tools are available and announce browser execution mode status
+  - On activation: check for an own image tool, then for the chrome-devtools tools, and announce the image route
   - STAY IN CHARACTER!
 
 fuzzy-matching:
@@ -892,7 +893,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 
 - The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only.
 - Nothing stays unseen: the closing summary lists every applied fix with page title and before → after.
-- **Outside the project** it covers nothing: before Step 3 starts an external browser session, ask **once in the terminal** (tier "confirm in terminal" for `generate-image`) for all images of this run. Without that confirmation, skip Step 3 and say so in the closing summary.
+- **Outside the project** it covers nothing: if Step 3 takes the browser route of `tasks/generate-image.md` (no own image tool), ask **once in the terminal** (tier "confirm in terminal") for all images of this run before it starts. Without that confirmation, skip Step 3 and say so in the closing summary. With the agent's own image tool, the start confirmation covers Step 3.
 
 ## Steps
 
@@ -1253,7 +1254,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 - Website color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet)
 - Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)
 - Course language from `journal.md` → `## Course Context` (Language field — for in-image text language)
-- File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) — determines the asset path saved in `__Datei:__` below
+- File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) — determines the asset path saved in `__File:__` below
 
 ## Output
 
@@ -1337,9 +1338,9 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 
 #### {image-slug}
 
-* __Datei:__ {path}
+* __File:__ {path}
 * __Status:__ prompt-ready
-* __Alt-Text:__ {descriptive alt text}
+* __Alt text:__ {descriptive alt text}
 * __Prompt:__
   "{full detailed prompt ready for image generator}"
 
@@ -1891,54 +1892,61 @@ This style guide will be referenced by the Teaching-Agent when:
 
 ## Purpose
 
-Executes saved image prompts stored in `journal.md` → `## Sessions` → `#### Images` blocks via the browser — in two modes:
+Executes saved image prompts stored in `journal.md` → `## Sessions` → `#### Images` blocks — with the agent's own image tool if it has one, otherwise via ChatGPT in the browser — in two modes:
 
 - **Single mode** (`:generate-image {slug}`) — execute one specific image entry directly
 - **Batch mode** (`:generate-image` without argument) — show mode selection, then process all pending prompts
 
 To generate and save prompts first, use `:create-image`.
 
-Requires the **chrome-devtools MCP server** to be active and Chrome running with remote debugging.
+Which way is used is decided in Phase 0. Only the browser route needs the **chrome-devtools MCP server** and Chrome with remote debugging.
 
 ## Inputs
 
 - **Single mode:** the `<section>` whose heading is `#### {slug}`, found in any session's `#### Images` block in `journal.md` → `## Sessions`
-- **Batch mode:** all `<section>` image entries across every session's `#### Images` block (skips entries whose `__Status:__` is `generated` or whose file at `__Datei:__` already exists)
-- Chrome DevTools MCP availability (checked at task start)
+- **Batch mode:** all `<section>` image entries across every session's `#### Images` block (skips entries whose `__Status:__` is `generated` or whose file at `__File:__` already exists). Older journals use `__Datei:__` and `__Alt-Text:__` for the same fields — read them, and write `__File:__` / `__Alt text:__` when an entry is updated.
+- The agent's own image tool, or Chrome DevTools MCP availability (checked in Phase 0)
 - Course language from `journal.md` → `## Course Context` (safety-net: appended to prompt if no language instruction is already present)
 
 ## Output
 
-- Downloaded images saved to the exact path already recorded in that entry's `__Datei:__` field (written by `:create-image`, mode-resolved per `data/file-structure-modes.md` — do not re-derive independently)
+- Downloaded images saved to the exact path already recorded in that entry's `__File:__` field (written by `:create-image`, mode-resolved per `data/file-structure-modes.md` — do not re-derive independently)
 - Confirmation per image; batch summary at the end
 
 **Called from `:build-session` Step 3:** its single terminal confirmation covers all images of that run; skip the per-image and Start / Cancel confirmations below. Run only for the slugs it passes.
 
-## MCP Setup (required)
+## Phase 0: Choose the route
+
+Decide by the tools the running agent actually has — never by its name:
+
+1. **Own image tool** — the agent has a built-in tool that turns a prompt into an image file (e.g. Codex). Use it: no browser, no ChatGPT window. Writes only inside the project, so it needs the normal chat confirmation (tier "confirm in chat" in `data/agent-links.md`; inside `:build-session` its start confirmation covers it). Continue with Phase 2a/2b, then [Phase 3D](#phase-3d-own-image-tool).
+2. **Browser route** — no own image tool, but the chrome-devtools MCP tools are available. Opens an external browser session, so it keeps the terminal confirmation. Continue with Phase 1.
+3. **Neither** — explain both options in one short message (an agent with its own image tool, or the browser setup below) and stop. Suggest `:create-image` for prompt-only mode.
+
+Tool names differ per agent: the chrome-devtools tools are e.g. `mcp_chrome-devtools_list_pages` in VS Code and `mcp__…chrome-devtools__list_pages` in Claude Code — match by the tool name ending (`list_pages`, `resize_page`, `navigate_page`, `evaluate_script`).
+
+---
+
+## Phase 1: Browser route — entry point
+
+Setup (once): Chrome with remote debugging, and the chrome-devtools MCP server configured in the agent's MCP settings (VS Code `mcp.json`, Claude Code `.mcp.json` or plugin, Codex `config.toml`):
 
 ```bash
 google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug
 ```
 
-The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
+1. The chrome-devtools tools are available (Phase 0, route 2).
 
----
-
-## Phase 1: Entry Point
-
-1. Check if `mcp_chrome-devtools_*` tools are available.
-   - **Not available** → explain setup, stop. Suggest `:create-image` for prompt-only mode.
-
-2. Check if Chrome is already running with remote debugging by calling `mcp_chrome-devtools_list_pages`.
+2. Check if Chrome is already running with remote debugging by calling `list_pages`.
    - **Fails or returns empty** → start Chrome in the background:
      ```bash
      google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug &
      ```
-     Wait ~3 seconds, then retry `mcp_chrome-devtools_list_pages` to confirm connection.
+     Wait ~3 seconds, then retry `list_pages` to confirm connection. Starting Chrome is part of the terminal-confirmed browser route.
      If it still fails: inform the instructor and stop.
    - **Succeeds** → continue.
 
-3. Resize the browser viewport: use `mcp_chrome-devtools_resize_page` → width: 1280, height: 900.
+3. Resize the browser viewport: use `resize_page` → width: 1280, height: 900.
    This ensures stop-button and send-button are rendered (they may be hidden on narrow viewports).
 
 4. Determine mode:
@@ -1946,7 +1954,7 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
    - **No argument** → 🎛️ ask with structured question (single choice):
      - **Single** — enter a slug to execute one prompt
      - **Sequential batch** — process all pending prompts one by one, agent controls each step
-     - **Automated batch** — inject a JS loop into the browser, runs fully unattended
+     - **Automated batch** — inject a JS loop into the browser, runs fully unattended (browser route only)
 
 ---
 
@@ -1961,15 +1969,15 @@ The `chrome-devtools` MCP server must be configured in VS Code's `mcp.json`.
 ## Phase 2b: Batch Mode — Collect Queue
 
 3. Scan every session's `#### Images` block in `journal.md` → `## Sessions` for `<section>` image entries.
-4. Read the slug and target path per entry from its `#### {image-slug}` heading and `__Datei:__` field.
+4. Read the slug and target path per entry from its `#### {image-slug}` heading and `__File:__` field.
 5. Skip if already generated:
-   - `__Status:__` is `generated`, **or** the file at `__Datei:__` already exists → mark `⏭ skipped`
+   - `__Status:__` is `generated`, **or** the file at `__File:__` already exists → mark `⏭ skipped`
    - otherwise (`__Status:__ prompt-ready` and no file yet) → add to queue
 6. Print queue:
    ```
    Batch queue: {N} to process, {M} skipped (already done)
-   - fox-samurai  → {__Datei:__ path from that entry}
-   - whale-astronaut → {__Datei:__ path from that entry}
+   - fox-samurai  → {__File:__ path from that entry}
+   - whale-astronaut → {__File:__ path from that entry}
    ```
 7. 🎛️ Confirm: **Start / Cancel**
 
@@ -2076,7 +2084,16 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ---
 
-## Phase 3: Submit to ChatGPT *(single + sequential batch)*
+## Phase 3D: Own image tool
+
+For each queued entry (single or sequential batch):
+
+1. Take the `__Prompt:__` value and apply the same language safety-net as Phase 3 below.
+2. Generate the image with the agent's own image tool.
+3. Save the result exactly at the `__File:__` path (create the folder if needed; if the tool writes elsewhere, move the file there).
+4. Check that the file exists at that path, then continue with Phase 5b. If generation fails, report `❌ failed` and stop (single) or continue (batch).
+
+## Phase 3: Submit to ChatGPT *(browser route, single + sequential batch)*
 
 - **First image only:** Navigate to `https://chatgpt.com/`. For subsequent images in sequential batch, stay on the same page — just insert the next prompt.
 - **Language safety-net:** Read course language from `journal.md` → `## Course Context`. If the prompt does not already contain a language instruction for in-image text (i.e., does not mention "text visible in the image"), append to the prompt:
@@ -2139,9 +2156,9 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ## Phase 5: Download and Save *(single + sequential batch)*
 
-- Save path: use the exact path already recorded in this entry's `__Datei:__` field (written by `:create-image`, already resolved for the active File Structure mode — see `data/file-structure-modes.md`). Create the containing folder if it does not exist yet. Only fall back to `~/Downloads/{image-slug}.png` if `__Datei:__` is missing entirely (inform the instructor).
+- Save path: use the exact path already recorded in this entry's `__File:__` field (written by `:create-image`, already resolved for the active File Structure mode — see `data/file-structure-modes.md`). Create the containing folder if it does not exist yet. Only fall back to `~/Downloads/{image-slug}.png` if `__File:__` is missing entirely (inform the instructor).
 - Collect new `file_` URLs via `urlsBefore` diff, deduplicated by `file_` ID. Take only **`newUrls[0]`** — the first new URL is the finished image; subsequent URLs are still-loading previews.
-- Download as `{image-slug}.png` to the path above.
+- Download as `{image-slug}.png`. The browser saves it in its own download folder, not in the project: move it from there to the path above (part of the terminal-confirmed browser route) and check that it arrived.
 - Download via Blob URL:
   ```js
   fetch(newUrls[0]).then(r => r.blob()).then(blob => {
@@ -2155,8 +2172,8 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ## Phase 5b: Update Journal Entry *(all modes)*
 
-- In the `<section>` for `{slug}`, set `__Status:__` to `generated`.
-- The `![…]({__Datei:__ path})` embed is already present (written by `:create-image`) and now renders the saved PNG — no change needed since the file was saved to that exact path.
+- Only once the file exists at the `__File:__` path: in the `<section>` for `{slug}`, set `__Status:__` to `generated`. If it does not, keep `prompt-ready` and report where the file is.
+- The `![…]({__File:__ path})` embed is already present (written by `:create-image`) and now renders the saved PNG — no change needed since the file was saved to that exact path.
 
 ---
 
@@ -2164,7 +2181,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
 
 ```
 Batch complete.
-✅  3 images generated and saved to their recorded `__Datei:__` paths
+✅  3 images generated and saved to their recorded `__File:__` paths
 ⏭   1 skipped (already existed)
 ❌  0 failed
 ```
@@ -2179,10 +2196,10 @@ If any failures: list slugs, suggest `:generate-image {slug}` to retry individua
 | Generate prompt          | ✅              | ❌ (reads saved)          | ❌ (reads saved)           |
 | Save prompt to journal   | ✅ always        | ❌                         | ❌                         |
 | Set Status → generated   | ❌ (prompt-ready)| ✅                         | ✅                         |
-| Submit to ChatGPT        | ❌              | ✅ single                 | ✅ all pending             |
+| Generate the image       | ❌              | ✅ own tool or ChatGPT    | ✅ all pending             |
 | Download image           | ❌              | ✅                         | ✅                         |
 | Save to project folder   | ❌              | ✅                         | ✅                         |
-| Requires chrome-devtools | ❌              | ✅                         | ✅                         |
+| Requires chrome-devtools | ❌              | browser route only        | browser route only        |
 
 ==================== END: specs/tasks/generate-image.md ====================
 
@@ -5367,7 +5384,7 @@ page content (and course scripts) can forge any link.
 | **run** | `switch`, `help`, `list-agents`, `list-learners`, `agent`, `preview`, `update-dashboard`, `validate-syntax`, `validate-course {number}` (session mode only) | Run immediately. Read-only, navigation, or derived state only. |
 | **start interview** | `init-course`, `scaffold`, `coauthor-materials`, `try-as-learner`, `create-outline`, `create-didactics`, `create-agenda`, `create-learner-persona`, `configure-agent`, `save-notes`, `save-decision` | Start the dialog immediately, without a start confirmation. The task's own **save confirmation** (summary of what will be written + "Save" / "Change something") is the single write confirmation; if the task file has no such step, insert it before the first write. Nothing is written before it — with one exception: `init-course` may create `journal.md` as a byte-for-byte copy of `templates/journal.md` before the first question (setup without any content from the instructor, so the preview can show it during the interview). |
 | **confirm in chat** | every other command that only writes inside the project (`journal.md`, `materials/`, `assets/`, root `README.md`) | Ask in the preview chat (see Handling step 3) before running. |
-| **confirm in terminal** | `manage-git`, `create-project`, `update-project`, `generate-image` (also inside `build-session`: one confirmation before its image step) | Runs git, publishing, or external browser sessions. Post a chat note that confirmation is waiting in the terminal, then ask there. |
+| **confirm in terminal** | `manage-git`, `create-project`, `update-project`, `generate-image` on the browser route (also inside `build-session`: one confirmation before its image step; with the agent's own image tool it is "confirm in chat") | Runs git, publishing, or external browser sessions. Post a chat note that confirmation is waiting in the terminal, then ask there. |
 | **never via link** | `exit`, unknown commands | Do not run. Answer in the chat that this action is not available as a link. |
 
 ## Chat Conduct

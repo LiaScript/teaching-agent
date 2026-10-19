@@ -20,7 +20,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 - Website color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet)
 - Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)
 - Course language from `journal.md` → `## Course Context` (Language field — for in-image text language)
-- File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) — determines the asset path saved in `__Datei:__` below
+- File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) — determines the asset path saved in `__File:__` below
 
 ## Output
 
@@ -104,9 +104,9 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 
 #### {image-slug}
 
-* __Datei:__ {path}
+* __File:__ {path}
 * __Status:__ prompt-ready
-* __Alt-Text:__ {descriptive alt text}
+* __Alt text:__ {descriptive alt text}
 * __Prompt:__
   "{full detailed prompt ready for image generator}"
 
