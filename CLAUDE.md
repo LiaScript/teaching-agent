@@ -62,7 +62,6 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 | `:try-as-learner {number} {companion?}` | `specs/tasks/try-as-learner.md` | try one unit as a learner in the preview, with a learning companion (find_tea… |
 | `:validate-course` | `specs/tasks/validate-course.md` | no args: full course check before publishing and replace validation reports i… |
 | `:validate-course {number}` | `specs/tasks/validate-course.md` | in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions` |
-| `:assemble-bundle` | `specs/tasks/assemble-bundle.md` | — |
 | `:save-notes {type?} {title?}` | `specs/tasks/save-notes.md` | summarize the current discussion and append it to `journal.md` → `## Notes Ba… |
 | `:save-decision {title}` | `specs/tasks/save-notes.md` | save a structured decision record (ADR format) and append it to `journal.md` … |
 | `:help` | — | Show available actions |

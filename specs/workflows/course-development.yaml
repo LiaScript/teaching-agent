@@ -295,7 +295,7 @@ workflow:
         Result rules (same order as in session mode): deferrals decided in the first run (⏳), other ❌ on required/mechanical items → FAIL, open pedagogical findings → PASS with concerns; never re-graded on request.
 
         Publishing Gate (enforced):
-        - `Mode: course` + PASS → proceed to :create-project or :assemble-bundle
+        - `Mode: course` + PASS → proceed to :create-project
         - FAIL → publishing commands blocked until re-validation passes
         - PASS with concerns → publishing stays blocked; the instructor fixes or accepts each concern individually (recorded as a decision), then re-validates
 
@@ -333,21 +333,6 @@ workflow:
         Only when the instructor explicitly wants to publish updates, and only with the same Publishing Gate as :create-project (`Mode: course` + `Result: PASS`). Branches the same way as :create-project:
         - single-file: commit and push the changed README.md/assets/ — the existing viewer URL reflects the update automatically
         - multi-file: update project.yaml with new/changed materials, commit and push, trigger the GitHub Pages workflow
-
-    # Phase 7: Bundling (Optional)
-    - step: assemble_bundle
-      agent: teaching
-      command: :assemble-bundle
-      output: course-bundle/
-      optional: true
-      condition: project_validation == PASS
-      notes: |
-        Create complete distributable package (requires `Mode: course` and `Result: PASS` in `journal.md` → `## Validation` → `### Latest Validation Summary`):
-        - Pre-flight check: blocks if `### Latest Validation Summary` is missing, not `Mode: course`, or not `Result: PASS`
-        - Collects `journal.md` plus all materials/
-        - Ensures optional sections (`## Agenda`, `## Sessions`, `## Notes Backup`) are represented if present
-        - Includes assets/ if present
-        - Generates bundle-index.md with content table and quick-start guide
 
   usage_notes: |
     This workflow is flexible:
@@ -404,7 +389,7 @@ workflow:
 
         U --> X[development: manage-git - anytime]
         W --> X
-        X --> Y[Optional: teaching: assemble-bundle]
+        X --> Y[Course ready to share]
         Y --> END[Published Course]
 
         style A fill:#0B6E75,color:#fff
@@ -503,7 +488,6 @@ workflow:
       - :try-as-learner {number} {companion?}
       - :validate-course
       - :validate-course {number}
-      - :assemble-bundle
       - :save-notes {type?} {title?}
       - :save-decision {title}
 

@@ -322,7 +322,6 @@ commands:
   :try-as-learner {number} {companion?}: "run task `tasks/try-as-learner.md` — try one unit as a learner in the preview, with a learning companion (find_teacher, learner view), then debrief"
   :validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number}: session-level syntax + content check after coauthor"
   :validate-course {number}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
-  :assemble-bundle: "run task `tasks/assemble-bundle.md`"
   :save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
   :save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
   :help: "Show available actions"
@@ -353,7 +352,6 @@ dependencies:
     - quick-fix.md
     - try-as-learner.md
     - validate-course.md
-    - assemble-bundle.md
     - create-learner-persona.md
     - save-notes.md
   templates:
@@ -857,92 +855,6 @@ Offers two paths for each missing core section:
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: specs/tasks/analyze-existing.md ====================
-
-
-==================== START: specs/tasks/assemble-bundle.md ====================
-
-# Task: assemble-bundle
-
-## Purpose
-
-Combines the project memory, materials, and assets into a complete, distributable package for handoff, archiving, or offline use.
-Produces a structured `course-bundle/` folder with an auto-generated index and all relevant artifacts.
-
-## Inputs
-
-- `journal.md` — canonical project memory containing course context, outline, didactics, agenda, sessions, session status, validation, reviews, and notes backup
-- File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`)
-- **multi-file mode:** `materials/` — full session materials (primary content), each with its own nested `assets/`
-- **single-file mode:** root `README.md` (primary content) and `assets/` (if exists)
-- `journal.md` → `## Validation` → `### Latest Validation Summary` — latest QA gate (**required, must show `Mode: course` and `Result: PASS`**)
-
-## Output
-
-**multi-file mode:**
-```
-course-bundle/
-├── bundle-index.md          ← auto-generated index
-├── journal.md               ← canonical project memory
-└── materials/
-    └── {n}-{slug}/
-        ├── README.md
-        └── assets/          ← if exists
-```
-
-**single-file mode:**
-```
-course-bundle/
-├── bundle-index.md          ← auto-generated index
-├── journal.md               ← canonical project memory
-├── README.md                ← the whole course
-└── assets/                  ← if exists
-```
-
-## Steps
-
-1. **Pre-flight check:** Confirm `journal.md` → `## Validation` → `### Latest Validation Summary` exists and shows `Mode: course` and `Result: PASS`.
-   - If missing, not `Mode: course`, or not `Result: PASS`: block bundling. State: "⛔ Please run `:validate-course` first and resolve all issues before creating the bundle."
-
-2. Read course title and abstract from `journal.md` → `## Outline`.
-
-3. Scan all source folders and collect files, according to `journal.md` → `## Course Context` → `__File Structure:__`:
-   - **multi-file:** `journal.md`, all files in `materials/` (including each session's nested `assets/`)
-   - **single-file:** `journal.md`, root `README.md`, and `assets/` (if exists)
-
-4. Generate `bundle-index.md`:
-
-   ```markdown
-   # Course Bundle: [Course Title]
-
-   Generated: YYYY-MM-DD
-   Course type: [type from `journal.md` → `## Course Context`]
-   File Structure: [single-file | multi-file]
-   Validation: PASS (see `journal.md` → `## Validation` → `### Latest Validation Summary`)
-
-   ## Contents
-
-   | File                              | Description                              |
-   |------------------------------------|------------------------------------------|
-   | journal.md                        | Project memory: context, outline, didactics, agenda, skeletons, sessions, validation, reviews, notes |
-   | README.md _(single-file)_ / materials/{n}-{slug}/README.md _(multi-file)_ | Session N: [title from `journal.md` → `## Agenda`] |
-   | assets/ _(single-file, root)_ / materials/{n}-{slug}/assets/ _(multi-file, per session)_ | Visual assets and prompts, if present |
-
-   ## Quick Start
-
-   - **Instructor handoff:** Start with `journal.md` → `## Outline` and `journal.md` → `## Didactics`
-   - **LiaScript publish:** Use `README.md` (single-file) or the files in `materials/` (multi-file) directly
-   - **Quality audit:** See `journal.md` → `## Validation`
-   ```
-
-5. Copy `journal.md` and the mode-appropriate content (`README.md` + `assets/` for single-file, or `materials/` for multi-file) into `course-bundle/`, preserving subfolder structure.
-
-6. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
-
-7. Confirm completion:
-   > "Bundle created in `course-bundle/`. Contains `journal.md`, [N] material files, and [assets/ ✅ / no assets]."
-   > "Next step: `:agent development` → `:create-project` to publish the course."
-
-==================== END: specs/tasks/assemble-bundle.md ====================
 
 
 ==================== START: specs/tasks/build-session.md ====================
@@ -1967,7 +1879,7 @@ Ensures all visual materials across courses maintain a consistent brand identity
 This style guide will be referenced by the Teaching-Agent when:
 - Creating logos for courses (`:create-logo`)
 - Generating image prompts during material co-authoring (`:coauthor-materials`)
-- Designing visual elements for the course bundle
+- Designing visual elements for the published course
 - Ensuring consistent branding across all course materials
 
 ==================== END: specs/tasks/create-visuals.md ====================
@@ -3220,7 +3132,7 @@ Run this task automatically after any task that changes project state:
 - `:coauthor-materials` after approval, `:quick-fix`
 - `:validate-course`, `:review-as-persona`
 - `:save-notes` or `:save-decision`
-- `:assemble-bundle`, `:create-project` or `:update-project`
+- `:create-project` or `:update-project`
 
 ## Steps
 
@@ -5883,7 +5795,7 @@ Compare the total estimate to the session's declared duration in `journal.md` �
 
 # File Structure Modes
 
-> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:assemble-bundle`, `:create-project`, `:update-project`, `:analyze-existing`, `:review-as-persona`, `:create-image`, and `:generate-image`.
+> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:create-project`, `:update-project`, `:analyze-existing`, `:review-as-persona`, `:create-image`, and `:generate-image`.
 
 Every course runs in exactly one **File Structure** mode, recorded in `journal.md` → `## Course Context` → `__File Structure:__`. Tasks that read or write a material or asset path must resolve it from the active mode below — never hardcode a path shape inline.
 
@@ -5932,7 +5844,6 @@ The same rules apply to every task that creates a session's material document �
 |---|---|---|
 | `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course` (session mode) | the `##` chapter matching this session inside root `/README.md` | `materials/{number}-{slug}/README.md` |
 | `:create-image` / `:generate-image` asset path | `assets/images/{image-slug}.png` (or `/videos/`) | `materials/{number}-{slug}/assets/images/{image-slug}.png` (or `/videos/`) |
-| `:assemble-bundle` | copies `README.md` + `assets/` | copies `materials/` (each session folder keeps its own nested `assets/`) |
 | `:create-project` / `:update-project` | **not applicable** — see "Publishing" below | generates `project.yaml` with one `collection:` entry per `materials/{number}-{slug}/README.md` |
 | `:analyze-existing` scan | root `README.md` with multiple `##` chapters, no `materials/` folder | `materials/*/README.md` folders |
 
@@ -8164,7 +8075,7 @@ workflow:
         Result rules (same order as in session mode): deferrals decided in the first run (⏳), other ❌ on required/mechanical items → FAIL, open pedagogical findings → PASS with concerns; never re-graded on request.
 
         Publishing Gate (enforced):
-        - `Mode: course` + PASS → proceed to :create-project or :assemble-bundle
+        - `Mode: course` + PASS → proceed to :create-project
         - FAIL → publishing commands blocked until re-validation passes
         - PASS with concerns → publishing stays blocked; the instructor fixes or accepts each concern individually (recorded as a decision), then re-validates
 
@@ -8202,21 +8113,6 @@ workflow:
         Only when the instructor explicitly wants to publish updates, and only with the same Publishing Gate as :create-project (`Mode: course` + `Result: PASS`). Branches the same way as :create-project:
         - single-file: commit and push the changed README.md/assets/ — the existing viewer URL reflects the update automatically
         - multi-file: update project.yaml with new/changed materials, commit and push, trigger the GitHub Pages workflow
-
-    # Phase 7: Bundling (Optional)
-    - step: assemble_bundle
-      agent: teaching
-      command: :assemble-bundle
-      output: course-bundle/
-      optional: true
-      condition: project_validation == PASS
-      notes: |
-        Create complete distributable package (requires `Mode: course` and `Result: PASS` in `journal.md` → `## Validation` → `### Latest Validation Summary`):
-        - Pre-flight check: blocks if `### Latest Validation Summary` is missing, not `Mode: course`, or not `Result: PASS`
-        - Collects `journal.md` plus all materials/
-        - Ensures optional sections (`## Agenda`, `## Sessions`, `## Notes Backup`) are represented if present
-        - Includes assets/ if present
-        - Generates bundle-index.md with content table and quick-start guide
 
   usage_notes: |
     This workflow is flexible:
@@ -8273,7 +8169,7 @@ workflow:
 
         U --> X[development: manage-git - anytime]
         W --> X
-        X --> Y[Optional: teaching: assemble-bundle]
+        X --> Y[Course ready to share]
         Y --> END[Published Course]
 
         style A fill:#0B6E75,color:#fff
@@ -8372,7 +8268,6 @@ workflow:
       - :try-as-learner {number} {companion?}
       - :validate-course
       - :validate-course {number}
-      - :assemble-bundle
       - :save-notes {type?} {title?}
       - :save-decision {title}
 

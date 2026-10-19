@@ -117,16 +117,13 @@ flowchart TD
     DEV["**SESSIONS** (iterative or batch)<br/>:create-session → :promote-session<br/>:coauthor-materials → :validate-course<br/>🧑‍🎓 :review-as-persona (optional)"]
     VAL["**VALIDATION** · :validate-course<br/>→ Validation (PASS / FAIL gate)"]
     PUB["🛠️ :create-project · :manage-git<br/>(optional, gated on PASS)"]
-    BUNDLE["**BUNDLE** · :assemble-bundle<br/>→ course-bundle/"]
 
     INIT --> OUTLINE --> DID --> VIS --> AGENDA --> DEV --> VAL
     DID -.->|optional| PERSONA -.-> VIS
     VAL -->|PASS| PUB
-    VAL -->|PASS| BUNDLE
     INIT -.->|improve-existing| ANALYZE[":analyze-existing"] -.-> DEV
 
     style INIT fill:#0B6E75,color:#fff
-    style BUNDLE fill:#FF8C42,color:#fff
     style VIS fill:#6B4E9B,color:#fff
     style PERSONA fill:#6B4E9B,color:#fff
     style PUB fill:#2E7D32,color:#fff
@@ -155,7 +152,7 @@ If you already know what you want, `:scaffold` replaces `:init-course → :creat
 
 ### Publishing gate
 
-Publishing (`:create-project`, `:update-project`) and bundling (`:assemble-bundle`) are **blocked until** `:validate-course` records `Mode: course` + `Result: PASS` in `## Validation`. This keeps half-finished courses from being shipped.
+Publishing (`:create-project`, `:update-project`) is **blocked until** `:validate-course` records `Mode: course` + `Result: PASS` in `## Validation`. This keeps half-finished courses from being shipped.
 
 ---
 
@@ -336,7 +333,6 @@ Details: [`specs/data/skills.md`](specs/data/skills.md).
 | `:coauthor-materials` | Interactive content co-authoring in persona |
 | `:quick-fix {n} {description}` | Targeted single-issue correction |
 | `:validate-course [{n}]` | Full course check, or single-session check |
-| `:assemble-bundle` | Package everything into `course-bundle/` |
 | `:save-notes {type?} {title?}` | Save a summary / research / decision note |
 | `:save-decision {title}` | Save a structured decision record (ADR) |
 | `:configure-agent {agent}` | Customize an agent's behavior in `journal.md` |
@@ -426,7 +422,6 @@ dist/web-bundle.md     ← generated: paste-anywhere bundle
 
 :agent teaching → :validate-course        # full course → PASS
 :agent development → :create-project       # publish to GitHub Pages
-:assemble-bundle                           # distributable package
 ```
 
 ---

@@ -38,7 +38,7 @@ Run this task automatically after any task that changes project state:
 - `:coauthor-materials` after approval, `:quick-fix`
 - `:validate-course`, `:review-as-persona`
 - `:save-notes` or `:save-decision`
-- `:assemble-bundle`, `:create-project` or `:update-project`
+- `:create-project` or `:update-project`
 
 ## Steps
 

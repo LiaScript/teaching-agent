@@ -268,7 +268,6 @@ commands:
   :try-as-learner {number} {companion?}: "run task `tasks/try-as-learner.md` — try one unit as a learner in the preview, with a learning companion (find_teacher, learner view), then debrief"
   :validate-course: "run task `tasks/validate-course.md` with `checklists/course-quality-checklist.md` — no args: full course check before publishing and replace validation reports inside all session subsections; with {number}: session-level syntax + content check after coauthor"
   :validate-course {number}: "run task `tasks/validate-course.md` in session mode for a single material file and replace that session's `#### Validation Report` in `journal.md` → `## Sessions`"
-  :assemble-bundle: "run task `tasks/assemble-bundle.md`"
   :save-notes {type?} {title?}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — summarize the current discussion and append it to `journal.md` → `## Notes Backup` — type: summary | research | decision (default: summary)"
   :save-decision {title}: "run task `tasks/save-notes.md` with `templates/note-backup.yaml` — save a structured decision record (ADR format) and append it to `journal.md` → `## Notes Backup`"
   :help: "Show available actions"
@@ -299,7 +298,6 @@ dependencies:
     - quick-fix.md
     - try-as-learner.md
     - validate-course.md
-    - assemble-bundle.md
     - create-learner-persona.md
     - save-notes.md
   templates:
