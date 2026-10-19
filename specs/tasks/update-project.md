@@ -32,22 +32,26 @@ Only if installed (see `data/skills.md`) — never install them:
    - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
 2. Read `journal.md` → `## Course Context` → `__File Structure:__` and branch:
 
+### both modes
+
+3. Read `journal.md` → `## Publishing` (repository, branch, viewer URL). If it is missing or empty, read the repository first exactly as `tasks/create-project.md` step 3 does.
+4. Ask the user about their git/GitHub experience.
+
 ### single-file mode
 
-3. Ask the user about their git/GitHub experience and confirm they want to publish the update.
-4. Stage, commit, and push the changed `README.md` and/or `assets/` to the repository (hand off to `:manage-git` for the actual git operations).
-5. Confirm: the LiaScript live-viewer URL from the last `:create-project` run is unchanged and now reflects the update (raw GitHub content updates as soon as the push lands — no rebuild step).
-6. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state).
+5. Check which changed files must be committed (`README.md`, `assets/`).
+6. **Show the plan, then confirm in the terminal** — before any change: the files to commit, the push target, and that the viewer URL stays the same (raw GitHub content updates as soon as the push lands — no rebuild step).
+7. On confirmation: hand off to `:manage-git` to commit and push.
 
 ### multi-file mode
 
-3. Ask the user about their git/GitHub experience and confirm they want to update and publish.
-4. Scan the `materials/` folder for new or updated session files.
-5. Update the `project.yaml` `collection:` entries accordingly (one entry per `materials/{number}-{slug}/README.md`) and ask the user to include all of the current materials or to import only a subset. Use colors and style from `journal.md` → `## Visual Identity` for any styling updates.
-6. Stage, commit, and push the updated `project.yaml` and new/changed materials to the repository.
-7. Trigger the GitHub Actions workflow to publish the updates (overwriting gh-pages as before).
-8. Explain each step to the user and confirm before making changes.
-9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state).
+5. Scan the `materials/` folder for new or updated session files and propose the new `project.yaml` `collection:` entries (one entry per `materials/{number}-{slug}/README.md`); ask whether to include all current materials or only a subset. Use colors and style from `journal.md` → `## Visual Identity` for any styling updates.
+6. **Show the plan, then confirm in the terminal** — before any change: the `project.yaml` changes, the files to commit, the push target, and that the GitHub Actions workflow republishes the GitHub Pages URL (overwriting gh-pages as before).
+7. On confirmation: update `project.yaml`, then hand off to `:manage-git` to commit and push; the push triggers the workflow.
+
+### after the push (both modes)
+
+8. Set `journal.md` → `## Publishing` → `__State:__ published on {date} (commit {short hash})` and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Usage
 

@@ -25,7 +25,7 @@ agent_coordination:
   role: "Publishing & git specialist — hands back to Teaching-Agent when publishing is set up"
 
   on_activation:
-    - "Read `journal.md`, especially `## Course Context` and `## Validation`, to understand course type, project conventions, and publishing readiness"
+    - "Read `journal.md`, especially `## Course Context`, `## Validation` and `## Publishing`, to understand course type, project conventions, and publishing readiness"
     - "Read only `journal.md` → `## Agents` → `### Development-Agent` for project-specific publishing/git customization, if present"
     - "Do not read `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, or `### Learner Personas` during activation"
     - "Read `journal.md` → `## Course Context` → `__File Structure:__` (see data/file-structure-modes.md) and remember which publishing path applies: single-file → no project.yaml, no GitHub Pages, just push + LiaScript viewer link; multi-file → project.yaml + GitHub Pages"

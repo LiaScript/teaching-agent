@@ -390,6 +390,17 @@ Course check not yet run. Unit checks are under "Sessions"; the course check run
 
 ---
 
+## Publishing
+
+_Maintained by the Development-Agent (`:create-project`, `:update-project`): read from the repository before anything is published. The dashboard shows it._
+
+* __Repository:__ none yet
+* __Branch:__ —
+* __Viewer URL:__ —
+* __State:__ not published
+
+---
+
 ## Analysis Status
 
 _Only used for improve-existing courses — filled by `:analyze-existing`._

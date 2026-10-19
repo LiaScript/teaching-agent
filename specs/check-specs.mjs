@@ -27,6 +27,8 @@ const required = {
   "tasks/quick-fix.md": ["Change path after a check", "Called from `:build-session`"],
   "tasks/generate-image.md": ["never by its name", "Only once the file exists"],
   "tasks/build-session.md": ["Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
+  "tasks/create-project.md": ["Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
+  "tasks/update-project.md": ["Show the plan, then confirm in the terminal"],
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["Findings returned to a caller never contain line numbers", "is never ❌ for it"],
@@ -39,7 +41,7 @@ const required = {
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
   "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "never\n        relative to another optional block"],
   "templates/session-validation.yaml": ["Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
-  "templates/journal.md": ["journal-start", "Target Group"],
+  "templates/journal.md": ["journal-start", "Target Group", "## Publishing"],
   "workflows/course-development.yaml": [":try-as-learner", "change path", "One way to start", "write-dashboard.mjs"],
   "agents/teaching-agent.yaml": [":try-as-learner", "starts with `## Outline`", "read a task file **completely**"],
 };

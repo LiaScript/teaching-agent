@@ -13,7 +13,8 @@ The dashboard is **derived state**. It is never the source of truth.
 - `journal.md` main metadata header (`language:`, template `import:` lines)
 - `journal.md` → `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`,
   `## Sessions` (overview table, `#### Validation Report`, `#### Persona Reviews`),
-  `## Templates`, `## Validation` → `### Latest Validation Summary`
+  `## Templates`, `## Validation` → `### Latest Validation Summary`,
+  `## Publishing` (repository, viewer URL, state — for the publishing step of the course process)
 - `journal.md` → `## Agents` → `### Learner Personas` — headings only, for actions
 - `templates/project-dashboard.yaml` — semantic data shape
 - `dashboard/README.md` — component API of the installed library

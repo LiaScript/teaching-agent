@@ -17,8 +17,8 @@ Sets up publishing for the course. Behavior branches hard on `journal.md` → `#
 
 ## Output
 
-- **single-file:** nothing generated on disk; a confirmed git push and the LiaScript live-viewer URL
-- **multi-file:** `project.yaml` in the root folder (includes all materials as separate cards) and a GitHub Actions workflow for LiaScript export and publishing
+- **single-file:** nothing generated on disk except `journal.md` → `## Publishing`; a confirmed git push and the LiaScript live-viewer URL
+- **multi-file:** `project.yaml` in the root folder (includes all materials as separate cards), a GitHub Actions workflow for LiaScript export and publishing, and `journal.md` → `## Publishing`
 
 ## Optional Skills
 
@@ -36,29 +36,22 @@ Only if installed (see `data/skills.md`) — never install them:
 
 ### single-file mode
 
-3. Ask the user about their git/GitHub experience.
-4. Check which files must be added to git and which need to be committed (`README.md`, `assets/`).
-5. Explain that single-file mode publishes by pushing to GitHub directly — no `project.yaml`, no workflow, no GitHub Pages step (see `data/file-structure-modes.md` → "Publishing"). Confirm before proceeding.
-6. Offer to commit and push changes to GitHub if the user agrees (hand off to `:manage-git` for the actual git operations).
-7. Once pushed, determine the repo's `{owner}/{repo}/{branch}` and present the LiaScript live-viewer URL:
-   ```
-   https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md
-   ```
-   Note this is a stable LiaScript convention — recommend the instructor spot-check it against https://liascript.github.io if anything looks off (per epistemic rules: never assert unverified syntax as certain).
-8. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state: pushed + viewer URL, no project.yaml/Pages).
+3. **Read the repository before anything changes** (read-only git): the `origin` remote and the current branch. Derive `{owner}/{repo}` and the viewer URL for the mode — single-file: `https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md`; multi-file: `https://{owner}.github.io/{repo}/` (GitHub Pages). This is a stable LiaScript / GitHub convention — recommend the instructor spot-check it once (epistemic rules: never assert unverified syntax as certain). Without a remote: ask whether to create the GitHub repository via `:manage-git` first, or stop.
+4. Ask the user about their git/GitHub experience.
+5. Check which files must be added to git and which need to be committed (`README.md`, `assets/`).
+6. **Show the plan, then confirm in the terminal** (tier "confirm in terminal", `data/agent-links.md`) — before any change: single-file publishes by pushing to GitHub directly, no `project.yaml`, no workflow, no GitHub Pages step (see `data/file-structure-modes.md` → "Publishing"); the files to commit, the push target, the viewer URL, and the `## Publishing` entries that will be written.
+7. On confirmation: write `journal.md` → `## Publishing` (`__Repository:__`, `__Branch:__`, `__Viewer URL:__`, `__State:__ not published`), then hand off to `:manage-git` to commit and push.
+8. Once pushed: set `__State:__ published on {date} (commit {short hash})`, present the viewer URL, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ### multi-file mode
 
-3. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
-4. Build the `collection:` entries: one entry per `materials/{number}-{slug}/README.md`, in session order; ask the user if any session should be excluded.
-5. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling.
-6. Review the internal reference for the latest workflow and publishing best practices.
-7. Generate a `project.yaml` in the root folder, including all materials and styled according to the style guide.
-8. Create a GitHub Actions workflow for LiaScript export and publishing to GitHub Pages. The workflow must always overwrite the gh-pages branch completely (no history or previous files kept), e.g. by using `force_orphan: true` in the deployment step.
-9. Check which files must be added to git and which need to be committed.
-10. Explain each step to the user and confirm before making changes.
-11. Offer to commit and push changes to GitHub if the user agrees.
-12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (publishing state).
+3. **Read the repository before anything changes** (read-only git): the `origin` remote and the current branch. Derive `{owner}/{repo}` and the viewer URL for the mode — single-file: `https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md`; multi-file: `https://{owner}.github.io/{repo}/` (GitHub Pages). This is a stable LiaScript / GitHub convention — recommend the instructor spot-check it once (epistemic rules: never assert unverified syntax as certain). Without a remote: ask whether to create the GitHub repository via `:manage-git` first, or stop.
+4. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
+5. Build the `collection:` entries: one entry per `materials/{number}-{slug}/README.md`, in session order; ask the user if any session should be excluded.
+6. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling, and review the internal reference for the latest workflow and publishing best practices.
+7. **Show the plan, then confirm in the terminal** — before any change: the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the files to commit, the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
+8. On confirmation: generate `project.yaml` in the root folder and the workflow file, write `journal.md` → `## Publishing` (`__State:__ not published`), then hand off to `:manage-git` to commit and push.
+9. Once pushed: set `__State:__ published on {date} (commit {short hash}) – GitHub Pages builds after the workflow run`, remind the instructor to activate GitHub Pages if it is not active yet, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Usage
 
