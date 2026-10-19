@@ -10,3 +10,6 @@ test/dashboard/artifacts/
 
 # Entwürfe für write-dashboard.mjs
 .cache/
+
+# Brainstorming-Entwürfe (Visual Companion)
+.superpowers/
