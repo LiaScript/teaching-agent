@@ -38,6 +38,9 @@ durchsuchen dieselben Daten.
 6. **Skills vorschlagen und installieren**: Fehlen die LiaScript-Skills,
    schlägt der Agent die Installation vor und installiert nach Zustimmung
    lokal im Projekt.
+7. **Browser-Tests absichern**: Playwright wird bei Bedarf nach Zustimmung
+   installiert; `check-material.mjs` funktioniert auf allen Systemen oder meldet
+   klar, was fehlt.
 
 ## Nicht-Ziele
 
@@ -259,6 +262,45 @@ Neu:
   klont, wird bei Bedarf selbst gefragt. Ziel-Ordner ist der des laufenden
   Agenten (z. B. `.claude/skills/` unter Claude Code).
 
+## Werkzeuge: Browser-Tests mit Playwright
+
+Templates müssen im Browser getestet werden. Playwright ist außerdem **schon
+heute eine versteckte Voraussetzung**: `specs/dashboard/check-material.mjs`
+(läuft u. a. in `:quick-fix` und bei Prüfungen) sucht Playwright nur im
+npx-Cache (`~/.npm/_npx`) und startet fest `/usr/bin/chromium`. Auf macOS,
+Windows oder ohne vorheriges `npx playwright` bricht es ab, ohne dass jemand eine
+Installation anbietet.
+
+Entschieden:
+
+1. **Interaktiv testen ohne Installation**: Beim Entwickeln testet der
+   Development-Agent im Preview der Lehrkraft mit dem DevServer-Werkzeug
+   `run_in_page` (rendert das Makro, gibt es Konsolenfehler) und die Lehrkraft
+   klickt selbst. Braucht nur den offenen Preview.
+2. **Automatische Tests mit der Playwright-Bibliothek**: Jedes eigene Template
+   bekommt Modelltests (Muster `specs/dashboard/check.mjs`) und einen Browsertest.
+   Fehlt Playwright, **fragt** der Agent und installiert nach Zustimmung **lokal
+   im Projekt** (`npm i -D playwright`, danach `npx playwright install chromium`;
+   Stufe **confirm in terminal**, ca. 150 MB Download). Schritte, die `sudo`
+   brauchen (`--with-deps` für Linux-Systembibliotheken), führt der Agent nie
+   aus – er nennt sie der Lehrkraft. Lehnt sie ab, laufen nur die Modelltests
+   und der Agent sagt, dass der Browsertest fehlt.
+3. **Playwright-MCP wird nicht vorausgesetzt** (Einrichtung je Agent
+   verschieden, Neustart nötig); 1 und 2 decken die Arbeit ab.
+4. **`check-material.mjs` reparieren** (gehört zu diesem Vorhaben):
+   - Playwright zuerst lokal im Projekt (`node_modules`) suchen, dann im
+     npx-Cache, dann `PLAYWRIGHT_MODULE_PATH`.
+   - Das von Playwright installierte Chromium verwenden; `/usr/bin/chromium`
+     höchstens als Rückfall, nicht fest verdrahtet.
+   - Fehlt Playwright oder der Browser: klare Meldung mit Exit-Code und dem
+     Installationsangebot aus Punkt 2 statt eines Absturzes; die aufrufenden
+     Tasks behandeln „Prüfung nicht möglich“ sichtbar (kein stilles Bestehen).
+   - Gleiches gilt für den Browsertest der Dashboard-Library, sobald er aus
+     `test/` nach `specs/` wandert.
+5. `node_modules/` des Kursprojekts gehört in dessen `.gitignore`;
+   `package.json`/Lockfile werden angelegt, wenn nicht vorhanden *(meine
+   Entscheidung)*.
+
 ## Befehle und Links
 
 Neue/erweiterte Befehle (Namen sind Builder-Entscheidung, sofern nicht anders
@@ -272,6 +314,7 @@ genannt):
 | Development | neu, z. B. `:develop-template {id}` | entwickeln im Projekt | confirm in chat |
 | Development | neu, z. B. `:publish-template {id}` | Repo, Topic, Tag, Import umstellen, optional PR | confirm in terminal |
 | alle | Skill-Installation | siehe oben | confirm in terminal |
+| Development (und Prüf-Tasks) | Playwright-Installation | siehe „Werkzeuge“ | confirm in terminal |
 
 - Alle neuen Befehle in die `commands:`-Maps, in `data/agent-links.md`
   (Stufen-Tabelle, Aktionszeile `## Templates`) und in `specs/workflows/course-development.yaml`.
