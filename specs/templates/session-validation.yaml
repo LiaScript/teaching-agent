@@ -25,6 +25,7 @@ template:
     - '2. Any other ❌ on a required element (Session Type or Method `Erforderlich`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step).'
+    - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
     - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead.'
   sections:
     - id: report-heading

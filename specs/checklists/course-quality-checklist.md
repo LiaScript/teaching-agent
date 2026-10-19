@@ -2,7 +2,7 @@
 
 > **Usage note:** Read `journal.md` → `## Course Context` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
 >
-> **Tags:** `[mechanical]` = verifiable from structure/presence/syntax, no content judgment needed — safe for the automated loop in `tasks/validate-course.md` → "Iteration (mechanical checks only)". `[pedagogical]` = needs content/didactic judgment — always escalated to the instructor, never auto-fixed in a loop.
+> **Tags:** `[mechanical]` = verifiable from structure/presence/syntax, no content judgment needed — safe for the automated loop in `tasks/validate-course.md` → "Iteration (mechanical checks only)". `[pedagogical]` = needs content/didactic judgment — always escalated to the instructor, never auto-fixed in a loop. `[advisory]` = computed mechanically, but only a hint for a human judgment — recorded in the report, never ❌, never part of the automated loop and never a reason for FAIL or "PASS with concerns".
 
 ## Context
 
@@ -87,7 +87,7 @@
 - [ ] [pedagogical] Hints and instructions never point to positions ("above", "below") across slides; they name the page title
 - [ ] [mechanical] Each session's content satisfies its declared Session Type's `Erforderlich` checklist from `## Didactics` → `__Session Types:__`
 - [ ] [mechanical] Each session's content satisfies its declared Session Method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
-- [ ] [mechanical] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is always advisory, never a fail by itself
+- [ ] [advisory] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is a hint for the instructor, never a fail
 
 ## LiaScript Syntax (per material file)
 

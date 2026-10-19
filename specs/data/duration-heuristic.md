@@ -38,12 +38,12 @@ Sum reading time and activity time for the session's total estimate.
 Compare the total estimate to the session's declared duration in `journal.md` → `## Agenda`.
 
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.
-- This is **always advisory, never a hard fail by itself** — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
+- This is an **`[advisory]` item** (see the tags in `checklists/course-quality-checklist.md`): a hint, never ❌, never a fail, never part of an automated fix loop — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
 
 ## Where this is used
 
 - `tasks/validate-course.md` — Content checks (session and course mode): computes the estimate and records the flag, if any.
 - `checklists/course-quality-checklist.md` — the "Session Materials" duration checkbox references this file instead of restating the formula.
-- `tasks/build-session.md` — content loop uses this during its mechanical gate.
+- `tasks/build-session.md` — records the flag as a hint in the content loop and hands it to the persona review (or the closing report); never fixes it automatically.
 - `tasks/create-agenda.md` — optional pointer when the instructor first declares session durations, as a sanity check.
 - `tasks/coauthor-materials.md` — optional self-check while drafting, before formal validation.

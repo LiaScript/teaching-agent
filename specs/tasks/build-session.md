@@ -42,7 +42,7 @@ c. Run `tasks/validate-course.md {number} {type}` (session mode) — this intern
 
 d. If any `[mechanical]`-tagged item (per `checklists/course-quality-checklist.md`) is FAIL: run `:quick-fix {number} {type} {description}` for each one. If a `:quick-fix` call escalates to `:coauthor-materials` per its own step 5 rule: **stop this loop immediately** and hand off to the instructor — do not invoke `:coauthor-materials` automatically, it requires a human in the loop.
 
-e. If any `[pedagogical]`-tagged item is flagged (including a "possibly too short" duration flag): do not auto-fix. Carry it forward into Step 2. If no personas exist to weigh in (Step 2 will be skipped), surface it directly in the closing report instead.
+e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is recorded (such as the "possibly too short" duration flag): do not auto-fix. Carry it forward into Step 2. If no personas exist to weigh in (Step 2 will be skipped), surface it directly in the closing report instead.
 
 **Loop:** Repeat b–d until every `[mechanical]` item passes, or after 5 iterations — whichever comes first. On hitting the cap: stop, list the remaining `[mechanical]` FAIL items, and report to the instructor instead of continuing to Step 2. See `CLAUDE.md` → "Iteration Pattern" for the general convention.
 

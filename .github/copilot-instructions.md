@@ -995,7 +995,7 @@ c. Run `tasks/validate-course.md {number} {type}` (session mode) — this intern
 
 d. If any `[mechanical]`-tagged item (per `checklists/course-quality-checklist.md`) is FAIL: run `:quick-fix {number} {type} {description}` for each one. If a `:quick-fix` call escalates to `:coauthor-materials` per its own step 5 rule: **stop this loop immediately** and hand off to the instructor — do not invoke `:coauthor-materials` automatically, it requires a human in the loop.
 
-e. If any `[pedagogical]`-tagged item is flagged (including a "possibly too short" duration flag): do not auto-fix. Carry it forward into Step 2. If no personas exist to weigh in (Step 2 will be skipped), surface it directly in the closing report instead.
+e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is recorded (such as the "possibly too short" duration flag): do not auto-fix. Carry it forward into Step 2. If no personas exist to weigh in (Step 2 will be skipped), surface it directly in the closing report instead.
 
 **Loop:** Repeat b–d until every `[mechanical]` item passes, or after 5 iterations — whichever comes first. On hitting the cap: stop, list the remaining `[mechanical]` FAIL items, and report to the instructor instead of continuing to Step 2. See `CLAUDE.md` → "Iteration Pattern" for the general convention.
 
@@ -3519,7 +3519,7 @@ Rules:
    - [ ] `[only if the skill `reference-checker` is available — see `data/skills.md` — and web access exists]` The session's references verified with `reference-checker`; record its summary (✅ / ⚠️ / 🚨 counts) and every 🚨 entry as findings in the report. Without the skill or web access, skip this check and say so in one line.
    - [ ] Content satisfies the `Erforderlich` (required elements) checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
    - [ ] `[if the session has a **Method:** line]` Content satisfies the `Erforderlich` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
-   - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration for this session in `journal.md` → `## Agenda`. This is always advisory — record the flag either way, never fail the report on this alone.
+   - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration for this session in `journal.md` → `## Agenda`. This is `[advisory]` — record the flag either way as a hint, never as ❌ or ⏳, and never change the result because of it.
 
    **Persona & style checks:**
    - [ ] Tone matches the Coauthor role from `journal.md` → `## Agents` → `### Coauthor`
@@ -3550,7 +3550,7 @@ Rules:
 6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`.
    Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns"); otherwise Done stays ❌.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
-7. **Chat summary:** name every ❌, every ⏳ with its step, and every `[pedagogical]` finding (also those you consider minor) in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
+7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
 
@@ -3640,7 +3640,7 @@ Rules:
 
 **Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes, or after 5 iterations — whichever comes first.
 
-- In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, missing required elements, structural gaps, and the duration flag from `data/duration-heuristic.md` — everything tagged `[mechanical]`.
+- In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, missing required elements, structural gaps — everything tagged `[mechanical]`. `[advisory]` items such as the duration flag are not in scope: the loop cannot fix them without inventing or cutting content.
 - Never auto-loop on `[pedagogical]`-tagged items — always surface those to the instructor immediately (core rule: critical sparring partner, not a rubber stamp).
 - On hitting the 5-iteration cap without a clean mechanical pass: stop, list the remaining `[mechanical]` FAIL items, and hand back to the instructor instead of continuing.
 - See `CLAUDE.md` → "Iteration Pattern" for the general convention. Under Claude Code this can additionally be driven with `/goal "journal.md → ## Validation → ### Latest Validation Summary shows all [mechanical] checklist items passing, or stop after 5 iterations"`.
@@ -4947,6 +4947,7 @@ template:
     - '2. Any other ❌ on a required element (Session Type or Method `Erforderlich`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step).'
+    - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
     - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead.'
   sections:
     - id: report-heading
@@ -5125,7 +5126,7 @@ template:
 
 > **Usage note:** Read `journal.md` → `## Course Context` first. Skip any check marked `[condition]` if the condition does not apply to this course type.
 >
-> **Tags:** `[mechanical]` = verifiable from structure/presence/syntax, no content judgment needed — safe for the automated loop in `tasks/validate-course.md` → "Iteration (mechanical checks only)". `[pedagogical]` = needs content/didactic judgment — always escalated to the instructor, never auto-fixed in a loop.
+> **Tags:** `[mechanical]` = verifiable from structure/presence/syntax, no content judgment needed — safe for the automated loop in `tasks/validate-course.md` → "Iteration (mechanical checks only)". `[pedagogical]` = needs content/didactic judgment — always escalated to the instructor, never auto-fixed in a loop. `[advisory]` = computed mechanically, but only a hint for a human judgment — recorded in the report, never ❌, never part of the automated loop and never a reason for FAIL or "PASS with concerns".
 
 ## Context
 
@@ -5210,7 +5211,7 @@ template:
 - [ ] [pedagogical] Hints and instructions never point to positions ("above", "below") across slides; they name the page title
 - [ ] [mechanical] Each session's content satisfies its declared Session Type's `Erforderlich` checklist from `## Didactics` → `__Session Types:__`
 - [ ] [mechanical] Each session's content satisfies its declared Session Method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
-- [ ] [mechanical] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is always advisory, never a fail by itself
+- [ ] [advisory] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is a hint for the instructor, never a fail
 
 ## LiaScript Syntax (per material file)
 
@@ -5837,13 +5838,13 @@ Sum reading time and activity time for the session's total estimate.
 Compare the total estimate to the session's declared duration in `journal.md` → `## Agenda`.
 
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.
-- This is **always advisory, never a hard fail by itself** — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
+- This is an **`[advisory]` item** (see the tags in `checklists/course-quality-checklist.md`): a hint, never ❌, never a fail, never part of an automated fix loop — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
 
 ## Where this is used
 
 - `tasks/validate-course.md` — Content checks (session and course mode): computes the estimate and records the flag, if any.
 - `checklists/course-quality-checklist.md` — the "Session Materials" duration checkbox references this file instead of restating the formula.
-- `tasks/build-session.md` — content loop uses this during its mechanical gate.
+- `tasks/build-session.md` — records the flag as a hint in the content loop and hands it to the persona review (or the closing report); never fixes it automatically.
 - `tasks/create-agenda.md` — optional pointer when the instructor first declares session durations, as a sanity check.
 - `tasks/coauthor-materials.md` — optional self-check while drafting, before formal validation.
 

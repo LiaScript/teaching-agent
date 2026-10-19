@@ -58,7 +58,7 @@ Rules:
    - [ ] `[only if the skill `reference-checker` is available — see `data/skills.md` — and web access exists]` The session's references verified with `reference-checker`; record its summary (✅ / ⚠️ / 🚨 counts) and every 🚨 entry as findings in the report. Without the skill or web access, skip this check and say so in one line.
    - [ ] Content satisfies the `Erforderlich` (required elements) checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
    - [ ] `[if the session has a **Method:** line]` Content satisfies the `Erforderlich` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
-   - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration for this session in `journal.md` → `## Agenda`. This is always advisory — record the flag either way, never fail the report on this alone.
+   - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration for this session in `journal.md` → `## Agenda`. This is `[advisory]` — record the flag either way as a hint, never as ❌ or ⏳, and never change the result because of it.
 
    **Persona & style checks:**
    - [ ] Tone matches the Coauthor role from `journal.md` → `## Agents` → `### Coauthor`
@@ -89,7 +89,7 @@ Rules:
 6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`.
    Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns"); otherwise Done stays ❌.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
-7. **Chat summary:** name every ❌, every ⏳ with its step, and every `[pedagogical]` finding (also those you consider minor) in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
+7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
 
@@ -179,7 +179,7 @@ Rules:
 
 **Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes, or after 5 iterations — whichever comes first.
 
-- In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, missing required elements, structural gaps, and the duration flag from `data/duration-heuristic.md` — everything tagged `[mechanical]`.
+- In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, missing required elements, structural gaps — everything tagged `[mechanical]`. `[advisory]` items such as the duration flag are not in scope: the loop cannot fix them without inventing or cutting content.
 - Never auto-loop on `[pedagogical]`-tagged items — always surface those to the instructor immediately (core rule: critical sparring partner, not a rubber stamp).
 - On hitting the 5-iteration cap without a clean mechanical pass: stop, list the remaining `[mechanical]` FAIL items, and hand back to the instructor instead of continuing.
 - See `CLAUDE.md` → "Iteration Pattern" for the general convention. Under Claude Code this can additionally be driven with `/goal "journal.md → ## Validation → ### Latest Validation Summary shows all [mechanical] checklist items passing, or stop after 5 iterations"`.
