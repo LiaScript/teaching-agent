@@ -20,7 +20,7 @@ template:
       title: Actions
       template: |
         <!-- class="journal-actions" -->
-        [▶ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
+        [▶️ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
       note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
     - id: kind
       title: Kind (visible)
@@ -37,7 +37,7 @@ template:
 
         **Method:** {{method}}
 
-        [▶ Promote](agent:teaching/promote-session?number={{number}}&type={{type}}) `:promote-session {{number}} {{type}}` · [▶ Build](agent:teaching/build-session?number={{number}}&type={{type}}) `:build-session {{number}} {{type}}`
+        [▶️ Promote](agent:teaching/promote-session?number={{number}}&type={{type}}) `:promote-session {{number}} {{type}}` · [▶️ Build](agent:teaching/build-session?number={{number}}&type={{type}}) `:build-session {{number}} {{type}}`
 
         </details>
       note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Erforderlich` checklist.'

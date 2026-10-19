@@ -60,7 +60,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
 ## Course Context
 
 <!-- class="journal-actions" -->
-[↻ Revise context](agent:teaching/init-course) `:init-course` · [🔍 Analyze existing course](agent:teaching/analyze-existing) `:analyze-existing`
+[✏️ Revise context](agent:teaching/init-course) `:init-course` · [🔍 Analyze existing course](agent:teaching/analyze-existing) `:analyze-existing`
 
 _Filled by `:init-course` from `templates/course-context.yaml`._
 
@@ -101,7 +101,7 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
 ## Outline
 
 <!-- class="journal-actions" -->
-[↻ Revise outline](agent:teaching/create-outline) `:create-outline`
+[✏️ Revise outline](agent:teaching/create-outline) `:create-outline`
 
 _Filled by `:create-outline` from `templates/course-outline.yaml`._
 
@@ -127,7 +127,7 @@ _Filled by `:create-outline` from `templates/course-outline.yaml`._
 ## Didactics
 
 <!-- class="journal-actions" -->
-[↻ Revise didactics](agent:teaching/create-didactics) `:create-didactics` · [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals`
+[✏️ Revise didactics](agent:teaching/create-didactics) `:create-didactics` · [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals`
 
 _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 
@@ -199,7 +199,7 @@ _Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
 ## Templates
 
 <!-- class="journal-actions" -->
-[▶ Manage templates](agent:teaching/manage-templates) `:manage-templates`
+[▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
 _Managed by `:manage-templates` from `templates/course-templates.yaml`._
 
@@ -237,7 +237,7 @@ More community templates can be found at [topics/liascript-template](https://git
 ## Agenda
 
 <!-- class="journal-actions" -->
-[↻ Revise agenda](agent:teaching/create-agenda) `:create-agenda`
+[✏️ Revise agenda](agent:teaching/create-agenda) `:create-agenda`
 
 _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
 
@@ -255,7 +255,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 ## Sessions
 
 <!-- class="journal-actions" -->
-[▶ New session](agent:teaching/create-session) `:create-session <number> <type>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
+[▶️ New session](agent:teaching/create-session) `:create-session <number> <type>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
 
@@ -302,7 +302,7 @@ only when the first image exists. Never use `#####` headings inside a session.
 ## Agents
 
 <!-- class="journal-actions" -->
-[▶ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
+[▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [🧑‍🎓 New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
 
 _Agent-specific project customizations and learner personas._
 _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
@@ -392,7 +392,7 @@ _Only used for improve-existing courses — filled by `:analyze-existing`._
 ## Notes Backup
 
 <!-- class="journal-actions" -->
-[▶ Save notes](agent:teaching/save-notes) `:save-notes` · [▶ Save decision](agent:teaching/save-decision) `:save-decision <title>`
+[▶️ Save notes](agent:teaching/save-notes) `:save-notes` · [▶️ Save decision](agent:teaching/save-decision) `:save-decision <title>`
 
 _Appended to by `:save-notes` and `:save-decision` from `templates/note-backup.yaml`._
 _Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._

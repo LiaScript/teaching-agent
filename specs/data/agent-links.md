@@ -108,12 +108,13 @@ Always write the link followed by the visible command, so the line is useful
 in any renderer (VS Code, GitHub, LiaScript without DevServer):
 
 ```markdown
-[▶ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
+[▶️ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
 ```
 
 - Label: short verb phrase in the course language (`## Course Context` →
-  `Language`), starting with `▶` (run), `↻` (revise/redo), `🔍` (check),
-  `👁` (preview), or the agent icon for a switch (`🎨` Artist, `🧑‍🎓` Learner,
+  `Language`), starting with `▶️` (run), `✏️` (revise/redo), `🔍` (check),
+  `👁` (preview), `🚀` (publish — only `development/create-project` and
+  `development/update-project`), or the agent icon for a switch (`🎨` Artist, `🧑‍🎓` Learner,
   `🛠️` Development, `🎓` Teaching).
 - Then the command in inline code, exactly as the instructor would type it —
   with values, never raw placeholders (`{description}`). A value left out on
@@ -133,10 +134,10 @@ in any renderer (VS Code, GitHub, LiaScript without DevServer):
 `## Dashboard` holds one JSON block rendered by the Dashboard library
 (`specs/dashboard/`). There an action is data, not a Markdown link: `href`
 (the `agent:` URI) plus `command` (the readable command) plus `icon` — the same
-symbol a Markdown label would start with (see Markdown Format: `▶`, `↻`, `🔍`,
-`👁`, or the agent icon). The library renders a button with the icon before the
+symbol a Markdown label would start with (see Markdown Format: `▶️`, `✏️`, `🔍`,
+`👁`, `🚀`, or the agent icon). The library renders a button with the icon before the
 label and the readable command right after it; without `icon` an `agent:` button
-shows `▶`. Whitelist,
+shows `▶️`. Whitelist,
 prerequisites and confirmation tiers apply unchanged.
 
 ### Action lines below headings
@@ -151,7 +152,7 @@ these paragraphs and nothing else.
 ## Outline
 
 <!-- class="journal-actions" -->
-[↻ Revise outline](agent:teaching/create-outline) `:create-outline` · [▶ Didactics](agent:teaching/create-didactics) `:create-didactics`
+[✏️ Revise outline](agent:teaching/create-outline) `:create-outline` · [▶️ Didactics](agent:teaching/create-didactics) `:create-didactics`
 
 _Filled by `:create-outline` from `templates/course-outline.yaml`._
 ```

@@ -47,7 +47,7 @@ template:
     selected: 'Optional: id of the recommended unit; empty string "" opens the whole-course view'
     process: 'Global course process with the same shape — always present, also once units exist'
     next:
-      icon: 'Action symbol as in Markdown labels (`▶` run, `↻` revise, `🔍` check, `👁` preview, agent icon for a switch); default `▶`'
+      icon: 'Action symbol as in Markdown labels (`▶️` run, `✏️` revise, `🔍` check, `👁` preview, `🚀` publish only, agent icon for a switch); default `▶️`'
       title: 'What we do next'
       why: 'Which result this step makes possible'
       label: 'Understandable action label'

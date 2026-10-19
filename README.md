@@ -240,7 +240,7 @@ In every environment the agent introduces itself, reads `journal.md` if it exist
 browser with a chat on top, and every action link in it talks to your agent:
 
 ```markdown
-[▶ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
+[▶️ Build session 3](agent:teaching/build-session?number=3&type=module) `:build-session 3 module` — material missing
 ```
 
 A click sends `agent:<agent>/<command>?<parameters>` to the running agent — `teaching`,

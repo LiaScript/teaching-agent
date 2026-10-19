@@ -190,7 +190,7 @@
     if (!item) return "";
     const select = viewId && item.selectUnit != null
       ? ` data-dashboard-select="${escape(item.selectUnit)}"` : "";
-    const icon = item.icon || (item.href.startsWith("agent:") ? "▶" : "");
+    const icon = item.icon || (item.href.startsWith("agent:") ? "▶️" : "");
     const text = escape(item.label || item.title || t("view"));
     const label = icon ? `<span class="dashboard-button-label"><span class="dashboard-button-icon" aria-hidden="true">${escape(icon)}</span> ${text}</span>` : text;
     return `<span class="dashboard-action-link"><a class="dashboard-button${primary ? " dashboard-button-primary" : ""}" href="${escape(resolveLink(item.href))}"${select}>${label} <span aria-hidden="true">→</span></a>${item.command ? ` <code class="dashboard-command">${escape(item.command)}</code>` : ""}</span>`;
