@@ -80,6 +80,19 @@ test("a selected unit links to its plan in the process panel", () => {
   assert.match(html, /href="#1\.-stunde-1"[^>]*>Planung ansehen/);
 });
 
+test("a course entry returns from a unit to the global process", () => {
+  const data = { lang: "de", title: "X", process: { title: "Kursplanung", steps: [{ title: "Lernziele", state: "done" }] },
+    units: [{ id: 1, title: "Stunde 1", state: "current", process: { steps: [{ title: "Material", state: "current" }] } }] };
+  const html = dashboard.renderComponent("View", "c", data);
+  assert.match(html, /data-dashboard-select=""[^>]*>.*Gesamter Kurs/s);
+  assert.match(html, /<h3>Stunde 1<\/h3>/);
+  const course = dashboard.renderComponent("View", "c2", { ...data, selected: "" });
+  assert.match(course, /dashboard-unit-selected" type="button" data-dashboard-select=""/);
+  assert.match(course, /<h3>Kursplanung<\/h3>/);
+  const withoutGlobal = dashboard.renderComponent("View", "c3", { ...data, process: undefined });
+  assert.doesNotMatch(withoutGlobal, /Gesamter Kurs/);
+});
+
 test("unit cards count finished process steps", () => {
   const html = dashboard.renderComponent("View", "s", { lang: "de", title: "X", units: [{ id: 1, title: "Stunde 1", state: "current", process: { steps: [{ title: "A", state: "done" }, { title: "B", state: "current" }, { title: "C", state: "planned" }] } }] });
   assert.match(html, /1 von 3 Schritten/);

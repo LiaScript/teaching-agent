@@ -49,6 +49,8 @@
 .lia-dashboard .dashboard-units { padding: 1.5em; border-right: 1px solid var(--dashboard-border); }
 .lia-dashboard .dashboard-hint { color: var(--dashboard-muted); font-size: .85em; }
 .lia-dashboard .dashboard-unit-list { padding: 0; margin: 1em 0 0; list-style: none; }
+.lia-dashboard .dashboard-course-entry { margin: 1em 0 0; padding-bottom: .55em; border-bottom: 1px dashed var(--dashboard-border); }
+.lia-dashboard .dashboard-course-entry + .dashboard-unit-list { margin-top: .55em; }
 .lia-dashboard .dashboard-unit-item { padding: 0; margin: .55em 0; }
 .lia-dashboard .dashboard-unit { display: flex; align-items: flex-start; gap: .75em; width: 100%; padding: .85em; border: 1px solid var(--dashboard-border); border-radius: 8px; background: var(--dashboard-bg); color: var(--dashboard-ink); font: inherit; text-align: left; }
 .lia-dashboard button.dashboard-unit { cursor: pointer; }

@@ -202,6 +202,11 @@ Alle Inhalte sind Beispiele. Makros zeigen übergebene Daten; sie entscheiden ni
   "subtitle": "Dein Kurs nimmt Form an.",
   "context": "Darstellungsbeispiel · drei fiktive Einheiten",
   "next": {"title": "Den SQL-Entwurf gemeinsam durchsehen", "why": "So stimmen wir die Aufgaben auf die Zielgruppe ab.", "label": "Möglichkeiten ansehen", "href": "agent:teaching/help", "command": ":help"},
+  "process": {"title": "Kursplanung", "steps": [
+    {"title": "Lernziele und Ablauf", "state": "done", "result": "Drei Einheiten sind geplant."},
+    {"title": "Einheiten ausarbeiten", "state": "current", "why": "Jede Einheit bekommt Material, das zu den Zielen passt."},
+    {"title": "Kurs prüfen und veröffentlichen", "state": "planned", "why": "Erst eine bestandene Gesamtprüfung gibt den Kurs frei."}
+  ]},
   "units": [
     {"id": 1, "title": "Einführung", "state": "done"},
     {"id": 2, "title": "Datenmodelle", "state": "done"},
@@ -215,6 +220,8 @@ Alle Inhalte sind Beispiele. Makros zeigen übergebene Daten; sie entscheiden ni
 ```
 
 Wähle eine Einheit. Die Prozessanzeige und Auswahl ändern sich; die übergebenen Zustände und der Gesamtfortschritt bleiben erhalten. Ohne detaillierte Prozessdaten erscheint ein verständlicher Hinweis.
+
+Enthält der Datensatz einen globalen `process`, steht über den Einheiten der Eintrag **Gesamter Kurs**. Er zeigt wieder den Ablauf des ganzen Kurses; von dort wechselst du mit einem Klick zurück in eine Einheit. `"selected": ""` öffnet die Übersicht direkt mit dieser Kursansicht.
 
 ## Hero
 

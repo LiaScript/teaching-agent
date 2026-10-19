@@ -17,6 +17,7 @@ template:
     - 'Exactly one highlighted next action, with why.'
     - 'A draft or a pending review never counts as done.'
     - 'With zero units show a global process and an honest empty state.'
+    - 'Keep the global process once units exist: the view offers it as a "whole course" entry above the units, so the instructor can switch between course and unit view.'
     - '`agent:` links additionally need `command` as the readable command, see `data/agent-links.md`.'
     - 'No hand-written HTML, CSS, JavaScript, tables or Mermaid — the layout belongs to `dashboard/`.'
     - 'Visible texts in the course language (`## Course Context` → Language); commands and URIs stay in English.'
@@ -43,8 +44,8 @@ template:
               next: 'Optional: what to do next'
               statusLabel: 'Optional: plain-language refinement of the state'
           note: 'Optional: loops back or special cases'
-    selected: 'Optional: id of the recommended unit'
-    process: 'Global process with the same shape, while no unit exists yet'
+    selected: 'Optional: id of the recommended unit; empty string "" opens the whole-course view'
+    process: 'Global course process with the same shape — always present, also once units exist'
     next:
       title: 'What we do next'
       why: 'Which result this step makes possible'

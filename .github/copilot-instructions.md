@@ -3286,7 +3286,9 @@ Run this task automatically after any task that changes project state:
    Titles never repeat the group name. Empty list if there is nothing open.
 7. Produce the JSON following `templates/project-dashboard.yaml`. No HTML, CSS,
    JavaScript, progress percentages or duplicated totals — the library derives
-   counts from `units[].state`. An empty project uses `units: []` plus a global
+   counts from `units[].state`. Always include the global course `process`, also
+   once units exist — the view offers it as the "whole course" entry next to the
+   units. An empty project uses `units: []` plus that global
    `process`; it shows no fake 0/1 or invalid percentage.
 8. Keep the `## Dashboard` heading line unchanged and replace the whole JSON block
    below it **in one write**: write the complete JSON with the file-write tool
@@ -4717,6 +4719,7 @@ template:
     - 'Exactly one highlighted next action, with why.'
     - 'A draft or a pending review never counts as done.'
     - 'With zero units show a global process and an honest empty state.'
+    - 'Keep the global process once units exist: the view offers it as a "whole course" entry above the units, so the instructor can switch between course and unit view.'
     - '`agent:` links additionally need `command` as the readable command, see `data/agent-links.md`.'
     - 'No hand-written HTML, CSS, JavaScript, tables or Mermaid — the layout belongs to `dashboard/`.'
     - 'Visible texts in the course language (`## Course Context` → Language); commands and URIs stay in English.'
@@ -4743,8 +4746,8 @@ template:
               next: 'Optional: what to do next'
               statusLabel: 'Optional: plain-language refinement of the state'
           note: 'Optional: loops back or special cases'
-    selected: 'Optional: id of the recommended unit'
-    process: 'Global process with the same shape, while no unit exists yet'
+    selected: 'Optional: id of the recommended unit; empty string "" opens the whole-course view'
+    process: 'Global course process with the same shape — always present, also once units exist'
     next:
       title: 'What we do next'
       why: 'Which result this step makes possible'

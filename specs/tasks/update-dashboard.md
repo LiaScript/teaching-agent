@@ -106,7 +106,9 @@ Run this task automatically after any task that changes project state:
    Titles never repeat the group name. Empty list if there is nothing open.
 7. Produce the JSON following `templates/project-dashboard.yaml`. No HTML, CSS,
    JavaScript, progress percentages or duplicated totals — the library derives
-   counts from `units[].state`. An empty project uses `units: []` plus a global
+   counts from `units[].state`. Always include the global course `process`, also
+   once units exist — the view offers it as the "whole course" entry next to the
+   units. An empty project uses `units: []` plus that global
    `process`; it shows no fake 0/1 or invalid percentage.
 8. Keep the `## Dashboard` heading line unchanged and replace the whole JSON block
    below it **in one write**: write the complete JSON with the file-write tool

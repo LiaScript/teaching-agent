@@ -15,6 +15,7 @@
       progressText: (done, total, u = { one: "Einheit", many: "Einheiten" }) => `${done} von ${total} ${total === 1 ? `${u.one} ist` : `${u.many} sind`} abgeschlossen`,
       units: "Meine Einheiten", unitsHint: "Antippen, um den Arbeitsstand zu sehen.",
       unitsEmpty: "Noch keine Unterrichtseinheit angelegt.", unitsEmptyNext: "Zuerst stimmen wir die Lernziele und die Lernaktivitäten ab.",
+      course: "Gesamter Kurs", courseSummary: "Überblick über die Kursplanung",
       showProcess: "Prozess ansehen", steps: (done, total) => `${done} von ${total} Schritten`,
       processEyebrow: "So entsteht das Material", processTitle: "Unser Arbeitsstand", result: "Liegt vor:", nextStep: "Nächster Schritt:",
       processEmpty: "Hierfür ist noch kein detaillierter Ablauf eingetragen.", plan: "Planung ansehen",
@@ -31,6 +32,7 @@
       progressText: (done, total, u = { one: "unit", many: "units" }) => `${done} of ${total} ${total === 1 ? `${u.one} is` : `${u.many} are`} done`,
       units: "My units", unitsHint: "Select one to see its progress.",
       unitsEmpty: "No unit created yet.", unitsEmptyNext: "First we agree on the learning objectives and activities.",
+      course: "Whole course", courseSummary: "Overview of the course planning",
       showProcess: "show process", steps: (done, total) => `${done} of ${total} steps`,
       processEyebrow: "How the material is made", processTitle: "Where we are", result: "Ready:", nextStep: "Next step:",
       processEmpty: "No detailed process recorded yet.", plan: "Open the plan",
@@ -121,6 +123,9 @@
     };
   }
 
+  // Selection value of the "whole course" entry: shows the global process.
+  const COURSE = "";
+
   const decisionKinds = ["decide", "prepare", "internal"];
 
   function decisionsData(input) {
@@ -155,16 +160,18 @@
       if (!unit.title) throw new Error("A unit needs a title.");
       return { ...unit, id, state: state(unit.state), process: processData(unit.process) };
     });
+    const globalProcess = processData(input.process);
     const selected = input.selected == null
       ? units.find(unit => unit.state === "current")?.id ?? units[0]?.id ?? null
       : String(input.selected);
-    if (selected !== null && !ids.has(selected)) throw new Error("The selected unit does not exist.");
+    const courseSelected = selected === COURSE && globalProcess.steps.length > 0;
+    if (selected !== null && !courseSelected && !ids.has(selected)) throw new Error("The selected unit does not exist.");
     const completed = units.filter(unit => unit.state === "done").length;
     return {
       ...input,
       units, selected, completed, total: units.length,
       percent: units.length ? Math.round(100 * completed / units.length) : 0,
-      process: processData(input.process),
+      process: globalProcess,
       next: actionData(input.next),
       explore: (input.explore ?? []).map(actionData),
       links: (input.links ?? []).map(actionData),
@@ -224,9 +231,17 @@
     return `<li class="dashboard-unit-item"><button class="dashboard-unit${selected ? " dashboard-unit-selected" : ""}" type="button" data-dashboard-select="${escape(input.id)}"${selected ? ' aria-current="true"' : ""} aria-label="${escape(input.title)}: ${escape(input.statusLabel || t(`state.${state(input.state)}`))}; ${t("showProcess")}">${content}</button></li>`;
   }
 
+  function courseEntry(input, viewId) {
+    const steps = input.process?.steps ?? [];
+    if (!viewId || !steps.length) return "";
+    const selected = input.selected === COURSE;
+    const stepsDone = steps.filter(step => step.state === "done").length;
+    return `<div class="dashboard-course-entry"><button class="dashboard-unit dashboard-course${selected ? " dashboard-unit-selected" : ""}" type="button" data-dashboard-select="${COURSE}"${selected ? ' aria-current="true"' : ""} aria-label="${escape(input.courseLabel || t("course"))}; ${t("showProcess")}"><span class="dashboard-unit-number" aria-hidden="true">⌂</span><span class="dashboard-unit-content"><strong>${escape(input.courseLabel || t("course"))}</strong><span class="dashboard-unit-steps">${t("steps", stepsDone, steps.length)}</span><span class="dashboard-unit-summary">${t("courseSummary")}</span></span></button></div>`;
+  }
+
   function units(input, viewId) {
     const items = input.units ?? [];
-    return `<section class="dashboard-units"><h3>${escape(input.unitsTitle || t("units"))}</h3>${items.length ? `<p class="dashboard-hint">${t("unitsHint")}</p><ol class="dashboard-unit-list">${items.map(item => unit(item, item.id === input.selected, viewId)).join("")}</ol>` : (input.plan ? plan(input.plan) : `<div class="dashboard-empty"><p>${escape(input.emptyUnits || t("unitsEmpty"))}</p><p>${t("unitsEmptyNext")}</p></div>`)}</section>`;
+    return `<section class="dashboard-units"><h3>${escape(input.unitsTitle || t("units"))}</h3>${items.length ? `<p class="dashboard-hint">${t("unitsHint")}</p>${courseEntry(input, viewId)}<ol class="dashboard-unit-list">${items.map(item => unit(item, item.id === input.selected, viewId)).join("")}</ol>` : (input.plan ? plan(input.plan) : `<div class="dashboard-empty"><p>${escape(input.emptyUnits || t("unitsEmpty"))}</p><p>${t("unitsEmptyNext")}</p></div>`)}</section>`;
   }
 
   function process(input) {
@@ -304,7 +319,8 @@
       const id = root?.dataset.dashboardView;
       const model = views.get(id);
       const selected = control?.dataset.dashboardSelect;
-      if (!model?.units.some(item => item.id === selected)) return;
+      const isCourse = selected === COURSE && model?.process.steps.length > 0;
+      if (!isCourse && !model?.units.some(item => item.id === selected)) return;
       event.preventDefault();
       model.selected = selected;
       useLanguage({ lang: model.lang });
