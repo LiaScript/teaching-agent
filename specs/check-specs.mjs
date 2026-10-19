@@ -86,6 +86,14 @@ test("Artist tasks that write journal.md refresh the dashboard and are listed as
   }
 });
 
+test("the workflow matches the dashboard path: work out together first, build-session after one approved unit", () => {
+  const workflow = read("workflows/course-development.yaml");
+  assert.ok(!workflow.includes('":create-session", ":promote-session"'), "a course path still promotes before co-authoring");
+  assert.ok(!/dependencies: \[create_didactics, create_visuals\]/.test(workflow), "the agenda depends on the optional visual identity again");
+  assert.match(workflow, /- command: :build-session \{number\}/, "build-session is missing in the session development sequence");
+  assert.match(workflow, /Creates the material document at the first Save/, "coauthor-materials no longer creates the material in the workflow");
+});
+
 test("session methods are chosen by the agent, never asked for per session", () => {
   const methods = read("data/didactic-methods.md");
   for (const old of ["confirms or changes it", "confirms, edits, or opts out", "default pre-selected"]) {

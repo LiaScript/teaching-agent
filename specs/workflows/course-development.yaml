@@ -74,7 +74,7 @@ workflow:
         - Adds `## Templates` and header imports if template requirements are provided
         - Stops before :coauthor-materials — content authoring remains interactive
         - Use instead of running :init-course → :create-outline → :create-didactics → :create-agenda → :create-session separately
-        - Not suitable for improve-existing (use :analyze-existing instead)
+        - Not suitable for improve-existing (redirects to :init-course, which leads on to :analyze-existing)
 
     # Phase 0b: Existing Course Analysis (improve-existing only)
     - step: analyze_existing
@@ -136,8 +136,9 @@ workflow:
       command: :create-visuals
       output: "journal.md → ## Visual Identity"
       dependencies: [create_outline, create_didactics]
+      optional: true
       notes: |
-        Create visual identity aligned with teaching persona:
+        Optional, before or after the agenda — nothing depends on it. Create visual identity aligned with teaching persona:
         - Logo generation guidelines and colors
         - Course image style and consistency rules
         - Website color palette and typography
@@ -157,7 +158,7 @@ workflow:
       agent: teaching
       command: :create-agenda
       output: "journal.md → ## Agenda"
-      dependencies: [create_didactics, create_visuals]
+      dependencies: [create_didactics]
       notes: |
         Build session structure (skipped for single-lesson):
         - Define all sessions/modules using terminology from course-context
@@ -178,27 +179,25 @@ workflow:
         - Includes the community template discovery link: https://github.com/topics/liascript-template
         - Ensures promoted materials include required imports when they use template macros
 
-    # Phase 4: Session Development (Two Approaches)
+    # Phase 4: Session Development
     - step: session_development
       agent: teaching
       approaches:
-        iterative:
-          description: "Create one session at a time, fully develop it, then move to next"
+        together:
+          description: "Default: work out each unit with the instructor — the first unit always goes this way"
           sequence:
-            - command: :create-session {number} {title}
+            - command: :create-session {number} {title?}
               output: "journal.md → ## Sessions"
-              notes: "Create skeleton subsection for session N and update the Sessions overview table"
-            - command: :promote-session {number}
+              notes: "Skeleton subsection for unit N; status line and table row in the overview. Its main action is \"work out together\""
+            - command: :coauthor-materials {number}
               output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
-              notes: "Convert skeleton to full material"
-            - command: :coauthor-materials
               notes: |
-                Interactive co-authoring in instructor persona:
-                - Refine content, add examples
-                - Suggest images (call artist-agent if needed)
-                - Iterate until material is complete
+                Interactive co-authoring in the Coauthor role:
+                - Works the content out from the skeleton in the dialog — no generated draft first
+                - Creates the material document at the first Save (data/file-structure-modes.md → "Creating the material document")
+                - Suggest images (call artist-agent if needed); iterate until the instructor approves
             - agent: artist
-              command: :create-image {description}
+              command: :create-image {number?} {description}
               optional: true
               notes: "Create image prompts during coauthoring as needed"
             - command: :validate-course {number}
@@ -225,52 +224,41 @@ workflow:
               optional: true
               condition: "journal.md contains ## Agents → ### Learner Personas"
               notes: |
-                Learner-perspective review after syntax validation (optional):
+                Learner-perspective review after the session check (optional):
                 - Agent embodies persona and reads material as that learner
                 - Reviews: language level, cognitive load, relevance, accessibility,
                   format fit, and assumed prior knowledge gaps
-                - Saves report to the matching `journal.md` → `## Sessions` session subsection under `#### Persona Reviews`
+                - Saves report to the matching session subsection under `#### Persona Reviews`
                 - Agent stays in persona for interactive follow-up chat
-                - Run for each defined persona, or just one
-                - If issues found: fix with :coauthor-materials, then optionally re-review
+                - If issues found: fix with :quick-fix or :coauthor-materials, then optionally re-review
             - repeat: for each session
 
-        batch:
-          description: "Create all skeletons first, then promote all, then coauthor all"
+        automated:
+          description: "After one unit was worked out together and approved: build the remaining units in one bounded loop each"
+          condition: "at least one unit was worked out with :coauthor-materials and approved (data/agent-links.md → action lines)"
           sequence:
-            - command: :create-session {number} {title}
+            - command: :create-session {number} {title?}
               output: "journal.md → ## Sessions"
-              notes: "Create all session skeleton subsections and update the Sessions overview table"
-              repeat: for all sessions
-            - command: :promote-session {number}
-              output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
-              notes: "Promote all skeletons to materials"
-              repeat: for all sessions
-            - command: :coauthor-materials
+              notes: "Skeletons for the remaining units (or let :build-session create a missing one)"
+              repeat: for each remaining session
+            - command: :build-session {number}
               notes: |
-                Go through all materials sequentially:
-                - Refine content for each session
-                - Add images via artist-agent when needed
-                - Mark each session complete before moving to next
-              repeat: for all materials
-            - command: :validate-course {number}
-              notes: "Session-level check per material after coauthor approval"
-              repeat: for all materials
-            - command: :try-as-learner {number} {companion?}
+                One start confirmation for everything inside the project, then:
+                promote → validate and fix mechanical items (≤ 5) → persona review (≤ 3) → images
+                (own image tool, or one terminal confirmation for the browser route) → Done only with PASS
+                Stops and hands over to the instructor when a fix needs co-authoring
+              repeat: for each remaining session
+            - command: :coauthor-materials {number}
               optional: true
-              notes: "Try a checked unit as a learner with a learning companion (preview only)"
-              repeat: for chosen materials
-            - agent: learner
-              command: :review-as-persona {name} {number}
-              optional: true
-              condition: "journal.md contains ## Agents → ### Learner Personas"
-              notes: "Learner-perspective review per material; saves each report under that session's `#### Persona Reviews`"
-              repeat: for all materials
+              notes: "Instructor review of a built unit; changes after its check go through :quick-fix"
+
+      alternatives:
+        - command: :promote-session {number}
+          notes: "Generate a complete first draft of a unit from its skeleton instead of working it out together (also the first step inside :build-session); replaces existing material only after asking"
 
       notes: |
-        User chooses approach based on preference:
-        - Iterative: Complete one session fully before next (focused)
-        - Batch: Create all structure first, then fill in content (overview)
+        - The first unit is always worked out together; that sets tone and level for the rest.
+        - The automated path is offered only afterwards, as the dashboard's main action for the remaining units.
 
     # Phase 5: Validation
     - step: validate_course
@@ -289,8 +277,7 @@ workflow:
         Feedback loop if issues found:
         - Open :coauthor-materials {number} for affected sessions
         - Agent loads the matching session's `#### Validation Report` and works through issues
-        - Re-run :validate-course after fixes until report is clean
-        - Instructor confirms that the report is acceptable (in the course language) to exit the loop
+        - Re-run :validate-course after fixes until the result is PASS — open pedagogical concerns are fixed or accepted one by one (see Publishing Gate), never waved through
 
         Result rules (same order as in session mode): deferrals decided in the first run (⏳), other ❌ on required/mechanical items → FAIL, open pedagogical findings → PASS with concerns; never re-graded on request.
 
@@ -339,7 +326,7 @@ workflow:
     - Steps can be done in sequence or with iterations
     - Git operations (manage-git) available anytime
     - Image creation on-demand during coauthoring
-    - Choose iterative or batch approach for sessions
+    - Sessions: the first unit together with :coauthor-materials, the remaining ones together or with :build-session
     - Publishing is optional and user-initiated — only when explicitly requested
     - :create-project recommended when multiple materials exist and course is ready to share
     - `journal.md` → `## Sessions` contains the overview first (status list for the instructor, technical table in <details>), then one skeleton subsection per session; the overview tracks skeleton/material/Done status automatically
@@ -358,44 +345,35 @@ workflow:
         B -->|new course| D[teaching: create-outline]
         D --> E[teaching: create-didactics]
         E --> EP[teaching: create-learner-persona - optional]
-        EP --> F[artist: create-visuals]
+        EP --> F[artist: create-visuals - optional]
         F --> G[artist: create-logo - optional]
-        G --> H[teaching: create-agenda]
-        H --> I{Session Approach?}
-
-        I -->|Iterative| J[teaching: create-session N]
-        J --> K[teaching: promote-session N]
-        K --> L[teaching: coauthor-materials N]
+        G --> H[teaching: create-agenda - if planned]
+        EP --> H
+        H --> J[teaching: create-session N]
+        J --> L[teaching: coauthor-materials N - creates the material]
         L --> LV[teaching: validate-course N]
-        LV --> TL[teaching: try-as-learner N - optional]
+        LV --> TL[teaching: try-as-learner N - optional, preview only]
         TL --> LR[learner: review-as-persona - optional]
         LR --> P{More sessions?}
-        P -->|Yes| J
+        P -->|Together| J
+        P -->|Automated, after one approved unit| BS[teaching: build-session N]
+        BS --> P
         P -->|No| VAL[teaching: validate-course full]
-
-        I -->|Batch| Q[teaching: create all skeletons]
-        Q --> R[teaching: promote all sessions]
-        R --> S[teaching: coauthor all materials]
-        S --> SV[teaching: validate-course per session]
-        SV --> SR[learner: review-as-persona per session - optional]
-        SR --> VAL
 
         C --> VAL
 
         VAL --> T{Publish?}
         T -->|Yes, first time| U[development: create-project]
         T -->|Yes, update| W[development: update-project]
-        T -->|Not yet| Y
+        T -->|Not yet| N[keep refining: coauthor-materials / quick-fix]
 
-        U --> X[development: manage-git - anytime]
+        U --> X[development: manage-git]
         W --> X
-        X --> Y[Course ready to share]
-        Y --> END[Published Course]
+        X --> END[Published Course]
 
         style A fill:#0B6E75,color:#fff
         style END fill:#FF8C42,color:#fff
         style B fill:#f9f,stroke:#333,stroke-width:2px
-        style I fill:#f9f,stroke:#333,stroke-width:2px
         style T fill:#f9f,stroke:#333,stroke-width:2px
         style P fill:#f9f,stroke:#333,stroke-width:2px
         style EP fill:#e8f4f8,stroke:#0B6E75
@@ -449,17 +427,17 @@ workflow:
   quick_reference:
     course_type_paths:
       lecture-series:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-visuals", ":create-agenda", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-agenda", ":create-session", ":coauthor-materials", ":validate-course"]
         publishing: "optional: :create-project when ready to share"
       self-paced:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":coauthor-materials", ":validate-course"]
         note: "Agenda optional — decided at :init-course"
         publishing: "optional: :create-project when ready to share"
       workshop:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-agenda", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-agenda", ":create-session", ":coauthor-materials", ":validate-course"]
         publishing: "optional: :create-project when ready to share"
       single-lesson:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":promote-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":coauthor-materials", ":validate-course"]
         note: "No agenda needed; one session only"
         publishing: "usually not needed for a single lesson"
       improve-existing:
