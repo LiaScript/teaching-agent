@@ -92,7 +92,8 @@ if (/^#{5}\s/m.test(section("Sessions").replace(/<section>[\s\S]*?<\/section>/g,
 for (const report of section("Sessions").split(/^(?=#### Validation Report)/m).slice(1)) {
   const body = report.split(/^#{1,4} (?!Validation Report)/m)[0];
   const visible = body.split("<details>")[0];
-  if (!/\*\*(Outcome|Ergebnis)\b[^*\n]*:\*\*/.test(visible) || !/<details>/.test(body)) problems.push("validation report without visible summary (**Outcome:**) or without <details> – use templates/session-validation.yaml");
+  // The outcome label is translated into the course language: check for a bold label, not for a word.
+  if (!/\*\*[^*\n]+:\*\*/.test(visible) || !/<details>/.test(body)) problems.push("validation report without visible summary (**Outcome:**) or without <details> – use templates/session-validation.yaml");
   if (/\b(Z\.|Zeilen?|[Ll]ines?)\s*\d/.test(body)) problems.push("validation report cites line numbers – use page titles of the material");
 }
 if (/^#### Images\s*\n+_Filled by/m.test(source)) problems.push("empty \"#### Images\" block with a placeholder note – create it only when an image exists");
@@ -132,7 +133,19 @@ for (const href of hrefs) if (/\{[a-z_-]+\??\}/i.test(href)) problems.push(`link
 for (const line of source.split("\n").filter(line => /class="journal-actions"/.test(line) || /^\[.*\]\(agent:/.test(line))) {
   for (const code of line.matchAll(/`(:[^`]*)`/g)) if (/\{[a-z_-]+\??\}/i.test(code[1])) problems.push(`action line shows a raw placeholder: ${code[1]}`);
 }
-const agendaRows = (section("Agenda").match(/^\|\s*\d+\s*\|/gm) ?? []).length;
+// Count the units table only: the table after `<!-- data-type="none" -->` (templates/course-agenda.yaml),
+// never the technical table in <details> or a time budget table; placeholder rows ({{…}}) do not count.
+function agendaUnitRows(agenda) {
+  const visible = agenda.replace(/<details>[\s\S]*?<\/details>/g, "");
+  const [, marked] = visible.split(/<!--\s*data-type="none"\s*-->/);
+  let lines = (marked ? marked.trimStart() : visible.replace(/<!--[\s\S]*?-->/g, "")).split("\n");
+  if (marked) {
+    const end = lines.findIndex(line => !/^\s*\|/.test(line));
+    if (end !== -1) lines = lines.slice(0, end);
+  }
+  return lines.filter(line => /^\s*\|\s*\d+\s*\|/.test(line) && !line.includes("{{")).length;
+}
+const agendaRows = agendaUnitRows(section("Agenda"));
 if (agendaRows && model.total !== agendaRows) problems.push(`the agenda has ${agendaRows} rows, the dashboard shows ${model.total} units`);
 if (problems.length) {
   console.error("ERRORS:");

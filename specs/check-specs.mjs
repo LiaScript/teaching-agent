@@ -57,10 +57,44 @@ test("no persona or scenario data from tandem tests in the specs", () => {
   assert.deepEqual(hits.map(path => path.slice(specs.length + 1)), []);
 });
 
-test("the empty journal template passes the journal check", () => {
+function checkJournal(text) {
   const dir = mkdtempSync(join(tmpdir(), "journal-"));
   const file = join(dir, "journal.md");
-  writeFileSync(file, read("templates/journal.md"));
+  writeFileSync(file, text);
   const run = spawnSync(process.execPath, [join(specs, "dashboard", "validate-journal.mjs"), file], { encoding: "utf8" });
-  assert.equal(run.status, 0, run.stdout + run.stderr);
+  return { status: run.status, output: run.stdout + run.stderr };
+}
+
+// A small journal with two units, an agenda and a session with a validation report.
+function journal({ agenda, outcome = "**Outcome:** passed (2026-10-19)", units = 2 } = {}) {
+  const data = { title: "X", units: Array.from({ length: units }, (_, i) => ({ id: String(i + 1), title: `U${i + 1}`, state: "planned", ...(i === 0 ? { href: "#1.-intro" } : {}) })) };
+  return ["<!--\nlanguage: fr\n-->", "# X", "## Dashboard", "```json @Dashboard.View", JSON.stringify(data), "```",
+    "## Agenda", agenda ?? [
+      "__Time Budget – Budget :__", "", "| 1 | 90 min − 10 min = 80 min |", "", "<!-- data-type=\"none\" -->",
+      "  | No. | Titre | Durée |", "  |---|---|---|", ...Array.from({ length: units }, (_, i) => `  | ${i + 1} | U${i + 1} | 45 min |`), "",
+      "<details><summary>Réglages techniques</summary>", "", "| No. | type | material |", "|---|---|---|",
+      ...Array.from({ length: units }, (_, i) => `| ${i + 1} | module | materials/${i + 1}-module/README.md |`), "", "</details>"].join("\n"),
+    "## Sessions", "### 1. Intro", "#### Validation Report – Rapport de validation", outcome, "",
+    "<details><summary>Rapport technique</summary>", "", "__Result:__ PASS", "", "</details>"].join("\n\n");
+}
+
+test("the empty journal template passes the journal check", () => {
+  const run = checkJournal(read("templates/journal.md"));
+  assert.equal(run.status, 0, run.output);
+});
+
+test("the journal check counts only the visible units table of the agenda", () => {
+  const ok = checkJournal(journal());
+  assert.equal(ok.status, 0, ok.output);
+  const fewer = checkJournal(journal({ units: 3 }).replace("  | 3 | U3 | 45 min |\n", ""));
+  assert.equal(fewer.status, 2, fewer.output);
+  assert.match(fewer.output, /the agenda has 2 rows, the dashboard shows 3 units/);
+});
+
+test("the journal check finds the visible outcome in any course language", () => {
+  const ok = checkJournal(journal({ outcome: "**Résultat :** réussi (2026-10-19)" }));
+  assert.equal(ok.status, 0, ok.output);
+  const missing = checkJournal(journal({ outcome: "réussi (2026-10-19)" }));
+  assert.equal(missing.status, 2, missing.output);
+  assert.match(missing.output, /without visible summary/);
 });
