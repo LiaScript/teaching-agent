@@ -2991,6 +2991,7 @@ All collected in a single intake interview at the start:
 - 3–5 learning objectives
 - Didactic concept preference (structured/exploratory/project-based/mixed)
 - Instructor persona style (humorous/academic/practical/conversational)
+- Session Types (format variants of a unit) with the grounding answer
 - Difficulty level
 - Session count and titles (or leave titles open for auto-generation)
 - Agenda required? (for self-paced / single-lesson)
@@ -3037,10 +3038,10 @@ Generated in sequence without interruption inside `journal.md`:
    - Teaching style: humorous / academic / practical / conversational / mixed
    - Difficulty level: beginner / intermediate / advanced
    - Didactic concept: structured/presenter-driven / exploratory / project-based / mixed
+   - Session Types: propose the default formats for the course type exactly as `tasks/create-didactics.md` step 3b does (display names in the course language, each with criterion and required elements, `data/session-types.md`), and ask its grounding question — one concretely planned unit and which format it gets, and why. If the answer fits no proposed type, revise the types before the draft.
 
    **🎛️ Block 4 — Structure (structured questions):**
    - Agenda needed? (for self-paced / single-lesson): yes / no
-   - Session approach after scaffold: iterative (one at a time) / batch (all at once)
    - Session count and length: 💬 ask for exact numbers (how many units, minutes each). Never offer ranges and never compute a middle value; if the instructor gives a range, ask which number to plan with.
    - File structure: teacher question from `tasks/init-course.md` step 6
    - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
@@ -3058,13 +3059,14 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
 1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment. Set `language:` to the course language code.
 2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well). Set `__File Structure:__` from the instructor's answer to the file-structure question. Follow the layout of `templates/course-context.yaml` (confirmed summary first, technical keys in `<details>`).
 3. Replace the content of `journal.md` → `## Outline`.
-4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet.
+4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet and the confirmed Session Types.
+4b. Synchronize `journal.md` → `## Agents` → `### Coauthor` exactly as `tasks/create-didactics.md` step 10 does (role, behavior, interaction style, project rules, voice sample; `__Customization Status:__ active`), so later tasks do not fall back to `## Didactics`.
 5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
 6. Replace the content of `journal.md` → `## Agenda` (skip if agenda = no).
 7. Replace the content of `journal.md` → `## Sessions` with:
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
    - One `### {number}. {title}` subsection per session below the overview
-8. Fill each session subsection using `templates/session-skeleton.yaml`.
+8. Fill each session subsection using `templates/session-skeleton.yaml`; every unit gets one of the confirmed Session Types (from the agenda, or as planned in the draft).
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 
 After each section is saved, print a brief progress line:
@@ -3073,6 +3075,7 @@ After each section is saved, print a brief progress line:
 ✅ journal.md → ## Course Context
 ✅ journal.md → ## Outline
 ✅ journal.md → ## Didactics
+✅ journal.md → ## Agents / Coauthor
 ✅ journal.md → ## Templates
 ✅ journal.md → ## Agenda
 ✅ journal.md → ## Sessions / overview
@@ -3087,7 +3090,7 @@ After each section is saved, print a brief progress line:
 > ⚠️ The summary below is **chat output only** — never write it into `journal.md`.
 > The journal's `## Dashboard` section is maintained exclusively by `tasks/update-dashboard.md` (already run in Phase 2, step 9).
 
-7. Print completion summary:
+1. Print completion summary:
    > "Scaffold completed. `journal.md` updated with [N] sections/entries. [One sentence in plain words on how the course is split into files, as answered in Block 4.]"
    >
    > | Section      | Status            |
@@ -3095,16 +3098,17 @@ After each section is saved, print a brief progress line:
    > | Course Context | ✅              |
    > | Outline        | ✅              |
    > | Didactics      | ✅              |
+   > | Coauthor       | ✅ active       |
    > | Templates      | ✅ / skipped    |
    > | Agenda         | ✅ / skipped    |
    > | Sessions       | ✅ overview + [N] subsections |
    >
    > "Next step: `:coauthor-materials` to start with Session 1."
 
-8. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
+2. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
    2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.
-9. Offer a note save:
+3. Offer a note save:
    > "Should I save the course structure decisions as a Decision Note? (`:save-decision course-structure`)"
 
 ## Escalation Rules
@@ -3112,8 +3116,8 @@ After each section is saved, print a brief progress line:
 - If a required input is missing: **pause and ask** — do not guess, do not average ranges, do not add units or stations.
 - Promises made in the chat after saving (e.g. "I will plan for X") must be written to the journal (Additional Notes or the matching section) in the same step, or not made.
 - Provenance notes (`_Filled by …_`) name the task that actually wrote the section (`:scaffold`).
-- If the session count is unusually high (>12 for a single-lesson or >20 overall): flag it and ask to confirm before continuing.
-- If course type is `improve-existing`: redirect to `:analyze-existing` instead.
+- If a single-lesson gets more than one unit, ask whether it is really a single lesson; if the session count is above 20, flag it and ask to confirm before continuing.
+- If course type is `improve-existing`: redirect to `:init-course` instead — `:analyze-existing` needs the Course Context that `:init-course` writes first.
 
 ## Notes
 
