@@ -14,10 +14,10 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 ```
 * __Session Types:__
-  1. __Vorlesung__ (slug: `lecture`) — Dozentengeführte Wissensvermittlung, keine bewertete Aufgabe.
-     Erforderlich: Content-Abschnitt mit Erklärungsbogen; keine bewerteten Activities.
-  2. __Übung__ (slug: `exercise`) — Angeleitete Praxis.
-     Erforderlich: ≥1 konkrete Aufgabe in Activities, Musterlösung oder Feedback-Hinweis.
+  1. __Vorlesung__ (slug: `vorlesung`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
+     Erforderlich: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
+  2. __Übung__ (slug: `uebung`) — Angeleitete Praxis.
+     Erforderlich: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
 ```
 
 - **Display name** — free text, in the course's language/terminology.
@@ -31,10 +31,12 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 | Course type | Suggested Session Types |
 |---|---|
-| lecture-series | **Vorlesung** (`lecture`) — dozentengeführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
+| lecture-series | **Vorlesung** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
 | self-paced | **Modul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
 | workshop | **Input** (`input`) — kurzer Theorieblock · **Aktivität** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
 | single-lesson | Usually **one** type only (named after `lectures-called`); skip the discussion step unless the instructor wants to split the lesson into sub-types |
+
+The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vorlesung`, `uebung`), as `templates/course-didactics.yaml` requires.
 
 ## Resolving a session's type
 

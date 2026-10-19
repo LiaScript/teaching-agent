@@ -62,7 +62,7 @@ template:
     - id: session-types
       title: Session Types
       template: |
-        * __Session Types:__ (Format-Varianten einer {{sessions-called}} — siehe `data/session-types.md`)
+        * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
           1. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion: what makes a session this type]
              Erforderlich: [2–3 concrete, checkable required elements]
           2. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion]

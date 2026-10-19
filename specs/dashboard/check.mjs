@@ -81,7 +81,7 @@ test("open points are grouped by role; internal notes stay collapsed", () => {
   ] });
   assert.match(html, /Noch zu entscheiden/);
   assert.match(html, /Vor dem Einsatz vorbereiten/);
-  assert.match(html, /<details class="dashboard-internal"><summary>Für Profis: 1 interne Notiz/);
+  assert.match(html, /<details class="dashboard-internal"><summary>1 technische Notiz/);
   assert.throws(() => dashboard.buildModel({ decisions: [{ title: "A", kind: "irgendwas" }] }));
 });
 

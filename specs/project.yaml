@@ -24,8 +24,8 @@ footer: >
 meta:
   title: Databases Unlocked - Interactive Database Systems Course
   description: >
-    Praxisnahe Einführung in Datenbanksysteme: Von Dateiformaten über Key-Value, 
-    Document und Column Stores bis zu relationalen Datenbanken mit SQL. 
+    Praxisnahe Einführung in Datenbanksysteme: Von Dateiformaten über Key-Value-, 
+    Document- und Column-Stores bis zu relationalen Datenbanken mit SQL. 
     Alle Konzepte direkt im Browser mit Hands-on-Beispielen.
 
 # Main course collection
@@ -40,7 +40,7 @@ collection:
         </p>
         <p>
           Beginnend bei einfachen Datenquellen wie Textdateien, CSV, JSON, YAML oder TOML werden schrittweise 
-          moderne Systeme vorgestellt – von Key-Value Stores über Object Stores und Column Stores bis hin zu 
+          moderne Systeme vorgestellt – von Key-Value-Stores über Object-Stores und Column-Stores bis hin zu 
           <strong>relationalen Datenbanken mit SQL</strong> und graphbasierten Ansätzen.
         </p>
         <p>
@@ -59,10 +59,10 @@ collection:
   # Block 1: Paradigmen-Überblick (kompakt)
   - html: >
       <hr>
-      <h2 style="color: #0B6E75;">Block 1: Daten-Paradigmen – Vom File zum Column Store</h2>
+      <h2 style="color: #0B6E75;">Block 1: Daten-Paradigmen – Von der Datei zum Column-Store</h2>
       <p>
         In diesem Block lernen Sie verschiedene Datenbank-Paradigmen kennen: 
-        Von einfachen Dateiformaten über Key-Value und Document Stores bis zu Column Stores.
+        Von einfachen Dateiformaten über Key-Value- und Document-Stores bis zu Column-Stores.
         Jedes Paradigma wird mit praktischen Beispielen im Browser demonstriert.
       </p>
 
@@ -78,7 +78,7 @@ collection:
       - Grundlagen
 
   - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/2-lecture.md
-    title: "L2: Key-Value Stores"
+    title: "L2: Key-Value-Stores"
     tags:
       - Key-Value
       - Redis
@@ -98,7 +98,7 @@ collection:
       - Synchronisation
   
   - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/5-lecture.md
-    title: "L5: Relationale Datenbanken (SQL) – Von der Idee zum Model"
+    title: "L5: Relationale Datenbanken (SQL) – Von der Idee zum Modell"
     tags:
       - Relationale Datenbanken
       - SQL
@@ -221,7 +221,7 @@ collection:
       - pdf-timeout: 120000
 
   - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/12-lecture.md
-    title: "L12: Indexe & Performance"
+    title: "L12: Indizes & Performance"
     tags:
       - SQL
       - Index
@@ -274,7 +274,7 @@ collection:
       </p>
 
   - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/mcp-tutorial.md
-    title: "MCP Tutorial: KI-gestützte Datenbankabfragen"
+    title: "MCP-Tutorial: KI-gestützte Datenbankabfragen"
     tags:
       - MCP
       - Model Context Protocol

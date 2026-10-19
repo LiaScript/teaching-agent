@@ -1,6 +1,6 @@
-// Rendert ein Kursmaterial im LiaScript-DevServer und berichtet, was die Kinder sehen:
-// Folien, Quizze, Vorlese-Knöpfe, fehlende Bilder und echte Fehler.
-// Aufruf aus dem Kursordner: node <pfad>/dashboard/check-material.mjs [README.md]
+// Renders a course material in the LiaScript DevServer and reports what learners see:
+// slides, quizzes, read-aloud buttons, missing images and real errors.
+// Run from the course project root: node <path>/dashboard/check-material.mjs [README.md]
 import { spawn } from "node:child_process";
 import { readdir, access } from "node:fs/promises";
 import { homedir } from "node:os";
@@ -21,7 +21,7 @@ async function playwright() {
     const module = resolve(cache, folder, "node_modules/playwright");
     try { await access(resolve(module, "package.json")); return require(module); } catch {}
   }
-  throw new Error("Kein installiertes Playwright gefunden. PLAYWRIGHT_MODULE_PATH setzen.");
+  throw new Error("No installed Playwright found. Set PLAYWRIGHT_MODULE_PATH.");
 }
 
 const server = spawn("liadev", ["--input", file, "--hostname", "127.0.0.1", "--port", String(port)], { cwd: root, stdio: "ignore" });
@@ -63,12 +63,12 @@ try {
     counts.tts += slide.tts;
   }
   console.log(`Material: ${file}`);
-  console.log(`Folien: ${titles.length} (${titles.slice(0, 12).join(" · ")}${titles.length > 12 ? " …" : ""})`);
-  console.log(`Quizze: ${counts.quizzes} · Vorlese-Elemente: ${counts.tts}`);
-  console.log(`Fehlende Bilder: ${missing.size}${missing.size ? ` (${[...missing].slice(0, 6).join(", ")}${missing.size > 6 ? " …" : ""})` : ""}`);
-  console.log(`Fehler (ohne fehlende Bilder und den bekannten Interpreter-Fehler fetchError): ${errors.length}`);
+  console.log(`Slides: ${titles.length} (${titles.slice(0, 12).join(" · ")}${titles.length > 12 ? " …" : ""})`);
+  console.log(`Quizzes: ${counts.quizzes} · Read-aloud buttons: ${counts.tts}`);
+  console.log(`Missing images: ${missing.size}${missing.size ? ` (${[...missing].slice(0, 6).join(", ")}${missing.size > 6 ? " …" : ""})` : ""}`);
+  console.log(`Errors (without missing images and the known interpreter error fetchError): ${errors.length}`);
   [...new Set(errors)].slice(0, 5).forEach(error => console.log(`- ${error}`));
-  console.log(`Exit-Code: ${errors.length ? 1 : 0}`);
+  console.log(`Exit code: ${errors.length ? 1 : 0}`);
   process.exitCode = errors.length ? 1 : 0;
 } finally {
   await browser?.close();

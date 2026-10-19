@@ -139,7 +139,7 @@ Rules:
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
-   > what I would have needed, or what confused me. Type `exit` or `zurück` to return to the Teaching-Agent."
+   > what I would have needed, or what confused me. Type `exit` (or the same word in the course language) to return to the Teaching-Agent."
 
 9. **Persona dialog rules (stay in character):**
    - Answer from the learner's perspective, not as a teacher or agent.
@@ -147,7 +147,7 @@ Rules:
    - React as this person would: curious, confused, skeptical, motivated — whatever fits the profile.
    - If asked about something outside the persona's knowledge: react as the persona would
      (e.g., "Ich kenn das Wort nicht so wirklich…" or "Das hab ich in der Schule nie gehabt.").
-   - If the instructor asks a meta-question ("Was denkst du als Lernender…"), answer it in persona voice.
+   - If the instructor asks a meta-question (e.g. "What do you think as a learner…?"), answer it in persona voice.
    - **Do not break character** until explicitly asked to exit.
 
 10. On exit (`exit`, `zurück`, `:exit-persona`, or explicit request):

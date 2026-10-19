@@ -9,20 +9,20 @@
   const TEXT = {
     de: {
       "state.planned": "Noch offen", "state.current": "In Arbeit", "state.draft": "Entwurf liegt vor",
-      "state.review": "Zur Durchsicht", "state.revision": "Überarbeiten", "state.done": "Abgeschlossen", "state.optional": "Bei Bedarf",
-      view: "Ansehen", eyebrow: "Unterrichtsplan", next: "Als Nächstes:", why: "Warum?", progress: "Fortschritt",
+      "state.review": "Zur Durchsicht", "state.revision": "Überarbeitung nötig", "state.done": "Abgeschlossen", "state.optional": "Bei Bedarf",
+      view: "Ansehen", eyebrow: "Kursplan", next: "Als Nächstes:", why: "Warum?", progress: "Fortschritt",
       progressEmpty: "Noch keine Einheit angelegt. Der Fortschritt wird sichtbar, sobald Einheiten entstehen.",
       unitWords: { one: "Einheit", many: "Einheiten" },
       // Verb follows the finished units ("1 von 6 Einheiten ist"); u.many is the dative plural after "von".
       progressText: (done, total, u = TEXT.de.unitWords) => `${done} von ${total} ${total === 1 ? u.one : u.many} ${done === 1 || total === 1 ? "ist" : "sind"} abgeschlossen`,
-      units: "Meine Einheiten", unitsHint: "Antippen, um den Arbeitsstand zu sehen.",
-      unitsEmpty: "Noch keine Unterrichtseinheit angelegt.", unitsEmptyNext: "Zuerst stimmen wir die Lernziele und die Lernaktivitäten ab.",
+      units: "Meine Einheiten", unitsHint: "Einheit auswählen, um den Arbeitsstand zu sehen.",
+      unitsEmpty: "Noch keine Einheit angelegt.", unitsEmptyNext: "Zuerst stimmen wir die Lernziele und die Lernaktivitäten ab.",
       course: "Gesamter Kurs", courseSummary: "Überblick über die Kursplanung",
       showProcess: "Prozess ansehen", steps: (done, total) => `${done} von ${total} ${total === 1 ? "Schritt" : "Schritten"}`,
       processEyebrow: "So entsteht das Material", processTitle: "Unser Arbeitsstand", result: "Liegt vor:", nextStep: "Nächster Schritt:",
       processEmpty: "Hierfür ist noch kein detaillierter Ablauf eingetragen.", plan: "Planung ansehen",
       decide: "Noch zu entscheiden", prepare: "Vor dem Einsatz vorbereiten", how: "So geht's:",
-      internal: n => `Für Profis: ${n} interne ${n === 1 ? "Notiz" : "Notizen"} des Assistenten`,
+      internal: n => `${n} technische ${n === 1 ? "Notiz" : "Notizen"} des Assistenten`,
       preview: "Vorläufige Planung", explore: "Weitere Möglichkeiten", sections: "Planungsbereiche",
       error: "Die Übersicht konnte nicht angezeigt werden."
     },
@@ -36,11 +36,11 @@
       units: "My units", unitsHint: "Select one to see its progress.",
       unitsEmpty: "No unit created yet.", unitsEmptyNext: "First we agree on the learning objectives and activities.",
       course: "Whole course", courseSummary: "Overview of the course planning",
-      showProcess: "show process", steps: (done, total) => `${done} of ${total} ${total === 1 ? "step" : "steps"}`,
+      showProcess: "Show process", steps: (done, total) => `${done} of ${total} ${total === 1 ? "step" : "steps"}`,
       processEyebrow: "How the material is made", processTitle: "Where we are", result: "Ready:", nextStep: "Next step:",
       processEmpty: "No detailed process recorded yet.", plan: "Open the plan",
       decide: "To decide", prepare: "Prepare before use", how: "How:",
-      internal: n => `For experts: ${n} internal ${n === 1 ? "note" : "notes"} of the assistant`,
+      internal: n => `${n} technical ${n === 1 ? "note" : "notes"} of the assistant`,
       preview: "Provisional plan", explore: "More options", sections: "Planning sections",
       error: "The overview could not be displayed."
     }
@@ -154,13 +154,13 @@
   function processData(input = {}) {
     if (Array.isArray(input)) input = { steps: input };
     if (!input || typeof input !== "object" || !Array.isArray(input.steps ?? [])) {
-      throw new Error("Der Prozess braucht eine Liste von Schritten.");
+      throw new Error("The process needs a list of steps.");
     }
     return {
       ...input,
       steps: (input.steps ?? []).map(step => {
         if (!step || typeof step !== "object" || !step.title) {
-          throw new Error("Jeder Prozessschritt braucht einen Titel.");
+          throw new Error("Every process step needs a title.");
         }
         return { ...step, state: state(step.state) };
       })
@@ -187,7 +187,7 @@
 
   function planData(input) {
     if (input == null) return null;
-    if (!Array.isArray(input.rows)) throw new Error("The provisional plan needs a list rows.");
+    if (!Array.isArray(input.rows)) throw new Error("The provisional plan needs a list `rows`.");
     input.rows.forEach(row => { if (!row.label || !row.text) throw new Error("Every plan row needs label and text."); });
     return input;
   }

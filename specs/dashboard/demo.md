@@ -54,7 +54,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Die Lehrkraft stimmt Sprache und Schwierigkeit auf die Zielgruppe ab.",
+            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
             "state": "done",
             "result": "Im fiktiven Beispiel abgestimmt und erledigt."
           },
@@ -96,7 +96,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Die Lehrkraft stimmt Sprache und Schwierigkeit auf die Zielgruppe ab.",
+            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
             "state": "done",
             "result": "Im fiktiven Beispiel abgestimmt und erledigt."
           },
@@ -138,7 +138,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Die Lehrkraft stimmt Sprache und Schwierigkeit auf die Zielgruppe ab.",
+            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -175,7 +175,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Die Lehrkraft stimmt Sprache und Schwierigkeit auf die Zielgruppe ab.",
+            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -212,7 +212,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Die Lehrkraft stimmt Sprache und Schwierigkeit auf die Zielgruppe ab.",
+            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -249,7 +249,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Die Lehrkraft stimmt Sprache und Schwierigkeit auf die Zielgruppe ab.",
+            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -266,7 +266,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
   "explore": [
     {
       "icon": "📖",
-      "title": "Die Library kennenlernen",
+      "title": "Die Bibliothek kennenlernen",
       "description": "Komponenten und ihre Makros in der Dokumentation ansehen.",
       "label": "Dokumentation öffnen",
       "href": "README.md"

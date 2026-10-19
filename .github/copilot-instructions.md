@@ -2835,7 +2835,7 @@ Rules:
 
 8. **Stay in persona for follow-up dialog:**
    > "I am still [Name]. You can talk to me now — ask how I felt about specific sections,
-   > what I would have needed, or what confused me. Type `exit` or `zurück` to return to the Teaching-Agent."
+   > what I would have needed, or what confused me. Type `exit` (or the same word in the course language) to return to the Teaching-Agent."
 
 9. **Persona dialog rules (stay in character):**
    - Answer from the learner's perspective, not as a teacher or agent.
@@ -2843,7 +2843,7 @@ Rules:
    - React as this person would: curious, confused, skeptical, motivated — whatever fits the profile.
    - If asked about something outside the persona's knowledge: react as the persona would
      (e.g., "Ich kenn das Wort nicht so wirklich…" or "Das hab ich in der Schule nie gehabt.").
-   - If the instructor asks a meta-question ("Was denkst du als Lernender…"), answer it in persona voice.
+   - If the instructor asks a meta-question (e.g. "What do you think as a learner…?"), answer it in persona voice.
    - **Do not break character** until explicitly asked to exit.
 
 10. On exit (`exit`, `zurück`, `:exit-persona`, or explicit request):
@@ -4020,7 +4020,7 @@ template:
     - id: session-types
       title: Session Types
       template: |
-        * __Session Types:__ (Format-Varianten einer {{sessions-called}} — siehe `data/session-types.md`)
+        * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
           1. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion: what makes a session this type]
              Erforderlich: [2–3 concrete, checkable required elements]
           2. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion]
@@ -4316,7 +4316,7 @@ _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 * __Course Type:__
   {{introductory, advanced, practice-oriented, group work, self-learning}}
 
-* __Session Types:__ (Format-Varianten einer {{sessions-called}} — siehe `data/session-types.md`)
+* __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
   1. __{{display name}}__ (slug: `{{slug}}`) — {{one-line criterion}}
      Erforderlich: {{2–3 required elements}}
 
@@ -7712,10 +7712,10 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 ```
 * __Session Types:__
-  1. __Vorlesung__ (slug: `lecture`) — Dozentengeführte Wissensvermittlung, keine bewertete Aufgabe.
-     Erforderlich: Content-Abschnitt mit Erklärungsbogen; keine bewerteten Activities.
-  2. __Übung__ (slug: `exercise`) — Angeleitete Praxis.
-     Erforderlich: ≥1 konkrete Aufgabe in Activities, Musterlösung oder Feedback-Hinweis.
+  1. __Vorlesung__ (slug: `vorlesung`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
+     Erforderlich: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
+  2. __Übung__ (slug: `uebung`) — Angeleitete Praxis.
+     Erforderlich: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
 ```
 
 - **Display name** — free text, in the course's language/terminology.
@@ -7729,10 +7729,12 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 | Course type | Suggested Session Types |
 |---|---|
-| lecture-series | **Vorlesung** (`lecture`) — dozentengeführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
+| lecture-series | **Vorlesung** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
 | self-paced | **Modul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
 | workshop | **Input** (`input`) — kurzer Theorieblock · **Aktivität** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
 | single-lesson | Usually **one** type only (named after `lectures-called`); skip the discussion step unless the instructor wants to split the lesson into sub-types |
+
+The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vorlesung`, `uebung`), as `templates/course-didactics.yaml` requires.
 
 ## Resolving a session's type
 
@@ -8136,7 +8138,7 @@ workflow:
         - Open :coauthor-materials {number} for affected sessions
         - Agent loads the matching session's `#### Validation Report` and works through issues
         - Re-run :validate-course after fixes until report is clean
-        - Instructor confirms "Report ist akzeptabel" to exit loop
+        - Instructor confirms that the report is acceptable (in the course language) to exit the loop
 
         Result rules (same order as in session mode): deferrals decided in the first run (⏳), other ❌ on required/mechanical items → FAIL, open pedagogical findings → PASS with concerns; never re-graded on request.
 

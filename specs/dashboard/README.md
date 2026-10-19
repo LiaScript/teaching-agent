@@ -4,7 +4,7 @@ version: 0.0.1
 language: de
 narrator: Deutsch Female
 mode: Textbook
-comment: Kleine LiaScript-Library für Übersichten, Einheiten und Arbeitsprozesse.
+comment: Kleine LiaScript-Bibliothek für Übersichten, Einheiten und Arbeitsprozesse.
 script: ./dashboard.js
 link: ./dashboard.css
 
@@ -14,7 +14,7 @@ link: ./dashboard.css
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -31,7 +31,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -48,7 +48,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -65,7 +65,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -82,7 +82,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -98,7 +98,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -114,7 +114,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -130,7 +130,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -146,7 +146,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -162,7 +162,7 @@ runtimeReady.then(library => {
 <script run-once modify="false" style="display:block">
 const runtimeReady = window.LiaDashboard ? Promise.resolve(window.LiaDashboard) : new Promise((resolve, reject) => {
   const onReady = () => { clearTimeout(timeout); resolve(window.LiaDashboard); };
-  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error("Dashboard-Library wurde nicht geladen.")); }, 5000);
+  const timeout = setTimeout(() => { document.removeEventListener("lia-dashboard-ready", onReady); reject(new Error(String(document.documentElement.lang).startsWith("de") ? "Die Dashboard-Bibliothek wurde nicht geladen." : "The dashboard library was not loaded.")); }, 5000);
   document.addEventListener("lia-dashboard-ready", onReady, {once: true});
 });
 runtimeReady.then(library => {
@@ -178,9 +178,9 @@ runtimeReady.then(library => {
 
 # Dashboard
 
-Diese Library stellt acht Komponenten bereit: **Hero, Progress, Card, Action, Status, Units, Process und Explore**. `Unit` ist ein Unter-Makro; `View` setzt die Komponenten zu einer gemeinsamen Übersicht zusammen.
+Diese Bibliothek stellt acht Komponenten bereit: **Hero, Progress, Card, Action, Status, Units, Process und Explore**. `Unit` ist ein Unter-Makro; `View` setzt die Komponenten zu einer gemeinsamen Übersicht zusammen.
 
-CSS und JavaScript liegen neben dieser Datei. Es gibt keine externen Bibliotheken und keinen Build-Schritt. Der Interpreter lädt beide Dateien über den Template-Import.
+CSS und JavaScript liegen neben dieser Datei. Sie braucht keine weiteren Bibliotheken und keinen Build-Schritt. Der Interpreter lädt beide Dateien über den Template-Import.
 
 Einbinden, wenn das Template im Projektordner `dashboard/` liegt:
 
@@ -317,7 +317,7 @@ Zusätzliche Aktionen erscheinen aufklappbar. Eine leere Liste erzeugt keinen un
 
 ## Daten und Grenzen
 
-1. Die Fachanwendung liefert Zustände, Gründe und zulässige Aktionen. Die Library kennt keine Teaching-Agent-Voraussetzungen oder Veröffentlichungsfreigaben.
+1. Die Fachanwendung liefert Zustände, Gründe und zulässige Aktionen. Die Bibliothek kennt keine Teaching-Agent-Voraussetzungen oder Veröffentlichungsfreigaben.
 2. `Dashboard.View` hält Zähler, Fortschrittsanzeige und Auswahl konsistent. Unbekannte Zustände und doppelte Einheiten-IDs erzeugen einen sichtbaren Datenhinweis.
 3. Eine Auswahl verändert ausschließlich die Ansicht. Es gibt keine Schreibzugriffe auf Journal, Materialien oder Lernfortschritt.
 4. Lokale CSS-Variablen, responsives Layout und ein dunkles Farbschema sind enthalten. Eine Anpassung an manuell gewählte LiaScript-Themes ist ein späterer Schritt.
@@ -336,7 +336,7 @@ link: ./dashboard.css
 @Dashboard.View wird an den JSON-Codeblock angehängt.
 ```
 
-Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, klein, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <entwurf.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
+Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, klein, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <draft.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
 
 Optionale Felder für die Kursterminologie: `unitsTitle` (Überschrift der Einheitenliste) und `unitLabel: {one, many}` (Wörter in der Fortschrittszeile, z. B. „1 von 4 Kapiteln ist abgeschlossen“). `many` steht in der Form nach „von“, also im Dativ Plural: `{"one": "Kapitel", "many": "Kapiteln"}`, `{"one": "Modul", "many": "Modulen"}`.
 

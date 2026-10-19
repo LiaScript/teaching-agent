@@ -290,7 +290,7 @@ workflow:
         - Open :coauthor-materials {number} for affected sessions
         - Agent loads the matching session's `#### Validation Report` and works through issues
         - Re-run :validate-course after fixes until report is clean
-        - Instructor confirms "Report ist akzeptabel" to exit loop
+        - Instructor confirms that the report is acceptable (in the course language) to exit the loop
 
         Result rules (same order as in session mode): deferrals decided in the first run (⏳), other ❌ on required/mechanical items → FAIL, open pedagogical findings → PASS with concerns; never re-graded on request.
 
