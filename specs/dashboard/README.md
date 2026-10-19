@@ -338,7 +338,7 @@ link: ./dashboard.css
 
 Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, klein, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <entwurf.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
 
-Optionale Felder für die Kursterminologie: `unitsTitle` (Überschrift der Einheitenliste) und `unitLabel: {one, many}` (Wörter in der Fortschrittszeile, z. B. „1 von 4 Kapiteln“).
+Optionale Felder für die Kursterminologie: `unitsTitle` (Überschrift der Einheitenliste) und `unitLabel: {one, many}` (Wörter in der Fortschrittszeile, z. B. „1 von 4 Kapiteln ist abgeschlossen“). `many` steht in der Form nach „von“, also im Dativ Plural: `{"one": "Kapitel", "many": "Kapiteln"}`, `{"one": "Modul", "many": "Modulen"}`.
 
 Optionales Feld `labels` für Kurssprachen ohne eingebaute Beschriftungen: ein Objekt, das feste Texte nach Schlüssel ersetzt. Fehlende Schlüssel fallen auf die eingebaute Sprache zurück. Ein spezielleres Datenfeld (`eyebrow`, `unitsTitle`, `progressTitle`, `decisionsTitle`, `exploreTitle`, `courseLabel`, `emptyUnits`) hat Vorrang vor `labels`.
 

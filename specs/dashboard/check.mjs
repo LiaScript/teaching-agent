@@ -155,9 +155,24 @@ test("labels survive switching the selected unit", () => {
   assert.match(root.innerHTML, /Disponible :/);
 });
 
+test("counts agree in number: the verb follows the finished units, the noun the total", () => {
+  const units = (done, total) => Array.from({ length: total }, (_, i) => ({ id: String(i + 1), title: "A", state: i < done ? "done" : "planned" }));
+  const de = (done, total) => dashboard.renderComponent("View", `de-${done}-${total}`, { lang: "de", title: "X", units: units(done, total) });
+  const en = (done, total) => dashboard.renderComponent("View", `en-${done}-${total}`, { lang: "en", title: "X", units: units(done, total) });
+  assert.match(de(1, 6), /1 von 6 Einheiten ist abgeschlossen/);
+  assert.match(de(2, 6), /2 von 6 Einheiten sind abgeschlossen/);
+  assert.match(de(0, 6), /0 von 6 Einheiten sind abgeschlossen/);
+  assert.match(de(1, 1), /1 von 1 Einheit ist abgeschlossen/);
+  assert.match(en(1, 6), /1 of 6 units is done/);
+  assert.match(en(2, 6), /2 of 6 units are done/);
+  const step = lang => dashboard.renderComponent("View", `s-${lang}`, { lang, title: "X", units: [{ id: "1", title: "A", state: "current", process: { steps: [{ title: "S", state: "done" }] } }] });
+  assert.match(step("de"), /1 von 1 Schritt</);
+  assert.match(step("en"), /1 of 1 step</);
+});
+
 test("unit label follows the course terminology", () => {
-  const html = dashboard.renderComponent("View", "u", { lang: "de", title: "X", unitLabel: { one: "Modul", many: "Module" }, units: [{ id: "1", title: "A", state: "done" }, { id: "2", title: "B", state: "planned" }] });
-  assert.match(html, /1 von 2 Module sind abgeschlossen/);
+  const html = dashboard.renderComponent("View", "u", { lang: "de", title: "X", unitLabel: { one: "Modul", many: "Modulen" }, units: [{ id: "1", title: "A", state: "done" }, { id: "2", title: "B", state: "planned" }] });
+  assert.match(html, /1 von 2 Modulen ist abgeschlossen/);
   const plain = dashboard.renderComponent("View", "v", { lang: "de", title: "X", units: [{ id: "1", title: "A", state: "planned" }] });
   assert.match(plain, /0 von 1 Einheit ist abgeschlossen/);
   const linked = dashboard.renderComponent("View", "w", { lang: "de", title: "X", unitLabel: { one: "Modul", many: "Module" }, units: [{ id: "1", title: "A", state: "current", href: "#a" }] });

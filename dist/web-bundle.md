@@ -4734,7 +4734,7 @@ template:
     subtitle: 'Current state of work in plain words; no repeated counters'
     notice: 'Optional: provisional sample data or pending decisions'
     unitsTitle: 'Label from `## Course Context` → Terminology (sessions-called)'
-    unitLabel: '{one, many}: the word for one unit and for several, in the course language, from `## Course Context` → Terminology (sessions-called) — used in the progress line'
+    unitLabel: '{one, many}: the word for one unit and for several, in the course language, from `## Course Context` → Terminology (sessions-called) — used in the progress line "1 of 4 …"; `many` in the form that follows "of" (German: dative plural after "von", e.g. `{"one": "Modul", "many": "Modulen"}`)'
     labels: 'Only when the course language is neither German nor English: every fixed text of the library translated, keyed as listed in `specs/dashboard/README.md` → `labels`; counted texts as {one, many} with the placeholders listed there'
     units:
       - id: 'Stable number from Sessions / Agenda'
