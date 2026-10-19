@@ -41,11 +41,5 @@ Converts a **Session** into a detailed **Session Material**.
 7. Generate planned outline.
 8. Apply template.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as authoring reference for every LiaScript construct in the material; otherwise use `data/liascript-cheat-sheet.md`.
-   - Write `author:` in the material's metadata header from `journal.md` → `## Course Context` → Conventions → Author (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
-   - If `journal.md` → `## Visual Identity` contains a `__LiaScript Theme:__` block, include it in the material's metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
-9. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
-10. Resolve the File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) and save accordingly:
-    - **multi-file:** derive `{slug}` from the session title, create `materials/{number}-{slug}/README.md` (and its `assets/` subfolder on demand, not upfront).
-    - **single-file:** insert or replace the `##` chapter for this session inside root `/README.md`, keeping chapters in session-number order.
-11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}` and rewrite that unit's status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
-12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+9. Save the material as described in `data/file-structure-modes.md` → "Creating the material document": path (reuse the path recorded in the agenda), metadata header (author, language, theme, template imports) and the overview update (Material ✅ with its status line).
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

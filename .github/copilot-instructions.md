@@ -1059,7 +1059,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 - Agenda info (modules/sessions) from `journal.md` → `## Agenda`
 - Terminology & conventions from `journal.md` → `## Course Context`
 - LiaScript template usage rules from `journal.md` → `## Templates` (if present)
-- Currently open material document — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
+- Currently open material document, if one exists yet (otherwise this task creates it, see step 6) — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - Optional `{number}` (e.g. from the session's action line `agent:teaching/coauthor-materials?number=3`): work on that session; without it, take the currently open material or ask which session
 - Optionally, corresponding session subsection in `journal.md` → `## Sessions`
 - Didactic inputs from `journal.md` → `## Didactics` (concept, course type, difficulty; not the primary persona source)
@@ -1102,6 +1102,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. **Before writing the consolidated draft**, self-check it against the *Session Materials* items of `checklists/course-quality-checklist.md` (facts, self-check wording differs from practice, word list covers every word needed to answer, everything learners must read can be read aloud, closing reward only after solving, quiz settings from `data/liascript-cheat-sheet.md` → Quizzes for young learners) and report the result in one line. Material files are changed only with the file-edit tool, never with shell scripts or heredocs.
    At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`). When it is saved into the material document (after the save confirmation) and Material is still ❌, set **Material ✅** and the unit's status line (`templates/session-skeleton.yaml` → `section_layout.overview`) — Material ✅ means the document exists, not that it is approved.
+   **If the session has no material document yet** (the usual case right after the skeleton): work out the content in the dialog from the skeleton — do not run `:promote-session` first — and create the document at the first "Save" exactly as `data/file-structure-modes.md` → "Creating the material document" describes (path, header, overview).
 7. When the instructor **approves** the material for this session:
    - Update the session's skeleton in `journal.md` → `## Sessions` → `### {n}. …` so that Summary, Content and Activities describe the material as it now is; show the changes in one line of the summary.
    - Approval does not change the overview: Material ✅ was set when the document was written (step 6). **Done stays ❌** until `:validate-course {n}` has written `Result: PASS` with no open ⏳ item into this session's `#### Validation Report`.
@@ -2623,14 +2624,8 @@ Converts a **Session** into a detailed **Session Material**.
 7. Generate planned outline.
 8. Apply template.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as authoring reference for every LiaScript construct in the material; otherwise use `data/liascript-cheat-sheet.md`.
-   - Write `author:` in the material's metadata header from `journal.md` → `## Course Context` → Conventions → Author (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
-   - If `journal.md` → `## Visual Identity` contains a `__LiaScript Theme:__` block, include it in the material's metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
-9. If the material uses macros from `journal.md` → `## Templates`, include each required `import: {url}` line in the LiaScript metadata header (multi-file: the new file's own header; single-file: the shared root `README.md` header, if not already present).
-10. Resolve the File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) and save accordingly:
-    - **multi-file:** derive `{slug}` from the session title, create `materials/{number}-{slug}/README.md` (and its `assets/` subfolder on demand, not upfront).
-    - **single-file:** insert or replace the `##` chapter for this session inside root `/README.md`, keeping chapters in session-number order.
-11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}` and rewrite that unit's status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
-12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+9. Save the material as described in `data/file-structure-modes.md` → "Creating the material document": path (reuse the path recorded in the agenda), metadata header (author, language, theme, template imports) and the overview update (Material ✅ with its status line).
+10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: specs/tasks/promote-session.md ====================
 
@@ -5908,8 +5903,16 @@ Each session/unit is its own LiaScript document in its own folder.
 - Course content: `materials/{number}-{slug}/README.md` — one folder per session.
 - Assets: `materials/{number}-{slug}/assets/images/`, `materials/{number}-{slug}/assets/videos/`, etc. — scoped to that session, not shared with others.
 - `{slug}` is a kebab-case slug derived from the session title: lowercase, strip punctuation, spaces → hyphens, truncate to ~5 significant words if the title is long (e.g. "Are You in Scope? Essential vs. Important Entities" → `are-you-in-scope-essential-vs-important`).
-- **Compute the slug once**, when the session's material file/folder is first created (`:promote-session`). If the session title changes afterward, do not silently rename the folder — flag the mismatch and ask before renaming, since links and assets may reference the existing path.
+- **Compute the slug once**, when the material path is first recorded — in the technical table of `## Agenda` if an agenda exists, otherwise when the material document is first created. Every later task reuses the recorded path. If the session title changes afterward, do not silently rename the folder — flag the mismatch and ask before renaming, since links and assets may reference the existing path.
 - Typical for: `lecture-series`, `self-paced`, `workshop`, or any course with multiple sessions.
+
+## Creating the material document
+
+The same rules apply to every task that creates a session's material document — `:promote-session` (generated material) and `:coauthor-materials` (material worked out in the dialog):
+
+1. **Path:** reuse the path recorded in the technical table of `## Agenda` if there is one; otherwise derive it as above (multi-file: `materials/{number}-{slug}/README.md`, the `assets/` subfolder only on demand; single-file: the `##` chapter for this session inside root `/README.md`, chapters in session-number order).
+2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `language:` from the course language, the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses.
+3. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 ## Default by course type
 
