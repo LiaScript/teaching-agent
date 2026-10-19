@@ -24,7 +24,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - Fully promoted, validated material for the session
 - `#### Validation Report` and (if personas exist) `#### Persona Reviews` in the matching `journal.md` → `## Sessions` subsection
 - Real images inserted, replacing placeholders
-- Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") in its `#### Validation Report`; dashboard updated
+- Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item in its `#### Validation Report`; dashboard updated
 - A closing summary: iterations spent per loop, final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
 
 ## Steps
@@ -51,7 +51,7 @@ e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is rec
 
 a. For each persona, run `tasks/review-as-persona.md {name} {number}` in **report-only mode**: perform its steps 1–7 (produce and save the structured `#### Persona Reviews` report) and skip steps 8–10 (the persistent in-character follow-up chat) — there is no one present to chat with during an automated loop. The instructor can start that chat separately afterward by calling `:review-as-persona` directly.
 
-b. If any persona's `Priority Issues` include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` (isolated issue) or by re-running Step 1 (broader issue), using the same "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. If a fix needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d.
+b. If any persona's priority issues (`data-key="priority"`) include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` (isolated issue) or by re-running Step 1 (broader issue), using the same "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. If a fix needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d.
 
 c. After fixes, re-run Step 1 and then this step again for **all** personas (not just the one that raised the concern, to catch regressions).
 
@@ -67,7 +67,7 @@ For each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}`
 
 ### 4. Finalize
 
-Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (if not already) — only if its `#### Validation Report` says `Result: PASS`; with "PASS with concerns" Done stays ❌ and the closing summary names the deferred step. Run `tasks/update-dashboard.md`. Report the closing summary described in Output above.
+Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (if not already, together with its status line) — only if its `#### Validation Report` says `Result: PASS` and lists no open ⏳ item; with "PASS with concerns" Done stays ❌ and the closing summary names the deferred step. Run `tasks/update-dashboard.md`. Report the closing summary described in Output above.
 
 ## Cross-agent execution note
 

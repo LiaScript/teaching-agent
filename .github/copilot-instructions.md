@@ -837,7 +837,7 @@ Offers two paths for each missing core section:
    - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and for material documents per `data/file-structure-modes.md` — `materials/{number}-{slug}/README.md` (multi-file; legacy `{number}-{type}` names count too, see step 1) or `##` chapters in root `/README.md` (single-file)
    - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
    - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if its material document exists, Done stays ❌ (cannot be inferred — instructor must confirm)
-   - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
+   - Save the overview (status list + technical table, `templates/session-skeleton.yaml` → `section_layout.overview`) directly below `## Sessions`, before all `### {number}. {title}` subsections
 
 6c. Ensure `journal.md` → `## Agents` exists:
    - If missing, create it from `templates/agents.yaml`.
@@ -977,7 +977,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - Fully promoted, validated material for the session
 - `#### Validation Report` and (if personas exist) `#### Persona Reviews` in the matching `journal.md` → `## Sessions` subsection
 - Real images inserted, replacing placeholders
-- Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") in its `#### Validation Report`; dashboard updated
+- Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item in its `#### Validation Report`; dashboard updated
 - A closing summary: iterations spent per loop, final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
 
 ## Steps
@@ -1004,7 +1004,7 @@ e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is rec
 
 a. For each persona, run `tasks/review-as-persona.md {name} {number}` in **report-only mode**: perform its steps 1–7 (produce and save the structured `#### Persona Reviews` report) and skip steps 8–10 (the persistent in-character follow-up chat) — there is no one present to chat with during an automated loop. The instructor can start that chat separately afterward by calling `:review-as-persona` directly.
 
-b. If any persona's `Priority Issues` include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` (isolated issue) or by re-running Step 1 (broader issue), using the same "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. If a fix needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d.
+b. If any persona's priority issues (`data-key="priority"`) include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` (isolated issue) or by re-running Step 1 (broader issue), using the same "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. If a fix needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d.
 
 c. After fixes, re-run Step 1 and then this step again for **all** personas (not just the one that raised the concern, to catch regressions).
 
@@ -1020,7 +1020,7 @@ For each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}`
 
 ### 4. Finalize
 
-Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (if not already) — only if its `#### Validation Report` says `Result: PASS`; with "PASS with concerns" Done stays ❌ and the closing summary names the deferred step. Run `tasks/update-dashboard.md`. Report the closing summary described in Output above.
+Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (if not already, together with its status line) — only if its `#### Validation Report` says `Result: PASS` and lists no open ⏳ item; with "PASS with concerns" Done stays ❌ and the closing summary names the deferred step. Run `tasks/update-dashboard.md`. Report the closing summary described in Output above.
 
 ## Cross-agent execution note
 
@@ -1079,7 +1079,7 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **Primary persona source:** `journal.md` → `## Agents` → `### Coauthor`.
    - **Fallback only:** If `### Coauthor` is missing or inactive, load `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - **If the current session subsection in `journal.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
-   - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
+   - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any priority issues (`data-key="priority"`) before starting free co-authoring. State which persona reviews were found.
    - **If the current session subsection contains the decisions list (`<!-- data-key="decisions" -->`, older journals `**Decisions:**`):** read it before suggesting anything — never re-propose what the instructor has already decided against.
 2. **Agent adopts the Coauthor role into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
@@ -1099,10 +1099,10 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. **Before writing the consolidated draft**, self-check it against the *Session Materials* items of `checklists/course-quality-checklist.md` (facts, self-check wording differs from practice, word list covers every word needed to answer, everything learners must read can be read aloud, closing reward only after solving, quiz settings from `data/liascript-cheat-sheet.md` → Quizzes for young learners) and report the result in one line. Material files are changed only with the file-edit tool, never with shell scripts or heredocs.
-   At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`).
+   At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`). When it is saved into the material document (after the save confirmation) and Material is still ❌, set **Material ✅** and the unit's status line (`templates/session-skeleton.yaml` → `section_layout.overview`) — Material ✅ means the document exists, not that it is approved.
 7. When the instructor **approves** the material for this session:
    - Update the session's skeleton in `journal.md` → `## Sessions` → `### {n}. …` so that Summary, Content and Activities describe the material as it now is; show the changes in one line of the summary.
-   - In the overview table set **Material ✅**. **Done stays ❌** until `:validate-course {n}` has written `Result: PASS` into this session's `#### Validation Report`.
+   - Approval does not change the overview: Material ✅ was set when the document was written (step 6). **Done stays ❌** until `:validate-course {n}` has written `Result: PASS` with no open ⏳ item into this session's `#### Validation Report`.
    - Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column.
    - **If the session already has a `#### Validation Report`** (this was a revision after a check): run `:validate-course {n}` right away without asking — the revision is only complete when the re-check passes. Skip step 8 then.
    - Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -1365,7 +1365,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 11. Derive an `{image-slug}` from the description (kebab-case).
 12. Save into the target session's `#### Images` block — always, without asking:
     - Locate the `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
-    - If it has no `#### Images` block, create one (placed after `**References:**`, before `#### Validation Report` if present).
+    - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
 
@@ -1875,11 +1875,11 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 6. Fill out template `templates/session-skeleton.yaml`.
 7. Save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
    The `## Sessions` section has one canonical structure:
-   1. An overview table directly below `## Sessions`
-   2. One `### {number}. {title}` subsection per session below the overview table
+   1. The overview directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`)
+   2. One `### {number}. {title}` subsection per session below the overview
 
    - Directly below the heading, write the action line from the template: exactly **one** main action (`coauthor-materials?number={n}`) — see `data/agent-links.md`.
-   - Then the visible line with kind and checklist (display names in the course language), followed by the technical `<details>` block with `**Type:** {type}`, `**Method:** {method}` and the further commands.
+   - Then the technical `<details>` block with `**Type:** {type}`, `**Method:** {method}` and the further commands, followed by the visible line with kind and checklist (display names in the course language) — the order of all blocks is `templates/session-skeleton.yaml` → `section_layout.entry_order`.
    - Visible bold labels are **only in the course language**, no abbreviations (no "UDL"). Each carries its English key invisibly in the attribute comment directly above it (`<!-- data-key="summary" -->`); tasks find a label by that key (older journals: by the English label).
    - Do not include the type in the subsection heading.
    - If a Method was resolved (step 3): `**Method:** {method}` directly after `**Type:**` inside the `<details>` block. Omit this line entirely if the resolved default is `none`.
@@ -1889,15 +1889,15 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - Do **not** create an `#### Images` block — `:create-image` creates it when the first image exists (an empty `####` heading becomes an empty slide).
    - Do not create a `**Decisions:**` list yet — `:coauthor-materials` adds it with the first decision.
    - **Self-check before saving** (adapt, then name every change in one line; ask before dropping or replacing anything the instructor asked for): the skeleton describes the material that will really be produced, not a wish list; new terms stay within the scope set in `## Didactics` (terms of later sessions are not used yet); every matching or assignment task has exactly one correct answer per item; every task, including extension tasks, can be solved with the material the learners get (text, pictures); every support need named in `## Course Context` or `## Outline` (language support, learning support) has a concrete measure in this unit; the self-check shows what *each* learner can do (also in pair or group work); a closing proof or reward cannot be reached without doing the tasks, or the skeleton says how the instructor checks it.
-8. Update the overview inside `journal.md` → `## Sessions`: a visible status list in the course language (one line per unit: "{n}. {title} – skeleton ✅ · material open", translated), followed by the technical overview table inside `<details><summary>{"Technical overview", translated}</summary> … </details>`:
-   - If `journal.md` → `## Sessions` does not exist yet, create it with the overview table first. Include a `Method` column only if `journal.md` → `## Didactics` → `__Default Session Method:__` is not `none`:
+8. Update the overview inside `journal.md` → `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: the unit's status line ("{n}. {title} – skeleton ✅ · material open", translated) and its row in the technical overview table inside `<details><summary>{"Technical overview", translated}</summary> … </details>`:
+   - If `journal.md` → `## Sessions` does not exist yet, create it with the overview first. Include a `Method` column only if `journal.md` → `## Didactics` → `__Default Session Method:__` is not `none`:
      ```
      | # | Title | Type | Method | Skeleton | Material | Done | Notes |
      |---|---|---|---|---|---|---|---|
      ```
    - Add a new row: `| {number} | {title} | {type} | {method} | ✅ | ❌ | ❌ | |` (omit the Method column entirely, matching the table header, if no method is in use)
    - If a row for this session already exists, update the Skeleton column to ✅.
-   - Keep the overview table before all `### {number}. {title}` subsections.
+   - Keep the overview (status list and table) before all `### {number}. {title}` subsections.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 10. **Show the new unit** (MCP gate open): after the overview is updated, `goto` the new unit by heading (`section: "### {number}. {title}"`, check with `get_state`), say in one line what the instructor sees there, and offer the next step (work out the material together).
 
@@ -2620,7 +2620,7 @@ Converts a **Session** into a detailed **Session Material**.
 10. Resolve the File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) and save accordingly:
     - **multi-file:** derive `{slug}` from the session title, create `materials/{number}-{slug}/README.md` (and its `assets/` subfolder on demand, not upfront).
     - **single-file:** insert or replace the `##` chapter for this session inside root `/README.md`, keeping chapters in session-number order.
-11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}` and rewrite that unit's status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
 12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: specs/tasks/promote-session.md ====================
@@ -2732,8 +2732,8 @@ Each session can contain one current review per learner persona.
 Rules:
 - Store the report under the matching `### {number}. {title}` session subsection.
 - The container heading is always `#### Persona Reviews`.
-- Each persona report is headed `##### {icon} {name}`.
-- Wrap each `##### {icon} {name}` report in its own `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide instead of splitting on every `######` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide".
+- Each persona report is one `<section>…</section>` block that starts with `<!-- data-key="persona" -->` and the line `**{icon} {name}** — …`; tasks find a persona's report by that line.
+- Inside the report use bold labels in the course language, each with its English key in a `data-key` comment above it, as in the session skeleton — never `#####` or `######` headings (no headings inside a session, see `templates/journal.md`). Older reports headed `##### {icon} {name}` are replaced as a whole in the new format.
 - If that persona already has a report for the same session, replace it completely (including its `<section>` wrapper).
 - Do not use a global `journal.md` → `## Persona Reviews` section for new reviews.
 
@@ -2754,33 +2754,33 @@ Rules:
 
 5. Review the material through the persona's eyes across **6 dimensions**:
 
-   **a) Verständlichkeit / Sprachniveau**
+   **a) Comprehensibility / language level**
    - Is the language appropriate for this persona's literacy level?
    - Are sentences too long, too abstract, or jargon-heavy?
    - Flag specific passages that would likely confuse or lose this learner.
-   - Consider: DaZ background, literacy level, reading comprehension from persona profile.
+   - Consider: learning in a second language (e.g. German as a second language), literacy level, reading comprehension from persona profile.
 
-   **b) Schwierigkeitsgrad / Überforderung**
+   **b) Difficulty / overload**
    - Is the cognitive load appropriate?
    - Are too many new concepts introduced at once without scaffolding?
    - Are there moments where this persona would likely give up or zone out?
 
-   **c) Relevanz / Motivation**
+   **c) Relevance / motivation**
    - Would this persona find the content relevant to their work and goals?
    - Are there hooks connecting the material to their daily reality?
    - Are examples drawn from contexts this persona actually knows?
 
-   **d) Zugänglichkeit**
+   **d) Accessibility**
    - Are there barriers this persona faces that the material doesn't address?
-   - Examples: key terms unexplained for DaZ learners; no visual support for text-averse learners;
+   - Examples: key terms unexplained for second-language learners; no visual support for text-averse learners;
      assumed digital literacy that this persona may not have.
 
-   **e) Formatpräferenz**
+   **e) Format preference**
    - Does the mix of formats (text, code blocks, quizzes, video embeds, diagrams) match this persona's media habits?
    - Would this persona engage with or skip certain elements?
    - Is there too much unbroken text for someone who primarily learns via YouTube?
 
-   **f) Vorwissen / fehlende Grundlagen**
+   **f) Prior knowledge / missing foundations**
    - Does the material assume knowledge or skills this persona likely does not have?
    - Are terms used without explanation that the persona profile flags as "likely unknown"?
    - Are any prerequisite concepts missing that would make the material incomprehensible?
@@ -2791,55 +2791,46 @@ Rules:
    ```
    <section>
 
-   ##### [Icon] [Name]
+   <!-- data-key="persona" -->
+   **[Icon] [Name]** — [one-line description]
 
    __Date:__ YYYY-MM-DD
-   __Persona:__ [Icon] [Name] — [one-line description]
    __Material:__ {material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode}
    __Result:__ OK / Issues found / Major concerns
 
-   ###### Overall Impression
+   <!-- data-key="impression" -->
+   **{"Overall impression", translated}:**
    [2–3 sentences written in the persona's voice: What was the experience of reading this?
    Honest, not diplomatic — this is from the learner's perspective.]
 
-   ###### Dimension Findings
+   <!-- data-key="findings" -->
+   **{"Findings by dimension", translated}:**
 
-   **a) Verständlichkeit / Sprachniveau**
-   [Findings — flag specific passages if relevant. Verdict: OK / Issues found]
+   - **{dimension a, translated}:** [Findings — flag specific passages if relevant. Verdict: OK / Issues found]
+   - **{dimension b, translated}:** [Findings. Verdict: OK / Too demanding / Too easy]
+   - **{dimension c, translated}:** [Findings. Verdict: OK / Low relevance for this persona]
+   - **{dimension d, translated}:** [Findings. Verdict: OK / Barriers identified]
+   - **{dimension e, translated}:** [Findings. Verdict: Good fit / Mismatch for this persona]
+   - **{dimension f, translated}:** [Terms or concepts assumed but likely unknown to this persona,
+     each marked ⚠️ assumed, should be introduced | ✅ likely known]
 
-   **b) Schwierigkeitsgrad / Überforderung**
-   [Findings. Verdict: OK / Too demanding / Too easy]
-
-   **c) Relevanz / Motivation**
-   [Findings. Verdict: OK / Low relevance for this persona]
-
-   **d) Zugänglichkeit**
-   [Findings. Verdict: OK / Barriers identified]
-
-   **e) Formatpräferenz**
-   [Findings. Verdict: Good fit / Mismatch for this persona]
-
-   **f) Vorwissen / fehlende Grundlagen**
-   [List of specific terms or concepts assumed but likely unknown to this persona.
-   Mark each as: ⚠️ assumed, should be introduced | ✅ likely known]
-
-   ###### Priority Issues
-   Ranked list — most impactful first:
+   <!-- data-key="priority" -->
+   **{"Priority issues", translated}:**
    1. [Issue] — Suggested fix
    2. [Issue] — Suggested fix
-   ...
 
-   ###### What Worked Well
-   [What this persona would respond well to — do not skip this section.]
+   <!-- data-key="worked" -->
+   **{"What worked well", translated}:**
+   [What this persona would respond well to — do not skip this part.]
 
    </section>
    ```
 
 7. Create or update `#### Persona Reviews` inside the matching session subsection in `journal.md` → `## Sessions`, keeping each persona's report wrapped in its own `<section>…</section>` block.
-   - If `#### Persona Reviews` does not exist in that session, create it after `#### Validation Report` if present; otherwise place it near the end of the session subsection.
-   - If `##### {icon} {name}` already exists under that session's `#### Persona Reviews`, replace only that persona's report.
+   - If `#### Persona Reviews` does not exist in that session, create it at the very end of the session subsection, after `#### Images` if present (`templates/session-skeleton.yaml` → `section_layout.entry_order`).
+   - If that persona's report already exists under that session's `#### Persona Reviews` (its `**{icon} {name}**` line, or an older `##### {icon} {name}` heading), replace only that persona's report.
    - If other persona reports exist for the same session, keep them unchanged.
-   Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → `##### {icon} {name}`."
+   Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → {icon} {name}."
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 8. **Stay in persona for follow-up dialog:**
@@ -3006,7 +2997,7 @@ Generated in sequence without interruption inside `journal.md`:
 - `## Agents` (kept from `templates/journal.md`; Coauthor role, optional specialist customizations, and learner persona container)
 - `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
-- `## Sessions` containing an overview table followed by one subsection per session
+- `## Sessions` containing the overview (`templates/session-skeleton.yaml` → `section_layout.overview`) followed by one subsection per session
 - `## Dashboard` updated in place via `tasks/update-dashboard.md`
 
 ## Steps
@@ -3063,9 +3054,8 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
 5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
 6. Replace the content of `journal.md` → `## Agenda` (skip if agenda = no).
 7. Replace the content of `journal.md` → `## Sessions` with:
-   - An overview table directly below `## Sessions`
-   - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
-   - One `### {number}. {title}` subsection per session below the overview table
+   - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
+   - One `### {number}. {title}` subsection per session below the overview
 8. Fill each session subsection using `templates/session-skeleton.yaml`.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 
@@ -3251,8 +3241,8 @@ Run this task automatically after any task that changes project state:
      `review` (only while the instructor or a check actually has something to
      look at); PASS with concerns or PASS with ⏳ items → `current` with
      `statusLabel` = "passed – {later step}" (translated); PASS + Done ✅ → `done`.
-   - `done` — only with `Result: PASS` (not "with concerns") in the unit's
-     `#### Validation Report` **and** Done ✅ in the overview table. Never infer it from a heading.
+   - `done` — only with `Result: PASS` (not "with concerns") and no open ⏳ item in
+     the unit's `#### Validation Report` **and** Done ✅ in the overview table. Never infer it from a heading.
    Optional process steps may use `optional`. A unit's `summary` never
    contradicts its state.
 4. Build the material process for each unit from actual evidence: `title`,
@@ -3320,15 +3310,17 @@ Run this task automatically after any task that changes project state:
       `<!-- class="journal-actions" -->` paragraph directly below the heading, or
       insert one there.
     - Fill it with the commands from that table that fit the current state, with
-      concrete arguments (session number, type, persona names). Session
+      concrete arguments (session number, persona names). Session
       subsections get exactly one main action; further fitting commands go into
-      the `<details><summary>More actions</summary>` block directly after the
-      action line (see `templates/session-skeleton.yaml`).
+      the `<details><summary>Technical settings and more actions</summary>` block
+      directly after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - If an action line ended up below a `#### Validation Report`,
       `#### Persona Reviews`, or `#### Images` block, move it back directly below
       the `###` heading.
     - Touch nothing else in those sections: action lines (and the sessions'
-      "More actions" blocks) are the only content of source sections this task may write.
+      further commands inside the sessions' "Technical settings and more actions"
+      blocks — never their Type or Method lines) are the only content of source
+      sections this task may write.
 11. Confirm the dashboard was updated only after step 9 passed, and name the next
     recommended command. If the MCP gate is open (`data/agent-links.md`), `goto` the
     Dashboard slide, check with `get_state`, and post the next action as an
@@ -3549,8 +3541,8 @@ Rules:
    - Recommended actions — check them against the session's decisions list (`data-key="decisions"`) first; never recommend something the instructor has already decided against
    - Page titles of the material as references — never line numbers
    - The visible plain-language summary (`**Outcome:**`, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
-6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`.
-   Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns"); otherwise Done stays ❌.
+6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`, directly after the action line and the technical details (`templates/session-skeleton.yaml` → `section_layout.entry_order`).
+   Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item; otherwise set Done ❌ — also when it was ✅ before. Rewrite the unit's status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
@@ -3583,14 +3575,14 @@ Rules:
 
 6. **Check Session Progress:**
    - Load `journal.md` → `## Sessions` as primary source
-   - Confirm the overview table appears directly below `## Sessions`
+   - Confirm the overview appears directly below `## Sessions` (status list, then the technical table in `<details>`, `templates/session-skeleton.yaml` → `section_layout.overview`) and every status line matches its table row
    - All expected sessions have a row in the overview table
    - Cross-check: every ✅ Skeleton row has a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
    - Cross-check: every ✅ Material row has its material document present — a file in `materials/{number}-{slug}/README.md` in multi-file mode, or a matching `##` chapter in root `/README.md` in single-file mode (see `data/file-structure-modes.md`)
    - All sessions marked ✅ Done `[required before publishing]`
 
 7. **Check each material document** (same LiaScript + content checks as Session Mode Step 4).
-   For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in that session subsection under `journal.md` → `## Sessions`.
+   For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in that session subsection under `journal.md` → `## Sessions`. Then set Done in the overview table exactly as in session mode step 6 — in both directions: a unit whose report no longer passes, or has an open ⏳ item, goes back to Done ❌ — and rewrite its status line (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 8. **Consistency check across project memory and materials:**
    - Terminology consistent (sessions-called from `journal.md` → `## Course Context` used throughout)
@@ -3598,7 +3590,7 @@ Rules:
    - Learning objectives from `journal.md` → `## Outline` traceable through `journal.md` → `## Agenda` into materials
    - Numbering correct and no gaps
 
-9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`:**
+9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads:
 
    ```
    Date: YYYY-MM-DD
@@ -3608,26 +3600,18 @@ Rules:
    Issues found: N
    Sessions checked: N
 
-   #### Course-Level Findings
-   ##### Foundation
-   - [issue or ✅ OK]
+   <!-- data-key="course-findings" -->
+   **{"Course-level findings", translated}:**
 
-   ##### Templates
-   - [issue or ✅ OK / SKIPPED]
+   - **{"Foundation", translated}:** [issue or ✅ OK]
+   - **{"Templates", translated}:** [issue or ✅ OK / SKIPPED]
+   - **{"Agenda", translated}:** [issue or ✅ OK / SKIPPED (course type)]
+   - **{"Session progress", translated}:** [issue or ✅ OK]
+   - **{"Materials", translated}:** Session {N} — {title}: [issue or ✅ OK]
+   - **{"Consistency", translated}:** [issue or ✅ OK]
 
-   ##### Agenda
-   - [issue or ✅ OK / SKIPPED (course type)]
-
-   ##### Session Progress
-   - [issue or ✅ OK]
-
-   ##### Materials
-   - Session {N} — {title}: [issue or ✅ OK]
-
-   ##### Consistency
-   - [issue or ✅ OK]
-
-   #### Recommended Actions
+   <!-- data-key="recommended-actions" -->
+   **{"Recommended actions", translated}:**
    1. [Concrete action with file reference]
    ```
 
@@ -4446,7 +4430,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 <!-- class="journal-actions" -->
 [▶️ New session](agent:teaching/create-session) `:create-session <number>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
 
-_Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
+_Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview first — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`) — then one `### {n}. {title}` subsection per session._
 
 <!-- One subsection per session, structured like this:
 
@@ -4454,7 +4438,9 @@ _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:
 
 {{action line: `class="journal-actions"` attribute comment + state-dependent links, see `data/agent-links.md`}}
 
-**Type:** {{slug from `## Didactics` → `__Session Types:__`}}
+{{<details> "Technical settings and more actions": **Type:** slug, **Method:** slug, further commands</details>}}
+
+{{visible kind line: display names of type and method}}
 
 **Summary:**
 
@@ -4476,15 +4462,19 @@ _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:
 
 1. {{reference}}
 
-After :validate-course in session mode, a `#### Validation Report` block is
-inserted at the top of the subsection, directly after the action line. After :review-as-persona, a
-`#### Persona Reviews` block is appended. `#### Images` is created by :create-image
-only when the first image exists. Never use `#####` headings inside a session.
+The block order is fixed in `templates/session-skeleton.yaml` → `section_layout.entry_order`: the `#### Validation Report`
+(after :validate-course) follows the action line and the technical details, before the
+skeleton; `#### Images` (created by :create-image only when the first image exists) and
+`#### Persona Reviews` (after :review-as-persona) come last, in this order. Never use `#####` headings inside a session.
 -->
+
+<details><summary>Technical overview</summary>
 
 <!-- data-type="none" -->
 | # | Title | Type | Skeleton | Material | Done | Notes |
 |---|-------|------|----------|----------|------|-------|
+
+</details>
 
 ---
 
@@ -4841,8 +4831,28 @@ template:
     section: Sessions
     entry: "{{number}}"
     section_layout:
-      overview: "Overview table directly below `## Sessions`"
-      entries: "Session skeletons as `### {{number}}. {{title}}` subsections below the overview table"
+      overview: >-
+        Directly below `## Sessions`, in this order:
+        (1) a visible status list in the course language, one numbered line per unit in session order,
+        `{n}. {title} – {status}` with status "skeleton ✅ · material open", "material ready · check open",
+        "passed – {later step} follows" or "checked ✅" (translated; a Notes entry follows after " – ");
+        (2) `<details><summary>{"Technical overview", translated}</summary>`, then `<!-- data-type="none" -->`
+        and the table `| # | Title | Type | Method | Skeleton | Material | Done | Notes |` (the Method
+        column only if `__Default Session Method:__` is not `none`), then `</details>`.
+        Columns: Skeleton ✅ = the `###` subsection exists; Material ✅ = the material document exists (set by
+        whichever task first writes it — instructor approval does not change it); Done ✅ = the latest
+        `#### Validation Report` says `Result: PASS` (not "with concerns") with no open ⏳ item — set and
+        reset by `:validate-course` in session and course mode alike.
+        Every task that changes a cell of the table rewrites that unit's status line in the same write,
+        so list and table never disagree.
+      entries: "Session skeletons as `### {{number}}. {{title}}` subsections below the overview"
+      entry_order: >-
+        Inside each `### {{number}}. {{title}}` subsection, always in this order: action line →
+        `<details>` "Technical settings and more actions" (Type, Method, further commands) →
+        `#### Validation Report` (once a check ran) → visible kind line → Summary → Content → Activities →
+        Decisions (once the first exists) → References → `#### Images` (once the first image exists) →
+        `#### Persona Reviews` (once a review exists). A task inserts its block at this position, never
+        relative to another optional block.
   title: 'Session {{number}}'
   sections:
     - id: title
@@ -4855,11 +4865,6 @@ template:
         <!-- class="journal-actions" -->
         [▶️ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
       note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
-    - id: kind
-      title: Kind (visible)
-      template: |
-        <!-- data-key="kind" -->
-        **{{"Kind", translated}}:** {{display name of the type in the course language}} · **{{"Checklist", translated}}:** {{display name of the method in the course language, or "none" translated}}
     - id: type
       title: Type (technical)
       template: |
@@ -4879,6 +4884,11 @@ template:
       template: |
         (inside the technical `<details>` block of `type`, see above)
       note: '{{method}} is a slug from `data/didactic-methods.md` → "Session Methods", resolved from the matching Agenda row if an agenda exists, otherwise from `journal.md` → `## Didactics` → `__Default Session Method:__`. Omit this line entirely if the default is `none`. Content must satisfy that method''s `Erforderlich` checklist, independently of the Type checklist above.'
+    - id: kind
+      title: Kind (visible)
+      template: |
+        <!-- data-key="kind" -->
+        **{{"Kind", translated}}:** {{display name of the type in the course language}} · **{{"Checklist", translated}}:** {{display name of the method in the course language, or "none" translated}}
     - id: summary
       title: Summary
       template: |
@@ -4950,7 +4960,7 @@ template:
     - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable are only (a) media still to be produced in a named later step (images, audio) and (b) publishing metadata needed only for publishing (contact address, license).'
     - '2. Any other ❌ on a required element (Session Type or Method `Erforderlich`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
-    - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step).'
+    - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
     - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding, a decision in `## Notes Backup` (`:save-decision`). List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
     - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead. Accepting a concern is a recorded decision, not a re-grade.'
@@ -4970,7 +4980,7 @@ template:
 
         **{{"Still missing", translated}}:**
 
-        - {{point}} – {{when, or in which step}}
+        - {{⏳ before a deferred item}} {{point}} – {{when, or in which step}}
 
         <details>
         <summary>{{"Technical report", translated}}</summary>
@@ -5187,7 +5197,7 @@ template:
 ## Session Progress (`journal.md` → `## Sessions`)
 
 - [ ] [mechanical] `journal.md` → `## Sessions` exists `[not single-lesson]`
-- [ ] [mechanical] Overview table appears directly below `## Sessions`
+- [ ] [mechanical] Overview appears directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`); every status line matches its table row
 - [ ] [mechanical] All expected sessions have a row in the overview table
 - [ ] [mechanical] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - [ ] [mechanical] No session marked ✅ Material without its material document present (`materials/{number}-{slug}/README.md` in multi-file mode, or a matching `##` chapter in root `README.md` in single-file mode)
@@ -5414,7 +5424,7 @@ Rules for action lines:
 | `## Templates` | `manage-templates` |
 | `## Agenda` | `create-agenda` |
 | `## Sessions` | `create-session` (without params — asked in chat), `validate-course` |
-| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>More actions</summary>` block right after the action line |
+| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
 | `## Validation` | `validate-course`, `development/create-project` (only if the publishing gate is PASS) |
 | `## Notes Backup` | `save-notes`, `save-decision` |
@@ -8193,7 +8203,7 @@ workflow:
     - Choose iterative or batch approach for sessions
     - Publishing is optional and user-initiated — only when explicitly requested
     - :create-project recommended when multiple materials exist and course is ready to share
-    - `journal.md` → `## Sessions` contains an overview table first, then one skeleton subsection per session; the overview table tracks skeleton/material/Done status automatically
+    - `journal.md` → `## Sessions` contains the overview first (status list for the instructor, technical table in <details>), then one skeleton subsection per session; the overview tracks skeleton/material/Done status automatically
     - Learner personas are optional but recommended: :create-learner-persona after :create-didactics
     - :review-as-persona runs after coauthor + validate; agent stays in persona for follow-up chat
     - `journal.md` → `## Dashboard` is derived state and is regenerated automatically with :update-dashboard after state-changing tasks — written only through `node specs/dashboard/write-dashboard.mjs`, checked by `node specs/dashboard/validate-journal.mjs` (anchors, placeholders, Done only with PASS)

@@ -69,8 +69,8 @@ Run this task automatically after any task that changes project state:
      `review` (only while the instructor or a check actually has something to
      look at); PASS with concerns or PASS with ⏳ items → `current` with
      `statusLabel` = "passed – {later step}" (translated); PASS + Done ✅ → `done`.
-   - `done` — only with `Result: PASS` (not "with concerns") in the unit's
-     `#### Validation Report` **and** Done ✅ in the overview table. Never infer it from a heading.
+   - `done` — only with `Result: PASS` (not "with concerns") and no open ⏳ item in
+     the unit's `#### Validation Report` **and** Done ✅ in the overview table. Never infer it from a heading.
    Optional process steps may use `optional`. A unit's `summary` never
    contradicts its state.
 4. Build the material process for each unit from actual evidence: `title`,
@@ -138,15 +138,17 @@ Run this task automatically after any task that changes project state:
       `<!-- class="journal-actions" -->` paragraph directly below the heading, or
       insert one there.
     - Fill it with the commands from that table that fit the current state, with
-      concrete arguments (session number, type, persona names). Session
+      concrete arguments (session number, persona names). Session
       subsections get exactly one main action; further fitting commands go into
-      the `<details><summary>More actions</summary>` block directly after the
-      action line (see `templates/session-skeleton.yaml`).
+      the `<details><summary>Technical settings and more actions</summary>` block
+      directly after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - If an action line ended up below a `#### Validation Report`,
       `#### Persona Reviews`, or `#### Images` block, move it back directly below
       the `###` heading.
     - Touch nothing else in those sections: action lines (and the sessions'
-      "More actions" blocks) are the only content of source sections this task may write.
+      further commands inside the sessions' "Technical settings and more actions"
+      blocks — never their Type or Method lines) are the only content of source
+      sections this task may write.
 11. Confirm the dashboard was updated only after step 9 passed, and name the next
     recommended command. If the MCP gate is open (`data/agent-links.md`), `goto` the
     Dashboard slide, check with `get_state`, and post the next action as an

@@ -108,6 +108,8 @@ for (const row of sessions.matchAll(/^\|\s*(\d+)\s*\|(.*)\|\s*$/gm)) {
   if (done && done.includes("✅")) {
     const block = sessions.split(new RegExp(`^### ${row[1]}\\. `, "m"))[1]?.split(/^### \d+\. /m)[0] ?? "";
     if (!/#### Validation Report[\s\S]*?__Result:__\s*PASS(?!\s*with)/.test(block)) problems.push(`unit ${row[1]}: "Done ✅" without a passed check (Validation Report with "Result: PASS" – not "with concerns" – is missing)`);
+    const report = block.split(/^(?=#### Validation Report)/m)[1]?.split(/^#### (?!Validation Report)/m)[0] ?? "";
+    if (report.includes("⏳")) problems.push(`unit ${row[1]}: "Done ✅" while ⏳ items are still open in its Validation Report – Done follows only once nothing is deferred`);
   }
 }
 // Anchors: LiaScript builds a slide anchor from the full heading text – lower

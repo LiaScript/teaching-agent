@@ -51,7 +51,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 11. Derive an `{image-slug}` from the description (kebab-case).
 12. Save into the target session's `#### Images` block — always, without asking:
     - Locate the `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
-    - If it has no `#### Images` block, create one (placed after `**References:**`, before `#### Validation Report` if present).
+    - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
 

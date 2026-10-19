@@ -46,5 +46,5 @@ Converts a **Session** into a detailed **Session Material**.
 10. Resolve the File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) and save accordingly:
     - **multi-file:** derive `{slug}` from the session title, create `materials/{number}-{slug}/README.md` (and its `assets/` subfolder on demand, not upfront).
     - **single-file:** insert or replace the `##` chapter for this session inside root `/README.md`, keeping chapters in session-number order.
-11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}`.
+11. Update the overview table in `journal.md` → `## Sessions`: set Material column to ✅ for session `{number}` and rewrite that unit's status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
 12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

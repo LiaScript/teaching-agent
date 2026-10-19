@@ -86,8 +86,8 @@ Rules:
    - Recommended actions — check them against the session's decisions list (`data-key="decisions"`) first; never recommend something the instructor has already decided against
    - Page titles of the material as references — never line numbers
    - The visible plain-language summary (`**Outcome:**`, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
-6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`.
-   Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns"); otherwise Done stays ❌.
+6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`, directly after the action line and the technical details (`templates/session-skeleton.yaml` → `section_layout.entry_order`).
+   Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item; otherwise set Done ❌ — also when it was ✅ before. Rewrite the unit's status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
@@ -120,14 +120,14 @@ Rules:
 
 6. **Check Session Progress:**
    - Load `journal.md` → `## Sessions` as primary source
-   - Confirm the overview table appears directly below `## Sessions`
+   - Confirm the overview appears directly below `## Sessions` (status list, then the technical table in `<details>`, `templates/session-skeleton.yaml` → `section_layout.overview`) and every status line matches its table row
    - All expected sessions have a row in the overview table
    - Cross-check: every ✅ Skeleton row has a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
    - Cross-check: every ✅ Material row has its material document present — a file in `materials/{number}-{slug}/README.md` in multi-file mode, or a matching `##` chapter in root `/README.md` in single-file mode (see `data/file-structure-modes.md`)
    - All sessions marked ✅ Done `[required before publishing]`
 
 7. **Check each material document** (same LiaScript + content checks as Session Mode Step 4).
-   For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in that session subsection under `journal.md` → `## Sessions`.
+   For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in that session subsection under `journal.md` → `## Sessions`. Then set Done in the overview table exactly as in session mode step 6 — in both directions: a unit whose report no longer passes, or has an open ⏳ item, goes back to Done ❌ — and rewrite its status line (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 8. **Consistency check across project memory and materials:**
    - Terminology consistent (sessions-called from `journal.md` → `## Course Context` used throughout)
@@ -135,7 +135,7 @@ Rules:
    - Learning objectives from `journal.md` → `## Outline` traceable through `journal.md` → `## Agenda` into materials
    - Numbering correct and no gaps
 
-9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`:**
+9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads:
 
    ```
    Date: YYYY-MM-DD
@@ -145,26 +145,18 @@ Rules:
    Issues found: N
    Sessions checked: N
 
-   #### Course-Level Findings
-   ##### Foundation
-   - [issue or ✅ OK]
+   <!-- data-key="course-findings" -->
+   **{"Course-level findings", translated}:**
 
-   ##### Templates
-   - [issue or ✅ OK / SKIPPED]
+   - **{"Foundation", translated}:** [issue or ✅ OK]
+   - **{"Templates", translated}:** [issue or ✅ OK / SKIPPED]
+   - **{"Agenda", translated}:** [issue or ✅ OK / SKIPPED (course type)]
+   - **{"Session progress", translated}:** [issue or ✅ OK]
+   - **{"Materials", translated}:** Session {N} — {title}: [issue or ✅ OK]
+   - **{"Consistency", translated}:** [issue or ✅ OK]
 
-   ##### Agenda
-   - [issue or ✅ OK / SKIPPED (course type)]
-
-   ##### Session Progress
-   - [issue or ✅ OK]
-
-   ##### Materials
-   - Session {N} — {title}: [issue or ✅ OK]
-
-   ##### Consistency
-   - [issue or ✅ OK]
-
-   #### Recommended Actions
+   <!-- data-key="recommended-actions" -->
+   **{"Recommended actions", translated}:**
    1. [Concrete action with file reference]
    ```
 

@@ -20,8 +20,8 @@ const required = {
   "tasks/create-didactics.md": ["do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`"],
   "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary"],
   "tasks/create-session-skeleton.md": ["data-key", "Show the new unit", "can be solved with the material the learners get"],
-  "tasks/coauthor-materials.md": ["Fact check before showing", "New rule → re-check"],
-  "tasks/validate-course.md": ["Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\""],
+  "tasks/coauthor-materials.md": ["Fact check before showing", "New rule → re-check", "Material ✅ means the document exists"],
+  "tasks/validate-course.md": ["Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions"],
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
   "tasks/update-dashboard.md": ["punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["Change path after a check"],
@@ -33,7 +33,7 @@ const required = {
   "templates/course-outline.yaml": ["layout:"],
   "templates/course-didactics.yaml": ["layout:"],
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
-  "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>"],
+  "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "never\n        relative to another optional block"],
   "templates/session-validation.yaml": ["Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket"],
   "templates/journal.md": ["journal-start", "Target Group"],
   "workflows/course-development.yaml": [":try-as-learner", "change path", "One way to start", "write-dashboard.mjs"],
@@ -57,6 +57,13 @@ test("material paths use the title slug, never the session type", () => {
     .flatMap(path => readFileSync(path, "utf8").split("\n").map(line => [path, line]))
     .filter(([, line]) => /\{\{?number\}?\}-\{\{?type\}?\}/.test(line) && !/legacy/.test(line));
   assert.deepEqual(hits.map(([path, line]) => `${path.slice(specs.length + 1)}: ${line.trim()}`), []);
+});
+
+test("reports inside sessions and the course summary use bold labels, not ##### headings", () => {
+  for (const file of ["tasks/review-as-persona.md", "tasks/validate-course.md", "templates/session-validation.yaml"]) {
+    const headings = read(file).split("\n").filter(line => /^\s*#{5,6}\s/.test(line));
+    assert.deepEqual(headings, [], `${file} writes ##### headings`);
+  }
 });
 
 test("no persona or scenario data from tandem tests in the specs", () => {
@@ -103,6 +110,16 @@ test("the journal check counts only the visible units table of the agenda", () =
   const fewer = checkJournal(journal({ units: 3 }).replace("  | 3 | U3 | 45 min |\n", ""));
   assert.equal(fewer.status, 2, fewer.output);
   assert.match(fewer.output, /the agenda has 2 rows, the dashboard shows 3 units/);
+});
+
+test("Done ✅ needs a passed check without open ⏳ items", () => {
+  const table = "| # | Title | Type | Skeleton | Material | Done | Notes |\n|---|---|---|---|---|---|---|\n| 1 | Intro | modul | ✅ | ✅ | ✅ | |";
+  const done = text => text.replace("## Sessions\n\n", `## Sessions\n\n${table}\n\n`);
+  const clean = checkJournal(done(journal()));
+  assert.equal(clean.status, 0, clean.output);
+  const pending = checkJournal(done(journal({ outcome: "**Outcome:** passed – image follows\n\n**Still missing:**\n\n- ⏳ Header image – in the image step" })));
+  assert.equal(pending.status, 2, pending.output);
+  assert.match(pending.output, /unit 1: "Done ✅" while ⏳ items are still open/);
 });
 
 test("a type's display name must not repeat the unit word; its slug may", () => {

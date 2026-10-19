@@ -8,8 +8,28 @@ template:
     section: Sessions
     entry: "{{number}}"
     section_layout:
-      overview: "Overview table directly below `## Sessions`"
-      entries: "Session skeletons as `### {{number}}. {{title}}` subsections below the overview table"
+      overview: >-
+        Directly below `## Sessions`, in this order:
+        (1) a visible status list in the course language, one numbered line per unit in session order,
+        `{n}. {title} – {status}` with status "skeleton ✅ · material open", "material ready · check open",
+        "passed – {later step} follows" or "checked ✅" (translated; a Notes entry follows after " – ");
+        (2) `<details><summary>{"Technical overview", translated}</summary>`, then `<!-- data-type="none" -->`
+        and the table `| # | Title | Type | Method | Skeleton | Material | Done | Notes |` (the Method
+        column only if `__Default Session Method:__` is not `none`), then `</details>`.
+        Columns: Skeleton ✅ = the `###` subsection exists; Material ✅ = the material document exists (set by
+        whichever task first writes it — instructor approval does not change it); Done ✅ = the latest
+        `#### Validation Report` says `Result: PASS` (not "with concerns") with no open ⏳ item — set and
+        reset by `:validate-course` in session and course mode alike.
+        Every task that changes a cell of the table rewrites that unit's status line in the same write,
+        so list and table never disagree.
+      entries: "Session skeletons as `### {{number}}. {{title}}` subsections below the overview"
+      entry_order: >-
+        Inside each `### {{number}}. {{title}}` subsection, always in this order: action line →
+        `<details>` "Technical settings and more actions" (Type, Method, further commands) →
+        `#### Validation Report` (once a check ran) → visible kind line → Summary → Content → Activities →
+        Decisions (once the first exists) → References → `#### Images` (once the first image exists) →
+        `#### Persona Reviews` (once a review exists). A task inserts its block at this position, never
+        relative to another optional block.
   title: 'Session {{number}}'
   sections:
     - id: title
@@ -22,11 +42,6 @@ template:
         <!-- class="journal-actions" -->
         [▶️ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
       note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
-    - id: kind
-      title: Kind (visible)
-      template: |
-        <!-- data-key="kind" -->
-        **{{"Kind", translated}}:** {{display name of the type in the course language}} · **{{"Checklist", translated}}:** {{display name of the method in the course language, or "none" translated}}
     - id: type
       title: Type (technical)
       template: |
@@ -46,6 +61,11 @@ template:
       template: |
         (inside the technical `<details>` block of `type`, see above)
       note: '{{method}} is a slug from `data/didactic-methods.md` → "Session Methods", resolved from the matching Agenda row if an agenda exists, otherwise from `journal.md` → `## Didactics` → `__Default Session Method:__`. Omit this line entirely if the default is `none`. Content must satisfy that method''s `Erforderlich` checklist, independently of the Type checklist above.'
+    - id: kind
+      title: Kind (visible)
+      template: |
+        <!-- data-key="kind" -->
+        **{{"Kind", translated}}:** {{display name of the type in the course language}} · **{{"Checklist", translated}}:** {{display name of the method in the course language, or "none" translated}}
     - id: summary
       title: Summary
       template: |

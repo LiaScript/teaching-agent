@@ -36,7 +36,7 @@ Suggest images for visualization, either as a search term or as a concrete image
    - **Primary persona source:** `journal.md` → `## Agents` → `### Coauthor`.
    - **Fallback only:** If `### Coauthor` is missing or inactive, load `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - **If the current session subsection in `journal.md` → `## Sessions` contains `#### Validation Report`:** load it and work through any issues before starting free co-authoring. State which issues were found: "I have loaded the validation report for session {N}. The following points were found: [...]. Let's start with these."
-   - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any `Priority Issues` before starting free co-authoring. State which persona reviews were found.
+   - **If the current session subsection contains `#### Persona Reviews`:** load the relevant learner feedback and prioritize any priority issues (`data-key="priority"`) before starting free co-authoring. State which persona reviews were found.
    - **If the current session subsection contains the decisions list (`<!-- data-key="decisions" -->`, older journals `**Decisions:**`):** read it before suggesting anything — never re-propose what the instructor has already decided against.
 2. **Agent adopts the Coauthor role into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
@@ -56,10 +56,10 @@ Suggest images for visualization, either as a search term or as a concrete image
    - Positive feedback only when it is genuinely earned and specific
 5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
 6. **Before writing the consolidated draft**, self-check it against the *Session Materials* items of `checklists/course-quality-checklist.md` (facts, self-check wording differs from practice, word list covers every word needed to answer, everything learners must read can be read aloud, closing reward only after solving, quiz settings from `data/liascript-cheat-sheet.md` → Quizzes for young learners) and report the result in one line. Material files are changed only with the file-edit tool, never with shell scripts or heredocs.
-   At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`).
+   At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`). When it is saved into the material document (after the save confirmation) and Material is still ❌, set **Material ✅** and the unit's status line (`templates/session-skeleton.yaml` → `section_layout.overview`) — Material ✅ means the document exists, not that it is approved.
 7. When the instructor **approves** the material for this session:
    - Update the session's skeleton in `journal.md` → `## Sessions` → `### {n}. …` so that Summary, Content and Activities describe the material as it now is; show the changes in one line of the summary.
-   - In the overview table set **Material ✅**. **Done stays ❌** until `:validate-course {n}` has written `Result: PASS` into this session's `#### Validation Report`.
+   - Approval does not change the overview: Material ✅ was set when the document was written (step 6). **Done stays ❌** until `:validate-course {n}` has written `Result: PASS` with no open ⏳ item into this session's `#### Validation Report`.
    - Optionally add a short note (e.g., open points, follow-up ideas) in the Notes column.
    - **If the session already has a `#### Validation Report`** (this was a revision after a check): run `:validate-course {n}` right away without asking — the revision is only complete when the re-check passes. Skip step 8 then.
    - Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

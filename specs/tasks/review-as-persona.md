@@ -36,8 +36,8 @@ Each session can contain one current review per learner persona.
 Rules:
 - Store the report under the matching `### {number}. {title}` session subsection.
 - The container heading is always `#### Persona Reviews`.
-- Each persona report is headed `##### {icon} {name}`.
-- Wrap each `##### {icon} {name}` report in its own `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide instead of splitting on every `######` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide".
+- Each persona report is one `<section>…</section>` block that starts with `<!-- data-key="persona" -->` and the line `**{icon} {name}** — …`; tasks find a persona's report by that line.
+- Inside the report use bold labels in the course language, each with its English key in a `data-key` comment above it, as in the session skeleton — never `#####` or `######` headings (no headings inside a session, see `templates/journal.md`). Older reports headed `##### {icon} {name}` are replaced as a whole in the new format.
 - If that persona already has a report for the same session, replace it completely (including its `<section>` wrapper).
 - Do not use a global `journal.md` → `## Persona Reviews` section for new reviews.
 
@@ -58,33 +58,33 @@ Rules:
 
 5. Review the material through the persona's eyes across **6 dimensions**:
 
-   **a) Verständlichkeit / Sprachniveau**
+   **a) Comprehensibility / language level**
    - Is the language appropriate for this persona's literacy level?
    - Are sentences too long, too abstract, or jargon-heavy?
    - Flag specific passages that would likely confuse or lose this learner.
-   - Consider: DaZ background, literacy level, reading comprehension from persona profile.
+   - Consider: learning in a second language (e.g. German as a second language), literacy level, reading comprehension from persona profile.
 
-   **b) Schwierigkeitsgrad / Überforderung**
+   **b) Difficulty / overload**
    - Is the cognitive load appropriate?
    - Are too many new concepts introduced at once without scaffolding?
    - Are there moments where this persona would likely give up or zone out?
 
-   **c) Relevanz / Motivation**
+   **c) Relevance / motivation**
    - Would this persona find the content relevant to their work and goals?
    - Are there hooks connecting the material to their daily reality?
    - Are examples drawn from contexts this persona actually knows?
 
-   **d) Zugänglichkeit**
+   **d) Accessibility**
    - Are there barriers this persona faces that the material doesn't address?
-   - Examples: key terms unexplained for DaZ learners; no visual support for text-averse learners;
+   - Examples: key terms unexplained for second-language learners; no visual support for text-averse learners;
      assumed digital literacy that this persona may not have.
 
-   **e) Formatpräferenz**
+   **e) Format preference**
    - Does the mix of formats (text, code blocks, quizzes, video embeds, diagrams) match this persona's media habits?
    - Would this persona engage with or skip certain elements?
    - Is there too much unbroken text for someone who primarily learns via YouTube?
 
-   **f) Vorwissen / fehlende Grundlagen**
+   **f) Prior knowledge / missing foundations**
    - Does the material assume knowledge or skills this persona likely does not have?
    - Are terms used without explanation that the persona profile flags as "likely unknown"?
    - Are any prerequisite concepts missing that would make the material incomprehensible?
@@ -95,55 +95,46 @@ Rules:
    ```
    <section>
 
-   ##### [Icon] [Name]
+   <!-- data-key="persona" -->
+   **[Icon] [Name]** — [one-line description]
 
    __Date:__ YYYY-MM-DD
-   __Persona:__ [Icon] [Name] — [one-line description]
    __Material:__ {material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode}
    __Result:__ OK / Issues found / Major concerns
 
-   ###### Overall Impression
+   <!-- data-key="impression" -->
+   **{"Overall impression", translated}:**
    [2–3 sentences written in the persona's voice: What was the experience of reading this?
    Honest, not diplomatic — this is from the learner's perspective.]
 
-   ###### Dimension Findings
+   <!-- data-key="findings" -->
+   **{"Findings by dimension", translated}:**
 
-   **a) Verständlichkeit / Sprachniveau**
-   [Findings — flag specific passages if relevant. Verdict: OK / Issues found]
+   - **{dimension a, translated}:** [Findings — flag specific passages if relevant. Verdict: OK / Issues found]
+   - **{dimension b, translated}:** [Findings. Verdict: OK / Too demanding / Too easy]
+   - **{dimension c, translated}:** [Findings. Verdict: OK / Low relevance for this persona]
+   - **{dimension d, translated}:** [Findings. Verdict: OK / Barriers identified]
+   - **{dimension e, translated}:** [Findings. Verdict: Good fit / Mismatch for this persona]
+   - **{dimension f, translated}:** [Terms or concepts assumed but likely unknown to this persona,
+     each marked ⚠️ assumed, should be introduced | ✅ likely known]
 
-   **b) Schwierigkeitsgrad / Überforderung**
-   [Findings. Verdict: OK / Too demanding / Too easy]
-
-   **c) Relevanz / Motivation**
-   [Findings. Verdict: OK / Low relevance for this persona]
-
-   **d) Zugänglichkeit**
-   [Findings. Verdict: OK / Barriers identified]
-
-   **e) Formatpräferenz**
-   [Findings. Verdict: Good fit / Mismatch for this persona]
-
-   **f) Vorwissen / fehlende Grundlagen**
-   [List of specific terms or concepts assumed but likely unknown to this persona.
-   Mark each as: ⚠️ assumed, should be introduced | ✅ likely known]
-
-   ###### Priority Issues
-   Ranked list — most impactful first:
+   <!-- data-key="priority" -->
+   **{"Priority issues", translated}:**
    1. [Issue] — Suggested fix
    2. [Issue] — Suggested fix
-   ...
 
-   ###### What Worked Well
-   [What this persona would respond well to — do not skip this section.]
+   <!-- data-key="worked" -->
+   **{"What worked well", translated}:**
+   [What this persona would respond well to — do not skip this part.]
 
    </section>
    ```
 
 7. Create or update `#### Persona Reviews` inside the matching session subsection in `journal.md` → `## Sessions`, keeping each persona's report wrapped in its own `<section>…</section>` block.
-   - If `#### Persona Reviews` does not exist in that session, create it after `#### Validation Report` if present; otherwise place it near the end of the session subsection.
-   - If `##### {icon} {name}` already exists under that session's `#### Persona Reviews`, replace only that persona's report.
+   - If `#### Persona Reviews` does not exist in that session, create it at the very end of the session subsection, after `#### Images` if present (`templates/session-skeleton.yaml` → `section_layout.entry_order`).
+   - If that persona's report already exists under that session's `#### Persona Reviews` (its `**{icon} {name}**` line, or an older `##### {icon} {name}` heading), replace only that persona's report.
    - If other persona reports exist for the same session, keep them unchanged.
-   Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → `##### {icon} {name}`."
+   Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → {icon} {name}."
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 8. **Stay in persona for follow-up dialog:**

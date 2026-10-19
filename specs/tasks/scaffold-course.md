@@ -38,7 +38,7 @@ Generated in sequence without interruption inside `journal.md`:
 - `## Agents` (kept from `templates/journal.md`; Coauthor role, optional specialist customizations, and learner persona container)
 - `## Templates` (if template imports are specified)
 - `## Agenda` (if applicable)
-- `## Sessions` containing an overview table followed by one subsection per session
+- `## Sessions` containing the overview (`templates/session-skeleton.yaml` → `section_layout.overview`) followed by one subsection per session
 - `## Dashboard` updated in place via `tasks/update-dashboard.md`
 
 ## Steps
@@ -95,9 +95,8 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
 5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
 6. Replace the content of `journal.md` → `## Agenda` (skip if agenda = no).
 7. Replace the content of `journal.md` → `## Sessions` with:
-   - An overview table directly below `## Sessions`
-   - One row per session: `| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`
-   - One `### {number}. {title}` subsection per session below the overview table
+   - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
+   - One `### {number}. {title}` subsection per session below the overview
 8. Fill each session subsection using `templates/session-skeleton.yaml`.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 

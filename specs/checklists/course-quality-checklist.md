@@ -58,7 +58,7 @@
 ## Session Progress (`journal.md` → `## Sessions`)
 
 - [ ] [mechanical] `journal.md` → `## Sessions` exists `[not single-lesson]`
-- [ ] [mechanical] Overview table appears directly below `## Sessions`
+- [ ] [mechanical] Overview appears directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`); every status line matches its table row
 - [ ] [mechanical] All expected sessions have a row in the overview table
 - [ ] [mechanical] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - [ ] [mechanical] No session marked ✅ Material without its material document present (`materials/{number}-{slug}/README.md` in multi-file mode, or a matching `##` chapter in root `README.md` in single-file mode)

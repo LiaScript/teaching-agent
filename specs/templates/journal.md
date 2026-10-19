@@ -257,7 +257,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 <!-- class="journal-actions" -->
 [▶️ New session](agent:teaching/create-session) `:create-session <number>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
 
-_Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview table first, then one `### {n}. {title}` subsection per session._
+_Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview first — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`) — then one `### {n}. {title}` subsection per session._
 
 <!-- One subsection per session, structured like this:
 
@@ -265,7 +265,9 @@ _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:
 
 {{action line: `class="journal-actions"` attribute comment + state-dependent links, see `data/agent-links.md`}}
 
-**Type:** {{slug from `## Didactics` → `__Session Types:__`}}
+{{<details> "Technical settings and more actions": **Type:** slug, **Method:** slug, further commands</details>}}
+
+{{visible kind line: display names of type and method}}
 
 **Summary:**
 
@@ -287,15 +289,19 @@ _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:
 
 1. {{reference}}
 
-After :validate-course in session mode, a `#### Validation Report` block is
-inserted at the top of the subsection, directly after the action line. After :review-as-persona, a
-`#### Persona Reviews` block is appended. `#### Images` is created by :create-image
-only when the first image exists. Never use `#####` headings inside a session.
+The block order is fixed in `templates/session-skeleton.yaml` → `section_layout.entry_order`: the `#### Validation Report`
+(after :validate-course) follows the action line and the technical details, before the
+skeleton; `#### Images` (created by :create-image only when the first image exists) and
+`#### Persona Reviews` (after :review-as-persona) come last, in this order. Never use `#####` headings inside a session.
 -->
+
+<details><summary>Technical overview</summary>
 
 <!-- data-type="none" -->
 | # | Title | Type | Skeleton | Material | Done | Notes |
 |---|-------|------|----------|----------|------|-------|
+
+</details>
 
 ---
 

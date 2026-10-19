@@ -176,7 +176,7 @@ Rules for action lines:
 | `## Templates` | `manage-templates` |
 | `## Agenda` | `create-agenda` |
 | `## Sessions` | `create-session` (without params — asked in chat), `validate-course` |
-| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>More actions</summary>` block right after the action line |
+| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
 | `## Validation` | `validate-course`, `development/create-project` (only if the publishing gate is PASS) |
 | `## Notes Backup` | `save-notes`, `save-decision` |
