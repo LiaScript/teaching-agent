@@ -41,7 +41,7 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 - `journal.md` → `## Sessions` overview table `Type` column, and `**Type:** {slug}` inside each session subsection
 - `journal.md` → `## Agenda` sessions table `Type` column
 - `:create-session`, `:promote-session`, `:quick-fix`, `:review-as-persona` — the `type` input parameter is one of the slugs defined here, not a hardcoded `lecture`/`exercise`
-- Material/asset paths where the pattern includes `{type}` — always the slug, never the display name
+- Material/asset paths never contain the type: they use the title slug (`materials/{number}-{slug}/`, see `data/file-structure-modes.md`)
 
 ## Enforcement loop
 

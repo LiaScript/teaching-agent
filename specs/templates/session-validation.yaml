@@ -51,7 +51,7 @@ template:
       title: Metadata
       template: |
         __Date:__ {{date}}
-        __Material:__ materials/{{number}}-{{type}}.md
+        __Material:__ {{material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode (see `data/file-structure-modes.md`)}}
         __Result:__ {{result}}
         __Mode:__ {{mode}}
     - id: content

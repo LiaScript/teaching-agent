@@ -834,9 +834,9 @@ Offers two paths for each missing core section:
    - `journal.md` → `## Agenda` → `:create-agenda`
 
 6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
-   - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
+   - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and for material documents per `data/file-structure-modes.md` — `materials/{number}-{slug}/README.md` (multi-file; legacy `{number}-{type}` names count too, see step 1) or `##` chapters in root `/README.md` (single-file)
    - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
-   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
+   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if its material document exists, Done stays ❌ (cannot be inferred — instructor must confirm)
    - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
 
 6c. Ensure `journal.md` → `## Agents` exists:
@@ -2711,7 +2711,7 @@ or simply get a feel for how this learner experiences the material.
 - `{name}` — persona name (must exist in `journal.md` → `## Agents` → `### Learner Personas`)
 - `{number}` — session number
 - `{type}` — session type slug, one of `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`)
-- `materials/{number}-{type}.md` — the material to review
+- The material document to review — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `journal.md` → `## Agents` → `### Learner Personas` → matching `#### Persona: {icon} {name}` only
 - `journal.md` → `## Agenda` — learning objectives for this session
 - `journal.md` → `## Course Context` — terminology and conventions
@@ -2742,7 +2742,7 @@ Rules:
    - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `:create-learner-persona` first.
    - Do not read `journal.md` → `## Agents` → `### Coauthor` or any other persona body.
 
-2. Load `materials/{number}-{type}.md`.
+2. Load the material document for this session (see Inputs). If it does not exist yet, stop and say that the unit has no material to review.
 
 3. Load the learning objectives for this session from `journal.md` → `## Agenda`.
    Also find the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
@@ -2793,7 +2793,7 @@ Rules:
 
    __Date:__ YYYY-MM-DD
    __Persona:__ [Icon] [Name] — [one-line description]
-   __Material:__ materials/{number}-{type}.md
+   __Material:__ {material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode}
    __Result:__ OK / Issues found / Major concerns
 
    ###### Overall Impression
@@ -4973,7 +4973,7 @@ template:
       title: Metadata
       template: |
         __Date:__ {{date}}
-        __Material:__ materials/{{number}}-{{type}}.md
+        __Material:__ {{material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode (see `data/file-structure-modes.md`)}}
         __Result:__ {{result}}
         __Mode:__ {{mode}}
     - id: content
@@ -5854,7 +5854,7 @@ Compare the total estimate to the session's declared duration in `journal.md` �
 
 # File Structure Modes
 
-> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold-course`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:assemble-bundle`, `:create-project`, `:update-project`, `:analyze-existing`, `:create-image`, and `:generate-image`.
+> Read this before resolving any material or asset path. Referenced by `:init-course`, `:scaffold-course`, `:create-session`, `:promote-session`, `:coauthor-materials`, `:quick-fix`, `:validate-course`, `:assemble-bundle`, `:create-project`, `:update-project`, `:analyze-existing`, `:review-as-persona`, `:create-image`, and `:generate-image`.
 
 Every course runs in exactly one **File Structure** mode, recorded in `journal.md` → `## Course Context` → `__File Structure:__`. Tasks that read or write a material or asset path must resolve it from the active mode below — never hardcode a path shape inline.
 
@@ -7723,7 +7723,7 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 - `journal.md` → `## Sessions` overview table `Type` column, and `**Type:** {slug}` inside each session subsection
 - `journal.md` → `## Agenda` sessions table `Type` column
 - `:create-session`, `:promote-session`, `:quick-fix`, `:review-as-persona` — the `type` input parameter is one of the slugs defined here, not a hardcoded `lecture`/`exercise`
-- Material/asset paths where the pattern includes `{type}` — always the slug, never the display name
+- Material/asset paths never contain the type: they use the title slug (`materials/{number}-{slug}/`, see `data/file-structure-modes.md`)
 
 ## Enforcement loop
 
@@ -8008,7 +8008,7 @@ workflow:
               output: "journal.md → ## Sessions"
               notes: "Create skeleton subsection for session N and update the Sessions overview table"
             - command: :promote-session {number} {type}
-              output: materials/{number}-{type}.md
+              output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
               notes: "Convert skeleton to full material"
             - command: :coauthor-materials
               notes: |
@@ -8062,7 +8062,7 @@ workflow:
               notes: "Create all session skeleton subsections and update the Sessions overview table"
               repeat: for all sessions
             - command: :promote-session {number} {type}
-              output: materials/{number}-{type}.md
+              output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
               notes: "Promote all skeletons to materials"
               repeat: for all sessions
             - command: :coauthor-materials

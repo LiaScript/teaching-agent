@@ -189,7 +189,7 @@ workflow:
               output: "journal.md → ## Sessions"
               notes: "Create skeleton subsection for session N and update the Sessions overview table"
             - command: :promote-session {number} {type}
-              output: materials/{number}-{type}.md
+              output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
               notes: "Convert skeleton to full material"
             - command: :coauthor-materials
               notes: |
@@ -243,7 +243,7 @@ workflow:
               notes: "Create all session skeleton subsections and update the Sessions overview table"
               repeat: for all sessions
             - command: :promote-session {number} {type}
-              output: materials/{number}-{type}.md
+              output: "materials/{number}-{slug}/README.md (multi-file) or a ## chapter in README.md (single-file), see data/file-structure-modes.md"
               notes: "Promote all skeletons to materials"
               repeat: for all sessions
             - command: :coauthor-materials

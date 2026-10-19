@@ -63,9 +63,9 @@ Offers two paths for each missing core section:
    - `journal.md` → `## Agenda` → `:create-agenda`
 
 6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
-   - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and `materials/` for files matching `{number}-{type}.md`
+   - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and for material documents per `data/file-structure-modes.md` — `materials/{number}-{slug}/README.md` (multi-file; legacy `{number}-{type}` names count too, see step 1) or `##` chapters in root `/README.md` (single-file)
    - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
-   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if a file exists in `materials/`, Done stays ❌ (cannot be inferred — instructor must confirm)
+   - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if its material document exists, Done stays ❌ (cannot be inferred — instructor must confirm)
    - Save the overview table directly below `## Sessions`, before all `### {number}. {title}` subsections
 
 6c. Ensure `journal.md` → `## Agents` exists:

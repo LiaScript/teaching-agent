@@ -17,7 +17,7 @@ or simply get a feel for how this learner experiences the material.
 - `{name}` — persona name (must exist in `journal.md` → `## Agents` → `### Learner Personas`)
 - `{number}` — session number
 - `{type}` — session type slug, one of `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`)
-- `materials/{number}-{type}.md` — the material to review
+- The material document to review — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `journal.md` → `## Agents` → `### Learner Personas` → matching `#### Persona: {icon} {name}` only
 - `journal.md` → `## Agenda` — learning objectives for this session
 - `journal.md` → `## Course Context` — terminology and conventions
@@ -48,7 +48,7 @@ Rules:
    - If `journal.md` → `## Agents` → `### Learner Personas` does not exist: state this and suggest `:create-learner-persona` first.
    - Do not read `journal.md` → `## Agents` → `### Coauthor` or any other persona body.
 
-2. Load `materials/{number}-{type}.md`.
+2. Load the material document for this session (see Inputs). If it does not exist yet, stop and say that the unit has no material to review.
 
 3. Load the learning objectives for this session from `journal.md` → `## Agenda`.
    Also find the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
@@ -99,7 +99,7 @@ Rules:
 
    __Date:__ YYYY-MM-DD
    __Persona:__ [Icon] [Name] — [one-line description]
-   __Material:__ materials/{number}-{type}.md
+   __Material:__ {material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode}
    __Result:__ OK / Issues found / Major concerns
 
    ###### Overall Impression

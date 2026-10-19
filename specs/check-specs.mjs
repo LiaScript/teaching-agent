@@ -47,6 +47,17 @@ for (const [file, phrases] of Object.entries(required)) {
   });
 }
 
+test("material paths use the title slug, never the session type", () => {
+  const walk = dir => readdirSync(dir).flatMap(name => {
+    const path = join(dir, name);
+    return statSync(path).isDirectory() ? (name === "node_modules" ? [] : walk(path)) : [path];
+  });
+  const hits = walk(specs).filter(path => /\.(md|ya?ml)$/.test(path))
+    .flatMap(path => readFileSync(path, "utf8").split("\n").map(line => [path, line]))
+    .filter(([, line]) => /\{\{?number\}?\}-\{\{?type\}?\}/.test(line) && !/legacy/.test(line));
+  assert.deepEqual(hits.map(([path, line]) => `${path.slice(specs.length + 1)}: ${line.trim()}`), []);
+});
+
 test("no persona or scenario data from tandem tests in the specs", () => {
   const words = /\b(biene\w*|bienenvolk|sabine|jonas|frida|summi|krüger)\b/i;
   const walk = dir => readdirSync(dir).flatMap(name => {
