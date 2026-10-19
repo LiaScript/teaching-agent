@@ -207,7 +207,7 @@ workflow:
                 - LiaScript syntax, learning objectives, persona tone, factual correctness
                 - Result rules in fixed order (deferrable only: media of a named later step, publishing metadata — marked ⏳); the chat names every open finding
                 - If issues found: re-open :coauthor-materials with report as context
-                - If clean: offer :try-as-learner once, then persona review
+                - If clean: offer :try-as-learner once (only with the preview / MCP gate open), then persona review
             - command: :try-as-learner {number} {companion?}
               optional: true
               notes: |

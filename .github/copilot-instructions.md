@@ -5772,7 +5772,7 @@ No new mechanism needed for any of these — this table exists so the vocabulary
 
 Course Frameworks are documentation-only and Validation Mechanisms are already enforced elsewhere, so only Session Methods need their own loop — the same three-task loop Session Types already use:
 
-1. **Generation** — `:create-agenda` assigns the method per session (default pre-selected, instructor can override); `:create-session` stores it on the skeleton; `:promote-session` follows its structural guidance when generating content.
+1. **Generation** — `:create-agenda` assigns the method per session (the default, or another one the agent picks for that session without asking; the instructor can change it any time); `:create-session` stores it on the skeleton; `:promote-session` follows its structural guidance when generating content.
 2. **Validation** — `:validate-course` (session and course mode) checks the material against the method's `Erforderlich` list, independently of the Session Type check.
 3. **Course-level check** — `checklists/course-quality-checklist.md` confirms every session's content matches its declared method's required elements before publishing (when a method is set).
 
@@ -8042,7 +8042,7 @@ workflow:
                 - LiaScript syntax, learning objectives, persona tone, factual correctness
                 - Result rules in fixed order (deferrable only: media of a named later step, publishing metadata — marked ⏳); the chat names every open finding
                 - If issues found: re-open :coauthor-materials with report as context
-                - If clean: offer :try-as-learner once, then persona review
+                - If clean: offer :try-as-learner once (only with the preview / MCP gate open), then persona review
             - command: :try-as-learner {number} {companion?}
               optional: true
               notes: |
