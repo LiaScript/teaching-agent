@@ -52,7 +52,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 6. Build the agenda in a structured form adapted to the pacing model:
    - **lecture-series**: sessions with time slots and weekly schedule
    - **workshop**: blocks with approximate time per block
-   - **self-paced**: modules without fixed time slots, estimated duration only
+   - **self-paced**: modules with estimated duration only — unless the learners work in fixed time slots (e.g. lessons in which they study at their own pace); then plan per slot as in step 5c
    - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
 
    When assigning a duration, `data/duration-heuristic.md` can help sanity-check that it's realistic for the planned content volume — this is orientation only, not a required check here (the actual check happens later in `:validate-course`).

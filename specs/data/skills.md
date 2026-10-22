@@ -61,9 +61,10 @@ Skills add knowledge; the workflow keeps control:
   where the **task** says, not where the skill would put them (e.g. a theme
   block goes into `journal.md` → `## Visual Identity`, a reference check into
   the session's `#### Validation Report`).
-- If a skill contradicts `data/liascript-cheat-sheet.md` on LiaScript syntax,
-  follow the skill (it is maintained alongside LiaScript) and note the conflict
-  once to the instructor.
+- If a skill contradicts `data/liascript-cheat-sheet.md` on LiaScript syntax, or
+  `data/liascript-workflows.md` on exporter options and workflow versions (e.g. a
+  GitHub Action version), follow the skill (it is maintained alongside LiaScript
+  and the exporter) and note the conflict once to the instructor.
 - Skills that would act on their own — run multi-agent ideation, generate
   files, call the web — run only inside a step that the instructor started and,
   where the task says so, after confirmation.

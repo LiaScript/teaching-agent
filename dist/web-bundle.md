@@ -1159,7 +1159,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 6. Build the agenda in a structured form adapted to the pacing model:
    - **lecture-series**: sessions with time slots and weekly schedule
    - **workshop**: blocks with approximate time per block
-   - **self-paced**: modules without fixed time slots, estimated duration only
+   - **self-paced**: modules with estimated duration only — unless the learners work in fixed time slots (e.g. lessons in which they study at their own pace); then plan per slot as in step 5c
    - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
 
    When assigning a duration, `data/duration-heuristic.md` can help sanity-check that it's realistic for the planned content volume — this is orientation only, not a required check here (the actual check happens later in `:validate-course`).
@@ -2326,7 +2326,7 @@ The course context acts as the governance layer: it defines the course type, ter
     - Add `import: {url}` to the main metadata header if missing
     - Create or update `journal.md` → `## Templates`
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
-11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" are translated — except the `__State:__` value under `## Publishing`, an English key (`not published` / `published on …`) read by the dashboard; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
+11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" are translated — except the `__State:__` value under `## Publishing`, an English key (`not published` / `published on …`) read by the dashboard; also the explanatory paragraphs under `## Templates` and `## Agents`, their visible values and boundary lines, and the `<summary>` labels of technical blocks. English stay only keys that tasks read: `__Customization Status:__` (active / inactive), `__State:__`, `Mode:` / `Result:`, and the header rows of technical tables; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
 12. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
    2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.
@@ -3000,8 +3000,8 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
 7. Replace the content of `journal.md` → `## Sessions` with:
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
    - One `### {number}. {title}` subsection per session below the overview
-8. Fill each session subsection using `templates/session-skeleton.yaml`; every unit gets one of the confirmed Session Types (from the agenda, or as planned in the draft).
-8b. Set `language:` in the metadata header to the course language code and the course title to the confirmed working title; if the language is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" are translated — except the `__State:__` value under `## Publishing`, an English key (`not published` / `published on …`) read by the dashboard; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open.
+8. Fill each session subsection using `templates/session-skeleton.yaml`; every unit gets one of the confirmed Session Types (from the agenda, or as planned in the draft). Write it in the Coauthor voice synchronized in step 4b and run the "Self-check before saving" of `tasks/create-session-skeleton.md` on each skeleton; its results are part of the confirmed draft.
+8b. Set `language:` in the metadata header to the course language code and the course title to the confirmed working title; if the language is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" are translated — except the `__State:__` value under `## Publishing`, an English key (`not published` / `published on …`) read by the dashboard; also the explanatory paragraphs under `## Templates` and `## Agents`, their visible values and boundary lines, and the `<summary>` labels of technical blocks. English stay only keys that tasks read: `__Customization Status:__` (active / inactive), `__State:__`, `Mode:` / `Result:`, and the header rows of technical tables; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 
 After each section is saved, print a brief progress line:
@@ -3226,7 +3226,9 @@ Run this task automatically after any task that changes project state:
    Never fix foreign sections silently — listing them is this task's job. Every
    item gets a unique `key` (the hint key printed by the validation script, e.g.
    `provisional`, `slug`, `type-name`, `preparation`, `file-structure`; several items for one
-   hint use `{hint}-{topic}`) and a `kind`:
+   hint use `{hint}-{topic}`; open priority issues of a persona review use `review-{unit}-{n}`
+   (`decide`), prompt-only images `image-{unit}-{slug}` (`prepare`: create the image elsewhere or
+   with `:generate-image` once an image route exists)) and a `kind`:
    - `decide` — the instructor must decide; `how` says where and how.
    - `prepare` — the instructor must do or get something before using the material; `how` says how.
    - `internal` — cleanup the agent does itself at the next suitable write (old
@@ -4990,7 +4992,7 @@ template:
     - '3b. A factual statement that could not be verified (no web access or `reference-checker`) and is not yet confirmed by the instructor is an open `[pedagogical]` concern (rule 3), listed with its page title; the instructor confirms or corrects it — a confirmation is a dated decision.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
-    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding — or a concern the instructor accepts for every unit (e.g. "no screenshots") — one decision in `## Notes Backup` (`:save-decision`) that names it and its scope; it then counts as accepted in every unit it names. List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
+    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding — or a concern the instructor accepts for every unit (e.g. "no screenshots") — one decision in `## Notes Backup` (`:save-decision`) that names it and its scope; it then counts as accepted in every unit it names, also in units created later ("all units"). List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
     - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead. Accepting a concern is a recorded decision, not a re-grade.'
   sections:
     - id: report-heading
@@ -8259,9 +8261,10 @@ Skills add knowledge; the workflow keeps control:
   where the **task** says, not where the skill would put them (e.g. a theme
   block goes into `journal.md` → `## Visual Identity`, a reference check into
   the session's `#### Validation Report`).
-- If a skill contradicts `data/liascript-cheat-sheet.md` on LiaScript syntax,
-  follow the skill (it is maintained alongside LiaScript) and note the conflict
-  once to the instructor.
+- If a skill contradicts `data/liascript-cheat-sheet.md` on LiaScript syntax, or
+  `data/liascript-workflows.md` on exporter options and workflow versions (e.g. a
+  GitHub Action version), follow the skill (it is maintained alongside LiaScript
+  and the exporter) and note the conflict once to the instructor.
 - Skills that would act on their own — run multi-agent ideation, generate
   files, call the web — run only inside a step that the instructor started and,
   where the task says so, after confirmation.
