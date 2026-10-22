@@ -54,6 +54,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
     - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
+    - **Mark the spot in the material:** if the session's material document exists, put a visible marker where the image belongs — `> 🖼️ _{"Image follows", translated}: {alt text}_` with `<!-- image: {image-slug} -->` on the line above it — so learners never see a broken image. If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format

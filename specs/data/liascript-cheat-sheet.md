@@ -43,9 +43,9 @@ comment:  Short description of the course
 
 ### Additional Rule: Subheadings within a Slide
 
-- Each `##` heading **always starts a new slide**.
+- Each `#`, `##` and `###` heading **always starts a new slide** — the heading depth is the slide hierarchy (a `###` is a sub-slide of the `##` above it).
 
-- `###` (one level below `##`) is safe to use **bare, directly under a `##` slide** — it does not require a container and does not start a new slide/segment.
+- Use bare `###` only where a new (sub-)slide is wanted, e.g. the parts of a unit in single-file mode (`templates/session-material.yaml` → `heading_levels`).
 
 - Subheadings from `####` down to `######` are only allowed if **embedded** inside:
 

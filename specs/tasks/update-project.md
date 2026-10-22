@@ -30,6 +30,7 @@ Only if installed (see `data/skills.md`) — never install them:
 
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
    - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
+   - **Contact address:** if `## Course Context` → Conventions → Contact is empty, ask for it now (publishing needs an `email:` in the material headers). It becomes part of the plan: written to `## Course Context` and as `email:` into every material header after the confirmation.
 2. Read `journal.md` → `## Course Context` → `__File Structure:__` and branch:
 
 ### both modes

@@ -21,7 +21,7 @@ template:
        `__Mode:__` (English keys, read by tasks and the publishing gate) and the findings as **bold
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
   result_rules:
-    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable are only (a) media still to be produced in a named later step (images, audio) and (b) publishing metadata needed only for publishing (contact address, license).'
+    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio). Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
     - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'

@@ -49,6 +49,10 @@ Session commands identify a session by its number alone (`:promote-session 3`, `
 - If subsection and agenda disagree, say so and ask which is right before continuing — never pick one silently.
 - An extra type argument (older typed commands, a `type` parameter in older `agent:` links) is accepted only if it matches the resolved type; otherwise stop and ask.
 
+## Objectives and duration of a session
+
+Read a session's learning objectives and declared duration from its row in `journal.md` → `## Agenda`. Without an agenda (agenda: no, or not created yet): objectives from `## Outline` → Learning Objectives and its Session Overview (for a single lesson: all objectives); duration from `## Course Context` / `## Outline` → Time Commitment (for a single lesson: the lesson length). Never leave a check without objectives because the agenda is missing.
+
 ## Where the slug is used
 
 - `journal.md` → `## Sessions` overview table `Type` column, and `**Type:** {slug}` inside each session subsection

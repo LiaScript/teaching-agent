@@ -90,6 +90,7 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
   5. Accessibility: {{required | optional | not needed}}
   6. Author: {{display name for the material header}}
+  7. Contact: {{e-mail, or empty — needed only before publishing}}
 
 * __LiaScript conventions:__
   - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}

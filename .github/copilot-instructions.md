@@ -877,7 +877,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `number`
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - `journal.md` → `## Sessions` — session skeleton (created if missing, see Step 0)
-- `journal.md` → `## Agenda` — declared duration for this session
+- declared duration for this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda, without an agenda the time commitment)
 - `journal.md` → `## Agents` → `### Learner Personas` — if present, drives Step 2
 - Referenced sub-procedures: `tasks/create-session-skeleton.md`, `tasks/promote-session.md`, `tasks/create-image.md`, `tasks/generate-image.md`, `tasks/validate-course.md`, `tasks/validate-syntax.md`, `tasks/review-as-persona.md`, `tasks/quick-fix.md`, `data/duration-heuristic.md`
 
@@ -969,7 +969,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 ## Inputs
 
 - Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (`__Role / Persona:__`, `__Behavior Additions:__`, `__Preferred Interaction Style:__`, `__Project-Specific Rules:__`, `__Persona Voice Sample:__`, and `__Boundaries / Never:__` bullets — mandatory handoff)
-- Agenda info (modules/sessions) from `journal.md` → `## Agenda`
+- Objectives and duration of the session (`data/session-types.md` → "Objectives and duration of a session": `## Agenda`, without an agenda `## Outline`)
 - Terminology & conventions from `journal.md` → `## Course Context`
 - LiaScript template usage rules from `journal.md` → `## Templates` (if present)
 - Currently open material document, if one exists yet (otherwise this task creates it, see step 6) — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
@@ -1005,14 +1005,14 @@ Suggest images for visualization, either as a search term or as a concrete image
 
    **Critical engagement rules — always active:**
    - If a content section is vague or lacks depth: point it out explicitly and ask for more detail
-   - If a learning objective from `journal.md` → `## Agenda` is not addressed: flag it before moving on
+   - If a learning objective of this session is not addressed: flag it before moving on
    - If the instructor's suggestion contradicts the didactic concept in `journal.md` → `## Didactics`: raise it as a conflict
    - If an explanation is too long, too abstract, or not suited for the target audience: say so
    - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing
    - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
    - Positive feedback only when it is genuinely earned and specific
-5. **Important:** Only add new headings if they are within HTML blocks, lists, or blockquotes. (**Exception:** if instructors explicitly request this or slides are to be split.)
+5. **Important:** every `#`, `##` and `###` heading starts a new slide. Use headings only at the levels of `templates/session-material.yaml` → `heading_levels` (the unit's parts); any further sub-heading only inside an HTML block, a list or a blockquote — unless the instructor explicitly wants another slide.
 6. **Before writing the consolidated draft**, self-check it against the *Session Materials* items of `checklists/course-quality-checklist.md` (facts, self-check wording differs from practice, word list covers every word needed to answer, everything learners must read can be read aloud, closing reward only after solving, quiz settings from `data/liascript-cheat-sheet.md` → Quizzes for young learners) and report the result in one line. Material files are changed only with the file-edit tool, never with shell scripts or heredocs.
    At the end, a consolidated material version (or partial sections) is created, which can be incorporated into the currently open material document (see `data/file-structure-modes.md`). When it is saved into the material document (after the save confirmation) and Material is still ❌, set **Material ✅** and the unit's status line (`templates/session-skeleton.yaml` → `section_layout.overview`) — Material ✅ means the document exists, not that it is approved.
    **If the session has no material document yet** (the usual case right after the skeleton): work out the content in the dialog from the skeleton — do not run `:promote-session` first — and create the document at the first "Save" exactly as `data/file-structure-modes.md` → "Creating the material document" describes (path, header, overview).
@@ -1288,6 +1288,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
     - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
+    - **Mark the spot in the material:** if the session's material document exists, put a visible marker where the image belongs — `> 🖼️ _{"Image follows", translated}: {alt text}_` with `<!-- image: {image-slug} -->` on the line above it — so learners never see a broken image. If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format
@@ -1717,6 +1718,7 @@ Only if installed (see `data/skills.md`) — never install them:
 0. Load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
    - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
+   - **Contact address:** if `## Course Context` → Conventions → Contact is empty, ask for it now (publishing needs an `email:` in the material headers). It becomes part of the plan: written to `## Course Context` and as `email:` into every material header after the confirmation.
 2. Read `journal.md` → `## Course Context` → `__File Structure:__` and branch:
 
 ### single-file mode
@@ -2168,7 +2170,7 @@ For each queued entry (single or sequential batch):
 ## Phase 5b: Update Journal Entry *(all modes)*
 
 - Only once the file exists at the `__File:__` path: in the `<section>` for `{slug}`, set `__Status:__` to `generated`. If it does not, keep `prompt-ready` and report where the file is.
-- The `![…]({__File:__ path})` embed is already present (written by `:create-image`) and now renders the saved PNG — no change needed since the file was saved to that exact path.
+- In the material, replace the marker `<!-- image: {slug} -->` + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker, insert the image at the place it belongs and say where. Only then is the image visible to learners.
 
 ---
 
@@ -2304,7 +2306,7 @@ The course context acts as the governance layer: it defines the course type, ter
    - Language: prefill with the language the instructor writes in; ask only if the material should be in another language
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you — how *learners* are addressed in the material
-   - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). A contact address for publishing goes to the Dashboard as `prepare`.
+   - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). Contact address (optional, an e-mail learners may write to): needed only before publishing — if not given now, the dashboard lists it as `prepare`, and `:create-project` asks for it.
    - Instructor Address: how the agents address the instructor (default: the formal form of the course language, unless the instructor offers otherwise) — never derived from Person
    - Accessibility: required / optional / not needed
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
@@ -2950,6 +2952,7 @@ Generated in sequence without interruption inside `journal.md`:
    - Language: prefilled with the language the instructor writes in
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you
+   - Instructor Address and Author name, as in `tasks/init-course.md` step 7; contact address optional
    - Accessibility: required / optional / not needed
 
    **💬 Block 2 — Content (free text, discuss if needed):**
@@ -3366,6 +3369,7 @@ Only if installed (see `data/skills.md`) — never install them:
 
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
    - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
+   - **Contact address:** if `## Course Context` → Conventions → Contact is empty, ask for it now (publishing needs an `email:` in the material headers). It becomes part of the plan: written to `## Course Context` and as `email:` into every material header after the confirmation.
 2. Read `journal.md` → `## Course Context` → `__File Structure:__` and branch:
 
 ### both modes
@@ -3450,19 +3454,19 @@ Rules:
 ## Session Mode Steps (`:validate-course {number}`)
 
 1. Load `journal.md` → `## Course Context` for course type and conventions.
-2. Load `journal.md` → `## Agenda` to get the learning objectives for this session.
+2. Load the learning objectives and declared duration of this session (`data/session-types.md` → "Objectives and duration of a session" — from `## Agenda`, without an agenda from `## Outline`).
 3. Load `data/liascript-cheat-sheet.md` as syntax reference. If the skill `liascript-syntax` is available (see `data/skills.md`), use it as second reference (see `tasks/validate-syntax.md`).
 3b. Load `checklists/course-quality-checklist.md` and apply **every** item of the categories that concern one unit — Session Subsections, Session Materials, LiaScript Syntax — for this session, also items the checks below do not repeat. A session PASS must not hide a `[mechanical]` item the course check would fail later.
 4. Open the material document for this session — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode — and check:
 
    **Content checks:**
-   - [ ] All learning objectives from `journal.md` → `## Agenda` for this session are addressed
+   - [ ] All learning objectives of this session (step 2) are addressed
    - [ ] No section is vague, content-free, or placeholder-only
    - [ ] References present where content claims are made
    - [ ] `[only if the skill `reference-checker` is available — see `data/skills.md` — and web access exists]` The session's references verified with `reference-checker`; record its summary (✅ / ⚠️ / 🚨 counts) and every 🚨 entry as findings in the report. Without the skill or web access, skip this check and say so in one line.
    - [ ] Content satisfies the `Required` checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
    - [ ] `[if the session has a **Method:** line]` Content satisfies the `Required` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
-   - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration for this session in `journal.md` → `## Agenda`. This is `[advisory]` — record the flag either way as a hint, never as ❌ or ⏳, and never change the result because of it.
+   - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration of this session (step 2). This is `[advisory]` — record the flag either way as a hint, never as ❌ or ⏳, and never change the result because of it.
 
    **Persona & style checks:**
    - [ ] Tone matches the Coauthor role from `journal.md` → `## Agents` → `### Coauthor`
@@ -3479,7 +3483,7 @@ Rules:
 
 5. Fill `templates/session-validation.yaml` for this session with:
    - Material path
-   - Result: PASS / FAIL / PASS with concerns — apply `result_rules` of the template in their order (deferrals ⏳ decided in the first run; other ❌ on required/mechanical → FAIL; open pedagogical ❌ → PASS with concerns; otherwise PASS). Publishing metadata (contact address) is ⏳ "before publishing" in session mode, never ❌.
+   - Result: PASS / FAIL / PASS with concerns — apply `result_rules` of the template in their order (deferrals ⏳ decided in the first run; other ❌ on required/mechanical → FAIL; open pedagogical ❌ → PASS with concerns; otherwise PASS). Publishing metadata (contact address, license) is never a finding of a unit check — the publishing gate checks it.
    - Mode: session
    - Date
    - Content findings
@@ -3639,8 +3643,8 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 
 ## Checks
 
-1. **Metadata header** (cheat sheet §1): `author`, `email`, `version`, `language`, `narrator` present and well-formed in the `<!-- ... -->` header block — multi-file: the material document's own header; single-file: the one shared header of root `README.md` (a session's `##` chapter has no header of its own and is never ❌ for it). In session mode a missing `email` is ⏳ "before publishing" (not ❌) as long as `author` holds a display name; in course mode and at the publishing gate it is required.
-2. **Heading structure** (§2): multi-file: exactly one `#` heading (course title) per material document; single-file: exactly one `#` in root `README.md`, and a session's chapter starts with its `##` heading and contains no `#`; every `##` starts a new slide; a bare `###` directly under a `##` is fine; `####`-or-deeper only inside a `<div>`/semantic wrapper, a list, or a blockquote — never bare.
+1. **Metadata header** (cheat sheet §1): `author`, `version`, `language`, `narrator` present and well-formed in the `<!-- ... -->` header block — multi-file: the material document's own header; single-file: the one shared header of root `README.md` (a session's `##` chapter has no header of its own and is never ❌ for it). `email` is not part of this check in either mode: the contact address is publishing metadata, checked only by the publishing gate (`tasks/create-project.md`).
+2. **Heading structure** (§2): multi-file: exactly one `#` heading (course title) per material document; single-file: exactly one `#` in root `README.md`, and a session's chapter starts with its `##` heading and contains no `#`; every `#`, `##` and `###` starts a new slide, so headings follow `templates/session-material.yaml` → `heading_levels`; `####`-or-deeper only inside a `<div>`/semantic wrapper, a list, or a blockquote — never bare.
 3. **Code blocks** (§8): every fenced code block opened with triple backticks is closed; correct language tag used (`js`, `py`, `html`, etc.); interactive code blocks pair a `<script>`/`@input` block directly after the code block where applicable.
 4. **Alerts** (§3): alert blockquotes use only supported types (`NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`); every line of the alert starts with `>`.
 5. **Citations** (§3): citation blockquotes have a `--` source line, preceded by an empty `>` line.
@@ -3900,6 +3904,7 @@ template:
           4. Instructor Address: [Sie | Du | you] — how the agents address the instructor (chat, dashboard)
           5. Accessibility: [required | optional | not needed]
           6. Author: [display name for the material header, e.g. title + surname]
+          7. Contact: [e-mail for the material header, or empty — needed only before publishing]
 
         * __LiaScript conventions:__
           - [list project-specific rules here]
@@ -4230,6 +4235,7 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
   5. Accessibility: {{required | optional | not needed}}
   6. Author: {{display name for the material header}}
+  7. Contact: {{e-mail, or empty — needed only before publishing}}
 
 * __LiaScript conventions:__
   - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
@@ -4943,7 +4949,7 @@ template:
        `__Mode:__` (English keys, read by tasks and the publishing gate) and the findings as **bold
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
   result_rules:
-    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable are only (a) media still to be produced in a named later step (images, audio) and (b) publishing metadata needed only for publishing (contact address, license).'
+    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio). Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
     - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
@@ -5221,7 +5227,7 @@ template:
 - [ ] [pedagogical] Every factual statement is correct at the stated level of simplification and traceable to a listed reference; no frightening or absolute claims without a source
 - [ ] [mechanical] Quizzes follow `data/liascript-cheat-sheet.md` → Quizzes for young learners where the target group needs it (no visible "show solution" button before the first try)
 - [ ] [pedagogical] Didactic inputs from `journal.md` → `## Didactics` reflected (methods, learning phases)
-- [ ] [pedagogical] Learning objectives from `journal.md` → `## Agenda` addressed in content
+- [ ] [pedagogical] Learning objectives of each session (`data/session-types.md` → "Objectives and duration of a session") addressed in content
 - [ ] [pedagogical] Self-check uses different examples, pictures or wording than the practice tasks (tests understanding, not recognition)
 - [ ] [pedagogical] A closing proof or reward is reachable only after solving the tasks, or the material says how the instructor checks it; praise does not appear after "show solution"
 - [ ] [pedagogical] Question texts *and* answer options can be read aloud where the target group needs it
@@ -5229,7 +5235,7 @@ template:
 - [ ] [pedagogical] Hints and instructions never point to positions ("above", "below") across slides; they name the page title
 - [ ] [mechanical] Each session's content satisfies its declared Session Type's `Required` checklist from `## Didactics` → `__Session Types:__`
 - [ ] [mechanical] Each session's content satisfies its declared Session Method's `Required` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
-- [ ] [advisory] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is a hint for the instructor, never a fail
+- [ ] [advisory] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration (`data/session-types.md` → "Objectives and duration of a session") — a deviation is a hint for the instructor, never a fail
 
 ## LiaScript Syntax (per material file)
 
@@ -5239,7 +5245,7 @@ template:
 
 - [ ] [mechanical] Terminology from `journal.md` → `## Course Context` used consistently throughout project memory and materials
 - [ ] [pedagogical] Instructor persona tone consistent across all materials
-- [ ] [pedagogical] Learning objectives from `journal.md` → `## Outline` traceable into `journal.md` → `## Agenda` and materials
+- [ ] [pedagogical] Learning objectives from `journal.md` → `## Outline` traceable into the materials (through `## Agenda` if there is one)
 - [ ] [pedagogical] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] [mechanical] Numbering correct, no gaps
 - [ ] [mechanical] No sessions without materials
@@ -5860,7 +5866,7 @@ Sum reading time and activity time for the session's total estimate.
 
 ## Comparing against the declared duration
 
-Compare the total estimate to the session's declared duration in `journal.md` → `## Agenda`.
+Compare the total estimate to the session's declared duration (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the time commitment).
 
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.
 - This is an **`[advisory]` item** (see the tags in `checklists/course-quality-checklist.md`): a hint, never ❌, never a fail, never part of an automated fix loop — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
@@ -6244,8 +6250,9 @@ Each session/unit is its own LiaScript document in its own folder.
 The same rules apply to every task that creates a session's material document — `:promote-session` (generated material) and `:coauthor-materials` (material worked out in the dialog):
 
 1. **Path:** reuse the path recorded in the technical table of `## Agenda` if there is one; otherwise derive it as above (multi-file: `materials/{number}-{slug}/README.md`, the `assets/` subfolder only on demand; single-file: the `##` chapter for this session inside root `/README.md`, chapters in session-number order).
-2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `language:` from the course language, the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses.
-3. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
+2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `email:` from Conventions → Contact if set, `version: 0.1.0` for a new document, `language:` from the course language, `narrator:` a voice for that language (e.g. `Deutsch Female`, `UK English Female`), the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses.
+3. **Images:** for every entry in the session's `#### Images` block, put the marker of `tasks/create-image.md` (status `prompt-ready`) or the image itself (status `generated`) at the place it belongs.
+4. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 ## Default by course type
 
@@ -6341,9 +6348,9 @@ comment:  Short description of the course
 
 ### Additional Rule: Subheadings within a Slide
 
-- Each `##` heading **always starts a new slide**.
+- Each `#`, `##` and `###` heading **always starts a new slide** — the heading depth is the slide hierarchy (a `###` is a sub-slide of the `##` above it).
 
-- `###` (one level below `##`) is safe to use **bare, directly under a `##` slide** — it does not require a container and does not start a new slide/segment.
+- Use bare `###` only where a new (sub-)slide is wanted, e.g. the parts of a unit in single-file mode (`templates/session-material.yaml` → `heading_levels`).
 
 - Subheadings from `####` down to `######` are only allowed if **embedded** inside:
 
@@ -8101,6 +8108,10 @@ Session commands identify a session by its number alone (`:promote-session 3`, `
 
 - If subsection and agenda disagree, say so and ask which is right before continuing — never pick one silently.
 - An extra type argument (older typed commands, a `type` parameter in older `agent:` links) is accepted only if it matches the resolved type; otherwise stop and ask.
+
+## Objectives and duration of a session
+
+Read a session's learning objectives and declared duration from its row in `journal.md` → `## Agenda`. Without an agenda (agenda: no, or not created yet): objectives from `## Outline` → Learning Objectives and its Session Overview (for a single lesson: all objectives); duration from `## Course Context` / `## Outline` → Time Commitment (for a single lesson: the lesson length). Never leave a check without objectives because the agenda is missing.
 
 ## Where the slug is used
 

@@ -99,7 +99,7 @@ The course context acts as the governance layer: it defines the course type, ter
    - Language: prefill with the language the instructor writes in; ask only if the material should be in another language
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you — how *learners* are addressed in the material
-   - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). A contact address for publishing goes to the Dashboard as `prepare`.
+   - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). Contact address (optional, an e-mail learners may write to): needed only before publishing — if not given now, the dashboard lists it as `prepare`, and `:create-project` asks for it.
    - Instructor Address: how the agents address the instructor (default: the formal form of the course language, unless the instructor offers otherwise) — never derived from Person
    - Accessibility: required / optional / not needed
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements

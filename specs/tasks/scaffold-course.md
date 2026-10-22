@@ -59,6 +59,7 @@ Generated in sequence without interruption inside `journal.md`:
    - Language: prefilled with the language the instructor writes in
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you
+   - Instructor Address and Author name, as in `tasks/init-course.md` step 7; contact address optional
    - Accessibility: required / optional / not needed
 
    **💬 Block 2 — Content (free text, discuss if needed):**

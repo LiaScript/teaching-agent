@@ -56,6 +56,7 @@ template:
           4. Instructor Address: [Sie | Du | you] — how the agents address the instructor (chat, dashboard)
           5. Accessibility: [required | optional | not needed]
           6. Author: [display name for the material header, e.g. title + surname]
+          7. Contact: [e-mail for the material header, or empty — needed only before publishing]
 
         * __LiaScript conventions:__
           - [list project-specific rules here]
