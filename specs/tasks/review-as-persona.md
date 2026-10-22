@@ -19,7 +19,8 @@ or simply get a feel for how this learner experiences the material.
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - The material document to review — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `journal.md` → `## Agents` → `### Learner Personas` → matching `#### Persona: {icon} {name}` only
-- `journal.md` → `## Agenda` — learning objectives for this session
+- Learning objectives for this session (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the outline)
+- The session's decisions list (`data-key="decisions"`) in its `### {number}. {title}` subsection
 - `journal.md` → `## Course Context` — terminology and conventions
 - Matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 
@@ -50,7 +51,7 @@ Rules:
 
 2. Load the material document for this session (see Inputs). If it does not exist yet, stop and say that the unit has no material to review.
 
-3. Load the learning objectives for this session from `journal.md` → `## Agenda`.
+3. Load the learning objectives for this session (`data/session-types.md` → "Objectives and duration of a session") and the session's decisions list. Do not raise again a concern the instructor has already decided or accepted; if it still hurts this persona, mention it once as "already decided", without proposing it again.
    Also find the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
 
 4. Announce persona adoption clearly:

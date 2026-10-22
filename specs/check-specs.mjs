@@ -20,12 +20,12 @@ const required = {
   "tasks/create-didactics.md": ["do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`", "merge, never overwrite", "data-from=\"didactics\""],
   "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary", "If later: stop here", "do not ask about methods"],
   "tasks/create-session-skeleton.md": ["data-key", "Show the new unit", "can be solved with the material the learners get"],
-  "tasks/coauthor-materials.md": ["Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first", "never before it —"],
+  "tasks/coauthor-materials.md": ["**Course-wide decisions:**", "never present it as checked", "Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first", "never before it —"],
   "tasks/validate-course.md": ["Items only the instructor can resolve are not in scope", "With **PASS with concerns**", "Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
   "data/file-structure-modes.md": ["`narrator:` a voice for that language", "3. **Images:**"],
-  "tasks/create-image.md": ["Mark the spot in the material"],
-  "data/session-types.md": ["Objectives and duration of a session", "Never leave a check without objectives"],
+  "tasks/create-image.md": ["no visual identity yet", "Mark the spot in the material"],
+  "data/session-types.md": ["never equal the default terminology", "Objectives and duration of a session", "Never leave a check without objectives"],
   "tasks/update-dashboard.md": ["This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["Change path after a check", "Called from `:build-session`"],
   "tasks/generate-image.md": ["replace the marker", "never by its name", "Only once the file exists"],
@@ -110,7 +110,7 @@ test("templates and tasks agree on fields: agent subsections, agenda summary, de
 });
 
 test("no task reads objectives or duration only from the agenda, and ### is a slide", () => {
-  for (const file of ["tasks/validate-course.md", "tasks/coauthor-materials.md", "data/duration-heuristic.md", "checklists/course-quality-checklist.md", "tasks/build-session.md"]) {
+  for (const file of ["tasks/validate-course.md", "tasks/coauthor-materials.md", "data/duration-heuristic.md", "checklists/course-quality-checklist.md", "tasks/build-session.md", "tasks/review-as-persona.md"]) {
     assert.ok(!/(objectives?|duration)[^\n]{0,40}(from|in) `journal\.md` → `## Agenda`/i.test(read(file)) && !/`## Agenda` to get the learning objectives/.test(read(file)), `${file} reads objectives or duration only from the agenda`);
   }
   assert.ok(!read("data/liascript-cheat-sheet.md").includes("does not start a new slide"), "the cheat sheet says ### stays on the slide again");

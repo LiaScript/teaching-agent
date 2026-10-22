@@ -29,6 +29,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 
 ## Steps
 
+0. If `## Visual Identity` has no image guidelines yet: use a neutral style that fits the target group and the course language, say so in one line, note `style: neutral – no visual identity yet` in the prompt entry, and offer `:create-visuals` once. Never stop `:build-session` for this.
 1. Receive user description of what should be visualized.
 2. Read image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet).
 3. Read color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet).

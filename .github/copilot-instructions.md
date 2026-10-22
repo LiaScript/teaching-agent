@@ -999,8 +999,9 @@ Suggest images for visualization, either as a search term or as a concrete image
 2. **Agent adopts the Coauthor role into its own persona** and writes, discusses, and comments in the tone of this character.
 3. Instructors ask questions, raise objections, or request changes.
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
-   - **Fact check before showing:** before you show a draft piece, list its factual statements for yourself and check each against a named source (use `reference-checker` if installed). A simplification must stay true at the learners' level (never "A becomes C" when the source says "A → B → C"). No absolute or frightening claims ("soon there will be none left") unless the source states them. Mark every statement you could not verify as *unverified* in the chat; material with unverified statements is approved only if the instructor explicitly accepts that, and the session's references list the sources.
+   - **Fact check before showing:** before you show a draft piece, list its factual statements for yourself and check each against a named source (use `reference-checker` if installed). Without web access or the skill, name the source you rely on (textbook, standard, the instructor) or mark the claim "not verified" in the summary and ask — never present it as checked. A simplification must stay true at the learners' level (never "A becomes C" when the source says "A → B → C"). No absolute or frightening claims ("soon there will be none left") unless the source states them. Mark every statement you could not verify as *unverified* in the chat; material with unverified statements is approved only if the instructor explicitly accepts that, and the session's references list the sources.
    - **New rule → re-check:** when the instructor adopts a wording or style rule (also a project-wide one), apply it at once to **all** pieces drafted so far, show every hit with the fix in bold, and only then continue.
+   - **Course-wide decisions:** if a decision applies to every unit ("keyboard shortcuts only in the info box"), offer to record it as an instructor rule under `## Agents` → `### Coauthor` → Project-Specific Rules (without the `data-from` marker), so `:promote-session` and later co-authoring follow it; it is written with the same save confirmation. If a decision contradicts `## Didactics` or `### Coauthor` (e.g. its voice sample), say so and offer to adjust that section by the rule "Changing another section" in `data/agent-links.md`.
    - **Record decisions:** the decisions list holds only dated decisions (open points go to the overview as `decide` or `internal`). Every decision the instructor makes about this session goes, with date, into the session's decisions list — written together with the next save confirmation and listed in its summary in future tense ("When you save, I will also record: …", translated, see `data/agent-links.md` → "Nothing unseen gets saved"), never before it — (`data-key="decisions"`, label in the course language) in `journal.md` → `## Sessions` → `### {n}. {title}` (create it above `**References:**` if missing).
 
    **Critical engagement rules — always active:**
@@ -1263,6 +1264,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 
 ## Steps
 
+0. If `## Visual Identity` has no image guidelines yet: use a neutral style that fits the target group and the course language, say so in one line, note `style: neutral – no visual identity yet` in the prompt entry, and offer `:create-visuals` once. Never stop `:build-session` for this.
 1. Receive user description of what should be visualized.
 2. Read image style guidelines from `journal.md` → `## Visual Identity` (`__Course Image Generation Guidelines:__` bullet).
 3. Read color palette from `journal.md` → `## Visual Identity` (`__Website Color Palette:__` bullet).
@@ -2649,7 +2651,8 @@ or simply get a feel for how this learner experiences the material.
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - The material document to review — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `journal.md` → `## Agents` → `### Learner Personas` → matching `#### Persona: {icon} {name}` only
-- `journal.md` → `## Agenda` — learning objectives for this session
+- Learning objectives for this session (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the outline)
+- The session's decisions list (`data-key="decisions"`) in its `### {number}. {title}` subsection
 - `journal.md` → `## Course Context` — terminology and conventions
 - Matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 
@@ -2680,7 +2683,7 @@ Rules:
 
 2. Load the material document for this session (see Inputs). If it does not exist yet, stop and say that the unit has no material to review.
 
-3. Load the learning objectives for this session from `journal.md` → `## Agenda`.
+3. Load the learning objectives for this session (`data/session-types.md` → "Objectives and duration of a session") and the session's decisions list. Do not raise again a concern the instructor has already decided or accepted; if it still hurts this persona, mention it once as "already decided", without proposing it again.
    Also find the matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
 
 4. Announce persona adoption clearly:
@@ -5867,6 +5870,8 @@ For each activity, discussion, exercise, or quiz block in the material:
 | Activity type | Default estimate |
 |---|---|
 | Quiz question (single/multiple/text) | 1–2 min each |
+| Short task (one step, e.g. a single formula or one matching item) | 2–4 min each |
+| Teacher-led phase (board, demonstration, class talk) | the duration the instructor states, otherwise 5–10 min |
 | Short discussion prompt | 8–10 min |
 | Group exercise / hands-on task | 15–20 min |
 | Video/demo embed | stated media length, or 5 min default |
@@ -6241,6 +6246,7 @@ Every course runs in exactly one **File Structure** mode, recorded in `journal.m
 The entire course is one LiaScript document.
 
 - Course content: `/README.md` (project root). Every session/unit is a `##` chapter inside this one file — not a separate file.
+- If a unit's title equals the course title (typical for a single lesson), give the chapter its own title (e.g. "Lesson: …", translated) — two equal headings share one anchor, and links would jump to the wrong one.
 - Assets: `/assets/images/`, `/assets/videos/`, etc. — project root, shared across the whole course.
 - No `materials/` folder is created.
 - Typical for: `single-lesson`, or any course the instructor explicitly wants as one file.
@@ -6291,7 +6297,7 @@ Note: the **session-folder slug** (`{slug}` above, from the session title) and a
 
 Publishing looks fundamentally different in each mode — this is not just a path difference, it changes which commands even apply.
 
-**single-file:** `:create-project` and `:update-project` do not apply — there is no `project.yaml`, no GitHub Actions workflow, and no GitHub Pages step. The single `README.md` plus its `assets/` are simply pushed to GitHub via `:manage-git` like any other file; GitHub itself (raw content hosting) is the entire "publishing" story. Once pushed, hand the instructor the direct LiaScript live-viewer link:
+**single-file:** `:create-project` and `:update-project` run only their single-file branch — no `project.yaml`, no GitHub Actions workflow, no GitHub Pages step. The single `README.md` plus its `assets/` are pushed to GitHub via `:manage-git`, and the viewer link points to the raw file:
 
 ```
 https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md
@@ -8084,7 +8090,7 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 ```
 * __Session Types:__
-  1. __Vorlesung__ (slug: `vorlesung`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
+  1. __Vortrag__ (slug: `vortrag`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
      Required: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
   2. __Übung__ (slug: `uebung`) — Angeleitete Praxis.
      Required: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
@@ -8101,12 +8107,12 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 | Course type | Suggested Session Types |
 |---|---|
-| lecture-series | **Vorlesung** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
-| self-paced | **Modul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
-| workshop | **Input** (`input`) — kurzer Theorieblock · **Aktivität** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
+| lecture-series | **Vortrag** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
+| self-paced | **Lernmodul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
+| workshop | **Input** (`input`) — kurzer Theorieblock · **Praxisphase** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
 | single-lesson | Usually **one** type only (named after `lectures-called`); skip the discussion step unless the instructor wants to split the lesson into sub-types |
 
-The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vorlesung`, `uebung`), as `templates/course-didactics.yaml` requires.
+The display names are chosen so they never equal the default terminology of `tasks/init-course.md` (lecture, module, activity — translated); still check them against the course's real terminology. The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vortrag`, `uebung`), as `templates/course-didactics.yaml` requires.
 
 ## Resolving a session's type
 

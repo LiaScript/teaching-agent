@@ -9,6 +9,7 @@ Every course runs in exactly one **File Structure** mode, recorded in `journal.m
 The entire course is one LiaScript document.
 
 - Course content: `/README.md` (project root). Every session/unit is a `##` chapter inside this one file — not a separate file.
+- If a unit's title equals the course title (typical for a single lesson), give the chapter its own title (e.g. "Lesson: …", translated) — two equal headings share one anchor, and links would jump to the wrong one.
 - Assets: `/assets/images/`, `/assets/videos/`, etc. — project root, shared across the whole course.
 - No `materials/` folder is created.
 - Typical for: `single-lesson`, or any course the instructor explicitly wants as one file.
@@ -59,7 +60,7 @@ Note: the **session-folder slug** (`{slug}` above, from the session title) and a
 
 Publishing looks fundamentally different in each mode — this is not just a path difference, it changes which commands even apply.
 
-**single-file:** `:create-project` and `:update-project` do not apply — there is no `project.yaml`, no GitHub Actions workflow, and no GitHub Pages step. The single `README.md` plus its `assets/` are simply pushed to GitHub via `:manage-git` like any other file; GitHub itself (raw content hosting) is the entire "publishing" story. Once pushed, hand the instructor the direct LiaScript live-viewer link:
+**single-file:** `:create-project` and `:update-project` run only their single-file branch — no `project.yaml`, no GitHub Actions workflow, no GitHub Pages step. The single `README.md` plus its `assets/` are pushed to GitHub via `:manage-git`, and the viewer link points to the raw file:
 
 ```
 https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md

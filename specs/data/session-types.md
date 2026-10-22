@@ -14,7 +14,7 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 ```
 * __Session Types:__
-  1. __Vorlesung__ (slug: `vorlesung`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
+  1. __Vortrag__ (slug: `vortrag`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
      Required: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
   2. __Übung__ (slug: `uebung`) — Angeleitete Praxis.
      Required: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
@@ -31,12 +31,12 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 
 | Course type | Suggested Session Types |
 |---|---|
-| lecture-series | **Vorlesung** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
-| self-paced | **Modul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
-| workshop | **Input** (`input`) — kurzer Theorieblock · **Aktivität** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
+| lecture-series | **Vortrag** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
+| self-paced | **Lernmodul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
+| workshop | **Input** (`input`) — kurzer Theorieblock · **Praxisphase** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
 | single-lesson | Usually **one** type only (named after `lectures-called`); skip the discussion step unless the instructor wants to split the lesson into sub-types |
 
-The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vorlesung`, `uebung`), as `templates/course-didactics.yaml` requires.
+The display names are chosen so they never equal the default terminology of `tasks/init-course.md` (lecture, module, activity — translated); still check them against the course's real terminology. The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vortrag`, `uebung`), as `templates/course-didactics.yaml` requires.
 
 ## Resolving a session's type
 
