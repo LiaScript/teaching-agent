@@ -34,7 +34,7 @@ Each session has at most one current validation report, rendered from `templates
 Rules:
 - Store the report under the matching `### {number}. {title}` session subsection.
 - The report heading is always `#### Validation Report`.
-- Wrap the entire rendered report in a single `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide". Inside the report, findings use **bold labels**, never `#####` headings; the technical part sits in `<details>` below a visible plain-language summary (template `layout`).
+- The `#### Validation Report` heading stands outside; everything below it is wrapped in a single `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide". Inside the report, findings use **bold labels**, never `#####` headings; the technical part sits in `<details>` below a visible plain-language summary (template `layout`).
 - If the session already has a `#### Validation Report`, replace it completely.
 - Do not keep historical session validation reports.
 - Session mode does not update `journal.md` → `## Validation`.

@@ -1350,7 +1350,7 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 * __Prompt:__
   "{full detailed prompt ready for image generator}"
 
-![{alt text}]({path})
+{{only once the image exists (status `generated`): ![{alt text}]({path}) — never for `prompt-ready` / `prompt-only`, it would show a broken image}}
 
 </section>
 ```
@@ -1707,8 +1707,8 @@ Sets up publishing for the course. Behavior branches hard on `journal.md` → `#
 
 ## Output
 
-- **single-file:** nothing generated on disk except `journal.md` → `## Publishing` (and `metadata.yml` if the OERSI offer is accepted); a confirmed git push and the LiaScript live-viewer URL
-- **multi-file:** `project.yaml` in the root folder (includes all materials as separate cards), a GitHub Actions workflow for LiaScript export and publishing, and `journal.md` → `## Publishing`
+- **single-file:** no new files except `metadata.yml` if the OERSI offer is accepted; changed: `journal.md` → `## Publishing` and `## Course Context` → Contact, and the header lines `email:` / `version:` of `README.md`; a confirmed git push and the LiaScript live-viewer URL
+- **multi-file:** `project.yaml` in the root folder (includes all materials as separate cards) and a GitHub Actions workflow for LiaScript export and publishing; changed: `journal.md` → `## Publishing` and `## Course Context` → Contact, and the header lines `email:` / `version:` of every material document
 
 ## Optional Skills
 
@@ -1730,7 +1730,7 @@ Only if installed (see `data/skills.md`) — never install them:
 
 3. **Read the repository before anything changes** (read-only git): the `origin` remote and the current branch. Derive `{owner}/{repo}` and the viewer URL for the mode — single-file: `https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md`; multi-file: `https://{owner}.github.io/{repo}/` (GitHub Pages). This is a stable LiaScript / GitHub convention — recommend the instructor spot-check it once (epistemic rules: never assert unverified syntax as certain). Without a remote: ask whether to create the GitHub repository via `:manage-git` first, or stop.
 4. Ask the user about their git/GitHub experience.
-5. Decide which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` (propose a `.gitignore` with it). A repository without a first commit gets it from `:manage-git`.
+5. Decide which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` and never the assistant's own files (`CLAUDE.md`, `AGENTS.md`, `.mcp.json`) unless the planning is published too; the `.gitignore` itself is committed (propose one with `.cache/`). A repository without a first commit gets it from `:manage-git`.
 6. **Show the plan, then confirm in the terminal** (tier "confirm in terminal", `data/agent-links.md`) — before any change: single-file publishes by pushing to GitHub directly, no `project.yaml`, no workflow, no GitHub Pages step (see `data/file-structure-modes.md` → "Publishing"); the files to commit, the push target, the viewer URL, the header lines (`email:` from the contact address, `version:`), and the `## Publishing` entries that will be written. On "cancel" nothing is written — say that the contact address was not saved either.
 7. On confirmation: write `journal.md` → `## Publishing` (`__Repository:__`, `__Branch:__`, `__Viewer URL:__`, `__State:__ not published`), then hand off to `:manage-git` to commit and push.
 8. Once pushed: set `__State:__ published on {date} (commit {short hash})`, present the viewer URL, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -1741,8 +1741,9 @@ Only if installed (see `data/skills.md`) — never install them:
 4. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 5. Build the `collection:` entries: one entry per `materials/{number}-{slug}/README.md`, in session order; ask the user if any session should be excluded.
 6. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling, and review the internal reference for the latest workflow and publishing best practices.
-7. **Show the plan, then confirm in the terminal** — before any change (a complete `project.yaml` pattern: `data/example-project.yaml`): the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the files to commit (decided as in the single-file branch: which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` (propose a `.gitignore` with it). A repository without a first commit gets it from `:manage-git`.), the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
-8. On confirmation: generate `project.yaml` in the root folder and the workflow file, write `journal.md` → `## Publishing` (`__State:__ not published`), then hand off to `:manage-git` to commit and push.
+7. **Show the plan, then confirm in the terminal** — before any change (a complete `project.yaml` pattern: `data/example-project.yaml`): the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the header lines (`email:` from the contact address, `version:`), the files to commit (decided as in the single-file branch: which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` and never the assistant's own files (`CLAUDE.md`, `AGENTS.md`, `.mcp.json`) unless the planning is published too; the `.gitignore` itself is committed (propose one with `.cache/`). A repository without a first commit gets it from `:manage-git`.), the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
+   On "cancel" nothing is written — say that the contact address was not saved either.
+8. On confirmation: generate `project.yaml` in the root folder and the workflow file, write the header lines, write `journal.md` → `## Publishing` (`__State:__ not published`), then hand off to `:manage-git` to commit and push.
 9. Once pushed: set `__State:__ published on {date} (commit {short hash}) – GitHub Pages builds after the workflow run`, remind the instructor to activate GitHub Pages if it is not active yet, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Usage
@@ -2174,7 +2175,7 @@ For each queued entry (single or sequential batch):
 
 ## Phase 5b: Update Journal Entry *(all modes)*
 
-- Only once the file exists at the `__File:__` path: in the `<section>` for `{slug}`, set `__Status:__` to `generated`. If it does not, keep `prompt-ready` and report where the file is.
+- Only once the file exists at the `__File:__` path: in the `<section>` for `{slug}`, set `__Status:__` to `generated` and add the image `![{alt text}]({path})` below the prompt. If it does not, keep `prompt-ready` and report where the file is.
 - In the material, replace the marker `<!--- image: {slug} --->` (older journals: `<!-- image: {slug} -->`) + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker (e.g. status `prompt-only`), insert the image at the place it belongs and say where. Only then is the image visible to learners.
 
 ---
@@ -2325,7 +2326,7 @@ The course context acts as the governance layer: it defines the course type, ter
     - Add `import: {url}` to the main metadata header if missing
     - Create or update `journal.md` → `## Templates`
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
-11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" or "not published" are translated; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
+11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" are translated — except the `__State:__` value under `## Publishing`, an English key (`not published` / `published on …`) read by the dashboard; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
 12. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
    2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.
@@ -3000,7 +3001,7 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
    - One `### {number}. {title}` subsection per session below the overview
 8. Fill each session subsection using `templates/session-skeleton.yaml`; every unit gets one of the confirmed Session Types (from the agenda, or as planned in the draft).
-8b. Set `language:` in the metadata header to the course language code and the course title to the confirmed working title; if the language is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" or "not published" are translated; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open.
+8b. Set `language:` in the metadata header to the course language code and the course title to the confirmed working title; if the language is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" are translated — except the `__State:__` value under `## Publishing`, an English key (`not published` / `published on …`) read by the dashboard; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 
 After each section is saved, print a brief progress line:
@@ -3323,7 +3324,7 @@ Run this task automatically after any task that changes project state:
   is listed as `optional` until `Agenda required` is set, then `planned` (yes) or
   removed with a `note` (no). The last step, publishing, stays `optional` until the
   publishing gate is PASS, then `planned`, and `done` once `## Publishing` →
-  `__State:__` says published. Never let the number of steps change without a `note`.
+  `__State:__` starts with `published` (an English key, never translated). Never let the number of steps change without a `note`.
 - `plan` (provisional planning) only while Outline/Didactics assign content to
   lessons and no `## Agenda` exists yet. As soon as the agenda is confirmed, every
   agenda row is a unit (`planned`, progress 0 of N) — even before `## Sessions`
@@ -3455,7 +3456,7 @@ Each session has at most one current validation report, rendered from `templates
 Rules:
 - Store the report under the matching `### {number}. {title}` session subsection.
 - The report heading is always `#### Validation Report`.
-- Wrap the entire rendered report in a single `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide". Inside the report, findings use **bold labels**, never `#####` headings; the technical part sits in `<details>` below a visible plain-language summary (template `layout`).
+- The `#### Validation Report` heading stands outside; everything below it is wrapped in a single `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide". Inside the report, findings use **bold labels**, never `#####` headings; the technical part sits in `<details>` below a visible plain-language summary (template `layout`).
 - If the session already has a `#### Validation Report`, replace it completely.
 - Do not keep historical session validation reports.
 - Session mode does not update `journal.md` → `## Validation`.
@@ -4973,7 +4974,7 @@ template:
     replace_existing: true
   title: 'Session {{number}} Validation'
   layout: |
-    One slide only. Write:
+    One slide only: the heading stays outside, everything below it sits in one `<section>…</section>`. Write:
     1. `#### Validation Report – {{"Validation report", translated}}` (tasks find it by the start of the heading line).
     2. Visible, in the course language and in plain words (every label translated): outcome with result and date,
        then what works and what is still missing as short lists — refer to page titles of the material,
@@ -4986,6 +4987,7 @@ template:
     - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio) — an image marker in the material; prompt-only image prompts (no image route) are no deferral. Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
     - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
+    - '3b. A factual statement that could not be verified (no web access or `reference-checker`) and is not yet confirmed by the instructor is an open `[pedagogical]` concern (rule 3), listed with its page title; the instructor confirms or corrects it — a confirmation is a dated decision.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
     - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding — or a concern the instructor accepts for every unit (e.g. "no screenshots") — one decision in `## Notes Backup` (`:save-decision`) that names it and its scope; it then counts as accepted in every unit it names. List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'

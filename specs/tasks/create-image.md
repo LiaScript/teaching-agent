@@ -113,7 +113,7 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 * __Prompt:__
   "{full detailed prompt ready for image generator}"
 
-![{alt text}]({path})
+{{only once the image exists (status `generated`): ![{alt text}]({path}) — never for `prompt-ready` / `prompt-only`, it would show a broken image}}
 
 </section>
 ```

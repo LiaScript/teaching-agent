@@ -92,6 +92,7 @@ const sessionHeadings = [...section("Sessions").matchAll(/^### (\d+)\. /gm)].map
 model.units.filter(unit => sessionHeadings.includes(unit.id) && !unit.href).forEach(unit =>
   problems.push(`unit ${unit.id} has a skeleton but no href to its subsection in ## Sessions`));
 if (/^#{5}\s/m.test(section("Sessions").replace(/<section>[\s\S]*?<\/section>/g, ""))) problems.push("level-5 heading (#####) in ## Sessions – every heading becomes its own slide; use bold labels (or wrap the block in <section>)");
+if (/<section>\s*\n\s*#### Validation Report/.test(section("Sessions"))) problems.push("#### Validation Report heading inside <section> – the heading stays outside, everything below it goes into <section>");
 for (const report of section("Sessions").split(/^(?=#### Validation Report)/m).slice(1)) {
   const body = report.split(/^#{1,4} (?!Validation Report)/m)[0];
   const visible = body.split("<details>")[0];

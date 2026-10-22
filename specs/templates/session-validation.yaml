@@ -11,7 +11,7 @@ template:
     replace_existing: true
   title: 'Session {{number}} Validation'
   layout: |
-    One slide only. Write:
+    One slide only: the heading stays outside, everything below it sits in one `<section>…</section>`. Write:
     1. `#### Validation Report – {{"Validation report", translated}}` (tasks find it by the start of the heading line).
     2. Visible, in the course language and in plain words (every label translated): outcome with result and date,
        then what works and what is still missing as short lists — refer to page titles of the material,
@@ -24,6 +24,7 @@ template:
     - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio) — an image marker in the material; prompt-only image prompts (no image route) are no deferral. Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
     - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
+    - '3b. A factual statement that could not be verified (no web access or `reference-checker`) and is not yet confirmed by the instructor is an open `[pedagogical]` concern (rule 3), listed with its page title; the instructor confirms or corrects it — a confirmation is a dated decision.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
     - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding — or a concern the instructor accepts for every unit (e.g. "no screenshots") — one decision in `## Notes Backup` (`:save-decision`) that names it and its scope; it then counts as accepted in every unit it names. List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'

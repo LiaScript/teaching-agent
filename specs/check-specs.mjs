@@ -21,16 +21,16 @@ const required = {
   "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary", "If later: stop here", "do not ask about methods"],
   "tasks/create-session-skeleton.md": ["also in the terminal", "data-key", "Show the new unit", "can be solved with the material the learners get"],
   "tasks/coauthor-materials.md": ["**Course-wide decisions:**", "never present it as checked", "Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first", "never before it —"],
-  "tasks/validate-course.md": ["Items only the instructor can resolve are not in scope", "With **PASS with concerns**", "Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
+  "tasks/validate-course.md": ["heading stands outside; everything below it is wrapped", "Items only the instructor can resolve are not in scope", "With **PASS with concerns**", "Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
   "data/file-structure-modes.md": ["Umlauts and ß are transliterated", "Title slide (single-file, first unit)", "`narrator:` a voice for that language", "3. **Images:**"],
   "tasks/create-image.md": ["`<!--- image: {image-slug} --->`", "`prompt-only`", "no visual identity yet", "Mark the spot in the material"],
   "data/session-types.md": ["never equal the default unit words", "Objectives and duration of a session", "Never leave a check without objectives"],
-  "tasks/update-dashboard.md": ["States are exclusive", "The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
+  "tasks/update-dashboard.md": ["starts with `published` (an English key, never translated)", "States are exclusive", "The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["without one, say so in the dated line", "does not reopen a check", "Change path after a check", "Called from `:build-session`"],
-  "tasks/generate-image.md": ["replace the marker", "never by its name", "Only once the file exists"],
+  "tasks/generate-image.md": ["add the image `![{alt text}]({path})` below the prompt", "replace the marker", "never by its name", "Only once the file exists"],
   "tasks/build-session.md": ["do not refresh the dashboard themselves", "prompt-only mode", "every factual statement that could not be verified", "one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
-  "tasks/create-project.md": ["1b. Only once the gate is open", "the contact address was not saved either", "never `.cache/`", "**Version:**", "**Contact address:**", "Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
+  "tasks/create-project.md": ["never the assistant's own files", "1b. Only once the gate is open", "the contact address was not saved either", "never `.cache/`", "**Version:**", "**Contact address:**", "Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
   "tasks/update-project.md": ["Show the plan, then confirm in the terminal"],
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
@@ -44,7 +44,7 @@ const required = {
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
   "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "check failed – revision needed", "revised – check open", "passed with concerns – your decision needed", "never\n        relative to another optional block"],
   "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
-  "templates/session-validation.yaml": ["counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
+  "templates/session-validation.yaml": ["could not be verified", "the heading stays outside", "counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
   "templates/journal.md": ["* __Session Overview:__", "* __Time Budget:__", "\"title\": \"Publish\"", "* __Didactic Framework:__", "copied from Course Context", "journal-start", "Target Group", "## Publishing"],
   "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
   "agents/teaching-agent.yaml": [":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**"],
@@ -299,6 +299,13 @@ test("the journal check reads plain table labels, single-file chapters, the star
   assert.equal(missing.status, 2, missing.output);
   assert.match(missing.output, /Latest Validation Summary/);
   assert.equal(checkJournal(journal() + "\n\n## Validation\n\n### Latest Validation Summary\n\nDate: 2026-10-22\nMode: course\nResult: PASS\n").status, 0);
+});
+
+test("the validation report heading stands outside its <section>", () => {
+  const inside = journal().replace("#### Validation Report – Rapport de validation", "<section>\n\n#### Validation Report – Rapport de validation").replace("</details>", "</details>\n\n</section>");
+  const run = checkJournal(inside);
+  assert.equal(run.status, 2, run.output);
+  assert.match(run.output, /heading inside <section>/);
 });
 
 test("Done ✅ needs a passed check without open ⏳ items", () => {
