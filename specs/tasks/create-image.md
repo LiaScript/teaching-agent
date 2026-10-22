@@ -55,7 +55,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
     - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
-    - **Mark the spot in the material:** if the session's material document exists, put a visible marker where the image belongs — `> 🖼️ _{"Image follows", translated}: {alt text}_` with `<!-- image: {image-slug} -->` on the line above it — so learners never see a broken image. If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
+    - **Mark the spot in the material** (only with an image route, see `tasks/generate-image.md` Phase 0; without one — e.g. called by `:build-session` without an image tool or browser — set `__Status:__ prompt-only` and place no marker): if the session's material document exists, put a visible marker where the image belongs — `> 🖼️ _{"Image follows", translated}: {alt text}_` with `<!--- image: {image-slug} --->` (an authoring note: LiaScript ignores `<!--- … --->`, while a plain `<!-- … -->` would be read as attributes or narration) on the line above it — so learners never see a broken image. If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format
@@ -118,7 +118,7 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 </section>
 ```
 
-- `__Status:__` starts as `prompt-ready`; `:generate-image` flips it to `generated` after saving the PNG.
+- `__Status:__` starts as `prompt-ready` (marker placed in the material) or `prompt-only` (no image route when created: no marker, never a deferral); `:generate-image` flips it to `generated` after saving the PNG.
 - One `<section>` per image; multiple images stack under the same `#### Images` block.
 - `:generate-image` saves to the exact `{path}` recorded here — it does not re-derive the path independently.
 

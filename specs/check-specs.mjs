@@ -24,13 +24,13 @@ const required = {
   "tasks/validate-course.md": ["Items only the instructor can resolve are not in scope", "With **PASS with concerns**", "Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
   "data/file-structure-modes.md": ["`narrator:` a voice for that language", "3. **Images:**"],
-  "tasks/create-image.md": ["no visual identity yet", "Mark the spot in the material"],
+  "tasks/create-image.md": ["`<!--- image: {image-slug} --->`", "`prompt-only`", "no visual identity yet", "Mark the spot in the material"],
   "data/session-types.md": ["never equal the default terminology", "Objectives and duration of a session", "Never leave a check without objectives"],
-  "tasks/update-dashboard.md": ["This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
-  "tasks/quick-fix.md": ["Change path after a check", "Called from `:build-session`"],
+  "tasks/update-dashboard.md": ["The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
+  "tasks/quick-fix.md": ["without one, say so in the dated line", "does not reopen a check", "Change path after a check", "Called from `:build-session`"],
   "tasks/generate-image.md": ["replace the marker", "never by its name", "Only once the file exists"],
-  "tasks/build-session.md": ["one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
-  "tasks/create-project.md": ["**Contact address:**", "Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
+  "tasks/build-session.md": ["prompt-only mode", "every factual statement that could not be verified", "one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
+  "tasks/create-project.md": ["**Version:**", "**Contact address:**", "Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
   "tasks/update-project.md": ["Show the plan, then confirm in the terminal"],
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
@@ -42,10 +42,10 @@ const required = {
   "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
   "templates/course-didactics.yaml": ["layout:"],
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
-  "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "check failed – revision needed", "passed with concerns – your decision needed", "never\n        relative to another optional block"],
+  "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "check failed – revision needed", "revised – check open", "passed with concerns – your decision needed", "never\n        relative to another optional block"],
   "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
-  "templates/session-validation.yaml": ["so it never blocks Done", "Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
-  "templates/journal.md": ["* __Didactic Framework:__", "copied from Course Context", "journal-start", "Target Group", "## Publishing"],
+  "templates/session-validation.yaml": ["counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
+  "templates/journal.md": ["\"title\": \"Publish\"", "* __Didactic Framework:__", "copied from Course Context", "journal-start", "Target Group", "## Publishing"],
   "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
   "agents/teaching-agent.yaml": [":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**"],
 };
@@ -139,6 +139,14 @@ test("skills are detected by their installed names; old names only as aliases", 
     }
   }
   assert.match(read("data/skills.md"), /`liascript-exporter`/);
+});
+
+test("authoring notes in the journal template are <!--- … ---> so LiaScript ignores them", () => {
+  const journal = read("templates/journal.md");
+  const plain = [...journal.matchAll(/<!--(?!-)([\s\S]*?)-->/g)].slice(1)
+    .map(match => match[1].trim()).filter(body => !/^(class|data-[\w-]+)=/.test(body));
+  assert.deepEqual(plain.map(body => body.slice(0, 60)), []);
+  assert.ok(!read("data/agent-links.md").includes("materials/03-"), "agent-links shows a zero-padded folder number again");
 });
 
 test("the required-elements key is English; the German Erforderlich is only read in older journals", () => {

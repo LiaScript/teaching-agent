@@ -12,7 +12,7 @@ template:
         Directly below `## Sessions`, in this order:
         (1) a visible status list in the course language, one numbered line per unit in session order,
         `{n}. {title} – {status}` with status "skeleton ✅ · material open", "material ready · check open",
-        "check failed – revision needed", "passed with concerns – your decision needed",
+        "check failed – revision needed", "revised – check open", "passed with concerns – your decision needed",
         "passed – {later step} follows" or "checked ✅" (translated; a Notes entry follows after " – ");
         (2) `<details><summary>{"Technical overview", translated}</summary>`, then `<!-- data-type="none" -->`
         and the table `| # | Title | Type | Method | Skeleton | Material | Done | Notes |` (the Method

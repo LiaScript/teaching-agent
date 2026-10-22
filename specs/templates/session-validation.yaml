@@ -21,12 +21,12 @@ template:
        `__Mode:__` (English keys, read by tasks and the publishing gate) and the findings as **bold
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
   result_rules:
-    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio). Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
+    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio) — an image marker in the material; prompt-only image prompts (no image route) are no deferral. Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
     - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
-    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding, a decision in `## Notes Backup` (`:save-decision`). List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
+    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding — or a concern the instructor accepts for every unit (e.g. "no screenshots") — one decision in `## Notes Backup` (`:save-decision`) that names it and its scope; it then counts as accepted in every unit it names. List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
     - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead. Accepting a concern is a recorded decision, not a re-grade.'
   sections:
     - id: report-heading
@@ -36,7 +36,7 @@ template:
     - id: summary
       title: Summary for the instructor
       template: |
-        **{{"Outcome", translated}}:** {{passed | not passed | passed – {{later step}} still follows}} ({{date}})
+        **{{"Outcome", translated}}:** {{passed | not passed | passed with concerns – your decision needed | passed – {{later step}} still follows}} ({{date}})
 
         **{{"What works", translated}}:**
 

@@ -25,7 +25,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `#### Validation Report` and (if personas exist) `#### Persona Reviews` in the matching `journal.md` → `## Sessions` subsection
 - Real images inserted, replacing placeholders
 - Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item in its `#### Validation Report`; dashboard updated
-- A closing summary: iterations spent per loop, every applied fix (page title, before → after), final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
+- A closing summary: iterations spent per loop, every applied fix (page title, before → after), every factual statement that could not be verified (no web access or `reference-checker`) for the instructor to confirm or correct — they keep the unit at "passed with concerns" until then, and `:validate-course {number}` goes through them — final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
 
 ## Confirmations
 
@@ -43,7 +43,7 @@ If `journal.md` → `## Sessions` has no `### {number}. {title}` subsection yet,
 
 a. **First iteration only:** if the session's overview-table `Material` column is already ✅, ask the instructor before regenerating — `:promote-session` replaces the material wholesale and would silently discard any prior co-authoring. Otherwise, run `tasks/promote-session.md {number}` to generate the full material.
 
-b. **First iteration only:** identify spots in the freshly generated material that would benefit from an image (diagrams, illustrations, header art) and run `tasks/create-image.md {number} {description}` for each one, producing prompt-ready placeholders in this session's `#### Images` block. Keep the list of `{image-slug}`s created here — Step 3 needs it.
+b. **First iteration only:** identify spots in the freshly generated material that would benefit from an image (diagrams, illustrations, header art). First determine the image route as in `tasks/generate-image.md` Phase 0. **With a route:** run `tasks/create-image.md {number} {description}` for each spot — prompts in this session's `#### Images` block and a marker in the material. **Without a route** (no own image tool, no browser): run it in prompt-only mode — prompts saved with `__Status:__ prompt-only`, no marker in the material and no ⏳, so the unit can still be Done; the closing summary lists the prompts. Keep the list of `{image-slug}`s created here — Step 3 needs it.
 
 c. Run `tasks/validate-course.md {number}` (session mode) — this internally calls `tasks/validate-syntax.md` and applies `data/duration-heuristic.md`, and writes `#### Validation Report`.
 

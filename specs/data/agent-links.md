@@ -430,11 +430,11 @@ or clicked — and after answering a chat question that ends in a natural next
 step, post the next steps to the chat:
 
 ```markdown
-✅ Session 3 promoted — material in `materials/03-…/README.md`.
+✅ Session 3 promoted — material in `materials/3-…/README.md`.
 
 **Next:**
 - [🔍 Validate session 3](agent:teaching/validate-course?number=3) `:validate-course 3`
-- [👁 Show material](agent:teaching/preview?file=materials/03-…/README.md) `:preview materials/03-…/README.md`
+- [👁 Show material](agent:teaching/preview?file=materials/3-…/README.md) `:preview materials/3-…/README.md`
 - [🧑‍🎓 Review as Finn](agent:learner/review-as-persona?name=Finn&number=3) `:review-as-persona Finn 3`
 - [🎨 Switch to Artist](agent:artist/switch) `:agent artist`
 ```

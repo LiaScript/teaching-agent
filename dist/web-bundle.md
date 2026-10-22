@@ -887,7 +887,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `#### Validation Report` and (if personas exist) `#### Persona Reviews` in the matching `journal.md` → `## Sessions` subsection
 - Real images inserted, replacing placeholders
 - Session marked ✅ Done in the `## Sessions` overview table — only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item in its `#### Validation Report`; dashboard updated
-- A closing summary: iterations spent per loop, every applied fix (page title, before → after), final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
+- A closing summary: iterations spent per loop, every applied fix (page title, before → after), every factual statement that could not be verified (no web access or `reference-checker`) for the instructor to confirm or correct — they keep the unit at "passed with concerns" until then, and `:validate-course {number}` goes through them — final validation result, persona verdicts, images inserted, and anything that had to be escalated to the instructor
 
 ## Confirmations
 
@@ -905,7 +905,7 @@ If `journal.md` → `## Sessions` has no `### {number}. {title}` subsection yet,
 
 a. **First iteration only:** if the session's overview-table `Material` column is already ✅, ask the instructor before regenerating — `:promote-session` replaces the material wholesale and would silently discard any prior co-authoring. Otherwise, run `tasks/promote-session.md {number}` to generate the full material.
 
-b. **First iteration only:** identify spots in the freshly generated material that would benefit from an image (diagrams, illustrations, header art) and run `tasks/create-image.md {number} {description}` for each one, producing prompt-ready placeholders in this session's `#### Images` block. Keep the list of `{image-slug}`s created here — Step 3 needs it.
+b. **First iteration only:** identify spots in the freshly generated material that would benefit from an image (diagrams, illustrations, header art). First determine the image route as in `tasks/generate-image.md` Phase 0. **With a route:** run `tasks/create-image.md {number} {description}` for each spot — prompts in this session's `#### Images` block and a marker in the material. **Without a route** (no own image tool, no browser): run it in prompt-only mode — prompts saved with `__Status:__ prompt-only`, no marker in the material and no ⏳, so the unit can still be Done; the closing summary lists the prompts. Keep the list of `{image-slug}`s created here — Step 3 needs it.
 
 c. Run `tasks/validate-course.md {number}` (session mode) — this internally calls `tasks/validate-syntax.md` and applies `data/duration-heuristic.md`, and writes `#### Validation Report`.
 
@@ -1290,7 +1290,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
     - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
     - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
-    - **Mark the spot in the material:** if the session's material document exists, put a visible marker where the image belongs — `> 🖼️ _{"Image follows", translated}: {alt text}_` with `<!-- image: {image-slug} -->` on the line above it — so learners never see a broken image. If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
+    - **Mark the spot in the material** (only with an image route, see `tasks/generate-image.md` Phase 0; without one — e.g. called by `:build-session` without an image tool or browser — set `__Status:__ prompt-only` and place no marker): if the session's material document exists, put a visible marker where the image belongs — `> 🖼️ _{"Image follows", translated}: {alt text}_` with `<!--- image: {image-slug} --->` (an authoring note: LiaScript ignores `<!--- … --->`, while a plain `<!-- … -->` would be read as attributes or narration) on the line above it — so learners never see a broken image. If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format
@@ -1353,7 +1353,7 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 </section>
 ```
 
-- `__Status:__` starts as `prompt-ready`; `:generate-image` flips it to `generated` after saving the PNG.
+- `__Status:__` starts as `prompt-ready` (marker placed in the material) or `prompt-only` (no image route when created: no marker, never a deferral); `:generate-image` flips it to `generated` after saving the PNG.
 - One `<section>` per image; multiple images stack under the same `#### Images` block.
 - `:generate-image` saves to the exact `{path}` recorded here — it does not re-derive the path independently.
 
@@ -1721,6 +1721,7 @@ Only if installed (see `data/skills.md`) — never install them:
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
    - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
    - **Contact address:** if `## Course Context` → Conventions → Contact is empty, ask for it now (publishing needs an `email:` in the material headers). It becomes part of the plan: written to `## Course Context` and as `email:` into every material header after the confirmation.
+   - **Version:** LiaScript stores quiz and survey state only from `version: 1.0.0` on. The plan sets every material header below 1.0.0 to `1.0.0` (first publication). Header lines set here are publishing metadata and do not reopen a check.
 2. Read `journal.md` → `## Course Context` → `__File Structure:__` and branch:
 
 ### single-file mode
@@ -2172,7 +2173,7 @@ For each queued entry (single or sequential batch):
 ## Phase 5b: Update Journal Entry *(all modes)*
 
 - Only once the file exists at the `__File:__` path: in the `<section>` for `{slug}`, set `__Status:__` to `generated`. If it does not, keep `prompt-ready` and report where the file is.
-- In the material, replace the marker `<!-- image: {slug} -->` + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker, insert the image at the place it belongs and say where. Only then is the image visible to learners.
+- In the material, replace the marker `<!--- image: {slug} --->` (older journals: `<!-- image: {slug} -->`) + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker (e.g. status `prompt-only`), insert the image at the place it belongs and say where. Only then is the image visible to learners.
 
 ---
 
@@ -2568,7 +2569,7 @@ Converts a **Session** into a detailed **Session Material**.
 
 Fast, focused correction of a single well-defined issue in an existing material file, without running a full co-authoring session.
 
-**Change path after a check:** every change to a unit that already has a validation report — also changes asked for in the chat or after `:try-as-learner` — follows this task: full new wording shown → save confirmation → mini-validation of the changed area (`tasks/validate-syntax.md` scoped to the changed block, persona and figure rules from `## Didactics`, `node specs/dashboard/check-material.mjs`) → a dated line in the report that names what was checked ("changed after check: … – mini-check passed", translated) → derive the unit state again (`tasks/update-dashboard.md` step 3; never hand-edit the dashboard data). If the change alters structure, objectives, quiz settings or answers, the unit becomes "re-check pending" (`review`, `next` = re-check).
+**Change path after a check:** every change to a unit that already has a validation report — also changes asked for in the chat or after `:try-as-learner` — follows this task: full new wording shown → save confirmation → mini-validation of the changed area (`tasks/validate-syntax.md` scoped to the changed block, persona and figure rules from `## Didactics`, `node specs/dashboard/check-material.mjs <material file>` when a browser is available — without one, say so in the dated line; the mini-check then rests on `validate-syntax` and the next `:validate-course`) → a dated line in the report that names what was checked ("changed after check: … – mini-check passed", translated) → derive the unit state again (`tasks/update-dashboard.md` step 3; never hand-edit the dashboard data). If the change alters structure, objectives, quiz settings or answers, the unit becomes "re-check pending" (`review`, `next` = re-check). Publishing metadata in the header (`email:`, `version:`) set by `:create-project` / `:update-project` is not a content change and does not reopen a check.
 
 Minimal overhead for small, targeted changes (typos, broken syntax, swapping one example, fixing a quiz answer, correcting a link).
 
@@ -3318,7 +3319,9 @@ Run this task automatically after any task that changes project state:
   the process panel (same words in `next`, `steps` and chat offers).
 - Keep the global process steps stable from the empty journal on: the agenda step
   is listed as `optional` until `Agenda required` is set, then `planned` (yes) or
-  removed with a `note` (no). Never let the number of steps change without a `note`.
+  removed with a `note` (no). The last step, publishing, stays `optional` until the
+  publishing gate is PASS, then `planned`, and `done` once `## Publishing` →
+  `__State:__` says published. Never let the number of steps change without a `note`.
 - `plan` (provisional planning) only while Outline/Didactics assign content to
   lessons and no `## Agenda` exists yet. As soon as the agenda is confirmed, every
   agenda row is a unit (`planned`, progress 0 of N) — even before `## Sessions`
@@ -3378,6 +3381,7 @@ Only if installed (see `data/skills.md`) — never install them:
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
    - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
    - **Contact address:** if `## Course Context` → Conventions → Contact is empty, ask for it now (publishing needs an `email:` in the material headers). It becomes part of the plan: written to `## Course Context` and as `email:` into every material header after the confirmation.
+   - **Version:** LiaScript stores quiz and survey state only from `version: 1.0.0` on. The plan sets every material header below 1.0.0 to `1.0.0`; when content changed since the last publication, raise the minor version (e.g. 1.0.0 → 1.1.0). Header lines set here are publishing metadata and do not reopen a check.
 2. Read `journal.md` → `## Course Context` → `__File Structure:__` and branch:
 
 ### both modes
@@ -3508,7 +3512,7 @@ Rules:
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
-   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason; an accepted concern becomes a dated entry in the session's decisions list, listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. Accessibility: required) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
+   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. Accessibility: required) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
 
@@ -3604,7 +3608,7 @@ Applies only when `:validate-course` runs directly in course mode. Called as a s
 
 | Result                 | Agent behavior                                                                                                                                                                                                          |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔴 FAIL               | Block publishing. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `journal.md` → `## Validation` and rerun `:validate-course`. `:create-project` and `:update-project` are locked until PASS." |
+| 🔴 FAIL               | Block publishing. Open pedagogical concerns are gone through in the same pass as for PASS with concerns (fix or accept — for this unit or for the whole course), so the next run does not stop at them. State: "⛔ Publishing Gate: FAIL. Please resolve all issues in `journal.md` → `## Validation` and rerun `:validate-course`. `:create-project` and `:update-project` are locked until PASS." |
 | 🟡 PASS with concerns | Publishing stays locked. List every open concern in plain words and go through them one at a time: fix it now (`:quick-fix`, or `:coauthor-materials {number}` for broader changes) or accept it as is with a short reason. Record each accepted concern with the save confirmation — session finding: a dated entry in that session's decisions list; course-level finding: `:save-decision`. Then rerun `:validate-course`: accepted concerns no longer count (see `result_rules` in `templates/session-validation.yaml`). Never offer "publish anyway". |
 | 🟢 PASS               | Only if `Mode: course`: suggest handoff: "✅ Publishing Gate: PASS. Ready for publishing. Next step: `:agent development` → `:create-project`"                                                                                          |
 
@@ -4192,7 +4196,8 @@ This is where your course plan grows. You bring your teaching idea; the assistan
       {"title": "Didactics", "state": "planned", "why": "Methods, task formats and support that fit the objectives."},
       {"title": "Agenda", "state": "optional", "why": "Decided with the frame: order and duration of the units."},
       {"title": "Create material", "state": "planned", "why": "Explanations, tasks and self-checks grow out of the planning."},
-      {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."}
+      {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."},
+      {"title": "Publish", "state": "optional", "why": "Optional: share the checked course as a link."}
     ],
     "note": "You can step back at any time. A draft only counts as finished once you have approved it."
   },
@@ -4422,7 +4427,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview first — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`) — then one `### {n}. {title}` subsection per session._
 
-<!-- One subsection per session, structured like this:
+<!--- One subsection per session, structured like this:
 
 ### {{n}}. {{Session Title}}
 
@@ -4456,7 +4461,7 @@ The block order is fixed in `templates/session-skeleton.yaml` → `section_layou
 (after :validate-course) follows the action line and the technical details, before the
 skeleton; `#### Images` (created by :create-image only when the first image exists) and
 `#### Persona Reviews` (after :review-as-persona) come last, in this order. Never use `#####` headings inside a session.
--->
+--->
 
 <details><summary>Technical overview</summary>
 
@@ -4547,7 +4552,7 @@ _Replaced by `:validate-course` (course mode). The `### Latest Validation Summar
 
 ### Latest Validation Summary
 
-<!-- Not yet run. Format: tasks/validate-course.md, course mode step 9. When the language switches, replace the visible line below with its translation. -->
+<!--- Not yet run. Format: tasks/validate-course.md, course mode step 9. When the language switches, replace the visible line below with its translation. --->
 Course check not yet run. Unit checks are under "Sessions"; the course check runs before publishing.
 
 ---
@@ -4837,7 +4842,7 @@ template:
         Directly below `## Sessions`, in this order:
         (1) a visible status list in the course language, one numbered line per unit in session order,
         `{n}. {title} – {status}` with status "skeleton ✅ · material open", "material ready · check open",
-        "check failed – revision needed", "passed with concerns – your decision needed",
+        "check failed – revision needed", "revised – check open", "passed with concerns – your decision needed",
         "passed – {later step} follows" or "checked ✅" (translated; a Notes entry follows after " – ");
         (2) `<details><summary>{"Technical overview", translated}</summary>`, then `<!-- data-type="none" -->`
         and the table `| # | Title | Type | Method | Skeleton | Material | Done | Notes |` (the Method
@@ -4960,12 +4965,12 @@ template:
        `__Mode:__` (English keys, read by tasks and the publishing gate) and the findings as **bold
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
   result_rules:
-    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio). Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
+    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio) — an image marker in the material; prompt-only image prompts (no image route) are no deferral. Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
     - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
-    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding, a decision in `## Notes Backup` (`:save-decision`). List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
+    - 'Accepted concerns: a `[pedagogical]` finding the instructor has explicitly accepted as is is no longer open — a dated entry in the session''s decisions list (`<!-- data-key="decisions" -->`) names the finding and the reason; for a course-level finding — or a concern the instructor accepts for every unit (e.g. "no screenshots") — one decision in `## Notes Backup` (`:save-decision`) that names it and its scope; it then counts as accepted in every unit it names. List it as accepted in the technical report; it does not count for the result. Only the instructor accepts, one finding at a time — never the agent, never a blanket "publish anyway".'
     - 'Never move an item between ❌, ⏳ and hint because the instructor asks why the unit is not finished — explain the rule instead. Accepting a concern is a recorded decision, not a re-grade.'
   sections:
     - id: report-heading
@@ -4975,7 +4980,7 @@ template:
     - id: summary
       title: Summary for the instructor
       template: |
-        **{{"Outcome", translated}}:** {{passed | not passed | passed – {{later step}} still follows}} ({{date}})
+        **{{"Outcome", translated}}:** {{passed | not passed | passed with concerns – your decision needed | passed – {{later step}} still follows}} ({{date}})
 
         **{{"What works", translated}}:**
 
@@ -5698,11 +5703,11 @@ or clicked — and after answering a chat question that ends in a natural next
 step, post the next steps to the chat:
 
 ```markdown
-✅ Session 3 promoted — material in `materials/03-…/README.md`.
+✅ Session 3 promoted — material in `materials/3-…/README.md`.
 
 **Next:**
 - [🔍 Validate session 3](agent:teaching/validate-course?number=3) `:validate-course 3`
-- [👁 Show material](agent:teaching/preview?file=materials/03-…/README.md) `:preview materials/03-…/README.md`
+- [👁 Show material](agent:teaching/preview?file=materials/3-…/README.md) `:preview materials/3-…/README.md`
 - [🧑‍🎓 Review as Finn](agent:learner/review-as-persona?name=Finn&number=3) `:review-as-persona Finn 3`
 - [🎨 Switch to Artist](agent:artist/switch) `:agent artist`
 ```
@@ -6267,7 +6272,7 @@ The same rules apply to every task that creates a session's material document �
 
 1. **Path:** reuse the path recorded in the technical table of `## Agenda` if there is one; otherwise derive it as above (multi-file: `materials/{number}-{slug}/README.md`, the `assets/` subfolder only on demand; single-file: the `##` chapter for this session inside root `/README.md`, chapters in session-number order).
 2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `email:` from Conventions → Contact if set, `version: 0.1.0` for a new document, `language:` from the course language, `narrator:` a voice for that language (e.g. `Deutsch Female`, `UK English Female`), the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses.
-3. **Images:** for every entry in the session's `#### Images` block, put the marker of `tasks/create-image.md` (status `prompt-ready`) or the image itself (status `generated`) at the place it belongs.
+3. **Images:** for every entry in the session's `#### Images` block, put the marker of `tasks/create-image.md` (status `prompt-ready`) or the image itself (status `generated`) at the place it belongs; entries with status `prompt-only` get nothing.
 4. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 ## Default by course type

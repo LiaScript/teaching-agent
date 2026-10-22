@@ -37,7 +37,8 @@ This is where your course plan grows. You bring your teaching idea; the assistan
       {"title": "Didactics", "state": "planned", "why": "Methods, task formats and support that fit the objectives."},
       {"title": "Agenda", "state": "optional", "why": "Decided with the frame: order and duration of the units."},
       {"title": "Create material", "state": "planned", "why": "Explanations, tasks and self-checks grow out of the planning."},
-      {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."}
+      {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."},
+      {"title": "Publish", "state": "optional", "why": "Optional: share the checked course as a link."}
     ],
     "note": "You can step back at any time. A draft only counts as finished once you have approved it."
   },
@@ -267,7 +268,7 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview first — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`) — then one `### {n}. {title}` subsection per session._
 
-<!-- One subsection per session, structured like this:
+<!--- One subsection per session, structured like this:
 
 ### {{n}}. {{Session Title}}
 
@@ -301,7 +302,7 @@ The block order is fixed in `templates/session-skeleton.yaml` → `section_layou
 (after :validate-course) follows the action line and the technical details, before the
 skeleton; `#### Images` (created by :create-image only when the first image exists) and
 `#### Persona Reviews` (after :review-as-persona) come last, in this order. Never use `#####` headings inside a session.
--->
+--->
 
 <details><summary>Technical overview</summary>
 
@@ -392,7 +393,7 @@ _Replaced by `:validate-course` (course mode). The `### Latest Validation Summar
 
 ### Latest Validation Summary
 
-<!-- Not yet run. Format: tasks/validate-course.md, course mode step 9. When the language switches, replace the visible line below with its translation. -->
+<!--- Not yet run. Format: tasks/validate-course.md, course mode step 9. When the language switches, replace the visible line below with its translation. --->
 Course check not yet run. Unit checks are under "Sessions"; the course check runs before publishing.
 
 ---

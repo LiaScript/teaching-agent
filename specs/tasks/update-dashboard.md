@@ -201,7 +201,9 @@ Run this task automatically after any task that changes project state:
   the process panel (same words in `next`, `steps` and chat offers).
 - Keep the global process steps stable from the empty journal on: the agenda step
   is listed as `optional` until `Agenda required` is set, then `planned` (yes) or
-  removed with a `note` (no). Never let the number of steps change without a `note`.
+  removed with a `note` (no). The last step, publishing, stays `optional` until the
+  publishing gate is PASS, then `planned`, and `done` once `## Publishing` →
+  `__State:__` says published. Never let the number of steps change without a `note`.
 - `plan` (provisional planning) only while Outline/Didactics assign content to
   lessons and no `## Agenda` exists yet. As soon as the agenda is confirmed, every
   agenda row is a unit (`planned`, progress 0 of N) — even before `## Sessions`

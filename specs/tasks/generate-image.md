@@ -283,7 +283,7 @@ For each queued entry (single or sequential batch):
 ## Phase 5b: Update Journal Entry *(all modes)*
 
 - Only once the file exists at the `__File:__` path: in the `<section>` for `{slug}`, set `__Status:__` to `generated`. If it does not, keep `prompt-ready` and report where the file is.
-- In the material, replace the marker `<!-- image: {slug} -->` + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker, insert the image at the place it belongs and say where. Only then is the image visible to learners.
+- In the material, replace the marker `<!--- image: {slug} --->` (older journals: `<!-- image: {slug} -->`) + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker (e.g. status `prompt-only`), insert the image at the place it belongs and say where. Only then is the image visible to learners.
 
 ---
 
