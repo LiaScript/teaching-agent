@@ -6741,6 +6741,20 @@ Select all Baroque composers.
 - [[ ]] Debussy
 ```
 
+**Matrix Quiz (graded, for matching tasks)**
+
+```lia
+Which article belongs to the word?
+
+- [[der] [die] [das]]
+- [ ( )  (X)  ( ) ]  Frau
+- [ (X)  ( )  ( ) ]  Mann
+- [ ( )  ( )  (X) ]  Kind
+```
+
+- The first line holds the column labels; each row starts with `(` (one answer per row) or `[` (several answers per row) and ends with the row label.
+- This is a **quiz** with a solution. The matrix under Surveys (10b) looks similar but has no solution — never use it for a task with a right answer.
+
 **Text Quiz**
 
 ```lia
@@ -6763,19 +6777,21 @@ Composer of the 9th:
 **Quizzes for young learners / self-checks**
 
 ```lia
-<!-- data-hint-button="1" data-max-trials="2" data-solution-button="false" -->
 Which one is right?
 
+<!-- data-hint-button="1" data-max-trials="2" data-solution-button="false" -->
 - [( )] option A
 - [(X)] option B
-    [[?]] a hint in plain words
+[[?]] a hint in plain words
 ```
 
+- **The comment goes directly above the first answer line, not above the question.** An attribute comment belongs to the block that follows it; above the question it sets attributes on the question paragraph and the quiz ignores it. For a gap text it goes directly above the paragraph with the gaps.
+- Hints are their own lines after the options (`[[?]] …` or `- [[?]] …`), not indented under an option.
 - `data-hint-button="1"`: hint button after the 1st wrong try; `data-max-trials="2"`: the solution is shown automatically after the 2nd wrong try.
 - `data-solution-button="false"` hides the "show solution" button. **Without it the button is visible from the start**, also when `data-max-trials` is set.
 - Free-text tasks: always `data-solution-button="false"`.
 - Read answer options aloud with inline playback on the option (`{|>}{option text}`) instead of repeating them in the question text.
-- The fixed feedback texts of the player (e.g. "the correct answer has not been given yet") cannot be changed per quiz; announce them in the material if the learners need it.
+- Feedback lines can be changed per quiz (since LiaScript 2.0): `data-text-solved`, `data-text-failed`, `data-text-resolved` — inline Markdown or a single emoji; an empty value hides the line. For the whole course, define them once as header macros (`@ok: ⭐ Super!`) and use `data-text-solved="@ok"`. Surveys have no such attributes.
 
 ---
 

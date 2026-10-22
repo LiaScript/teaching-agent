@@ -37,7 +37,7 @@ const required = {
   "tasks/validate-syntax.md": ["checked only by the publishing gate", "Findings returned to a caller never contain line numbers", "is never ❌ for it"],
   "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback", "Preview required"],
   "data/agent-links.md": ["check failed → `coauthor-materials?number={n}`", "`agent` (`:configure-agent`) is one of", "`slide` is a positive integer", "never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
-  "data/liascript-cheat-sheet.md": ["Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\""],
+  "data/liascript-cheat-sheet.md": ["**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\""],
   "templates/course-context.yaml": ["layout:", "Target Group"],
   "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
   "templates/course-didactics.yaml": ["layout:"],
@@ -114,6 +114,20 @@ test("no task reads objectives or duration only from the agenda, and ### is a sl
     assert.ok(!/(objectives?|duration)[^\n]{0,40}(from|in) `journal\.md` → `## Agenda`/i.test(read(file)) && !/`## Agenda` to get the learning objectives/.test(read(file)), `${file} reads objectives or duration only from the agenda`);
   }
   assert.ok(!read("data/liascript-cheat-sheet.md").includes("does not start a new slide"), "the cheat sheet says ### stays on the slide again");
+});
+
+test("cheat sheet quiz examples put the attribute comment above the options and hints unindented", () => {
+  const sheet = read("data/liascript-cheat-sheet.md");
+  for (const block of sheet.match(/```lia\n[\s\S]*?```/g) ?? []) {
+    const lines = block.split("\n");
+    lines.forEach((line, i) => {
+      if (/^<!-- data-(hint-button|max-trials|solution-button|text-)/.test(line)) {
+        assert.match(lines[i + 1] ?? "", /^(- )?\[/, `quiz comment not directly above the options:\n${block}`);
+      }
+      assert.ok(!/^\s+\[\[\?\]\]/.test(line), `indented hint:\n${block}`);
+    });
+  }
+  assert.ok(!sheet.includes("cannot be changed per quiz"), "the cheat sheet says feedback texts are fixed again");
 });
 
 test("the required-elements key is English; the German Erforderlich is only read in older journals", () => {
