@@ -33,14 +33,14 @@ collection:
   # Introduction section
   - html: >
       <div style="padding: 20px; background-color: rgba(11, 110, 117, 0.1); border-radius: 8px; margin: 20px 0;">
-        <h2>📚 Über diesen Kurs</h2>
+        <h2>📚 Über diese Vorlesung</h2>
         <p>
           Diese Vorlesung bietet eine <strong>praxisnahe Einführung in die Welt der Datenbanken</strong> 
           und vermittelt einen systematischen Überblick über unterschiedliche Paradigmen und ihre Einsatzszenarien.
         </p>
         <p>
-          Beginnend bei einfachen Datenquellen wie Textdateien, CSV, JSON, YAML oder TOML werden schrittweise 
-          moderne Systeme vorgestellt – von Key-Value-Stores über Object-Stores und Column-Stores bis hin zu 
+          Ausgehend von einfachen Datenquellen wie Textdateien, CSV, JSON, YAML oder TOML stellt die Vorlesung schrittweise 
+          moderne Systeme vor – von Key-Value-Stores über Object-Stores und Column-Stores bis hin zu 
           <strong>relationalen Datenbanken mit SQL</strong> und graphbasierten Ansätzen.
         </p>
         <p>
@@ -113,7 +113,7 @@ collection:
       <p>
         <strong>Block 2 startet mit einer interaktiven Live-Session (L7):</strong><br>
         <span style="color: #FF8C42; font-weight: bold;">SQL Introduction & Query Data (SELECT)</span> – Hands-on, direkt im Browser.<br>
-        Relationales Modell, Relationale Algebra und weitere SQL-Themen folgen schrittweise.<br>
+        Relationales Modell, relationale Algebra und weitere SQL-Themen folgen schrittweise.<br>
         Die Materialien für Block 2 werden nach und nach ergänzt.
       </p>
 
@@ -197,7 +197,7 @@ collection:
 
 
   - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/10-lecture.md
-    title: "L10: Mehr FROM Subqueries, CTEs, Joins"
+    title: "L10: Mehr zu FROM: Subqueries, CTEs, Joins"
     tags:
       - Joins
       - SQL
@@ -209,7 +209,7 @@ collection:
       - pdf-timeout: 120000
 
   - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/10-lecture-full.md
-    title: "L10-Complete: Mehr FROM Subqueries, CTEs, Joins"
+    title: "L10-Complete: Mehr zu FROM: Subqueries, CTEs, Joins"
     tags:
       - Joins
       - SQL
@@ -302,7 +302,6 @@ collection:
       - Abfragen
       - DDL
       - DML
-      - SQL
 
   - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/javascript-primer.md
     title: "JavaScript Primer"
@@ -322,7 +321,7 @@ collection:
         <ol>
           <li><strong>Grundlagen der Datenbank-Paradigmen</strong> verstehen und typische Einsatzszenarien erklären</li>
           <li><strong>Relationale Datenbanken mit SQL anwenden</strong>, einschließlich Datenmodellierung und Normalisierung</li>
-          <li><strong>Praktische Erfahrung sammeln</strong> mit verschiedenen Datenbanksystemen direkt im Browser</li>
+          <li><strong>Praktische Erfahrung</strong> mit verschiedenen Datenbanksystemen direkt im Browser sammeln</li>
           <li><strong>Kernkonzepte wie ACID und Transaktionen</strong> analysieren und vergleichen</li>
           <li><strong>Stärken und Schwächen</strong> unterschiedlicher Ansätze kritisch beurteilen</li>
         </ol>

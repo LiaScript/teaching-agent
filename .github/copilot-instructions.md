@@ -1734,7 +1734,7 @@ Only if installed (see `data/skills.md`) — never install them:
 4. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 5. Build the `collection:` entries: one entry per `materials/{number}-{slug}/README.md`, in session order; ask the user if any session should be excluded.
 6. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling, and review the internal reference for the latest workflow and publishing best practices.
-7. **Show the plan, then confirm in the terminal** — before any change: the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the files to commit, the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
+7. **Show the plan, then confirm in the terminal** — before any change (a complete `project.yaml` pattern: `data/example-project.yaml`): the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the files to commit, the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
 8. On confirmation: generate `project.yaml` in the root folder and the workflow file, write `journal.md` → `## Publishing` (`__State:__ not published`), then hand off to `:manage-git` to commit and push.
 9. Once pushed: set `__State:__ published on {date} (commit {short hash}) – GitHub Pages builds after the workflow run`, remind the instructor to activate GitHub Pages if it is not active yet, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
@@ -5876,6 +5876,342 @@ Compare the total estimate to the session's declared duration in `journal.md` �
 ==================== END: specs/data/duration-heuristic.md ====================
 
 
+==================== START: specs/data/example-project.yaml ====================
+
+```yaml
+title: >
+  <span style="background-color: rgba(11, 110, 117, 0.75); padding: 10px; color: white; border-radius: 5px;">
+    Databases Unlocked: A Beginner's Journey
+  </span>
+
+comment: >
+  <br>
+  <span style="background-color: rgba(255, 140, 66, 0.75); padding: 8px; color: white; border-radius: 5px;">
+    Interactive Database Systems Course with LiaScript
+  </span>
+
+logo: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/assets/img/logo/main.jpg
+
+footer: >
+  <hr>
+  <p>
+    <strong>Databases Unlocked</strong> – Eine praxisnahe Einführung in die Welt der Datenbanken<br>
+    Bachelor-Studierende der Informatik (3.–5. Semester)<br>
+    <br>
+    Erstellt mit <a href="https://liascript.github.io" target="_blank">LiaScript</a> – 
+    Markup für interaktive Open Educational Resources
+  </p>
+
+meta:
+  title: Databases Unlocked - Interactive Database Systems Course
+  description: >
+    Praxisnahe Einführung in Datenbanksysteme: Von Dateiformaten über Key-Value-, 
+    Document- und Column-Stores bis zu relationalen Datenbanken mit SQL. 
+    Alle Konzepte direkt im Browser mit Hands-on-Beispielen.
+
+# Main course collection
+collection:
+  # Introduction section
+  - html: >
+      <div style="padding: 20px; background-color: rgba(11, 110, 117, 0.1); border-radius: 8px; margin: 20px 0;">
+        <h2>📚 Über diese Vorlesung</h2>
+        <p>
+          Diese Vorlesung bietet eine <strong>praxisnahe Einführung in die Welt der Datenbanken</strong> 
+          und vermittelt einen systematischen Überblick über unterschiedliche Paradigmen und ihre Einsatzszenarien.
+        </p>
+        <p>
+          Ausgehend von einfachen Datenquellen wie Textdateien, CSV, JSON, YAML oder TOML stellt die Vorlesung schrittweise 
+          moderne Systeme vor – von Key-Value-Stores über Object-Stores und Column-Stores bis hin zu 
+          <strong>relationalen Datenbanken mit SQL</strong> und graphbasierten Ansätzen.
+        </p>
+        <p>
+          <strong>Besonderheit:</strong> Alle Paradigmen werden mit Hands-on-Beispielen direkt im Browser 
+          erlebbar (über LiaScript und DBMS wie DuckDB-Wasm, SQLite-Wasm, IndexedDB, PouchDB).
+        </p>
+      </div>
+
+  # Course Start / Orientation
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/0-lecture.md
+    tags:
+      - Einführung
+      - Übersicht
+      - Organisatorisches
+      
+  # Block 1: Paradigmen-Überblick (kompakt)
+  - html: >
+      <hr>
+      <h2 style="color: #0B6E75;">Block 1: Daten-Paradigmen – Von der Datei zum Column-Store</h2>
+      <p>
+        In diesem Block lernen Sie verschiedene Datenbank-Paradigmen kennen: 
+        Von einfachen Dateiformaten über Key-Value- und Document-Stores bis zu Column-Stores.
+        Jedes Paradigma wird mit praktischen Beispielen im Browser demonstriert.
+      </p>
+
+ 
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/1-lecture.md
+    title: "L1: Daten & Serialisierung + DIKW"
+    tags:
+      - CSV
+      - JSON
+      - YAML
+      - Serialisierung
+      - DIKW
+      - Grundlagen
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/2-lecture.md
+    title: "L2: Key-Value-Stores"
+    tags:
+      - Key-Value
+      - Redis
+      - NoSQL
+      - Cache
+      - Performance
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/3-lecture.md
+    title: "L3: Document Stores"
+    tags:
+      - Document Store
+      - MongoDB
+      - PouchDB
+      - Indizes
+      - Abfragen
+      - NoSQL
+      - Synchronisation
+  
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/5-lecture.md
+    title: "L5: Relationale Datenbanken (SQL) – Von der Idee zum Modell"
+    tags:
+      - Relationale Datenbanken
+      - SQL
+      - Normalisierung
+      - ER-Modell
+      - Datenmodellierung
+
+  # Block 2: Relationale Grundlagen (coming soon)
+  - html: >
+      <hr>
+      <h2 style="color: #0B6E75;">Block 2: Relationale Grundlagen</h2>
+      <p>
+        <strong>Block 2 startet mit einer interaktiven Live-Session (L7):</strong><br>
+        <span style="color: #FF8C42; font-weight: bold;">SQL Introduction & Query Data (SELECT)</span> – Hands-on, direkt im Browser.<br>
+        Relationales Modell, relationale Algebra und weitere SQL-Themen folgen schrittweise.<br>
+        Die Materialien für Block 2 werden nach und nach ergänzt.
+      </p>
+
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/7-lecture.md
+    title: "L7: SQL Introduction & Query Data (SELECT)"
+    tags:
+      - SQL
+      - Hands-on
+      - Live-Session
+      - SELECT
+      - Query
+      - Praxis
+    arguments:
+      - pdf-timeout: 120000
+  
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/7-lecture-full.md
+    title: "L7: SQL Introduction & Query Data (SELECT) – Vollversion"
+    tags:
+      - SQL
+      - SELECT
+      - Query
+      - Praxis
+    arguments:
+      - pdf-timeout: 120000
+  
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/8-lecture.md
+    title: "L8: SQL Data Definition (DDL) & Manipulation (DML)"
+    tags:
+      - SQL
+      - DDL
+      - DML
+      - ALTER
+      - CREATE
+      - INSERT
+      - UPDATE
+      - DELETE
+    arguments:
+      - pdf-timeout: 120000
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/8-lecture-full.md
+    title: "L8-Complete: SQL Data Definition (DDL) & Manipulation (DML)"
+    tags:
+      - SQL
+      - DDL
+      - DML
+      - ALTER
+      - CREATE
+      - INSERT
+      - UPDATE
+      - DELETE
+    arguments:
+      - pdf-timeout: 120000
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/9-lecture.md
+    title: "L9: Normalisierung & ER-Diagramme"
+    tags:
+      - Normalisierung
+      - ER-Diagramme
+      - 1NF
+      - 2NF
+      - 3NF
+      - Hands-on
+      - Live-Session
+    arguments:
+      - pdf-timeout: 120000
+
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/9-lecture-full.md
+    title: "L9-Complete: Normalisierung & ER-Diagramme"
+    tags:
+      - Normalisierung
+      - ER-Diagramme
+      - 1NF
+      - 2NF
+      - 3NF
+      - Hands-on
+      - Live-Session
+    arguments:
+      - pdf-timeout: 120000
+
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/10-lecture.md
+    title: "L10: Mehr zu FROM: Subqueries, CTEs, Joins"
+    tags:
+      - Joins
+      - SQL
+      - Subqueries
+      - CTEs
+      - Hands-on
+      - Live-Session
+    arguments:
+      - pdf-timeout: 120000
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/10-lecture-full.md
+    title: "L10-Complete: Mehr zu FROM: Subqueries, CTEs, Joins"
+    tags:
+      - Joins
+      - SQL
+      - Subqueries
+      - CTEs
+      - Hands-on
+      - Live-Session
+    arguments:
+      - pdf-timeout: 120000
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/12-lecture.md
+    title: "L12: Indizes & Performance"
+    tags:
+      - SQL
+      - Index
+      - IMDB
+      - Performance
+      - Analyse
+    arguments:
+      - pdf-timeout: 120000
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/13-lecture.md
+    title: "L13: Advanced SQL – SET Operations & Views"
+    tags:
+      - SQL
+      - SET Operations
+      - Views
+      - E-Commerce
+    arguments:
+      - pdf-timeout: 120000
+        
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/14-lecture.md
+    title: "L14: Transaktionen & ACID"
+    tags:
+      - SQL
+      - Transaktionen
+      - ACID
+      - Isolation
+      - Konsistenz
+    arguments:
+      - pdf-timeout: 120000
+        
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/15-lecture.md
+    title: "L15: Funktionen & Trigger"
+    tags:
+      - SQL
+      - Funktionen
+      - Trigger
+      - Automatisierung
+      - Konsistenz
+    arguments:
+      - pdf-timeout: 120000
+
+  # Block 3: Technologien – APIs & KI-Integration
+  - html: >
+      <hr>
+      <h2 style="color: #0B6E75;">Block 3: Technologien – Datenbankzugriff über APIs & KI</h2>
+      <p>
+        In diesem Block lernen Sie moderne Technologien kennen, um auf Datenbanken zuzugreifen:
+        Von <strong>KI-gestützten Abfragen mit MCP</strong> über klassische <strong>REST-APIs</strong>
+        bis zu <strong>GraphQL</strong> für flexible Datenabfragen.
+      </p>
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/mcp-tutorial.md
+    title: "MCP-Tutorial: KI-gestützte Datenbankabfragen"
+    tags:
+      - MCP
+      - Model Context Protocol
+      - KI
+      - GitHub Copilot
+      - IMDB
+      - SQLite
+      - Tutorial
+      - Hands-on
+    arguments:
+      - pdf-timeout: 120000
+
+  # Additional Resources
+  - html: >
+      <hr>
+      <h2 style="color: #FF8C42;">📖 Zusatzmaterialien</h2>
+      <p>Weitere Ressourcen und Primer für die Vorlesung</p>
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/sql-cheat-sheet.md
+    title: "SQL Cheat Sheet"
+    tags:
+      - SQL
+      - Primer
+      - Grundlagen
+      - Abfragen
+      - DDL
+      - DML
+
+  - url: https://raw.githubusercontent.com/andre-dietrich/Datenbankensysteme-Vorlesung/refs/heads/main/materials/javascript-primer.md
+    title: "JavaScript Primer"
+    tags:
+      - JavaScript
+      - Primer
+      - Grundlagen
+      - Browser
+
+
+  # Learning Objectives Summary
+  - html: >
+      <hr>
+      <div style="padding: 20px; background-color: rgba(255, 140, 66, 0.1); border-radius: 8px; margin: 20px 0;">
+        <h2>🎯 Lernziele</h2>
+        <p>Nach Abschluss der Vorlesung können Sie:</p>
+        <ol>
+          <li><strong>Grundlagen der Datenbank-Paradigmen</strong> verstehen und typische Einsatzszenarien erklären</li>
+          <li><strong>Relationale Datenbanken mit SQL anwenden</strong>, einschließlich Datenmodellierung und Normalisierung</li>
+          <li><strong>Praktische Erfahrung</strong> mit verschiedenen Datenbanksystemen direkt im Browser sammeln</li>
+          <li><strong>Kernkonzepte wie ACID und Transaktionen</strong> analysieren und vergleichen</li>
+          <li><strong>Stärken und Schwächen</strong> unterschiedlicher Ansätze kritisch beurteilen</li>
+        </ol>
+      </div>
+```
+
+==================== END: specs/data/example-project.yaml ====================
+
+
 ==================== START: specs/data/file-structure-modes.md ====================
 
 # File Structure Modes
@@ -7021,6 +7357,8 @@ liaex -i project.yaml --format project --output index
 ## 4. Project Website (`project.yaml`)
 
 A project website is a single `index.html` that aggregates multiple LiaScript courses into a searchable, filterable catalog.
+
+A complete real-world example (a German database lecture with blocks, cards, tags and HTML descriptions) is `data/example-project.yaml` — use it as a pattern, never copy its course content.
 
 ### 4.1 Full project.yaml Reference
 

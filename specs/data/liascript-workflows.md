@@ -320,6 +320,8 @@ liaex -i project.yaml --format project --output index
 
 A project website is a single `index.html` that aggregates multiple LiaScript courses into a searchable, filterable catalog.
 
+A complete real-world example (a German database lecture with blocks, cards, tags and HTML descriptions) is `data/example-project.yaml` — use it as a pattern, never copy its course content.
+
 ### 4.1 Full project.yaml Reference
 
 ```yaml
