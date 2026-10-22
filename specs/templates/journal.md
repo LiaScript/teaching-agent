@@ -169,7 +169,7 @@ _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 ## Visual Identity
 
 <!-- class="journal-actions" -->
-[🎨 Visual identity](agent:artist/create-visuals) `:create-visuals` · [🎨 Logo](agent:artist/create-logo) `:create-logo`
+[🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals` · [🎨 Logo](agent:artist/create-logo) `:agent artist` → `:create-logo`
 
 _Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
 

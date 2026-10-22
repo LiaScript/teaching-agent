@@ -24,9 +24,9 @@ The course context acts as the governance layer: it defines the course type, ter
 ## Steps
 
 1. Welcome the instructor in one or two sentences and say how many questions follow. Do not repeat a workflow explanation the instructor already received in this chat.
-   - **Reuse what is known.** Before asking, collect everything the instructor already said in this chat (`read_chat`) or in `journal.md` (topic, audience, number and length of lessons, how learners work, devices). Do not ask for it again; show it as a prefilled assumption ("Noted so far: … Correct?") and let the instructor correct it.
+   - **Reuse what is known.** Before asking, collect everything the instructor already said in this chat (`read_chat` when the preview is connected, otherwise this conversation) or in `journal.md` (topic, audience, number and length of lessons, how learners work, devices). Do not ask for it again; show it as a prefilled assumption ("Noted so far: … Correct?") and let the instructor correct it.
    - **No unfounded recommendations.** Mark an option as recommended only if the instructor's own statements support it, and name that reason in one line. Otherwise give no recommendation.
-   - **Language.** Ask in the language the instructor writes in. Until step 7 is saved, that language is the course language for all chat messages and option labels (see `data/agent-links.md` → Chat Conduct → Language before the frame).
+   - **Language.** Ask in the language the instructor writes in. Until step 9 is saved, that language is the course language for all chat messages and option labels (see `data/agent-links.md` → Chat Conduct → Language before the frame).
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
    - Copy the template **1:1, byte for byte** with the single command `cp specs/templates/journal.md journal.md` — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, the header's `language:` (course language code, step 7), and `## Dashboard` (via `tasks/update-dashboard.md`).

@@ -166,6 +166,20 @@ test("one unit word (no lectures-called), no early build link, cp only for the e
   assert.match(read("agents/teaching-agent.yaml"), /`cp specs\/templates\/journal\.md journal\.md`/);
 });
 
+test("leftovers of the first test round stay fixed", () => {
+  assert.ok(!read("tasks/init-course.md").includes("Until step 7 is saved"), "init-course names the wrong save step");
+  for (const file of ["tasks/init-course.md", "tasks/scaffold-course.md"]) {
+    assert.match(read(file), /read_chat`? when the preview is connected/, `${file} requires read_chat in the terminal`);
+  }
+  const agent = read("agents/teaching-agent.yaml");
+  for (const data of ["session-types.md", "didactic-methods.md", "duration-heuristic.md", "file-structure-modes.md"]) {
+    assert.ok(agent.includes(`    - ${data}`), `teaching-agent.yaml dependencies miss ${data}`);
+  }
+  const artistLines = read("templates/journal.md").split("\n").filter(line => line.includes("](agent:artist/"));
+  assert.deepEqual(artistLines.filter(line => /(?<!→ )`:create-(visuals|logo)`/.test(line)), [], "an action line shows an Artist command without :agent artist");
+  assert.match(read("tasks/validate-course.md"), /- Mode: course/);
+});
+
 test("the required-elements key is English; the German Erforderlich is only read in older journals", () => {
   const walk = dir => readdirSync(dir).flatMap(name => {
     const path = join(dir, name);

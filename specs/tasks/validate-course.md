@@ -137,14 +137,14 @@ Rules:
    - Learning objectives from `journal.md` → `## Outline` traceable through `journal.md` → `## Agenda` into materials
    - Numbering correct and no gaps
 
-9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads:
+9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads, as a list (lines directly below each other would merge into one paragraph):
 
    ```
-   Date: YYYY-MM-DD
-   Mode: course
-   Result: PASS / FAIL / PASS with concerns
-   Issues found: N
-   Sessions checked: N
+   - Date: YYYY-MM-DD
+   - Mode: course
+   - Result: PASS / FAIL / PASS with concerns
+   - Issues found: N
+   - Sessions checked: N
 
    <!-- data-key="course-findings" -->
    **{"Course-level findings", translated}:**

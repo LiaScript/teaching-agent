@@ -182,7 +182,7 @@ project_memory:
   journal_formatting_rules:
     - "In every mode (terminal and preview): change `journal.md` and material files only with the file-edit tool, and re-read a task file completely on every command. The shell is for the check scripts, the byte-for-byte copy of the empty journal (`cp specs/templates/journal.md journal.md`) and terminal-confirmed tasks only."
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
-    - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
+    - "Every `## Section` stays FLAT: no `###` sub-headings inside a section (in LiaScript every heading becomes its own slide); its content follows the `layout` of its template — `* __Label:__` bullets, and where the layout says so a summary table or a `<details>` block."
     - "Exceptions to the flat rule: `## Dashboard` (one JSON code block annotated with `@Dashboard.View`, no headings), `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews` / `#### Images`; never `#####` — use bold labels instead), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
@@ -321,6 +321,10 @@ dependencies:
     - liascript-cheat-sheet.md
     - agent-links.md
     - skills.md
+    - session-types.md
+    - didactic-methods.md
+    - duration-heuristic.md
+    - file-structure-modes.md
   workflows:
     - course-development.yaml
 

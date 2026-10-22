@@ -236,7 +236,7 @@ project_memory:
   journal_formatting_rules:
     - "In every mode (terminal and preview): change `journal.md` and material files only with the file-edit tool, and re-read a task file completely on every command. The shell is for the check scripts, the byte-for-byte copy of the empty journal (`cp specs/templates/journal.md journal.md`) and terminal-confirmed tasks only."
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
-    - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
+    - "Every `## Section` stays FLAT: no `###` sub-headings inside a section (in LiaScript every heading becomes its own slide); its content follows the `layout` of its template — `* __Label:__` bullets, and where the layout says so a summary table or a `<details>` block."
     - "Exceptions to the flat rule: `## Dashboard` (one JSON code block annotated with `@Dashboard.View`, no headings), `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews` / `#### Images`; never `#####` — use bold labels instead), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
@@ -375,6 +375,10 @@ dependencies:
     - liascript-cheat-sheet.md
     - agent-links.md
     - skills.md
+    - session-types.md
+    - didactic-methods.md
+    - duration-heuristic.md
+    - file-structure-modes.md
   workflows:
     - course-development.yaml
 
@@ -2238,9 +2242,9 @@ The course context acts as the governance layer: it defines the course type, ter
 ## Steps
 
 1. Welcome the instructor in one or two sentences and say how many questions follow. Do not repeat a workflow explanation the instructor already received in this chat.
-   - **Reuse what is known.** Before asking, collect everything the instructor already said in this chat (`read_chat`) or in `journal.md` (topic, audience, number and length of lessons, how learners work, devices). Do not ask for it again; show it as a prefilled assumption ("Noted so far: … Correct?") and let the instructor correct it.
+   - **Reuse what is known.** Before asking, collect everything the instructor already said in this chat (`read_chat` when the preview is connected, otherwise this conversation) or in `journal.md` (topic, audience, number and length of lessons, how learners work, devices). Do not ask for it again; show it as a prefilled assumption ("Noted so far: … Correct?") and let the instructor correct it.
    - **No unfounded recommendations.** Mark an option as recommended only if the instructor's own statements support it, and name that reason in one line. Otherwise give no recommendation.
-   - **Language.** Ask in the language the instructor writes in. Until step 7 is saved, that language is the course language for all chat messages and option labels (see `data/agent-links.md` → Chat Conduct → Language before the frame).
+   - **Language.** Ask in the language the instructor writes in. Until step 9 is saved, that language is the course language for all chat messages and option labels (see `data/agent-links.md` → Chat Conduct → Language before the frame).
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
    - Copy the template **1:1, byte for byte** with the single command `cp specs/templates/journal.md journal.md` — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, the header's `language:` (course language code, step 7), and `## Dashboard` (via `tasks/update-dashboard.md`).
@@ -2952,7 +2956,7 @@ Generated in sequence without interruption inside `journal.md`:
 2. Collect all inputs using structured questions where options are fixed, free text where content is needed:
    - If the skill `creativity` is available (see `data/skills.md`) and the instructor has only a vague idea, offer it once as an exploratory warm-up before the interview — never by default.
 
-   **Rules for all blocks:** reuse what is known (chat via `read_chat`, `journal.md`) as prefilled assumptions instead of asking again; ask in the instructor's own terms (the teacher questions of `tasks/init-course.md` steps 3, 4 and 6 — scope + how learners work, target group, file structure as a teacher question, terminology, audience override); option labels in the course language, never slugs; follow `data/agent-links.md` → Chat Conduct → Forms.
+   **Rules for all blocks:** reuse what is known (the chat — via `read_chat` when the preview is connected — and `journal.md`) as prefilled assumptions instead of asking again; ask in the instructor's own terms (the teacher questions of `tasks/init-course.md` steps 3, 4 and 6 — scope + how learners work, target group, file structure as a teacher question, terminology, audience override); option labels in the course language, never slugs; follow `data/agent-links.md` → Chat Conduct → Forms.
 
    **🎛️ Block 1 — Course basics (structured questions, one pass):**
    - Course type: as two teacher questions (scope + how learners work), mapped as in `tasks/init-course.md` step 3
@@ -3562,14 +3566,14 @@ Rules:
    - Learning objectives from `journal.md` → `## Outline` traceable through `journal.md` → `## Agenda` into materials
    - Numbering correct and no gaps
 
-9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads:
+9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads, as a list (lines directly below each other would merge into one paragraph):
 
    ```
-   Date: YYYY-MM-DD
-   Mode: course
-   Result: PASS / FAIL / PASS with concerns
-   Issues found: N
-   Sessions checked: N
+   - Date: YYYY-MM-DD
+   - Mode: course
+   - Result: PASS / FAIL / PASS with concerns
+   - Issues found: N
+   - Sessions checked: N
 
    <!-- data-key="course-findings" -->
    **{"Course-level findings", translated}:**
@@ -4335,7 +4339,7 @@ _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 ## Visual Identity
 
 <!-- class="journal-actions" -->
-[🎨 Visual identity](agent:artist/create-visuals) `:create-visuals` · [🎨 Logo](agent:artist/create-logo) `:create-logo`
+[🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals` · [🎨 Logo](agent:artist/create-logo) `:agent artist` → `:create-logo`
 
 _Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
 

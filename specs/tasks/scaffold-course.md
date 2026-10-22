@@ -51,7 +51,7 @@ Generated in sequence without interruption inside `journal.md`:
 2. Collect all inputs using structured questions where options are fixed, free text where content is needed:
    - If the skill `creativity` is available (see `data/skills.md`) and the instructor has only a vague idea, offer it once as an exploratory warm-up before the interview — never by default.
 
-   **Rules for all blocks:** reuse what is known (chat via `read_chat`, `journal.md`) as prefilled assumptions instead of asking again; ask in the instructor's own terms (the teacher questions of `tasks/init-course.md` steps 3, 4 and 6 — scope + how learners work, target group, file structure as a teacher question, terminology, audience override); option labels in the course language, never slugs; follow `data/agent-links.md` → Chat Conduct → Forms.
+   **Rules for all blocks:** reuse what is known (the chat — via `read_chat` when the preview is connected — and `journal.md`) as prefilled assumptions instead of asking again; ask in the instructor's own terms (the teacher questions of `tasks/init-course.md` steps 3, 4 and 6 — scope + how learners work, target group, file structure as a teacher question, terminology, audience override); option labels in the course language, never slugs; follow `data/agent-links.md` → Chat Conduct → Forms.
 
    **🎛️ Block 1 — Course basics (structured questions, one pass):**
    - Course type: as two teacher questions (scope + how learners work), mapped as in `tasks/init-course.md` step 3
