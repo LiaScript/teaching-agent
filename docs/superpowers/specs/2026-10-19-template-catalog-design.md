@@ -38,7 +38,7 @@ durchsuchen dieselben Daten.
 6. **Skills vorschlagen und installieren**: Fehlen die LiaScript-Skills,
    schlägt der Agent die Installation vor und installiert nach Zustimmung
    lokal im Projekt.
-7. **Browser-Tests absichern**: Playwright wird bei Bedarf nach Zustimmung
+7. **Browsertests absichern**: Playwright wird bei Bedarf nach Zustimmung
    installiert; `check-material.mjs` funktioniert auf allen Systemen oder meldet
    klar, was fehlt.
 
@@ -49,7 +49,7 @@ durchsuchen dieselben Daten.
 - Ein öffentlicher Template-Store oder eine Bewertungs-/Kommentarfunktion.
 - Automatisches Pflegen der gemeinsamen Liste ohne Pull Request.
 
-## Anti-Ziele (wäre ein Fehlschlag, auch wenn es technisch läuft)
+## Anti-Ziele (jedes wäre ein Fehlschlag, auch wenn es technisch läuft)
 
 - Der Agent schlägt ungeprüfte Fundstücke so vor, als wären sie geprüft, oder
   baut ein kaputtes Template ungefragt in den Kurs ein.
@@ -57,7 +57,7 @@ durchsuchen dieselben Daten.
 - Skills oder Templates werden ohne ausdrückliche Zustimmung installiert,
   importiert, veröffentlicht oder per Pull Request geteilt.
 - Der Katalog funktioniert nur mit Internet oder nur mit Claude Code.
-- Karten-Einträge, Makronamen oder Import-URLs werden erfunden.
+- Karteneinträge, Makronamen oder Import-URLs werden erfunden.
 
 ## Ablauf im Workflow
 
@@ -82,14 +82,14 @@ durchsuchen dieselben Daten.
    bietet der Agent an, zu suchen (Schritt 2 gezielt) oder ein eigenes Template
    entwickeln zu lassen.
 
-Die Reihenfolge zum Artist-Agenten (`:create-visuals`) bleibt offen; beide
+Die Reihenfolge relativ zum Artist-Agenten (`:create-visuals`) bleibt offen; beide
 werden nach der Didaktik vorgeschlagen.
 
 ## Der Katalog
 
 ### Dateien
 
-| Datei | Gehört | Inhalt | Bei Update des Teaching-Agenten |
+| Datei | Gehört zu | Inhalt | Bei Update des Teaching-Agenten |
 |---|---|---|---|
 | `specs/catalog/README.md` | Teaching-Agent-Repo | Katalogseite (LiaScript) | wird überschrieben |
 | `specs/catalog/templates.json` | Teaching-Agent-Repo | gemeinsame, kuratierte Liste | wird überschrieben |
@@ -141,13 +141,13 @@ der Agent die Templates in der Kurssprache.
 ### Darstellung (entschieden: Kartenraster)
 
 - Ein Suchfeld und Tag-Filter für **Fach**, **Zielgruppe** und **Status**
-  („✓ geprüft“, „neu gefunden“, „nur dieses Projekt“).
-- Jede Karte zeigt Icon, Name, Kurztext, Status-Abzeichen, Tags und zwei Buttons:
+  („✓ geprüft“, „neu gefunden, nicht geprüft“, „nur dieses Projekt“).
+- Jede Karte zeigt Icon, Name, Kurztext, Statusabzeichen, Tags und zwei Buttons:
   - **👁 Ausprobieren** – normaler Link auf `demo`: öffnet das README des
     Templates selbst im LiaScript-Viewer (Template-READMEs sind lauffähige
     LiaScript-Dokumente). Funktioniert ohne Agent und ohne DevServer. Der
     Katalog importiert selbst **kein** Template → keine Makro-Konflikte.
-  - **📥 In meinen Kurs übernehmen** – `agent:`-Link
+  - **▶️ In meinen Kurs übernehmen** – `agent:`-Link
     `agent:teaching/manage-templates?name={id}` mit sichtbarem Befehl
     `:manage-templates {id}`.
 - Umsetzung nach dem Muster der Dashboard-Library: Datenblock + Makro, das die
@@ -209,7 +209,7 @@ wie bisher). Danach wie heute: `import:` in den Journal-Kopf, Eintrag unter
    in einem eigenen Ordner außerhalb von `specs/` (Name: Builder-Entscheidung,
    z. B. `lia-templates/{id}/`), nach dem Muster von `specs/dashboard/`:
    README mit Makros + Beispielen, JS/CSS daneben, lokal importiert.
-3. Die Lehrkraft testet im Preview; Rückmeldungen gehen in den Steckbrief /
+3. Die Lehrkraft testet in der Vorschau; Rückmeldungen gehen in den Steckbrief /
    die nächste Runde.
 4. Der Agent **schlägt vor**, das Template als **eigenes Repo** zu hosten und
    weiterzuentwickeln (Nutzen: mehrere Projekte, Community). **Die Lehrkraft
@@ -221,7 +221,7 @@ wie bisher). Danach wie heute: `import:` in den Journal-Kopf, Eintrag unter
    **Ort nach dem Veröffentlichen (entschieden):** Der Ordner
    `lia-templates/{id}/` bleibt im Kursprojekt und wird ein **eigenes,
    verschachteltes git-Repo**; das Kurs-Repo ignoriert ihn per `.gitignore`. Dort
-   wird weiterentwickelt und im Preview des Kurses getestet. Jede veröffentlichte
+   wird weiterentwickelt und in der Vorschau des Kurses getestet. Jede veröffentlichte
    Änderung: neuer Tag im Template-Repo, dann stellt Development die Import-Zeilen
    im Journal-Kopf, unter `## Templates` und in allen Materialien auf den neuen Tag um.
    Kein Submodul, kein Subtree, kein Klon außerhalb des Projekts.
@@ -253,7 +253,7 @@ Neu:
   Befehls – genaue Flags prüft der Builder gegen die Doku des `skills`-CLI).
 - Stufe **confirm in terminal** (lädt Code aus dem Netz), auch wenn der Anstoß
   aus dem Preview-Chat kommt.
-- Lehnt die Lehrkraft ab: einmal pro Sitzung nicht erneut fragen; der Schritt
+- Lehnt die Lehrkraft ab: in dieser Unterhaltung nicht erneut fragen; der Schritt
   läuft ohne Skill weiter wie bisher.
 - Ohne Shell (Web-Chat): nur den Befehl nennen.
 - *(meine Entscheidung)* Installierte Skill-Ordner (`.claude/skills/`,
@@ -262,7 +262,7 @@ Neu:
   klont, wird bei Bedarf selbst gefragt. Ziel-Ordner ist der des laufenden
   Agenten (z. B. `.claude/skills/` unter Claude Code).
 
-## Werkzeuge: Browser-Tests mit Playwright
+## Werkzeuge: Browsertests mit Playwright
 
 Templates müssen im Browser getestet werden. Playwright ist außerdem **schon
 heute eine versteckte Voraussetzung**: `specs/dashboard/check-material.mjs`
@@ -274,9 +274,9 @@ Installation anbietet.
 Entschieden:
 
 1. **Interaktiv testen ohne Installation**: Beim Entwickeln testet der
-   Development-Agent im Preview der Lehrkraft mit dem DevServer-Werkzeug
-   `run_in_page` (rendert das Makro, gibt es Konsolenfehler) und die Lehrkraft
-   klickt selbst. Braucht nur den offenen Preview.
+   Development-Agent in der Vorschau der Lehrkraft mit dem DevServer-Werkzeug
+   `run_in_page` (Rendert das Makro? Gibt es Konsolenfehler?) und die Lehrkraft
+   klickt selbst. Braucht nur die offene Vorschau.
 2. **Automatische Tests mit der Playwright-Bibliothek**: Jedes eigene Template
    bekommt Modelltests (Muster `specs/dashboard/check.mjs`) und einen Browsertest.
    Fehlt Playwright, **fragt** der Agent und installiert nach Zustimmung **lokal
@@ -308,7 +308,7 @@ genannt):
 
 | Agent | Befehl | Zweck | Stufe |
 |---|---|---|---|
-| Teaching | neu, z. B. `:suggest-templates` | Vorschlagsschritt nach der Didaktik | run (nur lesen) bzw. start interview, falls er etwas notiert |
+| Teaching | neu, z. B. `:suggest-templates` | Vorschlagsschritt nach der Didaktik | start interview (schreibt `__Template selection:__` erst nach Bestätigung, siehe oben) |
 | Teaching | `:manage-templates {name?}` (besteht) | übernehmen; erweitert um Katalog-`id` | confirm in chat |
 | Teaching | – | Steckbrief schreiben (Teil des Vorschlagsschritts oder eigener Befehl) | start interview |
 | Development | neu, z. B. `:develop-template {id}` | entwickeln im Projekt | confirm in chat |
