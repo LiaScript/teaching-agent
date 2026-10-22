@@ -22,7 +22,7 @@ template:
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
   result_rules:
     - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable are only (a) media still to be produced in a named later step (images, audio) and (b) publishing metadata needed only for publishing (contact address, license).'
-    - '2. Any other ❌ on a required element (Session Type or Method `Erforderlich`) or a `[mechanical]` item → **FAIL**.'
+    - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
@@ -65,7 +65,7 @@ template:
       title: Type Consistency
       template: |
         **Type Consistency:**
-        - Session Type: {{type}} — Erforderlich (from `## Didactics` → `__Session Types:__`): {{required_elements}}
+        - Session Type: {{type}} — Required (from `## Didactics` → `__Session Types:__`): {{required_elements}}
         - {{type_consistency_findings}}
     - id: persona-style
       title: Persona & Style
@@ -81,7 +81,7 @@ template:
       title: Method Consistency
       template: |
         **Method Consistency:** (omit the field if no Session Method is in use)
-        - Session Method: {{method}} — Erforderlich (from `data/didactic-methods.md`): {{method_required_elements}}
+        - Session Method: {{method}} — Required (from `data/didactic-methods.md`): {{method_required_elements}}
         - {{method_findings}}
     - id: duration
       title: Duration (advisory)

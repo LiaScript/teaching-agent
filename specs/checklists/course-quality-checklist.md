@@ -84,8 +84,8 @@
 - [ ] [pedagogical] Question texts *and* answer options can be read aloud where the target group needs it
 - [ ] [pedagogical] Matrix/table quizzes have short column headers (one or two words) or are transposed so the options fit a narrow screen
 - [ ] [pedagogical] Hints and instructions never point to positions ("above", "below") across slides; they name the page title
-- [ ] [mechanical] Each session's content satisfies its declared Session Type's `Erforderlich` checklist from `## Didactics` → `__Session Types:__`
-- [ ] [mechanical] Each session's content satisfies its declared Session Method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
+- [ ] [mechanical] Each session's content satisfies its declared Session Type's `Required` checklist from `## Didactics` → `__Session Types:__`
+- [ ] [mechanical] Each session's content satisfies its declared Session Method's `Required` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
 - [ ] [advisory] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is a hint for the instructor, never a fail
 
 ## LiaScript Syntax (per material file)

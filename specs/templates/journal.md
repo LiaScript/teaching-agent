@@ -152,7 +152,7 @@ _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 
 * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
   1. __{{display name}}__ (slug: `{{slug}}`) — {{one-line criterion}}
-     Erforderlich: {{2–3 required elements}}
+     Required: {{2–3 required elements}}
 
 * __Difficulty Level:__
   {{beginner | intermediate | advanced}}

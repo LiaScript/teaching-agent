@@ -1779,8 +1779,8 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
    - Look up the resolved type in `journal.md` → `## Didactics` → `__Session Types:__`. If it doesn't match a defined slug, stop and ask — do not invent a type on the fly.
-   - Note its `Erforderlich` (required elements) checklist; Activities/Content in step 5 must satisfy it.
-   - Resolve the session's Method: if `journal.md` → `## Agenda` exists and has a Method column, use this session's value from there; otherwise use `journal.md` → `## Didactics` → `__Default Session Method:__`. If that default is `none`, skip Method entirely — no line is stored, no checklist applies. Note the method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Type checklist above.
+   - Note its `Required` checklist; Activities/Content in step 5 must satisfy it.
+   - Resolve the session's Method: if `journal.md` → `## Agenda` exists and has a Method column, use this session's value from there; otherwise use `journal.md` → `## Didactics` → `__Default Session Method:__`. If that default is `none`, skip Method entirely — no line is stored, no checklist applies. Note the method's `Required` checklist from `data/didactic-methods.md`, independently of the Type checklist above.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
@@ -2539,8 +2539,8 @@ Converts a **Session** into a detailed **Session Material**.
 1. Load the matching skeleton subsection from `journal.md` → `## Sessions`.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
-   - Look up the session's type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) and note its `Erforderlich` (required elements) checklist; the generated outline in step 7 must satisfy it.
-   - If the skeleton has a `**Method:**` line, look it up in `data/didactic-methods.md` → "Session Methods" and note both its structural guidance and its `Erforderlich` checklist — the generated outline in step 7 must satisfy this in addition to, and independently of, the Type checklist above.
+   - Look up the session's type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) and note its `Required` checklist; the generated outline in step 7 must satisfy it.
+   - If the skeleton has a `**Method:**` line, look it up in `data/didactic-methods.md` → "Session Methods" and note both its structural guidance and its `Required` checklist — the generated outline in step 7 must satisfy this in addition to, and independently of, the Type checklist above.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
@@ -3418,7 +3418,7 @@ Can be run in two modes:
 - `checklists/course-quality-checklist.md` — structured checklist
 - `tasks/validate-syntax.md` — full LiaScript syntax check, called as a sub-procedure (single source of truth for syntax rules)
 - `data/duration-heuristic.md` — reading time + activity time estimate, compared against the declared duration
-- `data/didactic-methods.md` — Session Method `Erforderlich` checklists, if a session method is in use
+- `data/didactic-methods.md` — Session Method `Required` checklists, if a session method is in use
 - `templates/session-validation.yaml` — template for each stored session validation report
 - File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`)
 - For session mode: the material document for this session (resolved per File Structure mode), matching overview row in `journal.md` → `## Sessions`, and matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
@@ -3460,8 +3460,8 @@ Rules:
    - [ ] No section is vague, content-free, or placeholder-only
    - [ ] References present where content claims are made
    - [ ] `[only if the skill `reference-checker` is available — see `data/skills.md` — and web access exists]` The session's references verified with `reference-checker`; record its summary (✅ / ⚠️ / 🚨 counts) and every 🚨 entry as findings in the report. Without the skill or web access, skip this check and say so in one line.
-   - [ ] Content satisfies the `Erforderlich` (required elements) checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
-   - [ ] `[if the session has a **Method:** line]` Content satisfies the `Erforderlich` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
+   - [ ] Content satisfies the `Required` checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
+   - [ ] `[if the session has a **Method:** line]` Content satisfies the `Required` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
    - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration for this session in `journal.md` → `## Agenda`. This is `[advisory]` — record the flag either way as a hint, never as ❌ or ⏳, and never change the result because of it.
 
    **Persona & style checks:**
@@ -3984,9 +3984,9 @@ template:
       template: |
         * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
           1. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion: what makes a session this type]
-             Erforderlich: [2–3 concrete, checkable required elements]
+             Required: [2–3 concrete, checkable required elements]
           2. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion]
-             Erforderlich: [2–3 concrete, checkable required elements]
+             Required: [2–3 concrete, checkable required elements]
     - id: difficulty-level
       title: Difficulty Level
       template: |
@@ -4292,7 +4292,7 @@ _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 
 * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
   1. __{{display name}}__ (slug: `{{slug}}`) — {{one-line criterion}}
-     Erforderlich: {{2–3 required elements}}
+     Required: {{2–3 required elements}}
 
 * __Difficulty Level:__
   {{beginner | intermediate | advanced}}
@@ -4774,7 +4774,7 @@ template:
       in multi-file mode, or the `##` chapter matching this session inside root
       `README.md` in single-file mode.
   title: 'Session {{number}} ({{type | title}})'
-  note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). Structure the outline below so it satisfies that type''s `Erforderlich` checklist.'
+  note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). Structure the outline below so it satisfies that type''s `Required` checklist.'
   heading_levels: 'multi-file: as below — `#` is the title of the own material document, `##` its parts. single-file: every heading one level lower — the session is the `## {{title}}` chapter of root `README.md` (never a `#`; the course title is the only `#` there), its parts are `###`.'
   sections:
     - id: outline
@@ -4864,12 +4864,12 @@ template:
         [▶️ Promote](agent:teaching/promote-session?number={{number}}) `:promote-session {{number}}` · [▶️ Build](agent:teaching/build-session?number={{number}}) `:build-session {{number}}`
 
         </details>
-      note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Erforderlich` checklist.'
+      note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Required` checklist.'
     - id: method
       title: Method
       template: |
         (inside the technical `<details>` block of `type`, see above)
-      note: '{{method}} is a slug from `data/didactic-methods.md` → "Session Methods", resolved from the matching Agenda row if an agenda exists, otherwise from `journal.md` → `## Didactics` → `__Default Session Method:__`. Omit this line entirely if the default is `none`. Content must satisfy that method''s `Erforderlich` checklist, independently of the Type checklist above.'
+      note: '{{method}} is a slug from `data/didactic-methods.md` → "Session Methods", resolved from the matching Agenda row if an agenda exists, otherwise from `journal.md` → `## Didactics` → `__Default Session Method:__`. Omit this line entirely if the default is `none`. Content must satisfy that method''s `Required` checklist, independently of the Type checklist above.'
     - id: kind
       title: Kind (visible)
       template: |
@@ -4944,7 +4944,7 @@ template:
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
   result_rules:
     - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable are only (a) media still to be produced in a named later step (images, audio) and (b) publishing metadata needed only for publishing (contact address, license).'
-    - '2. Any other ❌ on a required element (Session Type or Method `Erforderlich`) or a `[mechanical]` item → **FAIL**.'
+    - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
     - '`[advisory]` items (the duration estimate) never count for the result: never ❌ or ⏳, never listed under "Still missing"; mention a flagged one as a plain hint in the visible summary ("Note: …", translated) and in the technical report.'
@@ -4987,7 +4987,7 @@ template:
       title: Type Consistency
       template: |
         **Type Consistency:**
-        - Session Type: {{type}} — Erforderlich (from `## Didactics` → `__Session Types:__`): {{required_elements}}
+        - Session Type: {{type}} — Required (from `## Didactics` → `__Session Types:__`): {{required_elements}}
         - {{type_consistency_findings}}
     - id: persona-style
       title: Persona & Style
@@ -5003,7 +5003,7 @@ template:
       title: Method Consistency
       template: |
         **Method Consistency:** (omit the field if no Session Method is in use)
-        - Session Method: {{method}} — Erforderlich (from `data/didactic-methods.md`): {{method_required_elements}}
+        - Session Method: {{method}} — Required (from `data/didactic-methods.md`): {{method_required_elements}}
         - {{method_findings}}
     - id: duration
       title: Duration (advisory)
@@ -5227,8 +5227,8 @@ template:
 - [ ] [pedagogical] Question texts *and* answer options can be read aloud where the target group needs it
 - [ ] [pedagogical] Matrix/table quizzes have short column headers (one or two words) or are transposed so the options fit a narrow screen
 - [ ] [pedagogical] Hints and instructions never point to positions ("above", "below") across slides; they name the page title
-- [ ] [mechanical] Each session's content satisfies its declared Session Type's `Erforderlich` checklist from `## Didactics` → `__Session Types:__`
-- [ ] [mechanical] Each session's content satisfies its declared Session Method's `Erforderlich` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
+- [ ] [mechanical] Each session's content satisfies its declared Session Type's `Required` checklist from `## Didactics` → `__Session Types:__`
+- [ ] [mechanical] Each session's content satisfies its declared Session Method's `Required` checklist from `data/didactic-methods.md`, independently of the Session Type check above `[if a session method is set — i.e. journal.md → ## Didactics → __Default Session Method:__ is not "none"]`
 - [ ] [advisory] Estimated duration per `data/duration-heuristic.md` (reading time + activity time) is within 70%–150% of the declared duration in `journal.md` → `## Agenda` — a deviation is a hint for the instructor, never a fail
 
 ## LiaScript Syntax (per material file)
@@ -5721,7 +5721,7 @@ step, post the next steps to the chat:
 Didactic concepts fall into three layers here, each handled differently — do not mix them up:
 
 1. **Course Frameworks** — course-wide, named once, documentation only. No task behavior changes based on which one is chosen.
-2. **Session Methods** — chosen per session (with a course-level default), each with its own checkable `Erforderlich` list. Enforced the same way Session Types are (see `data/session-types.md`).
+2. **Session Methods** — chosen per session (with a course-level default), each with its own checkable `Required` list. Enforced the same way Session Types are (see `data/session-types.md`).
 3. **Validation Mechanisms** — concepts that are already implemented by existing tasks. Named here only so the vocabulary is available; nothing new to build.
 
 ## 1) Course Frameworks
@@ -5747,29 +5747,29 @@ The agent chooses it at `:create-didactics` (documentation only, named in the te
 
 ## 2) Session Methods
 
-Chosen per session (course-level default set in `## Didactics` → `__Default Session Method:__`, per-session override possible in `:create-agenda`). Each method has the same four-part definition format as Session Types (see `data/session-types.md` → "Definition format"): display name, slug, one-line criterion, `Erforderlich` checklist — and is enforced by `:validate-course` the same way, as a **second, independent** checklist alongside the session's Type checklist. The two never merge and never conflict — a session simply has to satisfy both.
+Chosen per session (course-level default set in `## Didactics` → `__Default Session Method:__`, per-session override possible in `:create-agenda`). Each method has the same four-part definition format as Session Types (see `data/session-types.md` → "Definition format"): display name, slug, one-line criterion, `Required` checklist — and is enforced by `:validate-course` the same way, as a **second, independent** checklist alongside the session's Type checklist. The two never merge and never conflict — a session simply has to satisfy both.
 
-`__Default Session Method:__` may also be set to **`none`** — an explicit opt-out. When set, no Session Method `Erforderlich` check runs anywhere in the course; nothing is blocked or degraded, it's simply not used.
+`__Default Session Method:__` may also be set to **`none`** — an explicit opt-out. When set, no Session Method `Required` check runs anywhere in the course; nothing is blocked or degraded, it's simply not used.
 
 ### Definitions
 
 ```
 __Gagné's Nine Events__ (slug: `gagne`) — Sequenced instruction with a clear
 attention–activation–practice–feedback structure. Fits presenter-led sessions.
-  Erforderlich: opening attention hook present; prior knowledge explicitly
+  Required: opening attention hook present; prior knowledge explicitly
   activated; practice with feedback present.
 
 __Cognitive Load Pacing__ (slug: `cognitive-load`) — Deliberate control of
 cognitive load: new concepts are dosed, complex material is scaffolded,
 redundant re-presentation is avoided.
-  Erforderlich: no more than ~3–5 new core concepts introduced in the session;
+  Required: no more than ~3–5 new core concepts introduced in the session;
   complex content broken into worked examples or sub-steps; no redundant
   restatement of the same information across formats without added value.
 
 __UDL Format Variety__ (slug: `udl`) — Universal Design for Learning: content
 offered through multiple representation/expression formats so different
 learners can access and demonstrate understanding.
-  Erforderlich: at least two distinct media formats used for core concepts
+  Required: at least two distinct media formats used for core concepts
   (text + diagram/video/interaction); at least one way for learners to
   demonstrate understanding beyond a single quiz format; basic accessibility
   considered (alt text, plain language).
@@ -5803,7 +5803,7 @@ No new mechanism needed for any of these — this table exists so the vocabulary
 Course Frameworks are documentation-only and Validation Mechanisms are already enforced elsewhere, so only Session Methods need their own loop — the same three-task loop Session Types already use:
 
 1. **Generation** — `:create-agenda` assigns the method per session (the default, or another one the agent picks for that session without asking; the instructor can change it any time); `:create-session` stores it on the skeleton; `:promote-session` follows its structural guidance when generating content.
-2. **Validation** — `:validate-course` (session and course mode) checks the material against the method's `Erforderlich` list, independently of the Session Type check.
+2. **Validation** — `:validate-course` (session and course mode) checks the material against the method's `Required` list, independently of the Session Type check.
 3. **Course-level check** — `checklists/course-quality-checklist.md` confirms every session's content matches its declared method's required elements before publishing (when a method is set).
 
 If `__Default Session Method:__` is missing entirely (not even explicitly `none`), `:validate-course` flags this as a gap rather than silently skipping the check — same principle as an undefined Session Type.
@@ -8068,15 +8068,15 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 ```
 * __Session Types:__
   1. __Vorlesung__ (slug: `vorlesung`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
-     Erforderlich: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
+     Required: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
   2. __Übung__ (slug: `uebung`) — Angeleitete Praxis.
-     Erforderlich: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
+     Required: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
 ```
 
 - **Display name** — free text, in the course's language/terminology.
 - **Slug** — short, stable, filename-safe (lowercase, no spaces). It appears only in technical details, never in commands or links. Computed once when the type is defined; do not rename later without checking existing file references (same rule as the session-folder slug in `data/file-structure-modes.md`).
 - **Criterion** — one sentence: what makes a session this type, not another.
-- **Erforderlich** (required elements) — 2–3 concrete, checkable items. This is what turns the type from a label into something `:validate-course` can actually check.
+- **Required** (required elements) — 2–3 concrete, checkable items. The key stays English in every course language (`Required:`); older journals use `Erforderlich:` for the same key — read it as `Required:` and write `Required:` when the entry is updated. This is what turns the type from a label into something `:validate-course` can actually check.
 
 ## Default suggestions by course type
 
@@ -8111,7 +8111,7 @@ Session commands identify a session by its number alone (`:promote-session 3`, `
 
 ## Enforcement loop
 
-A Session Type's `Erforderlich` checklist is not documentation-only — it closes a loop across three tasks:
+A Session Type's `Required` checklist is not documentation-only — it closes a loop across three tasks:
 
 1. **Generation** — `:create-session` and `:promote-session` fill Activities/Content so the required elements are present for the chosen type.
 2. **Validation** — `:validate-course` (session and course mode) checks the material against its type's required elements as part of the Content checks, and records the result in `templates/session-validation.yaml` → `type-consistency`.

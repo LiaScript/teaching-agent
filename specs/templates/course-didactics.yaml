@@ -64,9 +64,9 @@ template:
       template: |
         * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
           1. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion: what makes a session this type]
-             Erforderlich: [2–3 concrete, checkable required elements]
+             Required: [2–3 concrete, checkable required elements]
           2. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion]
-             Erforderlich: [2–3 concrete, checkable required elements]
+             Required: [2–3 concrete, checkable required elements]
     - id: difficulty-level
       title: Difficulty Level
       template: |

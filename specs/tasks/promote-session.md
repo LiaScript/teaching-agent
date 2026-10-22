@@ -30,8 +30,8 @@ Converts a **Session** into a detailed **Session Material**.
 1. Load the matching skeleton subsection from `journal.md` → `## Sessions`.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.
-   - Look up the session's type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) and note its `Erforderlich` (required elements) checklist; the generated outline in step 7 must satisfy it.
-   - If the skeleton has a `**Method:**` line, look it up in `data/didactic-methods.md` → "Session Methods" and note both its structural guidance and its `Erforderlich` checklist — the generated outline in step 7 must satisfy this in addition to, and independently of, the Type checklist above.
+   - Look up the session's type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) and note its `Required` checklist; the generated outline in step 7 must satisfy it.
+   - If the skeleton has a `**Method:**` line, look it up in `data/didactic-methods.md` → "Session Methods" and note both its structural guidance and its `Required` checklist — the generated outline in step 7 must satisfy this in addition to, and independently of, the Type checklist above.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.

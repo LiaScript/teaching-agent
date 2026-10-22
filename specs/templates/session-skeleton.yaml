@@ -55,12 +55,12 @@ template:
         [▶️ Promote](agent:teaching/promote-session?number={{number}}) `:promote-session {{number}}` · [▶️ Build](agent:teaching/build-session?number={{number}}) `:build-session {{number}}`
 
         </details>
-      note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Erforderlich` checklist.'
+      note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Required` checklist.'
     - id: method
       title: Method
       template: |
         (inside the technical `<details>` block of `type`, see above)
-      note: '{{method}} is a slug from `data/didactic-methods.md` → "Session Methods", resolved from the matching Agenda row if an agenda exists, otherwise from `journal.md` → `## Didactics` → `__Default Session Method:__`. Omit this line entirely if the default is `none`. Content must satisfy that method''s `Erforderlich` checklist, independently of the Type checklist above.'
+      note: '{{method}} is a slug from `data/didactic-methods.md` → "Session Methods", resolved from the matching Agenda row if an agenda exists, otherwise from `journal.md` → `## Didactics` → `__Default Session Method:__`. Omit this line entirely if the default is `none`. Content must satisfy that method''s `Required` checklist, independently of the Type checklist above.'
     - id: kind
       title: Kind (visible)
       template: |

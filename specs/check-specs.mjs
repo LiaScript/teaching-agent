@@ -106,6 +106,17 @@ test("templates and tasks agree on fields: agent subsections, agenda summary, de
   assert.match(read("data/duration-heuristic.md"), /For a single-lesson/, "reading pace for a single-lesson is undefined");
 });
 
+test("the required-elements key is English; the German Erforderlich is only read in older journals", () => {
+  const walk = dir => readdirSync(dir).flatMap(name => {
+    const path = join(dir, name);
+    return statSync(path).isDirectory() ? (name === "node_modules" ? [] : walk(path)) : [path];
+  });
+  const hits = walk(specs).filter(path => /\.(md|ya?ml)$/.test(path) && !path.endsWith("example-project.yaml"))
+    .flatMap(path => readFileSync(path, "utf8").split("\n").map(line => [path, line]))
+    .filter(([, line]) => line.includes("Erforderlich") && !/older journals use `Erforderlich:`/.test(line));
+  assert.deepEqual(hits.map(([path, line]) => `${path.slice(specs.length + 1)}: ${line.trim().slice(0, 80)}`), []);
+});
+
 test("session methods are chosen by the agent, never asked for per session", () => {
   const methods = read("data/didactic-methods.md");
   for (const old of ["confirms or changes it", "confirms, edits, or opts out", "default pre-selected"]) {

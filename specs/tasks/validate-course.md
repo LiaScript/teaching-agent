@@ -15,7 +15,7 @@ Can be run in two modes:
 - `checklists/course-quality-checklist.md` — structured checklist
 - `tasks/validate-syntax.md` — full LiaScript syntax check, called as a sub-procedure (single source of truth for syntax rules)
 - `data/duration-heuristic.md` — reading time + activity time estimate, compared against the declared duration
-- `data/didactic-methods.md` — Session Method `Erforderlich` checklists, if a session method is in use
+- `data/didactic-methods.md` — Session Method `Required` checklists, if a session method is in use
 - `templates/session-validation.yaml` — template for each stored session validation report
 - File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`)
 - For session mode: the material document for this session (resolved per File Structure mode), matching overview row in `journal.md` → `## Sessions`, and matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
@@ -57,8 +57,8 @@ Rules:
    - [ ] No section is vague, content-free, or placeholder-only
    - [ ] References present where content claims are made
    - [ ] `[only if the skill `reference-checker` is available — see `data/skills.md` — and web access exists]` The session's references verified with `reference-checker`; record its summary (✅ / ⚠️ / 🚨 counts) and every 🚨 entry as findings in the report. Without the skill or web access, skip this check and say so in one line.
-   - [ ] Content satisfies the `Erforderlich` (required elements) checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
-   - [ ] `[if the session has a **Method:** line]` Content satisfies the `Erforderlich` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
+   - [ ] Content satisfies the `Required` checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
+   - [ ] `[if the session has a **Method:** line]` Content satisfies the `Required` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
    - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration for this session in `journal.md` → `## Agenda`. This is `[advisory]` — record the flag either way as a hint, never as ❌ or ⏳, and never change the result because of it.
 
    **Persona & style checks:**

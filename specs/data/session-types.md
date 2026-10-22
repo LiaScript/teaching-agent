@@ -15,15 +15,15 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 ```
 * __Session Types:__
   1. __Vorlesung__ (slug: `vorlesung`) — Von Lehrenden geführte Wissensvermittlung, keine bewertete Aufgabe.
-     Erforderlich: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
+     Required: Inhaltsteil mit durchgehendem roten Faden; keine bewerteten Aktivitäten.
   2. __Übung__ (slug: `uebung`) — Angeleitete Praxis.
-     Erforderlich: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
+     Required: ≥1 konkrete Aufgabe bei den Aktivitäten, Musterlösung oder Feedback-Hinweis.
 ```
 
 - **Display name** — free text, in the course's language/terminology.
 - **Slug** — short, stable, filename-safe (lowercase, no spaces). It appears only in technical details, never in commands or links. Computed once when the type is defined; do not rename later without checking existing file references (same rule as the session-folder slug in `data/file-structure-modes.md`).
 - **Criterion** — one sentence: what makes a session this type, not another.
-- **Erforderlich** (required elements) — 2–3 concrete, checkable items. This is what turns the type from a label into something `:validate-course` can actually check.
+- **Required** (required elements) — 2–3 concrete, checkable items. The key stays English in every course language (`Required:`); older journals use `Erforderlich:` for the same key — read it as `Required:` and write `Required:` when the entry is updated. This is what turns the type from a label into something `:validate-course` can actually check.
 
 ## Default suggestions by course type
 
@@ -58,7 +58,7 @@ Session commands identify a session by its number alone (`:promote-session 3`, `
 
 ## Enforcement loop
 
-A Session Type's `Erforderlich` checklist is not documentation-only — it closes a loop across three tasks:
+A Session Type's `Required` checklist is not documentation-only — it closes a loop across three tasks:
 
 1. **Generation** — `:create-session` and `:promote-session` fill Activities/Content so the required elements are present for the chosen type.
 2. **Validation** — `:validate-course` (session and course mode) checks the material against its type's required elements as part of the Content checks, and records the result in `templates/session-validation.yaml` → `type-consistency`.
