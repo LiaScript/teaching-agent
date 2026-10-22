@@ -30,14 +30,13 @@ template:
       title: Course Profile
       template: |
         * __Terminology:__
-          1. sessions-called: [session | unit | block | lesson]
-          2. lectures-called: [lecture | module | chapter | lesson]
+          1. sessions-called: [session | unit | block | lesson — the word for one unit]
 
         * __Course Profile:__
           1. Persona type: [professor | coach | facilitator | tutor]
           2. Agenda required: [yes | optional | no]
           3. Pacing: [scheduled | learner-driven | event-based | n/a]
-          4. Assessment defaults: [quizzes | reflection | assignments | none]
+          4. Assessment defaults: [one or more of quizzes, self-check quizzes, reflection, group work, assignments — or none; may be marked optional]
           5. Units: [count × length, if known — e.g. 3 × 45 min; read by `:create-agenda` and the duration check]
 
     - id: file-structure

@@ -356,6 +356,8 @@ Mathematical formulas use LaTeX syntax.
 
 Inline formula: $E = mc^2$
 
+A pair of `$` starts math everywhere outside code. Write spreadsheet references, prices or other text with `$` as inline code (`` `$C$7` ``), otherwise it is set as a formula.
+
 Block formula as separate paragraph:
 
 $$

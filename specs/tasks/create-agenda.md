@@ -35,7 +35,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
        - **Later** — Skip agenda, create it later
        If no: redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: continue.
      - **`yes`** (required) → Continue without asking.
-   - Read terminology (sessions-called, lectures-called) and pacing model.
+   - Read terminology (sessions-called) and pacing model.
 2. Read learning objectives from the outline.
 3. Adopt didactic concept and course type from Didactics.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**

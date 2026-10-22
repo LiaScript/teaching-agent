@@ -4,7 +4,7 @@
 
 A session's `type` is **not** a fixed global enum (`lecture` / `exercise`). It is a per-course vocabulary, defined once in `journal.md` → `## Didactics` → `__Session Types:__` by `:create-didactics`, and referenced by slug everywhere else.
 
-This is a different layer than `journal.md` → `## Course Context` → `__Terminology:__` (`sessions-called`, `lectures-called`): Terminology names the *unit* (e.g. "what do we call one session — a lesson, a block?"). Session Types names the *format that unit takes* (e.g. "is this particular lesson a lecture, an exercise, a self-check?"). A course can have one `sessions-called` term and several Session Types.
+This is a different layer than `journal.md` → `## Course Context` → `__Terminology:__` (`sessions-called`): Terminology names the *unit* (e.g. "what do we call one session — a lesson, a block?"). Session Types names the *format that unit takes* (e.g. "is this particular lesson a lecture, an exercise, a self-check?"). A course can have one `sessions-called` term and several Session Types.
 
 It is also a different, orthogonal layer from **Session Methods** (`data/didactic-methods.md`): Type is the *format* a session takes, Method is the *didactic technique* used to structure and validate its content (e.g. Gagné's Nine Events, Cognitive Load Pacing). A session declares both independently — don't confuse a `**Type:**` line with a `**Method:**` line on the same skeleton.
 
@@ -34,9 +34,9 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 | lecture-series | **Vortrag** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
 | self-paced | **Lernmodul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
 | workshop | **Input** (`input`) — kurzer Theorieblock · **Praxisphase** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
-| single-lesson | Usually **one** type only (named after `lectures-called`); skip the discussion step unless the instructor wants to split the lesson into sub-types |
+| single-lesson | Usually **one** type only (named after what the lesson mainly is); skip the discussion step unless the instructor wants to split the lesson into sub-types |
 
-The display names are chosen so they never equal the default terminology of `tasks/init-course.md` (lecture, module, activity — translated); still check them against the course's real terminology. The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vortrag`, `uebung`), as `templates/course-didactics.yaml` requires.
+The display names are chosen so they never equal the default unit words of `tasks/init-course.md` (session, unit, block, lesson — translated); still check them against the course's real terminology. The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vortrag`, `uebung`), as `templates/course-didactics.yaml` requires.
 
 ## Resolving a session's type
 

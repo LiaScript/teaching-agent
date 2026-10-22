@@ -28,7 +28,7 @@ function findHints() {
   const outline = section("Outline");
   const didactics = section("Didactics");
   const mode = context.match(/Mode:\s*(single-file|multi-file)/)?.[1];
-  const layoutRow = context.match(/\|\s*\*\*(Aufbau|Structure|Layout)\*\*\s*\|([^|\n]*)\|/)?.[2] ?? "";
+  const layoutRow = context.match(/\|\s*(?:\*\*)?(Aufbau|Structure|Layout)(?:\*\*)?\s*\|([^|\n]*)\|/)?.[2] ?? "";
   if (mode === "multi-file" && /Kapitel|chapter/i.test(layoutRow) && !/eigene[nr]? (Link|Datei)|own (link|file)/i.test(layoutRow)) {
     hints.push({ key: "file-structure", text: "Course Context describes chapters in one course, but File Structure is multi-file" });
   }
@@ -107,8 +107,10 @@ const header = sessions.match(/^\|\s*#\s*\|(.*)\|\s*$/m)?.[1].split("|").map(cel
 const column = (name, fromEnd) => header.indexOf(name) >= 0 ? header.indexOf(name) : header.length - fromEnd;
 const projectDir = dirname(resolve(file));
 const fileMode = section("Course Context").match(/Mode:\s*(single-file|multi-file)/)?.[1];
-const materialExists = number => fileMode === "single-file"
-  ? existsSync(join(projectDir, "README.md"))
+// single-file: the unit is a ## chapter of README.md whose heading contains the unit title
+const readme = () => existsSync(join(projectDir, "README.md")) ? readFileSync(join(projectDir, "README.md"), "utf8") : "";
+const materialExists = (number, title) => fileMode === "single-file"
+  ? readme().split("\n").some(line => line.startsWith("## ") && (!title || line.toLowerCase().includes(title.toLowerCase())))
   : existsSync(join(projectDir, "materials")) && readdirSync(join(projectDir, "materials")).some(name => name.startsWith(`${number}-`) && existsSync(join(projectDir, "materials", name, "README.md")));
 const doneRows = new Set();
 for (const row of sessions.matchAll(/^\|\s*(\d+)\s*\|(.*)\|\s*$/gm)) {
@@ -116,7 +118,7 @@ for (const row of sessions.matchAll(/^\|\s*(\d+)\s*\|(.*)\|\s*$/gm)) {
   if (header.length < 6) continue;
   const done = cells[column("Done", 2)];
   if (done?.includes("✅")) doneRows.add(row[1]);
-  if (fileMode && cells[column("Material", 3)]?.includes("✅") && !materialExists(row[1])) problems.push(`unit ${row[1]}: "Material ✅" but the material document is missing (${fileMode === "single-file" ? "README.md" : `materials/${row[1]}-…/README.md`})`);
+  if (fileMode && cells[column("Material", 3)]?.includes("✅") && !materialExists(row[1], cells[header.indexOf("Title") >= 0 ? header.indexOf("Title") : 0])) problems.push(`unit ${row[1]}: "Material ✅" but the material document is missing (${fileMode === "single-file" ? "README.md" : `materials/${row[1]}-…/README.md`})`);
   if (done && done.includes("✅")) {
     const block = sessions.split(new RegExp(`^### ${row[1]}\\. `, "m"))[1]?.split(/^### \d+\. /m)[0] ?? "";
     if (!/#### Validation Report[\s\S]*?__Result:__\s*PASS(?!\s*with)/.test(block)) problems.push(`unit ${row[1]}: "Done ✅" without a passed check (Validation Report with "Result: PASS" – not "with concerns" – is missing)`);
@@ -141,6 +143,13 @@ for (const href of hrefs.filter(item => item.startsWith("#"))) {
   if (/^#\d+$/.test(href)) problems.push(`link ${href} is a bare slide number – use the heading anchor (it moves when slides are added)`);
   else if (!anchors.has(decodeURIComponent(href).toLowerCase())) problems.push(`link ${href} matches no heading – LiaScript opens slide 1 instead (anchor = full heading text, lower case, spaces → "-", punctuation kept)`);
 }
+// The start link below the title and the course summary are written by tasks, not by the dashboard.
+const startLinks = source.split(/<!-- class="journal-start" -->/)[1]?.trimStart().split("\n\n")[0] ?? "";
+for (const [, link] of startLinks.matchAll(/\]\((#[^)\s]+)\)/g)) {
+  if (!anchors.has(decodeURIComponent(link).toLowerCase())) problems.push(`start link ${link} matches no heading – use the full heading anchor`);
+}
+const summary = section("Validation").split(/^### Latest Validation Summary[^\n]*\n/m)[1]?.split(/^#{1,3} /m)[0].replace(/<!--[\s\S]*?-->/g, "") ?? "";
+if (/\b(Date|Result):/.test(summary) && !(/\bMode:\s*\S/.test(summary) && /\bResult:\s*\S/.test(summary))) problems.push("Latest Validation Summary needs the key lines Mode: and Result: (read by the publishing gate)");
 // Visible commands must not show raw placeholders like {description}.
 for (const href of hrefs) if (/\{[a-z_-]+\??\}/i.test(href)) problems.push(`link ${href} contains a raw placeholder – pass the value or omit the parameter`);
 (function walkCommands(value) {

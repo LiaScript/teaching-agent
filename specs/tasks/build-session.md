@@ -30,6 +30,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 ## Confirmations
 
 - The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only.
+- Sub-procedures called by this task do not refresh the dashboard themselves; Step 4 runs `tasks/update-dashboard.md` once, also when the run stops early.
 - Nothing stays unseen: the closing summary lists every applied fix with page title and before → after.
 - **Outside the project** it covers nothing: if Step 3 takes the browser route of `tasks/generate-image.md` (no own image tool), ask **once in the terminal** (tier "confirm in terminal") for all images of this run before it starts. Without that confirmation, skip Step 3 and say so in the closing summary. With the agent's own image tool, the start confirmation covers Step 3.
 

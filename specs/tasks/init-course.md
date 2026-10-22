@@ -28,7 +28,7 @@ The course context acts as the governance layer: it defines the course type, ter
    - **No unfounded recommendations.** Mark an option as recommended only if the instructor's own statements support it, and name that reason in one line. Otherwise give no recommendation.
    - **Language.** Ask in the language the instructor writes in. Until step 7 is saved, that language is the course language for all chat messages and option labels (see `data/agent-links.md` → Chat Conduct → Language before the frame).
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
-   - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
+   - Copy the template **1:1, byte for byte** with the single command `cp specs/templates/journal.md journal.md` — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, the header's `language:` (course language code, step 7), and `## Dashboard` (via `tasks/update-dashboard.md`).
    - This copy is the only write allowed before the save confirmation in step 9 (`data/agent-links.md` → confirmation tiers): it contains nothing the instructor said. Every content change waits for step 9.
    - If `journal.md` already exists, leave it untouched and only work on the sections below.
@@ -61,11 +61,11 @@ The course context acts as the governance layer: it defines the course type, ter
 5. The Teaching-Agent builds LiaScript courses only — never ask for a platform. If the instructor mentions another one, say in one line that this assistant creates LiaScript material, which can later be exported (e.g. as a SCORM package for a learning platform). Accessibility is not asked: LiaScript brings read-aloud (text to speech), screen-reader labels and keyboard navigation for every course, and the material rules (alt texts, read-aloud for what learners must read, the question as the quiz label) apply to every course. Special needs of the learners (e.g. dyslexia, little German) belong to the target group, where the tasks take them into account.
 6. Based on the course type, set the profile defaults:
 
-   | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
+   | Type             | Unit word         | Persona         | Agenda default | Pacing          | Assessment              |
    | ---------------- | ----------------- | --------------- | -------------- | --------------- | ----------------------- |
-   | lecture-series   | session / lecture | professor       | yes            | scheduled       | quizzes + assignments   |
-   | self-paced       | unit / module     | coach           | optional       | learner-driven  | self-check quizzes      |
-   | workshop         | block / activity  | facilitator     | yes            | event-based     | reflection + group work |
+   | lecture-series   | session           | professor       | yes            | scheduled       | quizzes + assignments   |
+   | self-paced       | unit              | coach           | optional       | learner-driven  | self-check quizzes      |
+   | workshop         | block             | facilitator     | yes            | event-based     | reflection + group work |
    | single-lesson    | lesson            | tutor           | optional       | n/a             | optional quiz           |
    | improve-existing | (from existing)   | (from existing) | optional       | (from existing) | (from existing)         |
 
@@ -79,12 +79,12 @@ The course context acts as the governance layer: it defines the course type, ter
    | single-lesson | single-file |
    | improve-existing | detected in `:analyze-existing` |
 
-   Ask the file structure as a **teacher question** instead of stating a default (single choice, plain labels):
+   For a single lesson do not ask: it is `single-file` (one link); name it in one line of the summary. For every other course type, ask the file structure as a **teacher question** instead of stating a default (single choice, plain labels):
    1. "One link for all units — learners work through the chapters of one course" → `single-file`
    2. "One link per unit — each unit is opened on its own" → `multi-file`
-   Recommend 1 for up to about 6 short units (one link or QR code, progress in one place) and say why in one line; otherwise give the type default above without a recommendation.
+   Recommend 1 only if the instructor has named the number of units and it is up to about 6 short units (one link or QR code, progress in one place) — then say why in one line; otherwise give the type default above without a recommendation.
 
-   **Terminology:** set `sessions-called` and `lectures-called` to the words the instructor will see in the journal, in the course language and fitting the setting (e.g. school: the local words for "learning unit" / "chapter"). Use exactly these words in all instructor-facing text and in the Dashboard.
+   **Terminology:** set `sessions-called` to the word the instructor will see for one unit in the journal, in the course language and fitting the setting (e.g. school: the local word for "lesson" or "learning unit"). Use exactly these words in all instructor-facing text and in the Dashboard.
 
    **Audience override:** for school learners (primary or secondary school), never use the persona type `professor`; use `coach` (learner-driven) or `tutor` (teacher-led).
 
@@ -113,7 +113,7 @@ The course context acts as the governance layer: it defines the course type, ter
     - Add `import: {url}` to the main metadata header if missing
     - Create or update `journal.md` → `## Templates`
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
-11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
+11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" or "not published" are translated; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
 12. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
    2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.

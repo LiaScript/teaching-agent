@@ -8,7 +8,7 @@
 
 - [ ] [mechanical] `journal.md` → `## Course Context` exists
 - [ ] [mechanical] Course type defined
-- [ ] [mechanical] Terminology set (sessions-called, lectures-called)
+- [ ] [mechanical] Terminology set (sessions-called)
 - [ ] [mechanical] Language & tone conventions set
 - [ ] [mechanical] Agenda flag correct (yes / no / optional)
 - [ ] [mechanical] Person (Sie / Du / you) set

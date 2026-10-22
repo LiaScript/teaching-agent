@@ -72,13 +72,12 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
 
 * __Terminology:__
   1. sessions-called: {{session | unit | block | lesson | ...}}
-  2. lectures-called: {{lecture | module | chapter | lesson | ...}}
 
 * __Course Profile:__
   1. Persona type: {{professor | coach | facilitator | tutor}}
   2. Agenda required: {{yes | optional | no}}
   3. Pacing: {{scheduled | learner-driven | event-based}}
-  4. Assessment defaults: {{quizzes | reflection | assignments | none}}
+  4. Assessment defaults: {{one or more of quizzes, self-check quizzes, reflection, group work, assignments — or none}}
   5. Units: {{count × length, if known}}
 
 * __File Structure:__
@@ -124,6 +123,9 @@ _Filled by `:create-outline` from `templates/course-outline.yaml`._
   1. {{clear learning objective with application scenario}}
   2. {{clear learning objective with application scenario}}
   3. {{clear learning objective with application scenario}}
+
+* __Session Overview:__
+  {{session → objective → self-check, as a list or a table with at most 3 columns}}
 
 ---
 
@@ -253,18 +255,30 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 * __Overview:__
   {{number of sessions, duration, pacing — 2–4 sentences}}
 
+* __Time Budget:__
+  {{per time slot: slot length − setup − wrap-up = working time; sum of the mandatory units; buffer}}
+
 * __Modules / Sessions:__
 
-  | # | Title | Type | Duration | Learning Objective | Material |
-  |---|-------|------|----------|--------------------|----------|
-  | 1 | {{title}} | {{slug from `## Didactics` → `__Session Types:__`}} | {{duration}} | {{objective}} | {{material path — resolved from `## Course Context` → `__File Structure:__`; see `data/file-structure-modes.md`}} |
+  <!-- data-type="none" -->
+  | No. | Title | Time | Kind | Objectives |
+  |---|---|---|---|---|
+  | 1 | {{title (mandatory/optional)}} | {{time}} | {{display name of the Session Type}} | {{objectives}} |
+
+  <details><summary>Technical settings for the assistant</summary>
+
+  | No. | type slug | method slug | material path |
+  |---|---|---|---|
+  | 1 | {{slug}} | {{method slug}} | {{material path, see `data/file-structure-modes.md`}} |
+
+  </details>
 
 ---
 
 ## Sessions
 
 <!-- class="journal-actions" -->
-[▶️ New session](agent:teaching/create-session) `:create-session <number>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
+[▶️ Didactics first](agent:teaching/create-didactics) `:create-didactics`
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview first — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`) — then one `### {n}. {title}` subsection per session._
 

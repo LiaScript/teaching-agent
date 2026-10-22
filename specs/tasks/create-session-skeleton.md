@@ -13,7 +13,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 - Didactic concept from `journal.md` → `## Didactics`
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
-- Terminology from `journal.md` → `## Course Context` (sessions-called, lectures-called)
+- Terminology from `journal.md` → `## Course Context` (sessions-called)
 - Default Session Method from `journal.md` → `## Didactics` → `__Default Session Method:__`, and the matching session's Method column in `journal.md` → `## Agenda` if an agenda exists (see `data/didactic-methods.md`)
 
 ## Output
@@ -35,7 +35,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - All texts of this skeleton reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.
-7. Save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
+7. **Before saving:** show the new unit as it will be written (status line, kind, summary, content, activities) with "Save" / "Change something" — also in the terminal. Then save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
    The `## Sessions` section has one canonical structure:
    1. The overview directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`)
    2. One `### {number}. {title}` subsection per session below the overview

@@ -30,7 +30,8 @@ For each activity, discussion, exercise, or quiz block in the material:
 | Short task (one step, e.g. a single formula or one matching item) | 2–4 min each |
 | Teacher-led phase (board, demonstration, class talk) | the duration the instructor states, otherwise 5–10 min |
 | Short discussion prompt | 8–10 min |
-| Group exercise / hands-on task | 15–20 min |
+| Group or pair exercise / hands-on task | 15–20 min, or the duration the instructor states |
+| Gap text | 0.5–1 min per gap |
 | Video/demo embed | stated media length, or 5 min default |
 | Case study / longer discussion | 15–20 min |
 

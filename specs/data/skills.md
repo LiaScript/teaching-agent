@@ -26,8 +26,8 @@ counts as available if **either** holds:
    needs them (they are written for progressive loading — do not read all of
    them up front).
 
-Only check for file existence, with the agent's file-search or file-reading tool
-(glob) — not with shell commands (`ls`), see the shell rule in `CLAUDE.md` → Agent
+Only check for file existence, with the agent's file-search tool (glob) or, without
+one, by reading `SKILL.md` at each known path with the file-reading tool — not with shell commands (`ls`), see the shell rule in `CLAUDE.md` → Agent
 Links; never download, clone, or run `npx skills`. In a web chat without file access, nothing is detectable: treat
 all skills as unavailable.
 

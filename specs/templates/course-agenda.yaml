@@ -25,6 +25,9 @@ template:
     - id: overview
       title: Overview
       template: 'Short overview of the agenda, learning objectives, didactics & course type.'
+    - id: time-budget
+      title: Time Budget
+      template: 'Per time slot: slot length − setup − wrap-up = working time; sum of the mandatory units; buffer; phases outside the material.'
     - id: modules
       title: Modules / Sessions
       template: >

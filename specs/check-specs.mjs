@@ -14,30 +14,30 @@ const read = path => readFileSync(join(specs, path), "utf8");
 
 // File → sentences that must stay (one key phrase per rule).
 const required = {
-  "tasks/init-course.md": ["builds LiaScript courses only — never ask for a platform", "Accessibility is not asked", "follow the course language in terminal mode too", "the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
+  "tasks/init-course.md": ["For a single lesson do not ask", "only if the instructor has named the number of units", "builds LiaScript courses only — never ask for a platform", "Accessibility is not asked", "follow the course language in terminal mode too", "the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
   "tasks/scaffold-course.md": ["Guiding figure / instructor persona", "No agenda — decided with the course frame", "8b. Set `language:`", "Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
   "tasks/create-outline.md": ["Start from the instructor's goal", "Repeat this time check after every revision"],
   "tasks/create-didactics.md": ["in its short form", "do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`", "merge, never overwrite", "data-from=\"didactics\""],
   "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary", "If later: stop here", "do not ask about methods"],
-  "tasks/create-session-skeleton.md": ["data-key", "Show the new unit", "can be solved with the material the learners get"],
+  "tasks/create-session-skeleton.md": ["also in the terminal", "data-key", "Show the new unit", "can be solved with the material the learners get"],
   "tasks/coauthor-materials.md": ["**Course-wide decisions:**", "never present it as checked", "Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first", "never before it —"],
   "tasks/validate-course.md": ["Items only the instructor can resolve are not in scope", "With **PASS with concerns**", "Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
-  "data/file-structure-modes.md": ["`narrator:` a voice for that language", "3. **Images:**"],
+  "data/file-structure-modes.md": ["Umlauts and ß are transliterated", "Title slide (single-file, first unit)", "`narrator:` a voice for that language", "3. **Images:**"],
   "tasks/create-image.md": ["`<!--- image: {image-slug} --->`", "`prompt-only`", "no visual identity yet", "Mark the spot in the material"],
-  "data/session-types.md": ["never equal the default terminology", "Objectives and duration of a session", "Never leave a check without objectives"],
+  "data/session-types.md": ["never equal the default unit words", "Objectives and duration of a session", "Never leave a check without objectives"],
   "tasks/update-dashboard.md": ["States are exclusive", "The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["without one, say so in the dated line", "does not reopen a check", "Change path after a check", "Called from `:build-session`"],
   "tasks/generate-image.md": ["replace the marker", "never by its name", "Only once the file exists"],
-  "tasks/build-session.md": ["prompt-only mode", "every factual statement that could not be verified", "one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
-  "tasks/create-project.md": ["never `.cache/`", "**Version:**", "**Contact address:**", "Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
+  "tasks/build-session.md": ["do not refresh the dashboard themselves", "prompt-only mode", "every factual statement that could not be verified", "one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
+  "tasks/create-project.md": ["1b. Only once the gate is open", "the contact address was not saved either", "never `.cache/`", "**Version:**", "**Contact address:**", "Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
   "tasks/update-project.md": ["Show the plan, then confirm in the terminal"],
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["checked only by the publishing gate", "Findings returned to a caller never contain line numbers", "is never ❌ for it"],
   "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback", "Preview required"],
   "data/agent-links.md": ["checked ✅ → 👁 `preview`", "check failed → `coauthor-materials?number={n}`", "`agent` (`:configure-agent`) is one of", "`slide` is a positive integer", "never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
-  "data/liascript-cheat-sheet.md": ["**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\""],
+  "data/liascript-cheat-sheet.md": ["A pair of `$` starts math everywhere outside code", "**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\""],
   "templates/course-context.yaml": ["layout:", "Target Group"],
   "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
   "templates/course-didactics.yaml": ["layout:"],
@@ -45,7 +45,7 @@ const required = {
   "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "check failed – revision needed", "revised – check open", "passed with concerns – your decision needed", "never\n        relative to another optional block"],
   "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
   "templates/session-validation.yaml": ["counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
-  "templates/journal.md": ["\"title\": \"Publish\"", "* __Didactic Framework:__", "copied from Course Context", "journal-start", "Target Group", "## Publishing"],
+  "templates/journal.md": ["* __Session Overview:__", "* __Time Budget:__", "\"title\": \"Publish\"", "* __Didactic Framework:__", "copied from Course Context", "journal-start", "Target Group", "## Publishing"],
   "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
   "agents/teaching-agent.yaml": [":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**"],
 };
@@ -153,6 +153,14 @@ test("the course is always LiaScript: no platform or accessibility question, no 
   for (const file of ["tasks/init-course.md", "tasks/scaffold-course.md", "templates/course-context.yaml", "templates/journal.md"]) {
     assert.ok(!/Accessibility: (\[|\{\{)?required/.test(read(file)), `${file} asks for or stores accessibility again`);
   }
+});
+
+test("one unit word (no lectures-called), no early build link, cp only for the empty journal", () => {
+  for (const file of ["tasks/init-course.md", "templates/course-context.yaml", "templates/journal.md", "data/session-types.md", "tasks/create-didactics.md", "checklists/course-quality-checklist.md"]) {
+    assert.ok(!read(file).includes("lectures-called"), `${file} still uses lectures-called`);
+  }
+  assert.ok(!read("templates/session-skeleton.yaml").includes("agent:teaching/build-session"), "the skeleton offers build-session before an approved unit");
+  assert.match(read("agents/teaching-agent.yaml"), /`cp specs\/templates\/journal\.md journal\.md`/);
 });
 
 test("the required-elements key is English; the German Erforderlich is only read in older journals", () => {
@@ -273,6 +281,26 @@ test("Material ✅ needs the material document, and a done unit needs Done ✅",
   assert.match(run.output, /dashboard shows unit 1 as done/);
 });
 
+test("the journal check reads plain table labels, single-file chapters, the start link and the course summary", () => {
+  const layout = mode => `* __File Structure:__\n  1. Mode: ${mode}\n\n| Item | Decided |\n|---|---|\n| Aufbau | ein Kurs mit Kapiteln |`;
+  const hint = checkJournal(journal({ context: layout("multi-file") }));
+  assert.equal(hint.status, 2, hint.output);
+  assert.match(hint.output, /\[file-structure\]/);
+  const table = "| # | Title | Type | Skeleton | Material | Done | Notes |\n|---|---|---|---|---|---|---|\n| 1 | Intro | module | ✅ | ✅ | ❌ | |";
+  const single = journal({ context: "* __File Structure:__\n  1. Mode: single-file" }).replace("## Sessions\n\n", `## Sessions\n\n${table}\n\n`);
+  assert.equal(checkJournal(single, { "README.md": "# X\n\n## Something else" }).status, 2);
+  assert.equal(checkJournal(single, { "README.md": "# X\n\n## Stunde: Intro" }).status, 0);
+  const start = journal().replace("# X", "# X\n\n<!-- class=\"journal-start\" -->\n[Open the overview →](#no-such-heading)");
+  const run = checkJournal(start);
+  assert.equal(run.status, 2, run.output);
+  assert.match(run.output, /#no-such-heading/);
+  const summary = journal() + "\n\n## Validation\n\n### Latest Validation Summary\n\nDate: 2026-10-22\nResult: PASS\n";
+  const missing = checkJournal(summary);
+  assert.equal(missing.status, 2, missing.output);
+  assert.match(missing.output, /Latest Validation Summary/);
+  assert.equal(checkJournal(journal() + "\n\n## Validation\n\n### Latest Validation Summary\n\nDate: 2026-10-22\nMode: course\nResult: PASS\n").status, 0);
+});
+
 test("Done ✅ needs a passed check without open ⏳ items", () => {
   const table = "| # | Title | Type | Skeleton | Material | Done | Notes |\n|---|---|---|---|---|---|---|\n| 1 | Intro | modul | ✅ | ✅ | ✅ | |";
   const done = text => text.replace("## Sessions\n\n", `## Sessions\n\n${table}\n\n`);
@@ -284,7 +312,7 @@ test("Done ✅ needs a passed check without open ⏳ items", () => {
 });
 
 test("a type's display name must not repeat the unit word; its slug may", () => {
-  const context = "* __Terminology:__\n  1. sessions-called: Einheit\n  2. lectures-called: Modul";
+  const context = "* __Terminology:__\n  1. sessions-called: Modul";
   const types = (...names) => "* __Session Types:__\n" + names.map(([name, slug], i) => `  ${i + 1}. __${name}__ (slug: \`${slug}\`) — x`).join("\n");
   const slugOnly = checkJournal(journal({ context, didactics: types(["Lernmodul", "modul"], ["Selbstcheck", "selbstcheck"]) }));
   assert.equal(slugOnly.status, 0, slugOnly.output);

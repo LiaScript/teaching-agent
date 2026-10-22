@@ -163,7 +163,7 @@ agent_links:
   rules:
     - "MCP gate: only when the `liascript` tools `get_state`, `goto` and `chat` are available, handle `command` events and offer next steps as `agent:` links in the preview chat — after typed and clicked commands alike. Without them, stay in the terminal."
     - "Start order when the gate is open, before anything else: (1) `get_state`, (2) `set_agent` for all four agents, (3) subscribe to browser events (Monitor on `curl -sN <get_state.events>` with the longest timeout, restarted when it expires, never two at once), (4) `read_chat` and answer any open message first. Only then read `journal.md` and detect skills."
-    - "Keep the preview chat responsive: read files with the agent's file-reading tool (search tools if the session has them; otherwise read the section with the file-reading tool), never with shell commands (`grep`, `cat`, `head`, `ls`, `sed`, `python` …). Use the shell only for the project's check scripts, each as a single command without `;`, `&&` or pipes: `node specs/dashboard/validate-journal.mjs`, `node specs/dashboard/check-material.mjs <material file>`, `node specs/dashboard/write-dashboard.mjs <draft.json>`. The only other shell use is inside a task confirmed in the terminal (git via `:manage-git`, Chrome start and file move on the browser route of `:generate-image`), after that confirmation. Change `journal.md` and material files only with the file-edit tool, never with shell scripts or heredocs. Compound shell lines can trigger a permission prompt the instructor never sees, and the chat freezes meanwhile."
+    - "Keep the preview chat responsive: read files with the agent's file-reading tool (search tools if the session has them; otherwise read the section with the file-reading tool), never with shell commands (`grep`, `cat`, `head`, `ls`, `sed`, `python` …). Use the shell only for the project's check scripts, each as a single command without `;`, `&&` or pipes: `node specs/dashboard/validate-journal.mjs`, `node specs/dashboard/check-material.mjs <material file>`, `node specs/dashboard/write-dashboard.mjs <draft.json>`. Also allowed: `cp specs/templates/journal.md journal.md`, the byte-for-byte copy of the empty journal in `init-course` / `scaffold`. The only other shell use is inside a task confirmed in the terminal (git via `:manage-git`, Chrome start and file move on the browser route of `:generate-image`), after that confirmation. Change `journal.md` and material files only with the file-edit tool, never with shell scripts or heredocs. Compound shell lines can trigger a permission prompt the instructor never sees, and the chat freezes meanwhile."
     - "Task files, templates and `data/agent-links.md` may change between two commands: on every command (typed or clicked) re-read with the file-reading tool the task file, `data/agent-links.md`, `tasks/update-dashboard.md` and every template the task names — also if you read them earlier in this session. Always read a task file **completely**, not a line range: rules also stand at the end."
     - "Section headings in `journal.md` may carry a translated suffix (`## Outline – …`). When a task names `## Outline`, it means the line that starts with `## Outline`. Keep heading lines unchanged when replacing a section's content."
     - "Agent roster: when the gate is open, read `data/agent-links.md` → Agent Roster first, then declare all four agents with `set_agent` (names `teaching`, `artist`, `learner`, `development`, emojis from their `icon:`, labels in the course language as that section describes — no visible renaming later) before the first chat message, and update the current one on every persona switch. `chat`/`answer` events carry in `agent` the persona the instructor talks to — answer as that persona; `agent:<name>/switch` (link or chat menu) means `:agent <name>`."
@@ -234,6 +234,7 @@ project_memory:
     `## Dashboard` JSON data block rendered by `@Dashboard.View`, one flat
     `* __Label:__` bullet skeleton per section, plus scoped agent memory under `## Agents`.
   journal_formatting_rules:
+    - "In every mode (terminal and preview): change `journal.md` and material files only with the file-edit tool, and re-read a task file completely on every command. The shell is for the check scripts, the byte-for-byte copy of the empty journal (`cp specs/templates/journal.md journal.md`) and terminal-confirmed tasks only."
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their `{{...}}` placeholder skeleton."
     - "Every `## Section` stays FLAT: `* __Label:__` bullets only — never introduce `###` sub-headings inside a section; in LiaScript every heading becomes its own slide."
     - "Exceptions to the flat rule: `## Dashboard` (one JSON code block annotated with `@Dashboard.View`, no headings), `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews` / `#### Images`; never `#####` — use bold labels instead), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
@@ -892,6 +893,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 ## Confirmations
 
 - The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only.
+- Sub-procedures called by this task do not refresh the dashboard themselves; Step 4 runs `tasks/update-dashboard.md` once, also when the run stops early.
 - Nothing stays unseen: the closing summary lists every applied fix with page title and before → after.
 - **Outside the project** it covers nothing: if Step 3 takes the browser route of `tasks/generate-image.md` (no own image tool), ask **once in the terminal** (tier "confirm in terminal") for all images of this run before it starts. Without that confirmation, skip Step 3 and say so in the closing summary. With the agent's own image tool, the start confirmation covers Step 3.
 
@@ -1140,7 +1142,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
        - **Later** — Skip agenda, create it later
        If no: redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: continue.
      - **`yes`** (required) → Continue without asking.
-   - Read terminology (sessions-called, lectures-called) and pacing model.
+   - Read terminology (sessions-called) and pacing model.
 2. Read learning objectives from the outline.
 3. Adopt didactic concept and course type from Didactics.
 4. **Agent adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona.**
@@ -1204,10 +1206,10 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - **single-lesson**: focused, compact, single arc
 3a. Choose a **Didactic Framework** from `data/didactic-methods.md` → "Course Frameworks" yourself, based on course type. It is documentation only: do **not** ask the instructor; name it only inside the technical details. Ask only if the instructor uses such terms themselves.
 3b. Define `__Session Types:__` (see `data/session-types.md` for the full mechanism):
-   - **single-lesson**: default to one type named after `lectures-called`; skip the discussion of types unless the instructor wants to split the lesson into sub-types. The grounding check below still applies, in its short form: "Your lesson is mainly … — right?"
+   - **single-lesson**: default to one type, named after what the lesson mainly is (from the grounding answer, e.g. "introduction with practice"); skip the discussion of types unless the instructor wants to split the lesson into sub-types. The grounding check below still applies, in its short form: "Your lesson is mainly … — right?"
    - **all other course types**: 🎛️ propose the default Session Types for this course type from the table in `data/session-types.md`, each with slug, one-line criterion, and a 2–3 item required-elements checklist. Let the instructor confirm or edit.
    - 💬 Grounding check (mandatory, do not skip): ask the instructor to name one concretely planned session and which Session Type it would get, and why. If the answer doesn't fit any proposed type, revise the types before continuing — don't let an unfitting default stand.
-   - Display names in the course language; slugs as defined in the template layout (lowercase ASCII words in the course language, not English defaults). With more than one type, no display name equals a Terminology word (`sessions-called`, `lectures-called`) — choose another name before proposing (e.g. "Lernmodul" when units are called "Modul").
+   - Display names in the course language; slugs as defined in the template layout (lowercase ASCII words in the course language, not English defaults). With more than one type, no display name equals a Terminology word (`sessions-called`) — choose another name before proposing (e.g. "Lernmodul" when units are called "Modul").
 
 3c. Choose a **Default Session Method** yourself (several may be combined as "a + b") from `data/didactic-methods.md` → "Session Methods", based on course type — **`none`** is allowed. Do not ask; mention it in plain words in the summary only if it changes what the learners do. This becomes the course-wide default; `:create-agenda` can override it per session later.
 4. 💬 Describe the instructor persona (expertise, role, background) — free text, discuss with instructor.
@@ -1462,7 +1464,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 11. On approval: save to `journal.md` → `## Agents` → `### Learner Personas`.
     - If `## Agents` does not exist: create it from `templates/agents.yaml`
     - If `### Learner Personas` does not exist inside `## Agents`: create that subsection
-    - Append as a new `#### Persona: {icon} {name}` subsection, wrapped in `<section>…</section>` per the **Persona Structure** template below
+    - Append as a new `#### Persona: {icon} {name}` subsection: the `####` heading stays outside, everything below it is wrapped in `<section>…</section>`, as in the **Persona Structure** template below
 12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 13. Suggest next step:
     > "Persona saved. Call `:review-as-persona [Name] [number]` to use [Icon] [Name] as a reviewer for a session."
@@ -1471,7 +1473,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 
 ## Persona Structure
 
-Each persona is one `####` subsection inside `journal.md` → `## Agents` → `### Learner Personas` — never use `##` or `###` inside a persona entry (they would terminate the target container) and never go deeper than `#####`. Wrap the whole entry in `<section>…</section>` (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows the persona as one slide instead of splitting on every `#####` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide":
+Each persona is one `####` subsection inside `journal.md` → `## Agents` → `### Learner Personas` — never use `##` or `###` inside a persona entry (they would terminate the target container) and never go deeper than `#####`. Wrap everything below the `####` heading in `<section>…</section>` (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows the persona as one slide instead of splitting on every `#####` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide":
 
 ```markdown
 #### Persona: [Icon] [Name]
@@ -1717,11 +1719,11 @@ Only if installed (see `data/skills.md`) — never install them:
 
 ## Steps
 
-0. Load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
 1. Check `journal.md` → `## Validation` → `### Latest Validation Summary`.
    - If missing, not `Mode: course`, or not `Result: PASS`: block publishing and ask the instructor to run `:validate-course`.
    - **Contact address:** if `## Course Context` → Conventions → Contact is empty, ask for it now (publishing needs an `email:` in the material headers). It becomes part of the plan: written to `## Course Context` and as `email:` into every material header after the confirmation.
    - **Version:** LiaScript stores quiz and survey state only from `version: 1.0.0` on. The plan sets every material header below 1.0.0 to `1.0.0` (first publication). Header lines set here are publishing metadata and do not reopen a check.
+1b. Only once the gate is open: load `data/liascript-workflows.md` for the full CLI reference, `project.yaml` schema, and workflow templates. Only fetch the external URLs if a specific question is not answered by the internal reference.
 2. Read `journal.md` → `## Course Context` → `__File Structure:__` and branch:
 
 ### single-file mode
@@ -1729,7 +1731,7 @@ Only if installed (see `data/skills.md`) — never install them:
 3. **Read the repository before anything changes** (read-only git): the `origin` remote and the current branch. Derive `{owner}/{repo}` and the viewer URL for the mode — single-file: `https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md`; multi-file: `https://{owner}.github.io/{repo}/` (GitHub Pages). This is a stable LiaScript / GitHub convention — recommend the instructor spot-check it once (epistemic rules: never assert unverified syntax as certain). Without a remote: ask whether to create the GitHub repository via `:manage-git` first, or stop.
 4. Ask the user about their git/GitHub experience.
 5. Decide which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` (propose a `.gitignore` with it). A repository without a first commit gets it from `:manage-git`.
-6. **Show the plan, then confirm in the terminal** (tier "confirm in terminal", `data/agent-links.md`) — before any change: single-file publishes by pushing to GitHub directly, no `project.yaml`, no workflow, no GitHub Pages step (see `data/file-structure-modes.md` → "Publishing"); the files to commit, the push target, the viewer URL, and the `## Publishing` entries that will be written.
+6. **Show the plan, then confirm in the terminal** (tier "confirm in terminal", `data/agent-links.md`) — before any change: single-file publishes by pushing to GitHub directly, no `project.yaml`, no workflow, no GitHub Pages step (see `data/file-structure-modes.md` → "Publishing"); the files to commit, the push target, the viewer URL, the header lines (`email:` from the contact address, `version:`), and the `## Publishing` entries that will be written. On "cancel" nothing is written — say that the contact address was not saved either.
 7. On confirmation: write `journal.md` → `## Publishing` (`__Repository:__`, `__Branch:__`, `__Viewer URL:__`, `__State:__ not published`), then hand off to `:manage-git` to commit and push.
 8. Once pushed: set `__State:__ published on {date} (commit {short hash})`, present the viewer URL, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
@@ -1770,7 +1772,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 - Didactic concept from `journal.md` → `## Didactics`
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
-- Terminology from `journal.md` → `## Course Context` (sessions-called, lectures-called)
+- Terminology from `journal.md` → `## Course Context` (sessions-called)
 - Default Session Method from `journal.md` → `## Didactics` → `__Default Session Method:__`, and the matching session's Method column in `journal.md` → `## Agenda` if an agenda exists (see `data/didactic-methods.md`)
 
 ## Output
@@ -1792,7 +1794,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - All texts of this skeleton reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.
-7. Save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
+7. **Before saving:** show the new unit as it will be written (status line, kind, summary, content, activities) with "Save" / "Change something" — also in the terminal. Then save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
    The `## Sessions` section has one canonical structure:
    1. The overview directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`)
    2. One `### {number}. {title}` subsection per session below the overview
@@ -2238,7 +2240,7 @@ The course context acts as the governance layer: it defines the course type, ter
    - **No unfounded recommendations.** Mark an option as recommended only if the instructor's own statements support it, and name that reason in one line. Otherwise give no recommendation.
    - **Language.** Ask in the language the instructor writes in. Until step 7 is saved, that language is the course language for all chat messages and option labels (see `data/agent-links.md` → Chat Conduct → Language before the frame).
 2. If `journal.md` does not exist, instantiate it from `templates/journal.md`:
-   - Copy the template **1:1, byte for byte** — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
+   - Copy the template **1:1, byte for byte** with the single command `cp specs/templates/journal.md journal.md` — no edits, no added comments, no reformatting. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment.
    - All sections keep their `{{...}}` placeholder skeletons until their tasks run; this task only fills `## Course Context`, the course title, the header's `language:` (course language code, step 7), and `## Dashboard` (via `tasks/update-dashboard.md`).
    - This copy is the only write allowed before the save confirmation in step 9 (`data/agent-links.md` → confirmation tiers): it contains nothing the instructor said. Every content change waits for step 9.
    - If `journal.md` already exists, leave it untouched and only work on the sections below.
@@ -2271,11 +2273,11 @@ The course context acts as the governance layer: it defines the course type, ter
 5. The Teaching-Agent builds LiaScript courses only — never ask for a platform. If the instructor mentions another one, say in one line that this assistant creates LiaScript material, which can later be exported (e.g. as a SCORM package for a learning platform). Accessibility is not asked: LiaScript brings read-aloud (text to speech), screen-reader labels and keyboard navigation for every course, and the material rules (alt texts, read-aloud for what learners must read, the question as the quiz label) apply to every course. Special needs of the learners (e.g. dyslexia, little German) belong to the target group, where the tasks take them into account.
 6. Based on the course type, set the profile defaults:
 
-   | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
+   | Type             | Unit word         | Persona         | Agenda default | Pacing          | Assessment              |
    | ---------------- | ----------------- | --------------- | -------------- | --------------- | ----------------------- |
-   | lecture-series   | session / lecture | professor       | yes            | scheduled       | quizzes + assignments   |
-   | self-paced       | unit / module     | coach           | optional       | learner-driven  | self-check quizzes      |
-   | workshop         | block / activity  | facilitator     | yes            | event-based     | reflection + group work |
+   | lecture-series   | session           | professor       | yes            | scheduled       | quizzes + assignments   |
+   | self-paced       | unit              | coach           | optional       | learner-driven  | self-check quizzes      |
+   | workshop         | block             | facilitator     | yes            | event-based     | reflection + group work |
    | single-lesson    | lesson            | tutor           | optional       | n/a             | optional quiz           |
    | improve-existing | (from existing)   | (from existing) | optional       | (from existing) | (from existing)         |
 
@@ -2289,12 +2291,12 @@ The course context acts as the governance layer: it defines the course type, ter
    | single-lesson | single-file |
    | improve-existing | detected in `:analyze-existing` |
 
-   Ask the file structure as a **teacher question** instead of stating a default (single choice, plain labels):
+   For a single lesson do not ask: it is `single-file` (one link); name it in one line of the summary. For every other course type, ask the file structure as a **teacher question** instead of stating a default (single choice, plain labels):
    1. "One link for all units — learners work through the chapters of one course" → `single-file`
    2. "One link per unit — each unit is opened on its own" → `multi-file`
-   Recommend 1 for up to about 6 short units (one link or QR code, progress in one place) and say why in one line; otherwise give the type default above without a recommendation.
+   Recommend 1 only if the instructor has named the number of units and it is up to about 6 short units (one link or QR code, progress in one place) — then say why in one line; otherwise give the type default above without a recommendation.
 
-   **Terminology:** set `sessions-called` and `lectures-called` to the words the instructor will see in the journal, in the course language and fitting the setting (e.g. school: the local words for "learning unit" / "chapter"). Use exactly these words in all instructor-facing text and in the Dashboard.
+   **Terminology:** set `sessions-called` to the word the instructor will see for one unit in the journal, in the course language and fitting the setting (e.g. school: the local word for "lesson" or "learning unit"). Use exactly these words in all instructor-facing text and in the Dashboard.
 
    **Audience override:** for school learners (primary or secondary school), never use the persona type `professor`; use `coach` (learner-driven) or `tutor` (teacher-led).
 
@@ -2323,7 +2325,7 @@ The course context acts as the governance layer: it defines the course type, ter
     - Add `import: {url}` to the main metadata header if missing
     - Create or update `journal.md` → `## Templates`
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
-11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
+11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" or "not published" are translated; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
 12. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
    2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.
@@ -2987,7 +2989,7 @@ Generated in sequence without interruption inside `journal.md`:
 
 Write exactly the confirmed draft — no additions, no silently filled details. Run each step without approval prompts between steps:
 
-1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment. Set `language:` to the course language code.
+1. If `journal.md` does not exist, instantiate it from `templates/journal.md`: copy the template **1:1, byte for byte** (`cp specs/templates/journal.md journal.md`) — no edits, no added comments. The file is already a valid LiaScript document; its first HTML comment is the LiaScript metadata header (`language:`, `@color` macro, `import: ./specs/dashboard/README.md`) and must remain the first comment. Set `language:` to the course language code.
 2. Replace the content of `journal.md` → `## Course Context` from collected inputs — **flat** `* __Label:__` bullets only, no sub-headings (rule applies to all sections below as well). Set `__File Structure:__` from the instructor's answer to the file-structure question. Follow the layout of `templates/course-context.yaml` (confirmed summary first, technical keys in `<details>`).
 3. Replace the content of `journal.md` → `## Outline`.
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet and the confirmed Session Types.
@@ -2998,7 +3000,7 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
    - One `### {number}. {title}` subsection per session below the overview
 8. Fill each session subsection using `templates/session-skeleton.yaml`; every unit gets one of the confirmed Session Types (from the agenda, or as planned in the draft).
-8b. Set `language:` in the metadata header to the course language code and the course title to the confirmed working title; if the language is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open.
+8b. Set `language:` in the metadata header to the course language code and the course title to the confirmed working title; if the language is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; headings that name a template keep that name (e.g. `### Dashboard` under `## Templates`), while placeholder values such as "none yet" or "not published" are translated; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 
 After each section is saved, print a brief progress line:
@@ -3840,6 +3842,9 @@ template:
     - id: overview
       title: Overview
       template: 'Short overview of the agenda, learning objectives, didactics & course type.'
+    - id: time-budget
+      title: Time Budget
+      template: 'Per time slot: slot length − setup − wrap-up = working time; sum of the mandatory units; buffer; phases outside the material.'
     - id: modules
       title: Modules / Sessions
       template: >
@@ -3892,14 +3897,13 @@ template:
       title: Course Profile
       template: |
         * __Terminology:__
-          1. sessions-called: [session | unit | block | lesson]
-          2. lectures-called: [lecture | module | chapter | lesson]
+          1. sessions-called: [session | unit | block | lesson — the word for one unit]
 
         * __Course Profile:__
           1. Persona type: [professor | coach | facilitator | tutor]
           2. Agenda required: [yes | optional | no]
           3. Pacing: [scheduled | learner-driven | event-based | n/a]
-          4. Assessment defaults: [quizzes | reflection | assignments | none]
+          4. Assessment defaults: [one or more of quizzes, self-check quizzes, reflection, group work, assignments — or none; may be marked optional]
           5. Units: [count × length, if known — e.g. 3 × 45 min; read by `:create-agenda` and the duration check]
 
     - id: file-structure
@@ -4231,13 +4235,12 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
 
 * __Terminology:__
   1. sessions-called: {{session | unit | block | lesson | ...}}
-  2. lectures-called: {{lecture | module | chapter | lesson | ...}}
 
 * __Course Profile:__
   1. Persona type: {{professor | coach | facilitator | tutor}}
   2. Agenda required: {{yes | optional | no}}
   3. Pacing: {{scheduled | learner-driven | event-based}}
-  4. Assessment defaults: {{quizzes | reflection | assignments | none}}
+  4. Assessment defaults: {{one or more of quizzes, self-check quizzes, reflection, group work, assignments — or none}}
   5. Units: {{count × length, if known}}
 
 * __File Structure:__
@@ -4283,6 +4286,9 @@ _Filled by `:create-outline` from `templates/course-outline.yaml`._
   1. {{clear learning objective with application scenario}}
   2. {{clear learning objective with application scenario}}
   3. {{clear learning objective with application scenario}}
+
+* __Session Overview:__
+  {{session → objective → self-check, as a list or a table with at most 3 columns}}
 
 ---
 
@@ -4412,18 +4418,30 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 * __Overview:__
   {{number of sessions, duration, pacing — 2–4 sentences}}
 
+* __Time Budget:__
+  {{per time slot: slot length − setup − wrap-up = working time; sum of the mandatory units; buffer}}
+
 * __Modules / Sessions:__
 
-  | # | Title | Type | Duration | Learning Objective | Material |
-  |---|-------|------|----------|--------------------|----------|
-  | 1 | {{title}} | {{slug from `## Didactics` → `__Session Types:__`}} | {{duration}} | {{objective}} | {{material path — resolved from `## Course Context` → `__File Structure:__`; see `data/file-structure-modes.md`}} |
+  <!-- data-type="none" -->
+  | No. | Title | Time | Kind | Objectives |
+  |---|---|---|---|---|
+  | 1 | {{title (mandatory/optional)}} | {{time}} | {{display name of the Session Type}} | {{objectives}} |
+
+  <details><summary>Technical settings for the assistant</summary>
+
+  | No. | type slug | method slug | material path |
+  |---|---|---|---|
+  | 1 | {{slug}} | {{method slug}} | {{material path, see `data/file-structure-modes.md`}} |
+
+  </details>
 
 ---
 
 ## Sessions
 
 <!-- class="journal-actions" -->
-[▶️ New session](agent:teaching/create-session) `:create-session <number>` · [🔍 Validate course](agent:teaching/validate-course) `:validate-course`
+[▶️ Didactics first](agent:teaching/create-didactics) `:create-didactics`
 
 _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview first — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`) — then one `### {n}. {title}` subsection per session._
 
@@ -4883,10 +4901,10 @@ template:
 
         **Method:** {{method}}
 
-        [▶️ Promote](agent:teaching/promote-session?number={{number}}) `:promote-session {{number}}` · [▶️ Build](agent:teaching/build-session?number={{number}}) `:build-session {{number}}`
+        [▶️ Promote](agent:teaching/promote-session?number={{number}}) `:promote-session {{number}}`
 
         </details>
-      note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. Fill Activities/Content below so they satisfy that type''s `Required` checklist.'
+      note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`) — never a hardcoded `lecture`/`exercise`. `:build-session` is not listed here: `tasks/update-dashboard.md` adds it once one unit was worked out together and approved. Fill Activities/Content below so they satisfy that type''s `Required` checklist.'
     - id: method
       title: Method
       template: |
@@ -5173,7 +5191,7 @@ template:
 
 - [ ] [mechanical] `journal.md` → `## Course Context` exists
 - [ ] [mechanical] Course type defined
-- [ ] [mechanical] Terminology set (sessions-called, lectures-called)
+- [ ] [mechanical] Terminology set (sessions-called)
 - [ ] [mechanical] Language & tone conventions set
 - [ ] [mechanical] Agenda flag correct (yes / no / optional)
 - [ ] [mechanical] Person (Sie / Du / you) set
@@ -5448,7 +5466,7 @@ Rules for action lines:
 | `## Visual Identity` | `artist/create-visuals`, `artist/create-logo` |
 | `## Templates` | `manage-templates` |
 | `## Agenda` | `create-agenda` |
-| `## Sessions` | `create-session` (without params — asked in chat), `validate-course` |
+| `## Sessions` | `create-session` (without params — asked in chat; only once `## Didactics` → `__Session Types:__` exist, before that `create-didactics`), `validate-course` (once a unit has material) |
 | `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; check failed → `coauthor-materials?number={n}` (✏️ revise); passed with concerns → `validate-course {n}` (it goes through the concerns); passed with ⏳ → the command of the named later step (e.g. `artist/generate-image`); checked ✅ → 👁 `preview` of the material; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
 | `## Validation` | `validate-course` |
@@ -5878,7 +5896,8 @@ For each activity, discussion, exercise, or quiz block in the material:
 | Short task (one step, e.g. a single formula or one matching item) | 2–4 min each |
 | Teacher-led phase (board, demonstration, class talk) | the duration the instructor states, otherwise 5–10 min |
 | Short discussion prompt | 8–10 min |
-| Group exercise / hands-on task | 15–20 min |
+| Group or pair exercise / hands-on task | 15–20 min, or the duration the instructor states |
+| Gap text | 0.5–1 min per gap |
 | Video/demo embed | stated media length, or 5 min default |
 | Case study / longer discussion | 15–20 min |
 
@@ -6262,7 +6281,7 @@ Each session/unit is its own LiaScript document in its own folder.
 
 - Course content: `materials/{number}-{slug}/README.md` — one folder per session.
 - Assets: `materials/{number}-{slug}/assets/images/`, `materials/{number}-{slug}/assets/videos/`, etc. — scoped to that session, not shared with others.
-- `{slug}` is a kebab-case slug derived from the session title: lowercase, strip punctuation, spaces → hyphens, truncate to ~5 significant words if the title is long (e.g. "Are You in Scope? Essential vs. Important Entities" → `are-you-in-scope-essential-vs-important`).
+- `{slug}` is a kebab-case slug derived from the session title: lowercase, strip punctuation, spaces → hyphens, truncate to ~5 significant words if the title is long (e.g. "Are You in Scope? Essential vs. Important Entities" → `are-you-in-scope-essential-vs-important`). Umlauts and ß are transliterated (ä→ae, ö→oe, ü→ue, ß→ss); only punctuation is dropped, no filler words; keep the first ~5 words.
 - **Compute the slug once**, when the material path is first recorded — in the technical table of `## Agenda` if an agenda exists, otherwise when the material document is first created. Every later task reuses the recorded path. If the session title changes afterward, do not silently rename the folder — flag the mismatch and ask before renaming, since links and assets may reference the existing path.
 - Typical for: `lecture-series`, `self-paced`, `workshop`, or any course with multiple sessions.
 
@@ -6273,7 +6292,8 @@ The same rules apply to every task that creates a session's material document �
 1. **Path:** reuse the path recorded in the technical table of `## Agenda` if there is one; otherwise derive it as above (multi-file: `materials/{number}-{slug}/README.md`, the `assets/` subfolder only on demand; single-file: the `##` chapter for this session inside root `/README.md`, chapters in session-number order).
 2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `email:` from Conventions → Contact if set, `version: 0.1.0` for a new document, `language:` from the course language, `narrator:` a voice for that language (e.g. `Deutsch Female`, `UK English Female`), the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses.
 3. **Images:** for every entry in the session's `#### Images` block, put the marker of `tasks/create-image.md` (status `prompt-ready`) or the image itself (status `generated`) at the place it belongs; entries with status `prompt-only` get nothing.
-4. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
+4. **Title slide (single-file, first unit):** under the `#` course title, a short introduction for the learners — 2–3 sentences: what it is about, what they will be able to do, how to start — in the learners' address and readable aloud; never an empty slide.
+5. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 ## Default by course type
 
@@ -6681,6 +6701,8 @@ Alternatively, diagrams can be created with ASCII art. The syntax info `ascii` e
 Mathematical formulas use LaTeX syntax.
 
 Inline formula: $E = mc^2$
+
+A pair of `$` starts math everywhere outside code. Write spreadsheet references, prices or other text with `$` as inline code (`` `$C$7` ``), otherwise it is set as a formula.
 
 Block formula as separate paragraph:
 
@@ -8101,7 +8123,7 @@ collection:
 
 A session's `type` is **not** a fixed global enum (`lecture` / `exercise`). It is a per-course vocabulary, defined once in `journal.md` → `## Didactics` → `__Session Types:__` by `:create-didactics`, and referenced by slug everywhere else.
 
-This is a different layer than `journal.md` → `## Course Context` → `__Terminology:__` (`sessions-called`, `lectures-called`): Terminology names the *unit* (e.g. "what do we call one session — a lesson, a block?"). Session Types names the *format that unit takes* (e.g. "is this particular lesson a lecture, an exercise, a self-check?"). A course can have one `sessions-called` term and several Session Types.
+This is a different layer than `journal.md` → `## Course Context` → `__Terminology:__` (`sessions-called`): Terminology names the *unit* (e.g. "what do we call one session — a lesson, a block?"). Session Types names the *format that unit takes* (e.g. "is this particular lesson a lecture, an exercise, a self-check?"). A course can have one `sessions-called` term and several Session Types.
 
 It is also a different, orthogonal layer from **Session Methods** (`data/didactic-methods.md`): Type is the *format* a session takes, Method is the *didactic technique* used to structure and validate its content (e.g. Gagné's Nine Events, Cognitive Load Pacing). A session declares both independently — don't confuse a `**Type:**` line with a `**Method:**` line on the same skeleton.
 
@@ -8131,9 +8153,9 @@ Each Session Type has four parts — a display name, a stable slug, a one-line c
 | lecture-series | **Vortrag** (`lecture`) — von Lehrenden geführt, keine bewertete Aufgabe · **Übung** (`exercise`) — angeleitete Praxis mit Aufgabe + Lösung/Feedback |
 | self-paced | **Lernmodul** (`module`) — Selbststudieninhalt · **Selbstcheck** (`selfcheck`) — Lernkontrolle/Quiz |
 | workshop | **Input** (`input`) — kurzer Theorieblock · **Praxisphase** (`activity`) — Gruppenarbeit/Hands-on mit Ergebnis |
-| single-lesson | Usually **one** type only (named after `lectures-called`); skip the discussion step unless the instructor wants to split the lesson into sub-types |
+| single-lesson | Usually **one** type only (named after what the lesson mainly is); skip the discussion step unless the instructor wants to split the lesson into sub-types |
 
-The display names are chosen so they never equal the default terminology of `tasks/init-course.md` (lecture, module, activity — translated); still check them against the course's real terminology. The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vortrag`, `uebung`), as `templates/course-didactics.yaml` requires.
+The display names are chosen so they never equal the default unit words of `tasks/init-course.md` (session, unit, block, lesson — translated); still check them against the course's real terminology. The slugs in this table are English placeholders: derive the real slug from the display name in the course language (e.g. `vortrag`, `uebung`), as `templates/course-didactics.yaml` requires.
 
 ## Resolving a session's type
 
@@ -8200,8 +8222,8 @@ counts as available if **either** holds:
    needs them (they are written for progressive loading — do not read all of
    them up front).
 
-Only check for file existence, with the agent's file-search or file-reading tool
-(glob) — not with shell commands (`ls`), see the shell rule in `CLAUDE.md` → Agent
+Only check for file existence, with the agent's file-search tool (glob) or, without
+one, by reading `SKILL.md` at each known path with the file-reading tool — not with shell commands (`ls`), see the shell rule in `CLAUDE.md` → Agent
 Links; never download, clone, or run `npx skills`. In a web chat without file access, nothing is detectable: treat
 all skills as unavailable.
 
