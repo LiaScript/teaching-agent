@@ -11,15 +11,15 @@
       "state.planned": "Noch offen", "state.current": "In Arbeit", "state.draft": "Entwurf liegt vor",
       "state.review": "Zur Durchsicht", "state.revision": "Überarbeitung nötig", "state.done": "Abgeschlossen", "state.optional": "Bei Bedarf",
       view: "Ansehen", eyebrow: "Kursplan", next: "Als Nächstes:", why: "Warum?", progress: "Fortschritt",
-      progressEmpty: "Noch keine Einheit angelegt. Der Fortschritt wird sichtbar, sobald Einheiten entstehen.",
+      progressEmpty: (units = "Einheiten") => `Der Fortschritt wird sichtbar, sobald ${units} angelegt sind.`,
       unitWords: { one: "Einheit", many: "Einheiten" },
       // Verb follows the finished units ("1 von 6 Einheiten ist"); u.many is the dative plural after "von".
       progressText: (done, total, u = TEXT.de.unitWords) => `${done} von ${total} ${total === 1 ? u.one : u.many} ${done === 1 || total === 1 ? "ist" : "sind"} abgeschlossen`,
-      units: "Meine Einheiten", unitsHint: "Einheit auswählen, um den Arbeitsstand zu sehen.",
-      unitsEmpty: "Noch keine Einheit angelegt.", unitsEmptyNext: "Zuerst stimmen wir die Lernziele und die Lernaktivitäten ab.",
+      units: "Einheiten", unitsHint: "Einheit auswählen, um den Arbeitsstand zu sehen.",
+      unitsEmpty: (units = "Einheiten") => `Noch keine ${units} angelegt.`, unitsEmptyNext: "Zuerst stimmen wir die Lernziele und die Lernaktivitäten ab.",
       course: "Gesamter Kurs", courseSummary: "Überblick über die Kursplanung",
       showProcess: "Prozess ansehen", steps: (done, total) => `${done} von ${total} ${total === 1 ? "Schritt" : "Schritten"}`,
-      processEyebrow: "So entsteht das Material", processTitle: "Unser Arbeitsstand", result: "Liegt vor:", nextStep: "Nächster Schritt:",
+      processEyebrow: "So entsteht das Material", processTitle: "Arbeitsstand", result: "Liegt vor:", nextStep: "Nächster Schritt:",
       processEmpty: "Hierfür ist noch kein detaillierter Ablauf eingetragen.", plan: "Planung ansehen",
       decide: "Noch zu entscheiden", prepare: "Vor dem Einsatz vorbereiten", how: "So geht's:",
       internal: n => `${n} technische ${n === 1 ? "Notiz" : "Notizen"} des Assistenten`,
@@ -30,14 +30,14 @@
       "state.planned": "Not started", "state.current": "In progress", "state.draft": "Draft ready",
       "state.review": "In review", "state.revision": "Needs revision", "state.done": "Done", "state.optional": "Optional",
       view: "Open", eyebrow: "Course plan", next: "Next:", why: "Why?", progress: "Progress",
-      progressEmpty: "No unit created yet. Progress appears as soon as units exist.",
+      progressEmpty: (units = "units") => `Progress appears as soon as ${units.toLowerCase()} exist.`,
       unitWords: { one: "unit", many: "units" },
       progressText: (done, total, u = TEXT.en.unitWords) => `${done} of ${total} ${total === 1 ? u.one : u.many} ${done === 1 || total === 1 ? "is" : "are"} done`,
-      units: "My units", unitsHint: "Select one to see its progress.",
-      unitsEmpty: "No unit created yet.", unitsEmptyNext: "First we agree on the learning objectives and activities.",
+      units: "Units", unitsHint: "Select one to see its progress.",
+      unitsEmpty: (units = "units") => `No ${units.toLowerCase()} yet.`, unitsEmptyNext: "First we agree on the learning objectives and activities.",
       course: "Whole course", courseSummary: "Overview of the course planning",
       showProcess: "Show process", steps: (done, total) => `${done} of ${total} ${total === 1 ? "step" : "steps"}`,
-      processEyebrow: "How the material is made", processTitle: "Where we are", result: "Ready:", nextStep: "Next step:",
+      processEyebrow: "How the material is made", processTitle: "Current state", result: "Ready:", nextStep: "Next step:",
       processEmpty: "No detailed process recorded yet.", plan: "Open the plan",
       decide: "To decide", prepare: "Prepare before use", how: "How:",
       internal: n => `${n} technical ${n === 1 ? "note" : "notes"} of the assistant`,
@@ -250,16 +250,16 @@
       ${input.context ? `<p class="dashboard-context">${escape(input.context)}</p>` : ""}
       ${input.subtitle ? `<p class="dashboard-intro">${escape(input.subtitle)}</p>` : ""}
       ${input.notice ? `<p class="dashboard-notice">${escape(input.notice)}</p>` : ""}
-      ${next ? `<div class="dashboard-next"><p><strong>${t("next")}</strong> ${escape(next.title || next.label)}</p>${next.why ? `<p class="dashboard-why"><strong>${t("why")}</strong> ${escape(next.why)}</p>` : ""}${actionLink(next, viewId, true)}</div>` : ""}
+      ${next ? `<div class="dashboard-next"><p><strong>${escape(t("next"))}</strong> ${escape(next.title || next.label)}</p>${next.why ? `<p class="dashboard-why"><strong>${escape(t("why"))}</strong> ${escape(next.why)}</p>` : ""}${actionLink(next, viewId, true)}</div>` : ""}
     </header>`;
   }
 
-  function progress(completed, total, label = t("progress"), unitLabel) {
+  function progress(completed, total, label = t("progress"), unitLabel, unitsTitle) {
     if (!Number.isInteger(total) || !Number.isInteger(completed) || completed < 0 || total < completed) {
       throw new Error("Progress needs valid values: done / total.");
     }
-    if (!total) return `<section class="dashboard-progress"><h3>${escape(label)}</h3><p>${t("progressEmpty")}</p></section>`;
-    const text = unitLabel?.one && unitLabel?.many ? t("progressText", completed, total, unitLabel) : t("progressText", completed, total);
+    if (!total) return `<section class="dashboard-progress"><h3>${escape(label)}</h3><p>${escape(t("progressEmpty", unitsTitle || t("units")))}</p></section>`;
+    const text = escape(unitLabel?.one && unitLabel?.many ? t("progressText", completed, total, unitLabel) : t("progressText", completed, total));
     return `<section class="dashboard-progress"><div><h3>${escape(label)}</h3><p>${text}</p></div><progress value="${completed}" max="${total}" aria-label="${text}"></progress></section>`;
   }
 
@@ -274,10 +274,10 @@
   function unit(input, selected = false, viewId) {
     const steps = input.process?.steps ?? [];
     const stepsDone = steps.filter(step => step.state === "done").length;
-    const stepText = steps.length ? `<span class="dashboard-unit-steps">${t("steps", stepsDone, steps.length)}</span>` : "";
+    const stepText = steps.length ? `<span class="dashboard-unit-steps">${escape(t("steps", stepsDone, steps.length))}</span>` : "";
     const content = `<span class="dashboard-unit-number" aria-hidden="true">${escape(input.id)}</span><span class="dashboard-unit-content"><strong>${escape(input.title)}</strong>${status(input.state, input.statusLabel)}${stepText}${input.summary ? `<span class="dashboard-unit-summary">${escape(input.summary)}</span>` : ""}</span>`;
     if (!viewId) return `<li class="dashboard-unit-item"><article class="dashboard-unit">${content}</article></li>`;
-    return `<li class="dashboard-unit-item"><button class="dashboard-unit${selected ? " dashboard-unit-selected" : ""}" type="button" data-dashboard-select="${escape(input.id)}"${selected ? ' aria-current="true"' : ""} aria-label="${escape(input.title)}: ${escape(input.statusLabel || t(`state.${state(input.state)}`))}; ${t("showProcess")}">${content}</button></li>`;
+    return `<li class="dashboard-unit-item"><button class="dashboard-unit${selected ? " dashboard-unit-selected" : ""}" type="button" data-dashboard-select="${escape(input.id)}"${selected ? ' aria-current="true"' : ""} aria-label="${escape(input.title)}: ${escape(input.statusLabel || t(`state.${state(input.state)}`))}; ${escape(t("showProcess"))}">${content}</button></li>`;
   }
 
   function courseEntry(input, viewId) {
@@ -285,21 +285,21 @@
     if (!viewId || !steps.length) return "";
     const selected = input.selected === COURSE;
     const stepsDone = steps.filter(step => step.state === "done").length;
-    return `<div class="dashboard-course-entry"><button class="dashboard-unit dashboard-course${selected ? " dashboard-unit-selected" : ""}" type="button" data-dashboard-select="${COURSE}"${selected ? ' aria-current="true"' : ""} aria-label="${escape(input.courseLabel || t("course"))}; ${t("showProcess")}"><span class="dashboard-unit-number" aria-hidden="true">⌂</span><span class="dashboard-unit-content"><strong>${escape(input.courseLabel || t("course"))}</strong><span class="dashboard-unit-steps">${t("steps", stepsDone, steps.length)}</span><span class="dashboard-unit-summary">${t("courseSummary")}</span></span></button></div>`;
+    return `<div class="dashboard-course-entry"><button class="dashboard-unit dashboard-course${selected ? " dashboard-unit-selected" : ""}" type="button" data-dashboard-select="${COURSE}"${selected ? ' aria-current="true"' : ""} aria-label="${escape(input.courseLabel || t("course"))}; ${escape(t("showProcess"))}"><span class="dashboard-unit-number" aria-hidden="true">⌂</span><span class="dashboard-unit-content"><strong>${escape(input.courseLabel || t("course"))}</strong><span class="dashboard-unit-steps">${escape(t("steps", stepsDone, steps.length))}</span><span class="dashboard-unit-summary">${escape(t("courseSummary"))}</span></span></button></div>`;
   }
 
   function units(input, viewId) {
     const items = input.units ?? [];
-    return `<section class="dashboard-units"><h3>${escape(input.unitsTitle || t("units"))}</h3>${items.length ? `<p class="dashboard-hint">${t("unitsHint")}</p>${courseEntry(input, viewId)}<ol class="dashboard-unit-list">${items.map(item => unit(item, item.id === input.selected, viewId)).join("")}</ol>` : (input.plan ? plan(input.plan) : `<div class="dashboard-empty"><p>${escape(input.emptyUnits || t("unitsEmpty"))}</p><p>${t("unitsEmptyNext")}</p></div>`)}</section>`;
+    return `<section class="dashboard-units"><h3>${escape(input.unitsTitle || t("units"))}</h3>${items.length ? `<p class="dashboard-hint">${escape(t("unitsHint"))}</p>${courseEntry(input, viewId)}<ol class="dashboard-unit-list">${items.map(item => unit(item, item.id === input.selected, viewId)).join("")}</ol>` : (input.plan ? plan(input.plan) : `<div class="dashboard-empty"><p>${escape(input.emptyUnits || t("unitsEmpty", input.unitsTitle || t("units")))}</p><p>${escape(t("unitsEmptyNext"))}</p></div>`)}</section>`;
   }
 
   function process(input) {
     const data = processData(input);
-    return `<section class="dashboard-process" aria-live="polite"><p class="dashboard-eyebrow">${escape(data.eyebrow || t("processEyebrow"))}</p><h3>${escape(data.title || t("processTitle"))}</h3>${data.description ? `<p class="dashboard-process-description">${escape(data.description)}</p>` : ""}${data.steps.length ? `<ol class="dashboard-step-list">${data.steps.map(step => `<li class="dashboard-step dashboard-step-${step.state}"${step.state === "current" ? ' aria-current="step"' : ""}><span class="dashboard-step-marker" aria-hidden="true">${states[step.state]}</span><div><div class="dashboard-step-heading"><h4>${escape(step.title)}</h4>${status(step.state, step.statusLabel)}</div>${step.result ? `<p class="dashboard-result"><strong>${t("result")}</strong> ${escape(step.result)}</p>` : ""}${step.why ? `<p class="dashboard-step-why">${escape(step.why)}</p>` : ""}${step.next ? `<p class="dashboard-step-next"><strong>${t("nextStep")}</strong> ${escape(step.next)}</p>` : ""}</div></li>`).join("")}</ol>` : `<p class="dashboard-empty">${t("processEmpty")}</p>`}${data.note ? `<p class="dashboard-process-note">${escape(data.note)}</p>` : ""}${input.href ? `<p class="dashboard-process-link">${actionLink({ label: input.planLabel || t("plan"), href: input.href })}</p>` : ""}</section>`;
+    return `<section class="dashboard-process" aria-live="polite"><p class="dashboard-eyebrow">${escape(data.eyebrow || t("processEyebrow"))}</p><h3>${escape(data.title || t("processTitle"))}</h3>${data.description ? `<p class="dashboard-process-description">${escape(data.description)}</p>` : ""}${data.steps.length ? `<ol class="dashboard-step-list">${data.steps.map(step => `<li class="dashboard-step dashboard-step-${step.state}"${step.state === "current" ? ' aria-current="step"' : ""}><span class="dashboard-step-marker" aria-hidden="true">${states[step.state]}</span><div><div class="dashboard-step-heading"><h4>${escape(step.title)}</h4>${status(step.state, step.statusLabel)}</div>${step.result ? `<p class="dashboard-result"><strong>${escape(t("result"))}</strong> ${escape(step.result)}</p>` : ""}${step.why ? `<p class="dashboard-step-why">${escape(step.why)}</p>` : ""}${step.next ? `<p class="dashboard-step-next"><strong>${escape(t("nextStep"))}</strong> ${escape(step.next)}</p>` : ""}</div></li>`).join("")}</ol>` : `<p class="dashboard-empty">${escape(t("processEmpty"))}</p>`}${data.note ? `<p class="dashboard-process-note">${escape(data.note)}</p>` : ""}${input.href ? `<p class="dashboard-process-link">${actionLink({ label: input.planLabel || t("plan"), href: input.href })}</p>` : ""}</section>`;
   }
 
   function decisionItem(item) {
-    return `<li><strong>${escape(item.title)}</strong>${item.why ? ` <span class="dashboard-decision-why">${escape(item.why)}</span>` : ""}${item.how ? `<span class="dashboard-decision-how"><strong>${t("how")}</strong> ${escape(item.how)}</span>` : ""}${item.href ? ` ${actionLink(item)}` : ""}</li>`;
+    return `<li><strong>${escape(item.title)}</strong>${item.why ? ` <span class="dashboard-decision-why">${escape(item.why)}</span>` : ""}${item.how ? `<span class="dashboard-decision-how"><strong>${escape(t("how"))}</strong> ${escape(item.how)}</span>` : ""}${item.href ? ` ${actionLink(item)}` : ""}</li>`;
   }
 
   function decisions(items, label = t("decide")) {
@@ -325,7 +325,7 @@
     const selectedProcess = selected
       ? { ...selected.process, title: selected.process.title || selected.title, href: selected.href, planLabel: null }
       : model.process;
-    return `${hero(model, viewId)}${decisions(model.decisions, model.decisionsTitle)}${progress(model.completed, model.total, model.progressTitle, model.unitLabel)}<div class="dashboard-workspace">${units(model, viewId)}${process(selectedProcess)}</div>${explore(model.explore, model.exploreTitle)}${model.links.length ? `<nav class="dashboard-links" aria-label="${t("sections")}">${model.links.map(item => actionLink(item, viewId)).join("")}</nav>` : ""}${model.footer ? `<p class="dashboard-footer">${escape(model.footer)}</p>` : ""}`;
+    return `${hero(model, viewId)}${decisions(model.decisions, model.decisionsTitle)}${progress(model.completed, model.total, model.progressTitle, model.unitLabel, model.unitsTitle)}<div class="dashboard-workspace">${units(model, viewId)}${process(selectedProcess)}</div>${explore(model.explore, model.exploreTitle)}${model.links.length ? `<nav class="dashboard-links" aria-label="${escape(t("sections"))}">${model.links.map(item => actionLink(item, viewId)).join("")}</nav>` : ""}${model.footer ? `<p class="dashboard-footer">${escape(model.footer)}</p>` : ""}`;
   }
 
   function view(id, input) {
@@ -357,7 +357,7 @@
       const html = renderers[component]();
       return component === "View" ? html : `<div class="lia-dashboard dashboard-component">${html}</div>`;
     } catch (error) {
-      return `<div class="lia-dashboard dashboard-error" role="alert"><strong>${t("error")}</strong><p>${escape(error.message)}</p></div>`;
+      return `<div class="lia-dashboard dashboard-error" role="alert"><strong>${escape(t("error"))}</strong><p>${escape(error.message)}</p></div>`;
     }
   }
 

@@ -141,8 +141,8 @@ function checkJournal(text) {
 }
 
 // A small journal with two units, an agenda and a session with a validation report.
-function journal({ agenda, outcome = "**Outcome:** passed (2026-10-19)", units = 2, context = "", didactics = "" } = {}) {
-  const data = { title: "X", units: Array.from({ length: units }, (_, i) => ({ id: String(i + 1), title: `U${i + 1}`, state: "planned", ...(i === 0 ? { href: "#1.-intro" } : {}) })) };
+function journal({ agenda, outcome = "**Outcome:** passed (2026-10-19)", units = 2, context = "", didactics = "", decisions } = {}) {
+  const data = { title: "X", ...(decisions ? { decisions } : {}), units: Array.from({ length: units }, (_, i) => ({ id: String(i + 1), title: `U${i + 1}`, state: "planned", ...(i === 0 ? { href: "#1.-intro" } : {}) })) };
   return ["<!--\nlanguage: fr\n-->", "# X", "## Course Context", context, "## Didactics", didactics,
     "## Dashboard", "```json @Dashboard.View", JSON.stringify(data), "```",
     "## Agenda", agenda ?? [
@@ -165,6 +165,14 @@ test("the journal check counts only the visible units table of the agenda", () =
   const fewer = checkJournal(journal({ units: 3 }).replace("  | 3 | U3 | 45 min |\n", ""));
   assert.equal(fewer.status, 2, fewer.output);
   assert.match(fewer.output, /the agenda has 2 rows, the dashboard shows 3 units/);
+});
+
+test("open points never repeat the dashboard's group names", () => {
+  for (const title of ["Vor dem Einsatz vorbereiten: Kopfhörer", "Prepare before use: headphones"]) {
+    const run = checkJournal(journal({ decisions: [{ title, kind: "prepare", how: "x" }] }));
+    assert.equal(run.status, 2, run.output);
+    assert.match(run.output, /repeats the group name/);
+  }
 });
 
 test("Done ✅ needs a passed check without open ⏳ items", () => {

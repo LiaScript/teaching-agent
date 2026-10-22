@@ -85,7 +85,7 @@ hints.filter(hint => !covered(hint)).forEach(hint =>
   problems.push(`hint "${hint.key}" is missing in decisions (add an item with key: "${hint.key}" or resolve it in the source section)`));
 model.decisions.filter(item => item.kind !== "internal").forEach(item => {
   if (!item.how) problems.push(`"${item.title}": field how is missing`);
-  if (/^(Vorbereitung|Noch zu entscheiden|Entscheidung|Preparation|To decide|Decision)\s*:/i.test(item.title)) problems.push(`"${item.title}": title repeats the group name`);
+  if (/^(Vor dem Einsatz vorbereiten|Vorbereitung|Noch zu entscheiden|Entscheidung|Prepare before use|Preparation|To decide|Decision)\s*:/i.test(item.title)) problems.push(`"${item.title}": title repeats the group name`);
   if (internalWords.test(`${item.title} ${item.why ?? ""} ${item.how ?? ""}`)) problems.push(`"${item.title}": internal term in an item for the instructor – mark it kind "internal" or rephrase`);
 });
 const sessionHeadings = [...section("Sessions").matchAll(/^### (\d+)\. /gm)].map(match => match[1]);

@@ -142,6 +142,19 @@ test("labels translate the fixed texts for any course language", () => {
   assert.match(html, /Course plan/, "keys without a label keep the built-in fallback");
 });
 
+test("texts from the data are escaped everywhere: labels, unit words, unit titles", () => {
+  const evil = "<img src=x onerror=alert(1)>";
+  const html = dashboard.renderComponent("View", "x1", { lang: "fr", title: "X",
+    labels: { next: evil, why: evil, unitsHint: evil, how: evil, result: evil, showProcess: evil, steps: `${evil} {done}/{total}`, progressText: `{done} ${evil} {total} {unit}` },
+    unitLabel: { one: evil, many: evil },
+    next: { title: "N", why: "W", label: "Go", href: "#x" },
+    decisions: [{ title: "D", kind: "decide", how: "H" }],
+    units: [{ id: "1", title: "A", state: "done", process: { steps: [{ title: "S", state: "done", result: "R" }] } }, { id: "2", title: "B", state: "planned" }] });
+  assert.doesNotMatch(html, /<img/);
+  const empty = dashboard.renderComponent("View", "x2", { lang: "de", title: "X", unitsTitle: evil });
+  assert.doesNotMatch(empty, /<img/);
+});
+
 test("labels are checked: unknown keys, wrong shapes and placeholders fail", () => {
   assert.throws(() => dashboard.buildModel({ labels: "Progression" }), /labels/);
   assert.throws(() => dashboard.buildModel({ labels: { progres: "Progression" } }), /progres/);
@@ -176,6 +189,19 @@ test("counts agree in number: the verb follows the finished units, the noun the 
   const step = lang => dashboard.renderComponent("View", `s-${lang}`, { lang, title: "X", units: [{ id: "1", title: "A", state: "current", process: { steps: [{ title: "S", state: "done" }] } }] });
   assert.match(step("de"), /1 von 1 Schritt</);
   assert.match(step("en"), /1 of 1 step</);
+});
+
+test("empty states use the course's word for units, and the panel titles are neutral", () => {
+  const de = dashboard.renderComponent("View", "e1", { lang: "de", title: "X", unitsTitle: "Kapitel" });
+  assert.match(de, /Noch keine Kapitel angelegt\./);
+  assert.match(de, /sobald Kapitel angelegt sind/);
+  assert.match(de, /<h3>Kapitel<\/h3>/);
+  const plain = dashboard.renderComponent("View", "e2", { lang: "de", title: "X", process: { steps: [{ title: "A" }] } });
+  assert.match(plain, /<h3>Einheiten<\/h3>/);
+  assert.match(plain, /<h3>Arbeitsstand<\/h3>/);
+  assert.doesNotMatch(plain, /Meine Einheiten|Unser Arbeitsstand/);
+  const en = dashboard.renderComponent("View", "e3", { lang: "en", title: "X", unitsTitle: "Chapters" });
+  assert.match(en, /No chapters yet\./);
 });
 
 test("unit label follows the course terminology", () => {

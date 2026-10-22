@@ -225,7 +225,7 @@ Enthält der Datensatz einen globalen `process`, steht über den Einheiten der E
 
 ## Hero
 
-Parameter: `Titel, Beschreibung, Rahmen, Aktionslabel, Link, lesbarer Befehl`.
+Parameter: `Titel, Beschreibung, Kontext, Beschriftung, Link, lesbarer Befehl`.
 
 @Dashboard.Hero(Datenbanken verstehen, Dein Kurs nimmt Form an., Fiktives Beispiel, Möglichkeiten ansehen, agent:teaching/help, :help)
 
@@ -295,7 +295,7 @@ Jeder Schritt hat `title` und `state`; `why`, `result`, `next` und `statusLabel`
 
 ## Card und Action
 
-`Card(Titel, Text)` und `Action(Symbol, Titel, Beschreibung, Aktionslabel, Link, Befehl)` stellen zusätzliche Hinweise oder Möglichkeiten dar. Das Symbol steht im Button vor dem Aktionslabel; in `Dashboard.View` übernehmen `next`, `decisions` und `explore` es aus dem Feld `icon`. Ohne Symbol zeigt ein `agent:`-Button `▶️`, ein Abschnittslink (`#…`) bleibt ohne Symbol. Texte werden als Text behandelt, nicht als frei eingefügtes HTML.
+`Card(Titel, Text)` und `Action(Symbol, Titel, Beschreibung, Beschriftung, Link, Befehl)` stellen zusätzliche Hinweise oder Möglichkeiten dar. Das Symbol steht im Button vor der Beschriftung; in `Dashboard.View` übernehmen `next`, `decisions` und `explore` es aus dem Feld `icon`. Ohne Symbol zeigt ein `agent:`-Button `▶️`, ein Abschnittslink (`#…`) bleibt ohne Symbol. Texte werden als Text behandelt, nicht als frei eingefügtes HTML.
 
 @Dashboard.Card(Bisher festgehalten, Drei Lernziele liegen als Entwurf vor.)
 
@@ -323,7 +323,7 @@ Zusätzliche Aktionen erscheinen aufklappbar. Eine leere Liste erzeugt keinen un
 4. Lokale CSS-Variablen, responsives Layout und ein dunkles Farbschema sind enthalten. Eine Anpassung an manuell gewählte LiaScript-Themes ist ein späterer Schritt.
 5. Feste Beschriftungen sind auf Deutsch und Englisch eingebaut (Sprache aus `lang`, sonst aus dem `lang` der Seite, Rückfall: Englisch). Für jede andere Sprache liefert das Feld `labels` die Beschriftungen. Titel, Gründe und mehrere Bereichsbeschriftungen kommen aus den Daten.
 
-Für eine spätere öffentliche Distribution sollen sowohl ein fester Tag/Commit als auch die aktuelle Entwicklungsfassung angeboten werden. Der Prototyp wird zunächst lokal importiert.
+Für eine spätere Veröffentlichung sollen sowohl ein fester Tag/Commit als auch die aktuelle Entwicklungsfassung angeboten werden. Der Prototyp wird zunächst lokal importiert.
 
 ## Implementierung
 
@@ -336,7 +336,7 @@ link: ./dashboard.css
 @Dashboard.View wird an den JSON-Codeblock angehängt.
 ```
 
-Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, klein, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <draft.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
+Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, in Kleinbuchstaben, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <draft.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
 
 Optionale Felder für die Kursterminologie: `unitsTitle` (Überschrift der Einheitenliste) und `unitLabel: {one, many}` (Wörter in der Fortschrittszeile, z. B. „1 von 4 Kapiteln ist abgeschlossen“). `many` steht in der Form nach „von“, also im Dativ Plural: `{"one": "Kapitel", "many": "Kapiteln"}`, `{"one": "Modul", "many": "Modulen"}`.
 
