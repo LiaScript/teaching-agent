@@ -26,23 +26,23 @@ const required = {
   "tasks/update-dashboard.md": ["This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["Change path after a check", "Called from `:build-session`"],
   "tasks/generate-image.md": ["never by its name", "Only once the file exists"],
-  "tasks/build-session.md": ["Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
+  "tasks/build-session.md": ["only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
   "tasks/create-project.md": ["Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
   "tasks/update-project.md": ["Show the plan, then confirm in the terminal"],
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["Findings returned to a caller never contain line numbers", "is never ❌ for it"],
   "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback", "Preview required"],
-  "data/agent-links.md": ["never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
+  "data/agent-links.md": ["`agent` (`:configure-agent`) is one of", "`slide` is a positive integer", "never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
   "data/liascript-cheat-sheet.md": ["data-solution-button=\"false\""],
   "templates/course-context.yaml": ["layout:", "Target Group"],
-  "templates/course-outline.yaml": ["layout:"],
+  "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
   "templates/course-didactics.yaml": ["layout:"],
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
   "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "never\n        relative to another optional block"],
   "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
   "templates/session-validation.yaml": ["Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
-  "templates/journal.md": ["journal-start", "Target Group", "## Publishing"],
+  "templates/journal.md": ["* __Didactic Framework:__", "copied from Course Context", "journal-start", "Target Group", "## Publishing"],
   "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
   "agents/teaching-agent.yaml": [":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**"],
 };
@@ -93,6 +93,17 @@ test("the workflow matches the dashboard path: work out together first, build-se
   assert.ok(!/dependencies: \[create_didactics, create_visuals\]/.test(workflow), "the agenda depends on the optional visual identity again");
   assert.match(workflow, /- command: :build-session \{number\}/, "build-session is missing in the session development sequence");
   assert.match(workflow, /Creates the material document at the first Save/, "coauthor-materials no longer creates the material in the workflow");
+});
+
+test("templates and tasks agree on fields: agent subsections, agenda summary, delivery format, check scripts", () => {
+  const agents = read("templates/agents.yaml");
+  for (const id of ["coauthor", "teaching-agent", "artist-agent", "development-agent", "learner-personas"]) {
+    assert.match(agents, new RegExp(`- id: ${id}\\n`), `templates/agents.yaml has no own section ${id}`);
+  }
+  assert.ok(!/learning objectives?, summary/i.test(read("tasks/create-agenda.md") + read("tasks/validate-course.md") + read("checklists/course-quality-checklist.md")), "the agenda asks for a summary it has no place for");
+  assert.ok(!read("tasks/create-didactics.md").includes("Set the delivery format"), "create-didactics sets a delivery format without a field");
+  assert.ok(!read("dashboard/check-material.mjs").includes('"/usr/bin/chromium"'), "check-material.mjs hard-codes the browser path");
+  assert.match(read("data/duration-heuristic.md"), /For a single-lesson/, "reading pace for a single-lesson is undefined");
 });
 
 test("session methods are chosen by the agent, never asked for per session", () => {

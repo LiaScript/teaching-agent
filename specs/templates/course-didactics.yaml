@@ -48,7 +48,7 @@ template:
       title: Course Type
       template: |
         * __Course Type:__
-          [Type of course: introductory, advanced, practice-oriented, group work, self-learning — and what that means for pacing and learner autonomy.]
+          [The course type copied from `## Course Context` (lecture-series | self-paced | workshop | single-lesson) and what it means for pacing and learner autonomy.]
     - id: didactic-framework
       title: Didactic Framework
       template: |

@@ -115,7 +115,7 @@ Rules:
    - Template usage in materials follows the documented examples and constraints in `## Templates`
 
 5. **Check Agenda** `[if agenda flag = yes in journal.md → ## Course Context]`:
-   - All sessions have title, duration, type, learning objective, summary
+   - All sessions have title, duration, type, learning objective
    - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]` All sessions have a Method assigned
    - Learning objectives align with `journal.md` → `## Outline`
 

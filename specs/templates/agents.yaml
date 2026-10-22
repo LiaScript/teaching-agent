@@ -23,7 +23,7 @@ template:
 
     - id: coauthor
       title: Coauthor
-      template: |
+      template: |+
         ### Coauthor
 
         * __Customization Status:__ inactive
@@ -40,6 +40,9 @@ template:
         * __Boundaries / Never:__
           1. Do not override base workflow, validation, safety, or epistemic rules.
 
+    - id: teaching-agent
+      title: Teaching-Agent
+      template: |+
         ### Teaching-Agent
 
         * __Customization Status:__ inactive
@@ -52,6 +55,9 @@ template:
         * __Boundaries / Never:__
           1. Do not override base workflow, validation, safety, or epistemic rules.
 
+    - id: artist-agent
+      title: Artist-Agent
+      template: |+
         ### Artist-Agent
 
         * __Customization Status:__ inactive
@@ -64,6 +70,9 @@ template:
         * __Boundaries / Never:__
           1. Do not override base visual consistency, accessibility, or uncertainty rules.
 
+    - id: development-agent
+      title: Development-Agent
+      template: |
         ### Development-Agent
 
         * __Customization Status:__ inactive

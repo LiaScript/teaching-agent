@@ -37,6 +37,11 @@ template:
       template: |
         * __Abstract:__
           [Detailed abstract with all topics, benefits, and application.]
+    - id: session-overview
+      title: Session Overview
+      template: |
+        * __Session Overview:__
+          [session → objective → self-check, as a list or a table with at most 3 columns]
     - id: learning-goals
       title: Learning Objectives
       template: |

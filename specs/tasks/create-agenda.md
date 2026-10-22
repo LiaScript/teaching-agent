@@ -3,7 +3,7 @@
 ## Purpose
 
 Creates the **Course Agenda** as a structured schedule for the course.  
-Defines sessions/modules with title, duration, type (slug from `journal.md` → `## Didactics` → `__Session Types:__`, see `data/session-types.md`), learning objectives, summary, and the corresponding materials files.
+Defines sessions/modules with title, duration, type (slug from `journal.md` → `## Didactics` → `__Session Types:__`, see `data/session-types.md`), learning objectives, and the corresponding materials files.
 **The agent also adopts the Coauthor role from `journal.md` → `## Agents` → `### Coauthor` into its own persona, so all content is written in this voice.**
 
 ## Inputs

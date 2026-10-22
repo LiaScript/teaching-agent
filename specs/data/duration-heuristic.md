@@ -13,8 +13,9 @@ A common failure mode is a session that reads as "complete" but is too thin for 
 Word count of the prose (excluding activity/discussion/quiz blocks, which are estimated separately below) ÷ reading pace.
 
 Reading pace depends on the course type from `journal.md` → `## Course Context`:
-- **130 words/minute** for narrated/lecture-style course types (content is meant to be read aloud or matches a TTS narration pace)
-- **200 words/minute** for self-paced, silent-reading course types
+- **130 words/minute** when the content is read aloud or presented — lecture-series and workshop, and a single-lesson led by the teacher
+- **200 words/minute** when learners read silently on their own — self-paced, and a single-lesson in which learners work alone
+- For a single-lesson, take how learners work from the answers in `## Course Context`; if it is unclear, use 130 (the safer, longer estimate)
 
 ### Activity time
 

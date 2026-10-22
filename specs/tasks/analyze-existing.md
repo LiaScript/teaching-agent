@@ -46,7 +46,7 @@ Offers two paths for each missing core section:
    - ⚠️ exists but likely incomplete (e.g., missing sections)
    - ❌ missing
 
-4. For each **missing** core section (`## Outline`, `## Didactics`), 🎛️ ask with structured question (single choice):
+4. For each **missing** core section (`## Outline`, `## Didactics`, and `## Agenda` if the course profile needs one), 🎛️ ask with structured question (single choice):
    - **Auto-generate** — I will read your existing materials and create a draft
    - **Interactive creation** — I will guide you through the appropriate creation command
    - **Skip** — proceed without this document

@@ -32,7 +32,7 @@ template:
 
         - Title, duration, type (slug from `journal.md` → `## Didactics` → `__Session Types:__`, see `data/session-types.md`)
         - Method (slug from `data/didactic-methods.md` → "Session Methods"; defaults to `journal.md` → `## Didactics` → `__Default Session Method:__`, can be overridden per session — omitted entirely if the default is `none`)
-        - Learning objective(s), summary
+        - Learning objective(s) (a unit's summary belongs to its skeleton, not to the agenda)
         - Automatic materials path, resolved from `journal.md` → `## Course Context` →
           `__File Structure:__` (see `data/file-structure-modes.md`): a `##` chapter in
           root `README.md` for single-file mode, or `materials/{n}-{slug}/README.md`

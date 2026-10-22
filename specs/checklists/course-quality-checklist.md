@@ -50,7 +50,7 @@
 
 ## Agenda `[if agenda flag = yes in journal.md → ## Course Context]`
 
-- [ ] [mechanical] All sessions have: title, duration, type, learning objective, summary
+- [ ] [mechanical] All sessions have: title, duration, type, learning objective (the summary of a unit lives in its skeleton under `## Sessions`)
 - [ ] [pedagogical] Session learning objectives align with `journal.md` → `## Outline` learning objectives
 - [ ] [mechanical] Materials file reference present per session
 

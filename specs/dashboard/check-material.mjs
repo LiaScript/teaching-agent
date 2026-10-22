@@ -3,6 +3,7 @@
 // Run from the course project root: node <path>/dashboard/check-material.mjs [README.md]
 import { spawn } from "node:child_process";
 import { readdir, access } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,7 +11,13 @@ import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 const root = process.cwd(); // run from the course project root
-const file = process.argv[2] ?? "README.md";
+const file = process.argv[2] ?? (existsSync("materials") ? null : "README.md");
+if (!file) {
+  // multi-file course: the root README.md is not a unit's material
+  console.error("Usage: node <path>/dashboard/check-material.mjs materials/<number>-<slug>/README.md");
+  console.log("Exit code: 1");
+  process.exit(1);
+}
 const port = 3041;
 const origin = `http://127.0.0.1:${port}`;
 
@@ -29,7 +36,8 @@ let browser;
 try {
   const { chromium } = await playwright();
   await new Promise(done => setTimeout(done, 3500));
-  browser = await chromium.launch({ executablePath: "/usr/bin/chromium", headless: true });
+  // CHROMIUM_PATH selects a system browser; otherwise Playwright uses its own.
+  browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}) });
   const page = await browser.newPage({ viewport: { width: 1024, height: 768 } });
   const missing = new Set();
   const errors = [];

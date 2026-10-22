@@ -40,7 +40,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 4. 💬 Describe the instructor persona (expertise, role, background) — free text, discuss with instructor.
 5. Derive the teaching style from `## Course Context` (Tone) and confirm it only as one line of the summary.
 6. Derive the difficulty level from target group and outline; confirm it only as one line of the summary.
-7. Set the delivery format consistent with the course type.
+7. If the delivery situation from `## Course Context` (classroom, online, self-study) shapes the lesson phases, describe that in `__Didactic Concept:__` — there is no separate field for it.
 8. Fill the `templates/course-didactics.yaml` template with the results.
 9. **Before saving** show the complete section as the instructor will read it (after a change: the whole new version with the changed parts in bold, never only the changes), with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Didactics` using the `layout` of `templates/course-didactics.yaml` (visible part in the course language, technical fields in `<details>`), no sub-headings.
 10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection — **merge, never overwrite** what the instructor added:

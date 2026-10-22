@@ -24,7 +24,7 @@ Use this task for both:
 - Entry heading format:
 
   ```markdown
-  ### {Type}: {Descriptive Title} ({YYYY-MM-DD})
+  ### {Type, in the course language}: {Descriptive Title} ({YYYY-MM-DD})
   ```
 
 ## Steps
@@ -41,7 +41,7 @@ Use this task for both:
 
    Examples:
    - `agenda-structure` -> `Agenda Structure And Session Rhythm`
-   - `persona-chat-lina-2-exercise` -> `Lina Feedback On Session 2 Exercise`
+   - `persona-chat-lina-2` -> `Lina Feedback On Session 2`
    - `course-type-decision` -> `Course Type And Scope Decision`
 
 3. Read `templates/note-backup.yaml` and select the content block matching the note type:

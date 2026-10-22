@@ -77,7 +77,7 @@ Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (
 
 ## Cross-agent execution note
 
-Steps 2 and 3 run the Learner-Agent's and Artist-Agent's own task procedures automatically as sub-steps of this loop, rather than through the usual conversational "suggest `:agent X`" handoff (see `CLAUDE.md` → "Agent Coordination" → the `:build-session` exception). Each sub-step still only reads its owning agent's own `### {Agent}` subsection in `journal.md` → `## Agents` — the read-scope rule stays in force even though the switch happens automatically instead of by explicit instructor command.
+Steps 2 and 3 run the Learner-Agent's and Artist-Agent's own task procedures automatically as sub-steps of this loop, rather than through the usual conversational "suggest `:agent X`" handoff (see `CLAUDE.md` → "Agent Coordination" → the `:build-session` exception). Each sub-step still only reads its owning agent's own part of `journal.md` → `## Agents` — the `### Artist-Agent` subsection for the image steps, and for the Learner-Agent only the named `#### Persona:` entry in `### Learner Personas` (it has no `### Learner-Agent` subsection) — the read-scope rule stays in force even though the switch happens automatically instead of by explicit instructor command.
 
 ## When to use vs. manual step-by-step
 

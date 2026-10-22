@@ -142,7 +142,13 @@ _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
   {{e.g. humorous, academic, practical, conversational — and how it shows in the material}}
 
 * __Course Type:__
-  {{introductory, advanced, practice-oriented, group work, self-learning}}
+  {{copied from Course Context: lecture-series | self-paced | workshop | single-lesson — and what it means for pacing}}
+
+* __Didactic Framework:__
+  {{framework name (see `data/didactic-methods.md`)}}
+
+* __Default Session Method:__
+  {{method name (slug) or `none`}}
 
 * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
   1. __{{display name}}__ (slug: `{{slug}}`) — {{one-line criterion}}
@@ -413,4 +419,4 @@ _Only used for improve-existing courses — filled by `:analyze-existing`._
 [▶️ Save notes](agent:teaching/save-notes) `:save-notes` · [▶️ Save decision](agent:teaching/save-decision) `:save-decision <title>`
 
 _Appended to by `:save-notes` and `:save-decision` from `templates/note-backup.yaml`._
-_Each note is one append-only `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` subsection._
+_Each note is one append-only `### {Type, in the course language}: {Descriptive Title} ({YYYY-MM-DD})` subsection._
