@@ -3,7 +3,7 @@
 //   node --test specs/check-specs.mjs
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync, statSync, existsSync, writeFileSync, mkdtempSync } from "node:fs";
+import { readFileSync, readdirSync, statSync, existsSync, writeFileSync, mkdtempSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
@@ -153,10 +153,14 @@ test("no persona or scenario data from tandem tests in the specs", () => {
   assert.deepEqual(hits.map(path => path.slice(specs.length + 1)), []);
 });
 
-function checkJournal(text) {
+function checkJournal(text, files = {}) {
   const dir = mkdtempSync(join(tmpdir(), "journal-"));
   const file = join(dir, "journal.md");
   writeFileSync(file, text);
+  for (const [path, content] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, path)), { recursive: true });
+    writeFileSync(join(dir, path), content);
+  }
   const run = spawnSync(process.execPath, [join(specs, "dashboard", "validate-journal.mjs"), file], { encoding: "utf8" });
   return { status: run.status, output: run.stdout + run.stderr };
 }
@@ -194,6 +198,40 @@ test("open points never repeat the dashboard's group names", () => {
     assert.equal(run.status, 2, run.output);
     assert.match(run.output, /repeats the group name/);
   }
+});
+
+test("the journal check tells line references from content that mentions rows", () => {
+  const content = checkJournal(journal({ outcome: "**Outcome:** passed (2026-10-19)\n\n**What works:**\n\n- The exercise sums Zeile 6 of the table" }));
+  assert.equal(content.status, 0, content.output);
+  for (const cited of ["- Missing alt text (Zeile 12)", "- Missing alt text in line 12", "- Missing alt text, Z. 12"]) {
+    const run = checkJournal(journal({ outcome: `**Outcome:** passed (2026-10-19)\n\n**Still missing:**\n\n${cited}` }));
+    assert.equal(run.status, 2, `${cited}: ${run.output}`);
+  }
+});
+
+test("the Done check finds the column also when the header is translated", () => {
+  const table = "| # | Titre | Type | Squelette | Matériel | Fait | Notes |\n|---|---|---|---|---|---|---|\n| 1 | Intro | module | ✅ | ✅ | ✅ | |";
+  const failed = journal().replace("## Sessions\n\n", `## Sessions\n\n${table}\n\n`).replace("__Result:__ PASS", "__Result:__ FAIL");
+  const run = checkJournal(failed, { "materials/1-intro/README.md": "# Intro" });
+  assert.equal(run.status, 2, run.output);
+  assert.match(run.output, /without a passed check/);
+});
+
+test("Material ✅ needs the material document, and a done unit needs Done ✅", () => {
+  const table = done => `| # | Title | Type | Skeleton | Material | Done | Notes |\n|---|---|---|---|---|---|---|\n| 1 | Intro | module | ✅ | ✅ | ${done} | |`;
+  const context = "* __File Structure:__\n  1. Mode: multi-file";
+  const base = done => journal({ context }).replace("## Sessions\n\n", `## Sessions\n\n${table(done)}\n\n`);
+  const missing = checkJournal(base("❌"));
+  assert.equal(missing.status, 2, missing.output);
+  assert.match(missing.output, /material document .*missing/);
+  assert.equal(checkJournal(base("❌"), { "materials/1-intro/README.md": "# Intro" }).status, 0);
+  const single = journal({ context: "* __File Structure:__\n  1. Mode: single-file" }).replace("## Sessions\n\n", `## Sessions\n\n${table("❌")}\n\n`);
+  assert.equal(checkJournal(single).status, 2);
+  assert.equal(checkJournal(single, { "README.md": "# X\n\n## 1. Intro" }).status, 0);
+  const doneUnit = base("❌").replace('"state":"planned"', '"state":"done"');
+  const run = checkJournal(doneUnit, { "materials/1-intro/README.md": "# Intro" });
+  assert.equal(run.status, 2, run.output);
+  assert.match(run.output, /dashboard shows unit 1 as done/);
 });
 
 test("Done ✅ needs a passed check without open ⏳ items", () => {

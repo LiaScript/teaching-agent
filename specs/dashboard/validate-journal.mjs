@@ -1,8 +1,8 @@
 // Checks the Dashboard data block in journal.md: valid JSON, valid model, and
 // whether likely contradictions between sections are listed under `decisions`.
 // Run from the course project root: node specs/dashboard/validate-journal.mjs [file]
-import { readFileSync, existsSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
+import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import "./dashboard.js";
 
@@ -97,14 +97,26 @@ for (const report of section("Sessions").split(/^(?=#### Validation Report)/m).s
   const visible = body.split("<details>")[0];
   // The outcome label is translated into the course language: check for a bold label, not for a word.
   if (!/\*\*[^*\n]+:\*\*/.test(visible) || !/<details>/.test(body)) problems.push("validation report without visible summary (**Outcome:**) or without <details> – use templates/session-validation.yaml");
-  if (/\b(Z\.|Zeilen?|[Ll]ines?)\s*\d/.test(body)) problems.push("validation report cites line numbers – use page titles of the material");
+  // A row of a spreadsheet ("Zeile 6") is content; a reference to a line of the material is not.
+  if (/\((?:Z\.|Zeilen?|[Ll]ines?)\s*\d+[^)]*\)|\b(?:Z\.|[Ll]ines?)\s*\d/.test(body)) problems.push("validation report cites line numbers – use page titles of the material");
 }
 if (/^#### Images\s*\n+_Filled by/m.test(source)) problems.push("empty \"#### Images\" block with a placeholder note – create it only when an image exists");
 const sessions = section("Sessions");
+const header = sessions.match(/^\|\s*#\s*\|(.*)\|\s*$/m)?.[1].split("|").map(cell => cell.trim()) ?? [];
+// The overview table ends with … Material | Done | Notes; find the columns by name, else by that position.
+const column = (name, fromEnd) => header.indexOf(name) >= 0 ? header.indexOf(name) : header.length - fromEnd;
+const projectDir = dirname(resolve(file));
+const fileMode = section("Course Context").match(/Mode:\s*(single-file|multi-file)/)?.[1];
+const materialExists = number => fileMode === "single-file"
+  ? existsSync(join(projectDir, "README.md"))
+  : existsSync(join(projectDir, "materials")) && readdirSync(join(projectDir, "materials")).some(name => name.startsWith(`${number}-`) && existsSync(join(projectDir, "materials", name, "README.md")));
+const doneRows = new Set();
 for (const row of sessions.matchAll(/^\|\s*(\d+)\s*\|(.*)\|\s*$/gm)) {
   const cells = row[2].split("|").map(cell => cell.trim());
-  const header = sessions.match(/^\|\s*#\s*\|(.*)\|\s*$/m)?.[1].split("|").map(cell => cell.trim()) ?? [];
-  const done = cells[header.indexOf("Done")];
+  if (header.length < 6) continue;
+  const done = cells[column("Done", 2)];
+  if (done?.includes("✅")) doneRows.add(row[1]);
+  if (fileMode && cells[column("Material", 3)]?.includes("✅") && !materialExists(row[1])) problems.push(`unit ${row[1]}: "Material ✅" but the material document is missing (${fileMode === "single-file" ? "README.md" : `materials/${row[1]}-…/README.md`})`);
   if (done && done.includes("✅")) {
     const block = sessions.split(new RegExp(`^### ${row[1]}\\. `, "m"))[1]?.split(/^### \d+\. /m)[0] ?? "";
     if (!/#### Validation Report[\s\S]*?__Result:__\s*PASS(?!\s*with)/.test(block)) problems.push(`unit ${row[1]}: "Done ✅" without a passed check (Validation Report with "Result: PASS" – not "with concerns" – is missing)`);
@@ -150,6 +162,8 @@ function agendaUnitRows(agenda) {
   }
   return lines.filter(line => /^\s*\|\s*\d+\s*\|/.test(line) && !line.includes("{{")).length;
 }
+model.units.filter(unit => unit.state === "done" && header.length >= 6 && !doneRows.has(unit.id)).forEach(unit =>
+  problems.push(`the dashboard shows unit ${unit.id} as done, but its Done column is not ✅`));
 const agendaRows = agendaUnitRows(section("Agenda"));
 if (agendaRows && model.total !== agendaRows) problems.push(`the agenda has ${agendaRows} rows, the dashboard shows ${model.total} units`);
 if (problems.length) {
