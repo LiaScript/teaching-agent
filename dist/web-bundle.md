@@ -919,7 +919,7 @@ e. If any `[pedagogical]`-tagged item is flagged, or an `[advisory]` hint is rec
 
 a. For each persona, run `tasks/review-as-persona.md {name} {number}` in **report-only mode**: perform its steps 1–7 (produce and save the structured `#### Persona Reviews` report) and skip steps 8–10 (the persistent in-character follow-up chat) — there is no one present to chat with during an automated loop. The instructor can start that chat separately afterward by calling `:review-as-persona` directly.
 
-b. If any persona's priority issues (`data-key="priority"`) include a blocking concern — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` if it is an isolated issue, using the "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. A broader issue needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d — never regenerate the material to fix it.
+b. If any persona's priority issues (`data-key="priority"`) include a blocking concern (one that makes the unit unusable for that persona: it cannot follow, cannot do a task, or cannot access the material — everything else is reported, not fixed in this loop) — including a "content feels too short/rushed" comment, which is the real judgment call on the Step 1e duration flag — fix it via `:quick-fix` if it is an isolated issue, using the "When to use vs. `:coauthor-materials`" table from `tasks/quick-fix.md` as the decision rule. A broader issue needs `:coauthor-materials`: stop and hand off to the instructor, same rule as Step 1d — never regenerate the material to fix it.
 
 c. After fixes, re-run Step 1c–1d — never 1a or 1b: regenerating would discard every fix of this run — and then this step again for **all** personas (not just the one that raised the concern, to catch regressions).
 
@@ -2765,6 +2765,7 @@ Rules:
    - If that persona's report already exists under that session's `#### Persona Reviews` (its `**{icon} {name}**` line, or an older `##### {icon} {name}` heading), replace only that persona's report.
    - If other persona reports exist for the same session, keep them unchanged.
    Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → {icon} {name}."
+   A persona review never changes Done or the unit's state by itself; its priority issues are offered as `:quick-fix` changes, and a change makes the unit wait for a re-check.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 8. **Stay in persona for follow-up dialog:**
@@ -3182,8 +3183,11 @@ Run this task automatically after any task that changes project state:
    - `revision` — the latest review or validation requires changes
    - Validation result → unit state: FAIL → `revision`; re-check pending →
      `review` (only while the instructor or a check actually has something to
-     look at); PASS with concerns or PASS with ⏳ items → `current` with
-     `statusLabel` = "passed – {later step}" (translated); PASS + Done ✅ → `done`.
+     look at); PASS with concerns → `current` with `statusLabel` = "passed with
+     concerns – your decision needed"; PASS with ⏳ items → `current` with
+     `statusLabel` = "passed – {later step}" (both translated); PASS + Done ✅ → `done`.
+     A persona review alone never changes the state; a change it leads to
+     makes the unit `review` until the re-check.
    - `done` — only with `Result: PASS` (not "with concerns") and no open ⏳ item in
      the unit's `#### Validation Report` **and** Done ✅ in the overview table. Never infer it from a heading.
    Optional process steps may use `optional`. A unit's `summary` never
@@ -3499,7 +3503,8 @@ Rules:
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
-8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
+8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
+   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason; an accepted concern becomes a dated entry in the session's decisions list, listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. Accessibility: required) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
 
@@ -3582,6 +3587,7 @@ Applies only when `:validate-course` runs directly in course mode. Called as a s
 **Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes, or after 5 iterations — whichever comes first.
 
 - In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, missing required elements, structural gaps — everything tagged `[mechanical]`. `[advisory]` items such as the duration flag are not in scope: the loop cannot fix them without inventing or cutting content.
+- Items only the instructor can resolve are not in scope either, even when tagged `[mechanical]` — missing content or a missing unit, an approval, an answer (e.g. "all sessions Done", "no session without material"). List them at once; if only such items remain, stop now — further iterations would change nothing.
 - Never auto-loop on `[pedagogical]`-tagged items — always surface those to the instructor immediately (core rule: critical sparring partner, not a rubber stamp).
 - On hitting the 5-iteration cap without a clean mechanical pass: stop, list the remaining `[mechanical]` FAIL items, and hand back to the instructor instead of continuing.
 - See `CLAUDE.md` → "Iteration Pattern" for the general convention. Under Claude Code this can additionally be driven with `/goal "journal.md → ## Validation → ### Latest Validation Summary shows all [mechanical] checklist items passing, or stop after 5 iterations"`.
@@ -4827,6 +4833,7 @@ template:
         Directly below `## Sessions`, in this order:
         (1) a visible status list in the course language, one numbered line per unit in session order,
         `{n}. {title} – {status}` with status "skeleton ✅ · material open", "material ready · check open",
+        "check failed – revision needed", "passed with concerns – your decision needed",
         "passed – {later step} follows" or "checked ✅" (translated; a Notes entry follows after " – ");
         (2) `<details><summary>{"Technical overview", translated}</summary>`, then `<!-- data-type="none" -->`
         and the table `| # | Title | Type | Method | Skeleton | Material | Done | Notes |` (the Method
@@ -5433,7 +5440,7 @@ Rules for action lines:
 | `## Templates` | `manage-templates` |
 | `## Agenda` | `create-agenda` |
 | `## Sessions` | `create-session` (without params — asked in chat), `validate-course` |
-| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
+| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; check failed → `coauthor-materials?number={n}` (✏️ revise); passed with concerns → `validate-course {n}` (it goes through the concerns); passed with ⏳ → the command of the named later step (e.g. `artist/generate-image`); checked ✅ → no main action; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
 | `## Validation` | `validate-course` |
 | `## Publishing` | `development/create-project` (first publication, only if the publishing gate is PASS), `development/update-project` (once `__State:__` is published; same gate) |

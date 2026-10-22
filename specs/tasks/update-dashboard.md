@@ -70,8 +70,11 @@ Run this task automatically after any task that changes project state:
    - `revision` — the latest review or validation requires changes
    - Validation result → unit state: FAIL → `revision`; re-check pending →
      `review` (only while the instructor or a check actually has something to
-     look at); PASS with concerns or PASS with ⏳ items → `current` with
-     `statusLabel` = "passed – {later step}" (translated); PASS + Done ✅ → `done`.
+     look at); PASS with concerns → `current` with `statusLabel` = "passed with
+     concerns – your decision needed"; PASS with ⏳ items → `current` with
+     `statusLabel` = "passed – {later step}" (both translated); PASS + Done ✅ → `done`.
+     A persona review alone never changes the state; a change it leads to
+     makes the unit `review` until the re-check.
    - `done` — only with `Result: PASS` (not "with concerns") and no open ⏳ item in
      the unit's `#### Validation Report` **and** Done ✅ in the overview table. Never infer it from a heading.
    Optional process steps may use `optional`. A unit's `summary` never

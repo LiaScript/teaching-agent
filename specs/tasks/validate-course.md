@@ -92,7 +92,8 @@ Rules:
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
-8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
+8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
+   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason; an accepted concern becomes a dated entry in the session's decisions list, listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. Accessibility: required) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
 
@@ -175,6 +176,7 @@ Applies only when `:validate-course` runs directly in course mode. Called as a s
 **Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes, or after 5 iterations — whichever comes first.
 
 - In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, missing required elements, structural gaps — everything tagged `[mechanical]`. `[advisory]` items such as the duration flag are not in scope: the loop cannot fix them without inventing or cutting content.
+- Items only the instructor can resolve are not in scope either, even when tagged `[mechanical]` — missing content or a missing unit, an approval, an answer (e.g. "all sessions Done", "no session without material"). List them at once; if only such items remain, stop now — further iterations would change nothing.
 - Never auto-loop on `[pedagogical]`-tagged items — always surface those to the instructor immediately (core rule: critical sparring partner, not a rubber stamp).
 - On hitting the 5-iteration cap without a clean mechanical pass: stop, list the remaining `[mechanical]` FAIL items, and hand back to the instructor instead of continuing.
 - See `CLAUDE.md` → "Iteration Pattern" for the general convention. Under Claude Code this can additionally be driven with `/goal "journal.md → ## Validation → ### Latest Validation Summary shows all [mechanical] checklist items passing, or stop after 5 iterations"`.

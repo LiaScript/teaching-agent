@@ -135,6 +135,7 @@ Rules:
    - If that persona's report already exists under that session's `#### Persona Reviews` (its `**{icon} {name}**` line, or an older `##### {icon} {name}` heading), replace only that persona's report.
    - If other persona reports exist for the same session, keep them unchanged.
    Confirm: "Review saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Persona Reviews` → {icon} {name}."
+   A persona review never changes Done or the unit's state by itself; its priority issues are offered as `:quick-fix` changes, and a change makes the unit wait for a re-check.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 8. **Stay in persona for follow-up dialog:**
