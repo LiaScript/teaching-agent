@@ -172,7 +172,7 @@ agent_links:
     - "Every runnable command written into `journal.md` (Dashboard, action lines) is an `agent:` link followed by the visible command in inline code, so it stays readable without the DevServer."
 
 interaction_mode:
-  principle: "Use structured questions (vscode_askQuestions) for closed decisions; use free-form dialog for open content. When the instructor works in the LiaScript preview (a `command` or `chat` event arrived), ask both kinds in the preview chat instead — see `agent_links`."
+  principle: "Use a structured-question tool for closed decisions if the agent has one (e.g. AskUserQuestion, vscode_askQuestions), otherwise a numbered list in plain text; use free-form dialog for open content. When the instructor works in the LiaScript preview (a `command` or `chat` event arrived), ask both kinds in the preview chat instead — see `agent_links`."
 
   structured_questions:
     description: "Clickable options — use when the answer comes from a known, finite set and determines a workflow branch."
@@ -189,7 +189,7 @@ interaction_mode:
       - "The question requires a nuanced multi-sentence answer"
 
   task_notation:
-    structured: "🎛️ — use structured question (vscode_askQuestions) for this step"
+    structured: "🎛️ — structured question for this step (a structured-question tool if available, otherwise a numbered list)"
     freetext: "💬 — use free-form dialog for this step"
 
 epistemic_rules:
@@ -437,7 +437,7 @@ agent_coordination:
   role: "Learner perspective specialist — hands back to Teaching-Agent when persona work is complete"
 
   on_activation:
-    - "Read `journal.md`, especially `## Course Context`, to understand course type, target audience, terminology, and language"
+    - "Read only `journal.md` → `## Course Context` (course type, target audience, terminology, language) — other sections only when a command names them"
     - "Check if `journal.md` contains `## Agents` → `### Learner Personas`; for status, read only persona headings, not full persona bodies"
     - "Do not read `## Agents` → `### Coauthor` or any specialist agent customization"
     - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
@@ -988,7 +988,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 - LiaScript / Markdown using the syntax from `data/liascript-cheat-sheet.md`
 - Suggestions & text modules that can be incorporated into the currently open material document (see `data/file-structure-modes.md`)
 - Revised sections in the persona style
-- Image prompts or text diagrams, if applicable
+- Image prompts (saved through `:create-image`, Artist-Agent) or text diagrams, if applicable
 
 ## Steps
 
@@ -1003,7 +1003,7 @@ Suggest images for visualization, either as a search term or as a concrete image
 4. Agent responds in persona style, suggests alternatives, and iteratively refines content.
    - **Fact check before showing:** before you show a draft piece, list its factual statements for yourself and check each against a named source (use `reference-checker` if installed). Without web access or the skill, name the source you rely on (textbook, standard, the instructor) or mark the claim "not verified" in the summary and ask — never present it as checked. A simplification must stay true at the learners' level (never "A becomes C" when the source says "A → B → C"). No absolute or frightening claims ("soon there will be none left") unless the source states them. Mark every statement you could not verify as *unverified* in the chat; material with unverified statements is approved only if the instructor explicitly accepts that, and the session's references list the sources.
    - **New rule → re-check:** when the instructor adopts a wording or style rule (also a project-wide one), apply it at once to **all** pieces drafted so far, show every hit with the fix in bold, and only then continue.
-   - **Course-wide decisions:** if a decision applies to every unit ("keyboard shortcuts only in the info box"), offer to record it as an instructor rule under `## Agents` → `### Coauthor` → Project-Specific Rules (without the `data-from` marker), so `:promote-session` and later co-authoring follow it; it is written with the same save confirmation. If a decision contradicts `## Didactics` or `### Coauthor` (e.g. its voice sample), say so and offer to adjust that section by the rule "Changing another section" in `data/agent-links.md`.
+   - **Course-wide decisions** (not for a single lesson — there the session's decisions list is the course): if a decision applies to every unit ("keyboard shortcuts only in the info box"), offer to record it as an instructor rule under `## Agents` → `### Coauthor` → Project-Specific Rules (without the `data-from` marker), so `:promote-session` and later co-authoring follow it; it is written with the same save confirmation. If a decision contradicts `## Didactics` or `### Coauthor` (e.g. its voice sample), say so and offer to adjust that section by the rule "Changing another section" in `data/agent-links.md`.
    - **Record decisions:** the decisions list holds only dated decisions (open points go to the overview as `decide` or `internal`). Every decision the instructor makes about this session goes, with date, into the session's decisions list — written together with the next save confirmation and listed in its summary in future tense ("When you save, I will also record: …", translated, see `data/agent-links.md` → "Nothing unseen gets saved"), never before it — (`data-key="decisions"`, label in the course language) in `journal.md` → `## Sessions` → `### {n}. {title}` (create it above `**References:**` if missing).
 
    **Critical engagement rules — always active:**
@@ -1445,6 +1445,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
    7. Prior knowledge gaps: concepts, terms, and skills typically missing at course start
    **Desired outcome:** Statistics per dimension with source and year; flag where no specific data exists (use proxy data if noted)
    **Search suggestions:**
+   - Pick sources that fit the target group — apprentices (e.g. the examples below), school learners (school and education statistics), adults (adult education surveys):
    - `[audience] Ausbildung Statistik [year]`
    - `BIBB [occupation] Auszubildende`
    - `[region] Berufsausbildung Digitalnutzung Jugendliche`
@@ -1473,7 +1474,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 
 ## Persona Structure
 
-Each persona is one `####` subsection inside `journal.md` → `## Agents` → `### Learner Personas` — never use `##` or `###` inside a persona entry (they would terminate the target container) and never go deeper than `#####`. Wrap everything below the `####` heading in `<section>…</section>` (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows the persona as one slide instead of splitting on every `#####` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide":
+Each persona is one `####` subsection inside `journal.md` → `## Agents` → `### Learner Personas` — never use `##` or `###` inside a persona entry (they would terminate the target container) and never go deeper than `#####`. Write the `#####` headings of the structure in the course language. Wrap everything below the `####` heading in `<section>…</section>` (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows the persona as one slide instead of splitting on every `#####` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide":
 
 ```markdown
 #### Persona: [Icon] [Name]
@@ -1504,7 +1505,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 *[Source / Assumption note]*
 
 ##### 3. Training & Work Context
-- Training structure: ... (e.g., block schedule, weeks per block)
+- Learning setting: ... (e.g., school timetable, block schedule, part-time course alongside work)
 - Typical work day / schedule: ...
 - Commute / accessibility: ...
 - Financial situation: ...
@@ -2299,7 +2300,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
    **Terminology:** set `sessions-called` to the word the instructor will see for one unit in the journal, in the course language and fitting the setting (e.g. school: the local word for "lesson" or "learning unit"). Use exactly these words in all instructor-facing text and in the Dashboard.
 
-   **Audience override:** for school learners (primary or secondary school), never use the persona type `professor`; use `coach` (learner-driven) or `tutor` (teacher-led).
+   **Audience override:** for school learners (primary or secondary school), never use the persona type `professor`; use `coach` (learner-driven) or `tutor` (teacher-led, and also for "mixed").
 
    For **self-paced** and **single-lesson**, 🎛️ ask agenda preference in the instructor's terms ("Shall I create a schedule with order and time per unit?") (structured question — single choice):
    - **Yes** — helps with structure planning, especially for longer content
@@ -2310,7 +2311,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
 7. 🎛️ Ask about project-level conventions in one structured pass (multi-select where applicable):
    - Language: prefill with the language the instructor writes in; ask only if the material should be in another language
-   - Tone: formal / informal / conversational
+   - Tone: formal / informal / conversational (if not answered: informal for school learners, formal otherwise)
    - Person: Sie / Du / you — how *learners* are addressed in the material
    - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). Contact address (optional, an e-mail learners may write to): needed only before publishing — if not given now, the dashboard lists it as `prepare`, and `:create-project` asks for it.
    - Instructor Address: how the agents address the instructor (default: the formal form of the course language, unless the instructor offers otherwise) — never derived from Person
@@ -2320,7 +2321,7 @@ The course context acts as the governance layer: it defines the course type, ter
 9. **Before saving:** show a short summary of everything that will be written (this step and step 10), with "Save" / "Change something" — the single write confirmation of this task.
    - The summary table lists under "Decided" **only what the instructor answered**, in the instructor's own words (e.g. describe the course type by the two answers of step 3, not by a translated type slug).
    - Anything you derived or propose (a learning companion, self-checks …) goes into a separate list "Suggestions — not decided yet" or is left out; it is saved only after the instructor accepts it.
-   - Technical keys that are mapped from the answers (Type, Pacing, Persona type) are named in one plain-language line below the table ("For the assistant this means: …"), so the technical block never says something the instructor has not seen.
+   - Technical keys that are mapped from the answers (Type, Pacing, Persona type) are named in one plain-language line below the table ("For the assistant this means: …"), so the technical block never says something the instructor has not seen. That line belongs to the summary only and is not saved; the keys themselves go into the technical block.
    Then save by replacing the content of `journal.md` → `## Course Context` following `templates/course-context.yaml` → `layout` (summary table first, technical `* __Label:__` bullets inside `<details>`, no sub-headings).
 10. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
     - Add `import: {url}` to the main metadata header if missing
@@ -2969,15 +2970,14 @@ Generated in sequence without interruption inside `journal.md`:
 
    **🎛️ Block 3 — Didactics (structured questions):**
    - Guiding figure / instructor persona: 💬 who speaks in the material (or "none – a neutral teacher voice"); the persona voice sample is written from it in the draft, never invented without this answer
-   - Teaching style: humorous / academic / practical / conversational / mixed
-   - Difficulty level: beginner / intermediate / advanced
+   - Teaching style and difficulty level are not asked: derive them as `tasks/create-didactics.md` steps 5–6 do and show them in the draft
    - Didactic concept: structured/presenter-driven / exploratory / project-based / mixed
    - Session Types: propose the default formats for the course type exactly as `tasks/create-didactics.md` step 3b does (display names in the course language, each with criterion and required elements, `data/session-types.md`), and ask its grounding question — one concretely planned unit and which format it gets, and why. If the answer fits no proposed type, revise the types before the draft.
 
    **🎛️ Block 4 — Structure (structured questions):**
    - Agenda needed? (for self-paced / single-lesson): yes / no
    - Session count and length: 💬 ask for exact numbers (how many units, minutes each). Never offer ranges and never compute a middle value; if the instructor gives a range, ask which number to plan with.
-   - File structure: teacher question from `tasks/init-course.md` step 6
+   - File structure: teacher question from `tasks/init-course.md` step 6 — not for a single lesson (always single-file, named in the draft)
    - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
 
 3. **Draft before saving.** Generate the complete content of every section that Phase 2 will write (Course Context incl. technical choices such as persona type, pacing, file structure; Outline incl. objectives; Didactics incl. framework, method, level; the Coauthor entries derived from it (step 4b); Agenda; session list with titles, durations and core content) and show it in the chat **before** anything is written — one compact block per section in plain course language, technical choices named in plain words. Nothing may be saved that is not in this draft (`data/agent-links.md` → "Nothing unseen gets saved").
@@ -3205,7 +3205,8 @@ Run this task automatically after any task that changes project state:
    objectives → activities → material draft → instructor review → validation and
    revision. Checks may return the work to an earlier step. A generated draft is
    not instructor approval, and a session PASS is not a course publication PASS.
-5. Choose **exactly one** prominent next action (`next`) with an understandable
+5. After a check with FAIL or open concerns, `next` is resolving them ("Resolve concerns" / "Revise", translated), never another check of the same state.
+   Choose **exactly one** prominent next action (`next`) with an understandable
    `title`, `why`, `label`, `href`, readable `command` and `icon` (the action
    symbol from `data/agent-links.md` → Markdown Format; the same for actions in
    `decisions` and `explore`). Check prerequisites
@@ -3566,7 +3567,6 @@ Rules:
    ```
    Date: YYYY-MM-DD
    Mode: course
-   Course type: [type]
    Result: PASS / FAIL / PASS with concerns
    Issues found: N
    Sessions checked: N
@@ -4073,11 +4073,6 @@ template:
       template: |
         * __Abstract:__
           [Detailed abstract with all topics, benefits, and application.]
-    - id: session-overview
-      title: Session Overview
-      template: |
-        * __Session Overview:__
-          [session → objective → self-check, as a list or a table with at most 3 columns]
     - id: learning-goals
       title: Learning Objectives
       template: |
@@ -4085,6 +4080,11 @@ template:
           1. [Clear learning objective with application scenario]
           2. [Clear learning objective with application scenario]
           3. [Clear learning objective with application scenario]
+    - id: session-overview
+      title: Session Overview
+      template: |
+        * __Session Overview:__
+          [session → objective → self-check, as a list or a table with at most 3 columns]
 ```
 
 ==================== END: specs/templates/course-outline.yaml ====================
@@ -4817,7 +4817,7 @@ template:
       `README.md` in single-file mode.
   title: 'Session {{number}} ({{type | title}})'
   note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). Structure the outline below so it satisfies that type''s `Required` checklist.'
-  heading_levels: 'multi-file: as below — `#` is the title of the own material document, `##` its parts. single-file: every heading one level lower — the session is the `## {{title}}` chapter of root `README.md` (never a `#`; the course title is the only `#` there), its parts are `###`.'
+  heading_levels: 'multi-file: as below — `#` is the title of the own material document, `##` its parts. single-file: every heading one level lower — the session is a `##` chapter of root `README.md` titled with the unit title — or its own title when that equals the course title (`data/file-structure-modes.md`) — never a `#`, the course title is the only `#` there; its parts are `###`.'
   sections:
     - id: outline
       title: Planned Outline
@@ -5220,7 +5220,7 @@ template:
 - [ ] [mechanical] Session Types defined, each with slug, criterion, and required-elements checklist (see `data/session-types.md`)
 - [ ] [mechanical] Didactic Framework and Default Session Method declared (the latter may explicitly be `none`) — see `data/didactic-methods.md`
 
-## Templates `[if template imports or template macros are used]`
+## Templates `[only if a template is documented in ## Templates or a material uses a template macro — an empty template section does not count]`
 
 - [ ] [mechanical] `journal.md` → `## Templates` exists
 - [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header
@@ -5243,7 +5243,7 @@ template:
 
 ## Session Progress (`journal.md` → `## Sessions`)
 
-- [ ] [mechanical] `journal.md` → `## Sessions` exists `[not single-lesson]`
+- [ ] [mechanical] `journal.md` → `## Sessions` exists
 - [ ] [mechanical] Overview appears directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`); every status line matches its table row
 - [ ] [mechanical] All expected sessions have a row in the overview table
 - [ ] [mechanical] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
@@ -5473,7 +5473,7 @@ Rules for action lines:
 | `## Sessions` | `create-session` (without params — asked in chat; only once `## Didactics` → `__Session Types:__` exist, before that `create-didactics`), `validate-course` (once a unit has material) |
 | `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; check failed → `coauthor-materials?number={n}` (✏️ revise); passed with concerns → `validate-course {n}` (it goes through the concerns); passed with ⏳ → the command of the named later step (e.g. `artist/generate-image`); checked ✅ → 👁 `preview` of the material; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
-| `## Validation` | `validate-course` |
+| `## Validation` | `validate-course` (only once every unit of the agenda or overview has material) |
 | `## Publishing` | `development/create-project` (first publication, only if the publishing gate is PASS), `development/update-project` (once `__State:__` is published; same gate) |
 | `## Notes Backup` | `save-notes`, `save-decision` |
 
@@ -5517,8 +5517,8 @@ language (`## Course Context` → Language).
   also give every fixed `##` heading and every fixed `###` heading of the
   template (not agent names, not unit titles) a translated suffix after an en
   dash (`## Outline – <translation>`), keep the English key first, and wrap
-  nothing else; `## Sessions` and `## Agenda` use the course terminology once
-  it is set. Tasks find a section by the line that **starts** with
+  nothing else; `## Sessions` gets the plural of the unit word (`sessions-called`)
+  once it is set, `## Agenda` the translation of "schedule". Tasks find a section by the line that **starts** with
   `## {Key}`; Dashboard links use the full heading slug.
   **Do it fast:** send a one-line status first, then change only the header
   line, the headings and the title with small targeted edits (never rewrite
@@ -5911,6 +5911,7 @@ Sum reading time and activity time for the session's total estimate.
 
 Compare the total estimate to the session's declared duration (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the time commitment).
 
+- Compare with **one** number: the middle of the estimated range. Count a teacher-led phase once — as its stated duration, not again as reading time of the text shown on the board.
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.
 - This is an **`[advisory]` item** (see the tags in `checklists/course-quality-checklist.md`): a hint, never ❌, never a fail, never part of an automated fix loop — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
 
@@ -6296,7 +6297,7 @@ The same rules apply to every task that creates a session's material document �
 1. **Path:** reuse the path recorded in the technical table of `## Agenda` if there is one; otherwise derive it as above (multi-file: `materials/{number}-{slug}/README.md`, the `assets/` subfolder only on demand; single-file: the `##` chapter for this session inside root `/README.md`, chapters in session-number order).
 2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `email:` from Conventions → Contact if set, `version: 0.1.0` for a new document, `language:` from the course language, `narrator:` a voice for that language (e.g. `Deutsch Female`, `UK English Female`), the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses.
 3. **Images:** for every entry in the session's `#### Images` block, put the marker of `tasks/create-image.md` (status `prompt-ready`) or the image itself (status `generated`) at the place it belongs; entries with status `prompt-only` get nothing.
-4. **Title slide (single-file, first unit):** under the `#` course title, a short introduction for the learners — 2–3 sentences: what it is about, what they will be able to do, how to start — in the learners' address and readable aloud; never an empty slide.
+4. **Title slide (single-file, first unit):** under the `#` course title, a short introduction for the learners — 2–3 sentences: what it is about, what they will be able to do, how to start — in the learners' address and readable aloud; never an empty slide. The unit's own `##` chapter slide then starts the lesson: what we do today, in a few steps — not a second introduction.
 5. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 ## Default by course type

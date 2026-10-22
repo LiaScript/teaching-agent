@@ -64,6 +64,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
    7. Prior knowledge gaps: concepts, terms, and skills typically missing at course start
    **Desired outcome:** Statistics per dimension with source and year; flag where no specific data exists (use proxy data if noted)
    **Search suggestions:**
+   - Pick sources that fit the target group — apprentices (e.g. the examples below), school learners (school and education statistics), adults (adult education surveys):
    - `[audience] Ausbildung Statistik [year]`
    - `BIBB [occupation] Auszubildende`
    - `[region] Berufsausbildung Digitalnutzung Jugendliche`
@@ -92,7 +93,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 
 ## Persona Structure
 
-Each persona is one `####` subsection inside `journal.md` → `## Agents` → `### Learner Personas` — never use `##` or `###` inside a persona entry (they would terminate the target container) and never go deeper than `#####`. Wrap everything below the `####` heading in `<section>…</section>` (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows the persona as one slide instead of splitting on every `#####` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide":
+Each persona is one `####` subsection inside `journal.md` → `## Agents` → `### Learner Personas` — never use `##` or `###` inside a persona entry (they would terminate the target container) and never go deeper than `#####`. Write the `#####` headings of the structure in the course language. Wrap everything below the `####` heading in `<section>…</section>` (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows the persona as one slide instead of splitting on every `#####` subheading — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide":
 
 ```markdown
 #### Persona: [Icon] [Name]
@@ -123,7 +124,7 @@ Includes: age, background, where they are in their training, attitude toward lea
 *[Source / Assumption note]*
 
 ##### 3. Training & Work Context
-- Training structure: ... (e.g., block schedule, weeks per block)
+- Learning setting: ... (e.g., school timetable, block schedule, part-time course alongside work)
 - Typical work day / schedule: ...
 - Commute / accessibility: ...
 - Financial situation: ...

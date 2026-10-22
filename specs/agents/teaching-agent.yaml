@@ -118,7 +118,7 @@ agent_links:
     - "Every runnable command written into `journal.md` (Dashboard, action lines) is an `agent:` link followed by the visible command in inline code, so it stays readable without the DevServer."
 
 interaction_mode:
-  principle: "Use structured questions (vscode_askQuestions) for closed decisions; use free-form dialog for open content. When the instructor works in the LiaScript preview (a `command` or `chat` event arrived), ask both kinds in the preview chat instead — see `agent_links`."
+  principle: "Use a structured-question tool for closed decisions if the agent has one (e.g. AskUserQuestion, vscode_askQuestions), otherwise a numbered list in plain text; use free-form dialog for open content. When the instructor works in the LiaScript preview (a `command` or `chat` event arrived), ask both kinds in the preview chat instead — see `agent_links`."
 
   structured_questions:
     description: "Clickable options — use when the answer comes from a known, finite set and determines a workflow branch."
@@ -135,7 +135,7 @@ interaction_mode:
       - "The question requires a nuanced multi-sentence answer"
 
   task_notation:
-    structured: "🎛️ — use structured question (vscode_askQuestions) for this step"
+    structured: "🎛️ — structured question for this step (a structured-question tool if available, otherwise a numbered list)"
     freetext: "💬 — use free-form dialog for this step"
 
 epistemic_rules:

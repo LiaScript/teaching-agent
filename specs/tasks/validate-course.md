@@ -142,7 +142,6 @@ Rules:
    ```
    Date: YYYY-MM-DD
    Mode: course
-   Course type: [type]
    Result: PASS / FAIL / PASS with concerns
    Issues found: N
    Sessions checked: N

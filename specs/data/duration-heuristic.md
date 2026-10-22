@@ -41,6 +41,7 @@ Sum reading time and activity time for the session's total estimate.
 
 Compare the total estimate to the session's declared duration (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the time commitment).
 
+- Compare with **one** number: the middle of the estimated range. Count a teacher-led phase once — as its stated duration, not again as reading time of the text shown on the board.
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.
 - This is an **`[advisory]` item** (see the tags in `checklists/course-quality-checklist.md`): a hint, never ❌, never a fail, never part of an automated fix loop — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
 

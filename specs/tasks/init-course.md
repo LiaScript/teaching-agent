@@ -86,7 +86,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
    **Terminology:** set `sessions-called` to the word the instructor will see for one unit in the journal, in the course language and fitting the setting (e.g. school: the local word for "lesson" or "learning unit"). Use exactly these words in all instructor-facing text and in the Dashboard.
 
-   **Audience override:** for school learners (primary or secondary school), never use the persona type `professor`; use `coach` (learner-driven) or `tutor` (teacher-led).
+   **Audience override:** for school learners (primary or secondary school), never use the persona type `professor`; use `coach` (learner-driven) or `tutor` (teacher-led, and also for "mixed").
 
    For **self-paced** and **single-lesson**, 🎛️ ask agenda preference in the instructor's terms ("Shall I create a schedule with order and time per unit?") (structured question — single choice):
    - **Yes** — helps with structure planning, especially for longer content
@@ -97,7 +97,7 @@ The course context acts as the governance layer: it defines the course type, ter
 
 7. 🎛️ Ask about project-level conventions in one structured pass (multi-select where applicable):
    - Language: prefill with the language the instructor writes in; ask only if the material should be in another language
-   - Tone: formal / informal / conversational
+   - Tone: formal / informal / conversational (if not answered: informal for school learners, formal otherwise)
    - Person: Sie / Du / you — how *learners* are addressed in the material
    - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). Contact address (optional, an e-mail learners may write to): needed only before publishing — if not given now, the dashboard lists it as `prepare`, and `:create-project` asks for it.
    - Instructor Address: how the agents address the instructor (default: the formal form of the course language, unless the instructor offers otherwise) — never derived from Person
@@ -107,7 +107,7 @@ The course context acts as the governance layer: it defines the course type, ter
 9. **Before saving:** show a short summary of everything that will be written (this step and step 10), with "Save" / "Change something" — the single write confirmation of this task.
    - The summary table lists under "Decided" **only what the instructor answered**, in the instructor's own words (e.g. describe the course type by the two answers of step 3, not by a translated type slug).
    - Anything you derived or propose (a learning companion, self-checks …) goes into a separate list "Suggestions — not decided yet" or is left out; it is saved only after the instructor accepts it.
-   - Technical keys that are mapped from the answers (Type, Pacing, Persona type) are named in one plain-language line below the table ("For the assistant this means: …"), so the technical block never says something the instructor has not seen.
+   - Technical keys that are mapped from the answers (Type, Pacing, Persona type) are named in one plain-language line below the table ("For the assistant this means: …"), so the technical block never says something the instructor has not seen. That line belongs to the summary only and is not saved; the keys themselves go into the technical block.
    Then save by replacing the content of `journal.md` → `## Course Context` following `templates/course-context.yaml` → `layout` (summary table first, technical `* __Label:__` bullets inside `<details>`, no sub-headings).
 10. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
     - Add `import: {url}` to the main metadata header if missing

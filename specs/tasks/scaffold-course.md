@@ -69,15 +69,14 @@ Generated in sequence without interruption inside `journal.md`:
 
    **🎛️ Block 3 — Didactics (structured questions):**
    - Guiding figure / instructor persona: 💬 who speaks in the material (or "none – a neutral teacher voice"); the persona voice sample is written from it in the draft, never invented without this answer
-   - Teaching style: humorous / academic / practical / conversational / mixed
-   - Difficulty level: beginner / intermediate / advanced
+   - Teaching style and difficulty level are not asked: derive them as `tasks/create-didactics.md` steps 5–6 do and show them in the draft
    - Didactic concept: structured/presenter-driven / exploratory / project-based / mixed
    - Session Types: propose the default formats for the course type exactly as `tasks/create-didactics.md` step 3b does (display names in the course language, each with criterion and required elements, `data/session-types.md`), and ask its grounding question — one concretely planned unit and which format it gets, and why. If the answer fits no proposed type, revise the types before the draft.
 
    **🎛️ Block 4 — Structure (structured questions):**
    - Agenda needed? (for self-paced / single-lesson): yes / no
    - Session count and length: 💬 ask for exact numbers (how many units, minutes each). Never offer ranges and never compute a middle value; if the instructor gives a range, ask which number to plan with.
-   - File structure: teacher question from `tasks/init-course.md` step 6
+   - File structure: teacher question from `tasks/init-course.md` step 6 — not for a single lesson (always single-file, named in the draft)
    - LiaScript templates/imports: 💬 free text (optional; template name, import URL, and intended use)
 
 3. **Draft before saving.** Generate the complete content of every section that Phase 2 will write (Course Context incl. technical choices such as persona type, pacing, file structure; Outline incl. objectives; Didactics incl. framework, method, level; the Coauthor entries derived from it (step 4b); Agenda; session list with titles, durations and core content) and show it in the chat **before** anything is written — one compact block per section in plain course language, technical choices named in plain words. Nothing may be saved that is not in this draft (`data/agent-links.md` → "Nothing unseen gets saved").

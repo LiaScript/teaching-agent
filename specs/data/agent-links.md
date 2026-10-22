@@ -178,7 +178,7 @@ Rules for action lines:
 | `## Sessions` | `create-session` (without params — asked in chat; only once `## Didactics` → `__Session Types:__` exist, before that `create-didactics`), `validate-course` (once a unit has material) |
 | `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; check failed → `coauthor-materials?number={n}` (✏️ revise); passed with concerns → `validate-course {n}` (it goes through the concerns); passed with ⏳ → the command of the named later step (e.g. `artist/generate-image`); checked ✅ → 👁 `preview` of the material; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
-| `## Validation` | `validate-course` |
+| `## Validation` | `validate-course` (only once every unit of the agenda or overview has material) |
 | `## Publishing` | `development/create-project` (first publication, only if the publishing gate is PASS), `development/update-project` (once `__State:__` is published; same gate) |
 | `## Notes Backup` | `save-notes`, `save-decision` |
 
@@ -222,8 +222,8 @@ language (`## Course Context` → Language).
   also give every fixed `##` heading and every fixed `###` heading of the
   template (not agent names, not unit titles) a translated suffix after an en
   dash (`## Outline – <translation>`), keep the English key first, and wrap
-  nothing else; `## Sessions` and `## Agenda` use the course terminology once
-  it is set. Tasks find a section by the line that **starts** with
+  nothing else; `## Sessions` gets the plural of the unit word (`sessions-called`)
+  once it is set, `## Agenda` the translation of "schedule". Tasks find a section by the line that **starts** with
   `## {Key}`; Dashboard links use the full heading slug.
   **Do it fast:** send a one-line status first, then change only the header
   line, the headings and the title with small targeted edits (never rewrite

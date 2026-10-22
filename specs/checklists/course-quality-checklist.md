@@ -33,7 +33,7 @@
 - [ ] [mechanical] Session Types defined, each with slug, criterion, and required-elements checklist (see `data/session-types.md`)
 - [ ] [mechanical] Didactic Framework and Default Session Method declared (the latter may explicitly be `none`) — see `data/didactic-methods.md`
 
-## Templates `[if template imports or template macros are used]`
+## Templates `[only if a template is documented in ## Templates or a material uses a template macro — an empty template section does not count]`
 
 - [ ] [mechanical] `journal.md` → `## Templates` exists
 - [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header
@@ -56,7 +56,7 @@
 
 ## Session Progress (`journal.md` → `## Sessions`)
 
-- [ ] [mechanical] `journal.md` → `## Sessions` exists `[not single-lesson]`
+- [ ] [mechanical] `journal.md` → `## Sessions` exists
 - [ ] [mechanical] Overview appears directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`); every status line matches its table row
 - [ ] [mechanical] All expected sessions have a row in the overview table
 - [ ] [mechanical] No session marked ✅ Skeleton without a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
