@@ -121,7 +121,7 @@ The course context acts as the governance layer: it defines the course type, ter
 13. Confirm completion and suggest the next step based on course type:
     - **lecture-series / workshop** → `:create-outline`
     - **self-paced** → `:create-outline` (agenda depends on instructor answer)
-    - **single-lesson** → `:create-outline` → `:create-didactics` → `:create-agenda` (if yes) → `:create-session 1 lesson`
+    - **single-lesson** → `:create-outline` → `:create-didactics` → `:create-agenda` (if yes) → `:create-session 1`
     - **improve-existing** → `:analyze-existing` (scans existing project memory and materials, offers to fill gaps)
 
 ## Notes

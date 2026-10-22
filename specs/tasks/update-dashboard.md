@@ -148,10 +148,14 @@ Run this task automatically after any task that changes project state:
     - If an action line ended up below a `#### Validation Report`,
       `#### Persona Reviews`, or `#### Images` block, move it back directly below
       the `###` heading.
-    - Touch nothing else in those sections: action lines (and the sessions'
-      further commands inside the sessions' "Technical settings and more actions"
-      blocks — never their Type or Method lines) are the only content of source
-      sections this task may write.
+    - Touch nothing else in source sections. This task writes only:
+      1. the action lines, and the further commands inside the sessions'
+         "Technical settings and more actions" blocks — never their Type or Method lines;
+      2. the translated suffix of the `## Sessions` and `## Agenda` headings, kept in
+         line with the terminology (step 8) — the start of every heading stays unchanged;
+      3. the dashboard template `import:` line in the main header, once (step 8);
+      4. the `## Templates` entry of the dashboard template, via `tasks/manage-templates.md`
+         and only if it is missing (step 8).
 11. Confirm the dashboard was updated only after step 9 passed, and name the next
     recommended command. If the MCP gate is open (`data/agent-links.md`), `goto` the
     Dashboard slide, check with `get_state`, and post the next action as an

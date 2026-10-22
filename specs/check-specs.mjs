@@ -20,10 +20,10 @@ const required = {
   "tasks/create-didactics.md": ["do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`", "merge, never overwrite", "data-from=\"didactics\""],
   "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary", "If later: stop here", "do not ask about methods"],
   "tasks/create-session-skeleton.md": ["data-key", "Show the new unit", "can be solved with the material the learners get"],
-  "tasks/coauthor-materials.md": ["Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first"],
+  "tasks/coauthor-materials.md": ["Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first", "never before it —"],
   "tasks/validate-course.md": ["Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
   "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
-  "tasks/update-dashboard.md": ["punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
+  "tasks/update-dashboard.md": ["This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
   "tasks/quick-fix.md": ["Change path after a check", "Called from `:build-session`"],
   "tasks/generate-image.md": ["never by its name", "Only once the file exists"],
   "tasks/build-session.md": ["Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
@@ -33,13 +33,14 @@ const required = {
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["Findings returned to a caller never contain line numbers", "is never ❌ for it"],
   "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback", "Preview required"],
-  "data/agent-links.md": ["Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
+  "data/agent-links.md": ["never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
   "data/liascript-cheat-sheet.md": ["data-solution-button=\"false\""],
   "templates/course-context.yaml": ["layout:", "Target Group"],
   "templates/course-outline.yaml": ["layout:"],
   "templates/course-didactics.yaml": ["layout:"],
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
   "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "never\n        relative to another optional block"],
+  "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
   "templates/session-validation.yaml": ["Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
   "templates/journal.md": ["journal-start", "Target Group", "## Publishing"],
   "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
@@ -187,7 +188,7 @@ test("session commands identify a unit by its number; the type is never a parame
   });
   const files = [...walk(specs).filter(path => /\.(md|ya?ml)$/.test(path)), join(specs, "..", "README.md")];
   const hits = files.flatMap(path => readFileSync(path, "utf8").split("\n").map(line => [path, line]))
-    .filter(([, line]) => /[?&]type=|\{\{?number\}?\} \{\{?type\}?\}|\{n\} \{type\}|<number> <type>|\[number\] \[type\]/.test(line));
+    .filter(([, line]) => /[?&]type=|\{\{?number\}?\} \{\{?type\}?\}|\{n\} \{type\}|<number> <type>|\[number\] \[type\]|`:create-session \d+ [a-z]+`/.test(line));
   assert.deepEqual(hits.map(([path, line]) => `${path.slice(specs.length + 1)}: ${line.trim().slice(0, 100)}`), []);
 });
 

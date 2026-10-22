@@ -11,6 +11,7 @@ template:
       `README.md` in single-file mode.
   title: 'Session {{number}} ({{type | title}})'
   note: '{{type}} is a slug from `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). Structure the outline below so it satisfies that type''s `Erforderlich` checklist.'
+  heading_levels: 'multi-file: as below — `#` is the title of the own material document, `##` its parts. single-file: every heading one level lower — the session is the `## {{title}}` chapter of root `README.md` (never a `#`; the course title is the only `#` there), its parts are `###`.'
   sections:
     - id: outline
       title: Planned Outline
