@@ -301,10 +301,10 @@ work without them, too.
 |---|---|---|
 | `liascript-syntax` | 🎓 Teaching | writing, fixing and validating materials |
 | `reference-checker` | 🎓 Teaching | checking a session's references during validation |
-| `template-development` | 🎓 Teaching | building your own template in `:manage-templates` |
+| `liascript-templates` | 🎓 Teaching | building your own template in `:manage-templates` |
 | `creativity` | 🎓 Teaching | optional open ideation in `:create-outline` and `:scaffold` |
 | `liascript-theming` | 🎨 Artist | a LiaScript theme from the visual identity in `:create-visuals` |
-| `exporter-workflow` | 🛠️ Development | `project.yaml`, GitHub Actions, exports |
+| `liascript-exporter` | 🛠️ Development | `project.yaml`, GitHub Actions, exports |
 | `oersi-metadata` | 🛠️ Development | `metadata.yml` to list the course on OERSI |
 
 Install them yourself if you want them, e.g. `npx skills add LiaScript/skills`.

@@ -78,7 +78,7 @@ agent_customization:
 
 skills:
   reference: "`data/skills.md`"
-  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `exporter-workflow` and `oersi-metadata` in `:create-project` / `:update-project`."
+  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `liascript-exporter` and `oersi-metadata` in `:create-project` / `:update-project`."
 
 agent_links:
   reference: "`data/agent-links.md`"

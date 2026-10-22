@@ -144,7 +144,7 @@ skills:
   summary: >
     The LiaScript skills (github.com/LiaScript/skills) are used only if already installed,
     locally or globally: `liascript-syntax`, `reference-checker`, `liascript-templates`,
-    `creativity` (Teaching), `liascript-theming` (Artist), `exporter-workflow`,
+    `creativity` (Teaching), `liascript-theming` (Artist), `liascript-exporter`,
     `oersi-metadata` (Development).
   rules:
     - "Never install a skill (no `npx skills`, no copying, no download) and never assume one is installed — detect it as described in `data/skills.md`; without it, run the task as written."
@@ -719,7 +719,7 @@ agent_customization:
 
 skills:
   reference: "`data/skills.md`"
-  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `exporter-workflow` and `oersi-metadata` in `:create-project` / `:update-project`."
+  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `liascript-exporter` and `oersi-metadata` in `:create-project` / `:update-project`."
 
 agent_links:
   reference: "`data/agent-links.md`"
@@ -1712,7 +1712,7 @@ Sets up publishing for the course. Behavior branches hard on `journal.md` → `#
 
 Only if installed (see `data/skills.md`) — never install them:
 
-- `exporter-workflow` — use it next to `data/liascript-workflows.md` for `project.yaml`, the GitHub Actions workflow, and additional exports (PDF, SCORM, ePub, …). The rules of this task (e.g. `force_orphan: true`, confirmation before changes) stay binding.
+- `liascript-exporter` — use it next to `data/liascript-workflows.md` for `project.yaml`, the GitHub Actions workflow, and additional exports (PDF, SCORM, ePub, …). The rules of this task (e.g. `force_orphan: true`, confirmation before changes) stay binding.
 - `oersi-metadata` — 🎛️ offer once to add a `metadata.yml` so the course can be indexed as OER on OERSI (1. yes · 2. no). It is committed together with the other publishing files via `:manage-git`.
 
 ## Steps
@@ -3370,7 +3370,7 @@ Publishes new or changed content. Behavior branches hard on `journal.md` → `##
 
 Only if installed (see `data/skills.md`) — never install them:
 
-- `exporter-workflow` — use it next to `data/liascript-workflows.md` for `project.yaml`, the GitHub Actions workflow, and additional exports (PDF, SCORM, ePub, …). The rules of this task (e.g. `force_orphan: true`, confirmation before changes) stay binding.
+- `liascript-exporter` — use it next to `data/liascript-workflows.md` for `project.yaml`, the GitHub Actions workflow, and additional exports (PDF, SCORM, ePub, …). The rules of this task (e.g. `force_orphan: true`, confirmation before changes) stay binding.
 - `oersi-metadata` — 🎛️ offer once to add a `metadata.yml` so the course can be indexed as OER on OERSI (1. yes · 2. no). It is committed together with the other publishing files via `:manage-git`.
 
 ## Steps
@@ -8216,7 +8216,7 @@ never run it.
 | `liascript-templates` (older name: `template-development`) | Teaching | `manage-templates` | When the instructor needs a macro or template that does not exist yet (own template, JS library integration) |
 | `creativity` | Teaching | `create-outline`, `scaffold`, `coauthor-materials` (narrative courses) | Optional exploratory ideation (Emergent Creativity Protocol) before the structured step — only on the instructor's request |
 | `liascript-theming` | Artist | `create-visuals` | Turn the website palette and typography into a tested LiaScript theme header (`link:` + `@style` + `@custom`), or apply a bundled design by name |
-| `exporter-workflow` | Development | `create-project`, `update-project` | `project.yaml`, GitHub Actions, `liaex` exports (PDF, SCORM, ePub, …), in addition to `data/liascript-workflows.md` |
+| `liascript-exporter` (older name: `exporter-workflow`) | Development | `create-project`, `update-project` | `project.yaml`, GitHub Actions, `liaex` exports (PDF, SCORM, ePub, …), in addition to `data/liascript-workflows.md` |
 | `oersi-metadata` | Development | `create-project`, `update-project` | Optional `metadata.yml` to publish the course as OER on OERSI |
 
 ## Precedence

@@ -130,6 +130,17 @@ test("cheat sheet quiz examples put the attribute comment above the options and 
   assert.ok(!sheet.includes("cannot be changed per quiz"), "the cheat sheet says feedback texts are fixed again");
 });
 
+test("skills are detected by their installed names; old names only as aliases", () => {
+  const files = ["data/skills.md", "agents/teaching-agent.yaml", "agents/development-agent.yaml", "tasks/create-project.md", "tasks/update-project.md", "tasks/manage-templates.md"];
+  for (const file of files) {
+    for (const old of ["exporter-workflow", "template-development"]) {
+      const lines = read(file).split("\n").filter(line => line.includes(old) && !/older name/.test(line));
+      assert.deepEqual(lines, [], `${file} still detects the old skill name ${old}`);
+    }
+  }
+  assert.match(read("data/skills.md"), /`liascript-exporter`/);
+});
+
 test("the required-elements key is English; the German Erforderlich is only read in older journals", () => {
   const walk = dir => readdirSync(dir).flatMap(name => {
     const path = join(dir, name);

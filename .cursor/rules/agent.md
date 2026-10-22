@@ -95,7 +95,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 
 ## LiaScript Skills
 
-The LiaScript skills (github.com/LiaScript/skills) are used only if already installed, locally or globally: `liascript-syntax`, `reference-checker`, `liascript-templates`, `creativity` (Teaching), `liascript-theming` (Artist), `exporter-workflow`, `oersi-metadata` (Development).
+The LiaScript skills (github.com/LiaScript/skills) are used only if already installed, locally or globally: `liascript-syntax`, `reference-checker`, `liascript-templates`, `creativity` (Teaching), `liascript-theming` (Artist), `liascript-exporter`, `oersi-metadata` (Development).
 
 - Never install a skill (no `npx skills`, no copying, no download) and never assume one is installed — detect it as described in `data/skills.md`; without it, run the task as written.
 - Each task names its optional skill at the step where it helps; use it there and say so in one line.
