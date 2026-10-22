@@ -24,7 +24,7 @@ template:
         * __Course Type:__
           1. Type: [lecture-series | self-paced | workshop | single-lesson | improve-existing]
           2. Working Title: [optional working title]
-          3. Target Group: [short: who learns, how many, where — details follow in `## Outline`]
+          3. Target Group: [short: who learns, how many, where, special needs (e.g. dyslexia) — details follow in `## Outline`]
 
     - id: profile
       title: Course Profile
@@ -54,9 +54,8 @@ template:
           2. Tone: [formal | informal | conversational]
           3. Person: [Sie | Du | you] — how learners are addressed in the material
           4. Instructor Address: [Sie | Du | you] — how the agents address the instructor (chat, dashboard)
-          5. Accessibility: [required | optional | not needed]
-          6. Author: [display name for the material header, e.g. title + surname]
-          7. Contact: [e-mail for the material header, or empty — needed only before publishing]
+          5. Author: [display name for the material header, e.g. title + surname]
+          6. Contact: [e-mail for the material header, or empty — needed only before publishing]
 
         * __LiaScript conventions:__
           - [list project-specific rules here]

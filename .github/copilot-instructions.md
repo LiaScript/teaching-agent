@@ -1223,7 +1223,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
     - Set `* __Role / Persona:__` from `## Didactics` → `__Professor Persona:__`
     - Set `* __Behavior Additions:__` from the teaching style, didactic concept, and project-specific coauthoring needs
     - Set `* __Preferred Interaction Style:__` from the selected teaching style
-    - Set `* __Project-Specific Rules:__` from course type, time format, target platform, and material constraints
+    - Set `* __Project-Specific Rules:__` from course type, time format, and material constraints (the platform is always LiaScript)
     - Set `* __Persona Voice Sample:__` from `## Didactics` → `__Persona Voice Sample:__`
     - Preserve `* __Boundaries / Never:__` and keep it additive-only; never override workflow gates, validation rules, safety rules, or epistemic rules
 11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -2268,7 +2268,7 @@ The course context acts as the governance layer: it defines the course type, ter
    | 5 | — | improve-existing | (from existing) |
 
 4. 💬 Ask in one free-text question for the **working title and the target group** (topic, who the learners are, how many, where they work). Give a neutral example that does not echo anything the instructor said. Skip the parts already known (step 1).
-5. Target platform is LiaScript in this project; do not ask. Ask only if the instructor mentions another platform.
+5. The Teaching-Agent builds LiaScript courses only — never ask for a platform. If the instructor mentions another one, say in one line that this assistant creates LiaScript material, which can later be exported (e.g. as a SCORM package for a learning platform). Accessibility is not asked: LiaScript brings read-aloud (text to speech), screen-reader labels and keyboard navigation for every course, and the material rules (alt texts, read-aloud for what learners must read, the question as the quiz label) apply to every course. Special needs of the learners (e.g. dyslexia, little German) belong to the target group, where the tasks take them into account.
 6. Based on the course type, set the profile defaults:
 
    | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
@@ -2311,7 +2311,6 @@ The course context acts as the governance layer: it defines the course type, ter
    - Person: Sie / Du / you — how *learners* are addressed in the material
    - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). Contact address (optional, an e-mail learners may write to): needed only before publishing — if not given now, the dashboard lists it as `prepare`, and `:create-project` asks for it.
    - Instructor Address: how the agents address the instructor (default: the formal form of the course language, unless the instructor offers otherwise) — never derived from Person
-   - Accessibility: required / optional / not needed
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 8. Fill the `templates/course-context.yaml` template with the collected inputs, including the `__File Structure:__` field (mode + session folder naming) from step 6.
@@ -2916,7 +2915,6 @@ All collected in a single intake interview at the start:
 - Working title
 - Target audience
 - Language, tone, person (Sie/Du/you)
-- Accessibility requirements
 - Time commitment (where applicable)
 - Abstract (topics, benefits)
 - 3–5 learning objectives
@@ -2958,7 +2956,7 @@ Generated in sequence without interruption inside `journal.md`:
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you
    - Instructor Address and Author name, as in `tasks/init-course.md` step 7; contact address optional
-   - Accessibility: required / optional / not needed
+   - Special needs of the learners (e.g. dyslexia): as part of the target group — accessibility itself is not asked (`tasks/init-course.md` step 5)
 
    **💬 Block 2 — Content (free text, discuss if needed):**
    - Working title
@@ -3512,7 +3510,7 @@ Rules:
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
 8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
-   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. Accessibility: required) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
+   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. a special need of the target group, such as read-aloud for a learner with dyslexia) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
 
@@ -3886,7 +3884,7 @@ template:
         * __Course Type:__
           1. Type: [lecture-series | self-paced | workshop | single-lesson | improve-existing]
           2. Working Title: [optional working title]
-          3. Target Group: [short: who learns, how many, where — details follow in `## Outline`]
+          3. Target Group: [short: who learns, how many, where, special needs (e.g. dyslexia) — details follow in `## Outline`]
 
     - id: profile
       title: Course Profile
@@ -3916,9 +3914,8 @@ template:
           2. Tone: [formal | informal | conversational]
           3. Person: [Sie | Du | you] — how learners are addressed in the material
           4. Instructor Address: [Sie | Du | you] — how the agents address the instructor (chat, dashboard)
-          5. Accessibility: [required | optional | not needed]
-          6. Author: [display name for the material header, e.g. title + surname]
-          7. Contact: [e-mail for the material header, or empty — needed only before publishing]
+          5. Author: [display name for the material header, e.g. title + surname]
+          6. Contact: [e-mail for the material header, or empty — needed only before publishing]
 
         * __LiaScript conventions:__
           - [list project-specific rules here]
@@ -4248,9 +4245,8 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   2. Tone: {{formal | informal | conversational}}
   3. Person: {{Sie | Du | you}} — learners in the material
   4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
-  5. Accessibility: {{required | optional | not needed}}
-  6. Author: {{display name for the material header}}
-  7. Contact: {{e-mail, or empty — needed only before publishing}}
+  5. Author: {{display name for the material header}}
+  6. Contact: {{e-mail, or empty — needed only before publishing}}
 
 * __LiaScript conventions:__
   - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
@@ -4410,7 +4406,7 @@ More community templates can be found at [topics/liascript-template](https://git
 _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
 
 * __Overview:__
-  {{number of sessions, duration, pacing, platform — 2–4 sentences}}
+  {{number of sessions, duration, pacing — 2–4 sentences}}
 
 * __Modules / Sessions:__
 

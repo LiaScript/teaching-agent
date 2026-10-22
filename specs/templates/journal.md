@@ -89,9 +89,8 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   2. Tone: {{formal | informal | conversational}}
   3. Person: {{Sie | Du | you}} — learners in the material
   4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
-  5. Accessibility: {{required | optional | not needed}}
-  6. Author: {{display name for the material header}}
-  7. Contact: {{e-mail, or empty — needed only before publishing}}
+  5. Author: {{display name for the material header}}
+  6. Contact: {{e-mail, or empty — needed only before publishing}}
 
 * __LiaScript conventions:__
   - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
@@ -251,7 +250,7 @@ More community templates can be found at [topics/liascript-template](https://git
 _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
 
 * __Overview:__
-  {{number of sessions, duration, pacing, platform — 2–4 sentences}}
+  {{number of sessions, duration, pacing — 2–4 sentences}}
 
 * __Modules / Sessions:__
 

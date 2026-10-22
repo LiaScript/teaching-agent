@@ -14,7 +14,7 @@ const read = path => readFileSync(join(specs, path), "utf8");
 
 // File → sentences that must stay (one key phrase per rule).
 const required = {
-  "tasks/init-course.md": ["follow the course language in terminal mode too", "the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
+  "tasks/init-course.md": ["builds LiaScript courses only — never ask for a platform", "Accessibility is not asked", "follow the course language in terminal mode too", "the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
   "tasks/scaffold-course.md": ["8b. Set `language:`", "Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
   "tasks/create-outline.md": ["Start from the instructor's goal", "Repeat this time check after every revision"],
   "tasks/create-didactics.md": ["do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`", "merge, never overwrite", "data-from=\"didactics\""],
@@ -147,6 +147,12 @@ test("authoring notes in the journal template are <!--- … ---> so LiaScript ig
     .map(match => match[1].trim()).filter(body => !/^(class|data-[\w-]+)=/.test(body));
   assert.deepEqual(plain.map(body => body.slice(0, 60)), []);
   assert.ok(!read("data/agent-links.md").includes("materials/03-"), "agent-links shows a zero-padded folder number again");
+});
+
+test("the course is always LiaScript: no platform or accessibility question, no accessibility field", () => {
+  for (const file of ["tasks/init-course.md", "tasks/scaffold-course.md", "templates/course-context.yaml", "templates/journal.md"]) {
+    assert.ok(!/Accessibility: (\[|\{\{)?required/.test(read(file)), `${file} asks for or stores accessibility again`);
+  }
 });
 
 test("the required-elements key is English; the German Erforderlich is only read in older journals", () => {

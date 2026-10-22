@@ -18,7 +18,6 @@ All collected in a single intake interview at the start:
 - Working title
 - Target audience
 - Language, tone, person (Sie/Du/you)
-- Accessibility requirements
 - Time commitment (where applicable)
 - Abstract (topics, benefits)
 - 3–5 learning objectives
@@ -60,7 +59,7 @@ Generated in sequence without interruption inside `journal.md`:
    - Tone: formal / informal / conversational
    - Person: Sie / Du / you
    - Instructor Address and Author name, as in `tasks/init-course.md` step 7; contact address optional
-   - Accessibility: required / optional / not needed
+   - Special needs of the learners (e.g. dyslexia): as part of the target group — accessibility itself is not asked (`tasks/init-course.md` step 5)
 
    **💬 Block 2 — Content (free text, discuss if needed):**
    - Working title

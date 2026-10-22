@@ -50,7 +50,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
     - Set `* __Role / Persona:__` from `## Didactics` → `__Professor Persona:__`
     - Set `* __Behavior Additions:__` from the teaching style, didactic concept, and project-specific coauthoring needs
     - Set `* __Preferred Interaction Style:__` from the selected teaching style
-    - Set `* __Project-Specific Rules:__` from course type, time format, target platform, and material constraints
+    - Set `* __Project-Specific Rules:__` from course type, time format, and material constraints (the platform is always LiaScript)
     - Set `* __Persona Voice Sample:__` from `## Didactics` → `__Persona Voice Sample:__`
     - Preserve `* __Boundaries / Never:__` and keep it additive-only; never override workflow gates, validation rules, safety rules, or epistemic rules
 11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

@@ -58,7 +58,7 @@ The course context acts as the governance layer: it defines the course type, ter
    | 5 | — | improve-existing | (from existing) |
 
 4. 💬 Ask in one free-text question for the **working title and the target group** (topic, who the learners are, how many, where they work). Give a neutral example that does not echo anything the instructor said. Skip the parts already known (step 1).
-5. Target platform is LiaScript in this project; do not ask. Ask only if the instructor mentions another platform.
+5. The Teaching-Agent builds LiaScript courses only — never ask for a platform. If the instructor mentions another one, say in one line that this assistant creates LiaScript material, which can later be exported (e.g. as a SCORM package for a learning platform). Accessibility is not asked: LiaScript brings read-aloud (text to speech), screen-reader labels and keyboard navigation for every course, and the material rules (alt texts, read-aloud for what learners must read, the question as the quiz label) apply to every course. Special needs of the learners (e.g. dyslexia, little German) belong to the target group, where the tasks take them into account.
 6. Based on the course type, set the profile defaults:
 
    | Type             | Terminology       | Persona         | Agenda default | Pacing          | Assessment              |
@@ -101,7 +101,6 @@ The course context acts as the governance layer: it defines the course type, ter
    - Person: Sie / Du / you — how *learners* are addressed in the material
    - Author name for the material header (a display name learners and parents see, e.g. title + surname; no private address needed). Contact address (optional, an e-mail learners may write to): needed only before publishing — if not given now, the dashboard lists it as `prepare`, and `:create-project` asks for it.
    - Instructor Address: how the agents address the instructor (default: the formal form of the course language, unless the instructor offers otherwise) — never derived from Person
-   - Accessibility: required / optional / not needed
    - LiaScript conventions: 💬 ask as free text only if instructor has specific requirements
 
 8. Fill the `templates/course-context.yaml` template with the collected inputs, including the `__File Structure:__` field (mode + session folder naming) from step 6.
