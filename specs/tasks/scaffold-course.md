@@ -68,6 +68,7 @@ Generated in sequence without interruption inside `journal.md`:
    - 3–5 learning objectives
 
    **🎛️ Block 3 — Didactics (structured questions):**
+   - Guiding figure / instructor persona: 💬 who speaks in the material (or "none – a neutral teacher voice"); the persona voice sample is written from it in the draft, never invented without this answer
    - Teaching style: humorous / academic / practical / conversational / mixed
    - Difficulty level: beginner / intermediate / advanced
    - Didactic concept: structured/presenter-driven / exploratory / project-based / mixed
@@ -95,7 +96,7 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet and the confirmed Session Types.
 4b. Synchronize `journal.md` → `## Agents` → `### Coauthor` exactly as `tasks/create-didactics.md` step 10 does (role, behavior, interaction style, project rules, voice sample; `__Customization Status:__ active`), so later tasks do not fall back to `## Didactics`.
 5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
-6. Replace the content of `journal.md` → `## Agenda` (skip if agenda = no).
+6. Replace the content of `journal.md` → `## Agenda` (if agenda = no: replace its placeholders with one line in the course language, "No agenda — decided with the course frame", and keep its action line for planning one later).
 7. Replace the content of `journal.md` → `## Sessions` with:
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
    - One `### {number}. {title}` subsection per session below the overview

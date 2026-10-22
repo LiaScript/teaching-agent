@@ -106,7 +106,7 @@ The course context acts as the governance layer: it defines the course type, ter
 8. Fill the `templates/course-context.yaml` template with the collected inputs, including the `__File Structure:__` field (mode + session folder naming) from step 6.
 9. **Before saving:** show a short summary of everything that will be written (this step and step 10), with "Save" / "Change something" — the single write confirmation of this task.
    - The summary table lists under "Decided" **only what the instructor answered**, in the instructor's own words (e.g. describe the course type by the two answers of step 3, not by a translated type slug).
-   - Anything you derived or propose (a learning companion, self-checks, a persona type …) goes into a separate list "Suggestions — not decided yet" or is left out; it is saved only after the instructor accepts it.
+   - Anything you derived or propose (a learning companion, self-checks …) goes into a separate list "Suggestions — not decided yet" or is left out; it is saved only after the instructor accepts it.
    - Technical keys that are mapped from the answers (Type, Pacing, Persona type) are named in one plain-language line below the table ("For the assistant this means: …"), so the technical block never says something the instructor has not seen.
    Then save by replacing the content of `journal.md` → `## Course Context` following `templates/course-context.yaml` → `layout` (summary table first, technical `* __Label:__` bullets inside `<details>`, no sub-headings).
 10. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:

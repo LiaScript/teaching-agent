@@ -38,6 +38,7 @@ template:
           2. Agenda required: [yes | optional | no]
           3. Pacing: [scheduled | learner-driven | event-based | n/a]
           4. Assessment defaults: [quizzes | reflection | assignments | none]
+          5. Units: [count × length, if known — e.g. 3 × 45 min; read by `:create-agenda` and the duration check]
 
     - id: file-structure
       title: File Structure

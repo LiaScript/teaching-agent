@@ -79,6 +79,7 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   2. Agenda required: {{yes | optional | no}}
   3. Pacing: {{scheduled | learner-driven | event-based}}
   4. Assessment defaults: {{quizzes | reflection | assignments | none}}
+  5. Units: {{count × length, if known}}
 
 * __File Structure:__
   1. Mode: {{single-file | multi-file}} — see `data/file-structure-modes.md`

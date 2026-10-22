@@ -59,14 +59,15 @@ Run this task automatically after any task that changes project state:
    from `## Course Context` → `__File Structure:__`; in single-file mode inspect
    the matching chapter of the root `README.md`.
 3. Derive a display state for each unit:
+   - States are exclusive; if two seem to fit, take the later one in this list.
    - `planned` — in the agenda or skeleton only, not yet worked out. The
      recommended next unit without a skeleton stays `planned`; mark it with
      `selected` and make it the `next` action.
-   - `current` — a unit that has a skeleton or material and is being worked
-     on now, or on which a task is running
-   - `draft` — a material draft exists
-   - `review` — feedback, instructor approval or a re-check is still pending
-     (material revised after a check and waiting for the re-check is `review`, not `draft`)
+   - `current` — the one unit being worked on now (a task runs on it, or it is
+     being worked out together); a skeleton alone is `planned`
+   - `draft` — material exists and the instructor has not approved it yet
+   - `review` — approved or revised material whose check or re-check is still
+     pending (material revised after a check and waiting for the re-check is `review`, not `draft`)
    - `revision` — the latest review or validation requires changes
    - Validation result → unit state: FAIL → `revision`; re-check pending →
      `review` (only while the instructor or a check actually has something to

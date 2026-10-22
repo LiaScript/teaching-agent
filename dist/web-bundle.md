@@ -1133,7 +1133,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 
 1. Read `journal.md` → `## Course Context`:
    - Check `agenda` field in the profile:
-     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `:create-session 1`. Stop here.
+     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `:create-session 1`. If `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6. Stop here.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
        - **Yes** — Create agenda to plan the structure
        - **No** — Proceed directly to `:create-session`
@@ -1204,7 +1204,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - **single-lesson**: focused, compact, single arc
 3a. Choose a **Didactic Framework** from `data/didactic-methods.md` → "Course Frameworks" yourself, based on course type. It is documentation only: do **not** ask the instructor; name it only inside the technical details. Ask only if the instructor uses such terms themselves.
 3b. Define `__Session Types:__` (see `data/session-types.md` for the full mechanism):
-   - **single-lesson**: default to one type named after `lectures-called`; skip the discussion unless the instructor wants to split the lesson into sub-types.
+   - **single-lesson**: default to one type named after `lectures-called`; skip the discussion of types unless the instructor wants to split the lesson into sub-types. The grounding check below still applies, in its short form: "Your lesson is mainly … — right?"
    - **all other course types**: 🎛️ propose the default Session Types for this course type from the table in `data/session-types.md`, each with slug, one-line criterion, and a 2–3 item required-elements checklist. Let the instructor confirm or edit.
    - 💬 Grounding check (mandatory, do not skip): ask the instructor to name one concretely planned session and which Session Type it would get, and why. If the answer doesn't fit any proposed type, revise the types before continuing — don't let an unfitting default stand.
    - Display names in the course language; slugs as defined in the template layout (lowercase ASCII words in the course language, not English defaults). With more than one type, no display name equals a Terminology word (`sessions-called`, `lectures-called`) — choose another name before proposing (e.g. "Lernmodul" when units are called "Modul").
@@ -1705,7 +1705,7 @@ Sets up publishing for the course. Behavior branches hard on `journal.md` → `#
 
 ## Output
 
-- **single-file:** nothing generated on disk except `journal.md` → `## Publishing`; a confirmed git push and the LiaScript live-viewer URL
+- **single-file:** nothing generated on disk except `journal.md` → `## Publishing` (and `metadata.yml` if the OERSI offer is accepted); a confirmed git push and the LiaScript live-viewer URL
 - **multi-file:** `project.yaml` in the root folder (includes all materials as separate cards), a GitHub Actions workflow for LiaScript export and publishing, and `journal.md` → `## Publishing`
 
 ## Optional Skills
@@ -1728,7 +1728,7 @@ Only if installed (see `data/skills.md`) — never install them:
 
 3. **Read the repository before anything changes** (read-only git): the `origin` remote and the current branch. Derive `{owner}/{repo}` and the viewer URL for the mode — single-file: `https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md`; multi-file: `https://{owner}.github.io/{repo}/` (GitHub Pages). This is a stable LiaScript / GitHub convention — recommend the instructor spot-check it once (epistemic rules: never assert unverified syntax as certain). Without a remote: ask whether to create the GitHub repository via `:manage-git` first, or stop.
 4. Ask the user about their git/GitHub experience.
-5. Check which files must be added to git and which need to be committed (`README.md`, `assets/`).
+5. Decide which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` (propose a `.gitignore` with it). A repository without a first commit gets it from `:manage-git`.
 6. **Show the plan, then confirm in the terminal** (tier "confirm in terminal", `data/agent-links.md`) — before any change: single-file publishes by pushing to GitHub directly, no `project.yaml`, no workflow, no GitHub Pages step (see `data/file-structure-modes.md` → "Publishing"); the files to commit, the push target, the viewer URL, and the `## Publishing` entries that will be written.
 7. On confirmation: write `journal.md` → `## Publishing` (`__Repository:__`, `__Branch:__`, `__Viewer URL:__`, `__State:__ not published`), then hand off to `:manage-git` to commit and push.
 8. Once pushed: set `__State:__ published on {date} (commit {short hash})`, present the viewer URL, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -1739,7 +1739,7 @@ Only if installed (see `data/skills.md`) — never install them:
 4. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 5. Build the `collection:` entries: one entry per `materials/{number}-{slug}/README.md`, in session order; ask the user if any session should be excluded.
 6. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling, and review the internal reference for the latest workflow and publishing best practices.
-7. **Show the plan, then confirm in the terminal** — before any change (a complete `project.yaml` pattern: `data/example-project.yaml`): the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the files to commit, the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
+7. **Show the plan, then confirm in the terminal** — before any change (a complete `project.yaml` pattern: `data/example-project.yaml`): the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the files to commit (decided as in the single-file branch: which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` (propose a `.gitignore` with it). A repository without a first commit gets it from `:manage-git`.), the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
 8. On confirmation: generate `project.yaml` in the root folder and the workflow file, write `journal.md` → `## Publishing` (`__State:__ not published`), then hand off to `:manage-git` to commit and push.
 9. Once pushed: set `__State:__ published on {date} (commit {short hash}) – GitHub Pages builds after the workflow run`, remind the instructor to activate GitHub Pages if it is not active yet, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
@@ -2316,7 +2316,7 @@ The course context acts as the governance layer: it defines the course type, ter
 8. Fill the `templates/course-context.yaml` template with the collected inputs, including the `__File Structure:__` field (mode + session folder naming) from step 6.
 9. **Before saving:** show a short summary of everything that will be written (this step and step 10), with "Save" / "Change something" — the single write confirmation of this task.
    - The summary table lists under "Decided" **only what the instructor answered**, in the instructor's own words (e.g. describe the course type by the two answers of step 3, not by a translated type slug).
-   - Anything you derived or propose (a learning companion, self-checks, a persona type …) goes into a separate list "Suggestions — not decided yet" or is left out; it is saved only after the instructor accepts it.
+   - Anything you derived or propose (a learning companion, self-checks …) goes into a separate list "Suggestions — not decided yet" or is left out; it is saved only after the instructor accepts it.
    - Technical keys that are mapped from the answers (Type, Pacing, Persona type) are named in one plain-language line below the table ("For the assistant this means: …"), so the technical block never says something the instructor has not seen.
    Then save by replacing the content of `journal.md` → `## Course Context` following `templates/course-context.yaml` → `layout` (summary table first, technical `* __Label:__` bullets inside `<details>`, no sub-headings).
 10. If LiaScript conventions mention template imports, run `tasks/manage-templates.md` with `templates/course-templates.yaml`:
@@ -2965,6 +2965,7 @@ Generated in sequence without interruption inside `journal.md`:
    - 3–5 learning objectives
 
    **🎛️ Block 3 — Didactics (structured questions):**
+   - Guiding figure / instructor persona: 💬 who speaks in the material (or "none – a neutral teacher voice"); the persona voice sample is written from it in the draft, never invented without this answer
    - Teaching style: humorous / academic / practical / conversational / mixed
    - Difficulty level: beginner / intermediate / advanced
    - Didactic concept: structured/presenter-driven / exploratory / project-based / mixed
@@ -2992,7 +2993,7 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet and the confirmed Session Types.
 4b. Synchronize `journal.md` → `## Agents` → `### Coauthor` exactly as `tasks/create-didactics.md` step 10 does (role, behavior, interaction style, project rules, voice sample; `__Customization Status:__ active`), so later tasks do not fall back to `## Didactics`.
 5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
-6. Replace the content of `journal.md` → `## Agenda` (skip if agenda = no).
+6. Replace the content of `journal.md` → `## Agenda` (if agenda = no: replace its placeholders with one line in the course language, "No agenda — decided with the course frame", and keep its action line for planning one later).
 7. Replace the content of `journal.md` → `## Sessions` with:
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
    - One `### {number}. {title}` subsection per session below the overview
@@ -3175,14 +3176,15 @@ Run this task automatically after any task that changes project state:
    from `## Course Context` → `__File Structure:__`; in single-file mode inspect
    the matching chapter of the root `README.md`.
 3. Derive a display state for each unit:
+   - States are exclusive; if two seem to fit, take the later one in this list.
    - `planned` — in the agenda or skeleton only, not yet worked out. The
      recommended next unit without a skeleton stays `planned`; mark it with
      `selected` and make it the `next` action.
-   - `current` — a unit that has a skeleton or material and is being worked
-     on now, or on which a task is running
-   - `draft` — a material draft exists
-   - `review` — feedback, instructor approval or a re-check is still pending
-     (material revised after a check and waiting for the re-check is `review`, not `draft`)
+   - `current` — the one unit being worked on now (a task runs on it, or it is
+     being worked out together); a skeleton alone is `planned`
+   - `draft` — material exists and the instructor has not approved it yet
+   - `review` — approved or revised material whose check or re-check is still
+     pending (material revised after a check and waiting for the re-check is `review`, not `draft`)
    - `revision` — the latest review or validation requires changes
    - Validation result → unit state: FAIL → `revision`; re-check pending →
      `review` (only while the instructor or a check actually has something to
@@ -3898,6 +3900,7 @@ template:
           2. Agenda required: [yes | optional | no]
           3. Pacing: [scheduled | learner-driven | event-based | n/a]
           4. Assessment defaults: [quizzes | reflection | assignments | none]
+          5. Units: [count × length, if known — e.g. 3 × 45 min; read by `:create-agenda` and the duration check]
 
     - id: file-structure
       title: File Structure
@@ -4235,6 +4238,7 @@ _Filled by `:init-course` from `templates/course-context.yaml`._
   2. Agenda required: {{yes | optional | no}}
   3. Pacing: {{scheduled | learner-driven | event-based}}
   4. Assessment defaults: {{quizzes | reflection | assignments | none}}
+  5. Units: {{count × length, if known}}
 
 * __File Structure:__
   1. Mode: {{single-file | multi-file}} — see `data/file-structure-modes.md`
@@ -5445,7 +5449,7 @@ Rules for action lines:
 | `## Templates` | `manage-templates` |
 | `## Agenda` | `create-agenda` |
 | `## Sessions` | `create-session` (without params — asked in chat), `validate-course` |
-| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; check failed → `coauthor-materials?number={n}` (✏️ revise); passed with concerns → `validate-course {n}` (it goes through the concerns); passed with ⏳ → the command of the named later step (e.g. `artist/generate-image`); checked ✅ → no main action; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
+| `### {n}. {title}` | **exactly one main action** by state: skeleton without material → `coauthor-materials?number={n}`; material draft → `validate-course {n}`; check failed → `coauthor-materials?number={n}` (✏️ revise); passed with concerns → `validate-course {n}` (it goes through the concerns); passed with ⏳ → the command of the named later step (e.g. `artist/generate-image`); checked ✅ → 👁 `preview` of the material; after one session has been worked out together and approved, other sessions may use `build-session` as main action. All further commands (`promote-session`, `build-session`, `validate-syntax`, `preview`, `quick-fix`, `learner/review-as-persona`) go only into the session's `<details><summary>Technical settings and more actions</summary>` block right after the action line (block order: `templates/session-skeleton.yaml` → `section_layout.entry_order`) |
 | `## Agents` | `configure-agent` (agent asked in chat), `create-learner-persona`, `learner/switch` (only if personas exist) |
 | `## Validation` | `validate-course` |
 | `## Publishing` | `development/create-project` (first publication, only if the publishing gate is PASS), `development/update-project` (once `__State:__` is published; same gate) |

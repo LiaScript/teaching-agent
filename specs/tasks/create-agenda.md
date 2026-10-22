@@ -28,7 +28,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 
 1. Read `journal.md` → `## Course Context`:
    - Check `agenda` field in the profile:
-     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `:create-session 1`. Stop here.
+     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `:create-session 1`. If `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6. Stop here.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
        - **Yes** — Create agenda to plan the structure
        - **No** — Proceed directly to `:create-session`
