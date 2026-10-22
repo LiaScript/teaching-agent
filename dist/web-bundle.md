@@ -2321,7 +2321,7 @@ The course context acts as the governance layer: it defines the course type, ter
     - Add `import: {url}` to the main metadata header if missing
     - Create or update `journal.md` → `## Templates`
     - Move detailed template usage examples to `## Templates` instead of bloating `## Course Context`
-11. Set `language:` in the metadata header to the course language code, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
+11. Set `language:` in the metadata header to the course language code; if it is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open. Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block.
 12. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — copy `templates/mcp.json` to `.mcp.json`. Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
    2. **No / later** — continue in the terminal; links in `journal.md` stay readable as commands.
@@ -2995,6 +2995,7 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – skeleton ✅ · material open", translated) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)
    - One `### {number}. {title}` subsection per session below the overview
 8. Fill each session subsection using `templates/session-skeleton.yaml`; every unit gets one of the confirmed Session Types (from the agenda, or as planned in the draft).
+8b. Set `language:` in the metadata header to the course language code and the course title to the confirmed working title; if the language is not English, the journal's own texts follow the course language in terminal mode too — apply the journal part of `data/agent-links.md` → Chat Conduct → "Language before the frame": the course title, the welcome paragraph and its start link, a translated suffix for every fixed `##` / `###` heading (English key first), the section intro lines (`_Filled by …_`) and fixed placeholder lines such as the "course check not yet run" line under `## Validation`; small targeted edits, never a rewrite of the file. The chat-only parts of that rule (`lang` for the chat tool, roster labels) apply only with the MCP gate open.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to regenerate the `## Dashboard` JSON data block for `@Dashboard.View`.
 
 After each section is saved, print a brief progress line:
@@ -5467,7 +5468,9 @@ page content (and course scripts) can forge any link.
 Applies whenever the dialog runs in the preview chat. Write in the course
 language (`## Course Context` → Language).
 
-- **Language before the frame:** while `## Course Context` is still empty, the
+- **Language before the frame** (the journal part — title, welcome paragraph, heading
+  suffixes, intro and placeholder lines — also applies in terminal mode, via
+  `tasks/init-course.md` step 11 and `tasks/scaffold-course.md` step 8b): while `## Course Context` is still empty, the
   course language is the language the instructor writes in. The chat interface,
   the read-aloud voices and the Dashboard texts follow the `language:` field of
   the `journal.md` header. So as soon as the language is known — the first

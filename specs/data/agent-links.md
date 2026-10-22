@@ -203,7 +203,9 @@ page content (and course scripts) can forge any link.
 Applies whenever the dialog runs in the preview chat. Write in the course
 language (`## Course Context` → Language).
 
-- **Language before the frame:** while `## Course Context` is still empty, the
+- **Language before the frame** (the journal part — title, welcome paragraph, heading
+  suffixes, intro and placeholder lines — also applies in terminal mode, via
+  `tasks/init-course.md` step 11 and `tasks/scaffold-course.md` step 8b): while `## Course Context` is still empty, the
   course language is the language the instructor writes in. The chat interface,
   the read-aloud voices and the Dashboard texts follow the `language:` field of
   the `journal.md` header. So as soon as the language is known — the first

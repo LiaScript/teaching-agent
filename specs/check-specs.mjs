@@ -14,8 +14,8 @@ const read = path => readFileSync(join(specs, path), "utf8");
 
 // File → sentences that must stay (one key phrase per rule).
 const required = {
-  "tasks/init-course.md": ["the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
-  "tasks/scaffold-course.md": ["Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
+  "tasks/init-course.md": ["follow the course language in terminal mode too", "the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
+  "tasks/scaffold-course.md": ["8b. Set `language:`", "Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
   "tasks/create-outline.md": ["Start from the instructor's goal", "Repeat this time check after every revision"],
   "tasks/create-didactics.md": ["do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`", "merge, never overwrite", "data-from=\"didactics\""],
   "tasks/create-agenda.md": ["Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary", "If later: stop here", "do not ask about methods"],
