@@ -73,7 +73,7 @@
 
 ## Session Materials
 
-- [ ] [mechanical] All skeletons promoted to materials
+- [ ] [mechanical] Every unit with a skeleton has its material document (written together or prepared)
 - [ ] [mechanical] Outline with subchapters present
 - [ ] [pedagogical] References included per section where claims are made
 - [ ] [pedagogical] Every factual statement is correct at the stated level of simplification and traceable to a listed reference; no frightening or absolute claims without a source — in the material and in the unit's journal entry (summary, content)
@@ -109,4 +109,3 @@
 - [ ] [pedagogical] Learning objectives from `journal.md` → `## Outline` traceable into the materials (through `## Agenda` if there is one)
 - [ ] [pedagogical] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] [mechanical] Numbering correct, no gaps
-- [ ] [mechanical] No sessions without materials

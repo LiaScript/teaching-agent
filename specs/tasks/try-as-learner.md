@@ -29,7 +29,7 @@ This is a try-out in the preview, not a feature for learners: learners do not ge
    - Call `find_teacher` with **several** topics that fit the course (subject, method, target group — try more than one), and pick 3–4 people: mix women and men and regions, all suitable for the target group. One sentence each in the course language.
    - **Name each person exactly as the portrait card shows it** (the `find_teacher` name); if the course language has a common other form of the name, add it once in brackets. Pass that course-language form as `label` to `set_agent` (step 4), so card, list and chat header name the same person.
    - Ask with a `chat` form `{type: "teacher", options: [ids]}`. In the same message name the two other choices as links or a second short form: the guiding figure from `## Didactics` (if there is one) and "without a companion".
-   - If `get_state.teacher` names a teacher, take that one and ask nobody.
+   - If `get_state.teacher` names a teacher, or the command passed `companion` (a `find_teacher` id or name, or the guiding figure), take that one and ask nobody.
    - **Fallback:** if `find_teacher` or the `persona`/`view` options of `set_agent` are not available (older DevServer), offer only the guiding figure and "without a companion" and say so in one line.
 4. **Start.**
    - Confirm the choice in one planning message whose **last line is the exit sentence** ("To end, write: 'I am the teacher again'", translated) — the instructor needs it later and it stays the last planning text above the companion.

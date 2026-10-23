@@ -9,9 +9,9 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 ## Inputs
 
 - Learning objectives from `journal.md` → `## Outline` (the field with `data-key="learning-goals"`; in older journals the `__Learning Objectives…:__` bullet)
-- Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
-- Time commitment from `journal.md` → `## Outline` (`__Time Commitment:__` bullet)
-- Didactic concept from `journal.md` → `## Didactics` (`__Didactic Concept:__` bullet)
+- Abstract from `journal.md` → `## Outline` (`data-key="abstract"`; older journals: the `__Abstract:__` bullet)
+- Time commitment from `journal.md` → `## Outline` (`data-key="time-commitment"`; older journals: `__Time Commitment:__`) and `## Course Context` → Units
+- Didactic concept from `journal.md` → `## Didactics` (`data-key="didactic-concept"`; older journals: `__Didactic Concept:__`)
 - Session Types from `journal.md` → `## Didactics` (`__Session Types:__` bullet, see `data/session-types.md`)
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style & difficulty level from `journal.md` → `## Didactics`

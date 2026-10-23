@@ -20,7 +20,7 @@ Each session/unit is its own LiaScript document in its own folder.
 
 - Course content: `materials/{number}-{slug}/README.md` — one folder per session.
 - Assets: `materials/{number}-{slug}/assets/images/`, `materials/{number}-{slug}/assets/videos/`, etc. — scoped to that session, not shared with others.
-- `{slug}` is a kebab-case slug derived from the session title: lowercase, strip punctuation, spaces → hyphens, truncate to ~5 significant words if the title is long (e.g. "Are You in Scope? Essential vs. Important Entities" → `are-you-in-scope-essential-vs-important`). Umlauts and ß are transliterated (ä→ae, ö→oe, ü→ue, ß→ss); only punctuation is dropped, no filler words; keep the first ~5 words.
+- `{slug}` is a kebab-case slug derived from the session title: lowercase, strip punctuation, spaces → hyphens, keep the first ~5 words if the title is long (e.g. "Are You in Scope? Essential vs. Important Entities" → `are-you-in-scope-essential-vs-important`). Umlauts and ß are transliterated (ä→ae, ö→oe, ü→ue, ß→ss); only punctuation is dropped, no filler words; keep the first ~5 words.
 - **Compute the slug once**, when the material path is first recorded — in the technical table of `## Agenda` if an agenda exists, otherwise when the material document is first created. Every later task reuses the recorded path. If the session title changes afterward, do not silently rename the folder — flag the mismatch and ask before renaming, since links and assets may reference the existing path.
 - Typical for: `lecture-series`, `self-paced`, `workshop`, or any course with multiple sessions.
 

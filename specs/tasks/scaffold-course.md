@@ -11,6 +11,7 @@ This is the "scaffold mode" — fast-track for instructors who know what they wa
 ## Inputs
 
 - `templates/journal.md` (skeleton for a new `journal.md`)
+- `course-type` (optional command parameter): when given, do not ask the scope question; name it in the draft so the instructor confirms it there
 
 All collected in a single intake interview at the start:
 
@@ -21,10 +22,10 @@ All collected in a single intake interview at the start:
 - Time commitment (where applicable)
 - Abstract (topics, benefits)
 - 3–5 learning objectives
-- Didactic concept preference (structured/exploratory/project-based/mixed)
-- Instructor persona style (humorous/academic/practical/conversational)
+- Didactic concept preference (structured/exploratory/project-based/mixed) — derived, shown in the draft
+- Instructor persona style — derived, shown in the draft (not asked, Block 3)
 - Session Types (format variants of a unit) with the grounding answer
-- Difficulty level
+- Difficulty level — derived, shown in the draft (not asked)
 - Session count and titles (or leave titles open for auto-generation)
 - Agenda required? (for self-paced / single-lesson)
 
@@ -138,7 +139,7 @@ After each section is saved, print a brief progress line:
    > | Agenda         | ✅ / skipped    |
    > | Sessions       | ✅ overview + [N] subsections |
    >
-   > "Next step: `:coauthor-materials` to start with Session 1."
+   > "Next step: `:coauthor-materials 1` to start with Session 1."
 
 2. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — read `templates/mcp.json` and write it as `.mcp.json` with the file-write tool (no shell copy). Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.

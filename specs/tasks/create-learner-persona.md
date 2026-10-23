@@ -87,7 +87,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
     - Append as a new `#### Persona: {icon} {name}` subsection: the `####` heading stays outside, everything below it is wrapped in `<section>…</section>`, as in the **Persona Structure** template below
 12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 13. Suggest next step:
-    > "Persona saved. Call `:review-as-persona [Name] [number]` to use [Icon] [Name] as a reviewer for a session."
+    > "Persona saved. [Icon] [Name] can now review a unit: `:agent learner` → `:review-as-persona [Name] [number]`."
 
 ---
 
@@ -123,11 +123,11 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-##### 3. Training & Work Context
+##### 3. Learning Context
 - Learning setting: ... (e.g., school timetable, block schedule, part-time course alongside work)
-- Typical work day / schedule: ...
-- Commute / accessibility: ...
-- Financial situation: ...
+- Typical day / schedule: ...
+- Where and with which device they learn: ...
+- Other circumstances that matter for learning (only where known — e.g. work, family, money): ...
 
 *[Source / Assumption note]*
 

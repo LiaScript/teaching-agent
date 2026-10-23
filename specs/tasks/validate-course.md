@@ -107,7 +107,7 @@ Rules:
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
    A check announced at more than 3 minutes sends one lasting interim message at about half time (`data/agent-links.md` → Progress feedback).
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
-   If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified." with the anchor link to the report heading.
+   If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified." with the anchor link to the report heading, and offer `:try-as-learner {number}` once (only when the MCP gate is open).
 8. If issues found: confirm the report was saved, list the blockers briefly, and offer the fix: when every open point is one `:quick-fix` covers (one change each, no content decision), offer ✏️ `:quick-fix {number}` with its description; otherwise `:coauthor-materials {number}` (`data/agent-links.md` → Action lines).
    With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. a special need of the target group, such as read-aloud for a learner with dyslexia) is named as such and needs its own explicit confirmation. Then, if something was fixed, the short re-check of the changed area (`tasks/quick-fix.md` → Change path); if every concern was accepted, the outcome becomes PASS without a new check. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
@@ -139,7 +139,7 @@ Rules:
 6. **Check Session Progress:**
    - Load `journal.md` → `## Sessions` as primary source
    - Confirm the overview appears directly below `## Sessions` (status list, then the technical table in `<details>`, `templates/session-skeleton.yaml` → `section_layout.overview`) and every status line matches its table row
-   - All expected sessions have a row in the overview table
+   - All expected sessions have a row in the overview table (expected: the agenda's rows; without an agenda the number in `## Course Context` → Units, else the Outline's Session Overview)
    - Cross-check: every ✅ Skeleton row has a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
    - Cross-check: every ✅ Material row has its material document present — a file in `materials/{number}-{slug}/README.md` in multi-file mode, or a matching `##` chapter in root `/README.md` in single-file mode (see `data/file-structure-modes.md`)
    - All sessions marked ✅ Done `[required before publishing]`
@@ -150,7 +150,7 @@ Rules:
 8. **Consistency check across project memory and materials:**
    - Terminology consistent (sessions-called from `journal.md` → `## Course Context` used throughout)
    - Persona tone consistent across all materials
-   - Learning objectives from `journal.md` → `## Outline` traceable through `journal.md` → `## Agenda` into materials
+   - Learning objectives from `journal.md` → `## Outline` traceable into materials — through `journal.md` → `## Agenda` if there is one
    - Numbering correct and no gaps
 
 9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads, as a list (lines directly below each other would merge into one paragraph):
@@ -181,7 +181,7 @@ Rules:
    **Course result:** the worst of (a) the course-level checks, rated with `result_rules` of `templates/session-validation.yaml`, and (b) every unit's current report — a unit with an open ⏳ item or Done ❌ makes the course FAIL (publishing waits for it), open pedagogical concerns of a unit or of the course give PASS with concerns, otherwise PASS.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
 11. After all session validation reports and the latest summary are created: suggest next step.
-    - If issues exist: "Open `:coauthor-materials {number}` to resolve the issues in Session X, then rerun `:validate-course`."
+    - If issues exist: per unit as in session mode step 8 — ✏️ `:quick-fix {number}` when every open point of the unit is one quick-fix change, otherwise `:coauthor-materials {number}` — then rerun `:validate-course`.
     - If no issues: "Course is ready for publishing. Next step: `:agent development` → `:create-project`"
 
 ---

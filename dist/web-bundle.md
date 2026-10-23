@@ -1056,7 +1056,7 @@ Plan images where they help (as image spots for the Artist-Agent, see step 4 →
    - **Fact check before showing:** before you show a draft piece, list its factual statements for yourself and check each against a named source whose page you opened (a search summary is no source; use `reference-checker` if installed). Without web access or the skill, name the source you rely on (textbook, standard, the instructor) or mark the claim "not verified" in the summary and ask — never present it as checked. A simplification must stay true at the learners' level (never "A becomes C" when the source says "A → B → C"). No absolute or frightening claims ("soon there will be none left") unless the source states them. Mark every statement you could not verify as *unverified* in the chat; material with unverified statements is approved only if the instructor explicitly accepts that, and the session's references list the sources.
    - **New rule → re-check:** when the instructor adopts a wording or style rule (also a project-wide one), apply it at once to **all** pieces drafted so far, show every hit with the fix in bold, and only then continue.
    - **Course-wide decisions** (not for a single lesson — there the session's decisions list is the course): if a decision applies to every unit ("keyboard shortcuts only in the info box"), offer to record it as an instructor rule under `## Agents` → `### Coauthor` → Project-Specific Rules (without the `data-from` marker), so `:promote-session` and later co-authoring follow it; it is written with the same save confirmation. If a decision contradicts `## Didactics` or `### Coauthor` (e.g. its voice sample), say so and offer to adjust that section by the rule "Changing another section" in `data/agent-links.md`.
-   - **Record decisions:** the decisions list holds only dated decisions (open points go to the overview as `decide` or `internal`). Every decision the instructor makes about this session goes, with date, into the session's decisions list as `- **{date}:** {decision}` (a bullet with the date in bold — never a numbered item that starts with the date, `templates/session-skeleton.yaml` → decisions) — written together with the next save confirmation and listed in its summary in future tense ("When you save, I will also record: …", translated, see `data/agent-links.md` → "Nothing unseen gets saved"), never before it — (`data-key="decisions"`, label in the course language) in `journal.md` → `## Sessions` → `### {n}. {title}` (create it above `**References:**` if missing).
+   - **Record decisions:** the decisions list holds only dated decisions (open points go to the overview as `decide` or `internal`). Every decision the instructor makes about this session goes, with date, into the session's decisions list as `- **{date}:** {decision}` (a bullet with the date in bold — never a numbered item that starts with the date, `templates/session-skeleton.yaml` → decisions) — written together with the next save confirmation and listed in its summary in future tense ("When you save, I will also record: …", translated, see `data/agent-links.md` → "Nothing unseen gets saved"), never before it — (`data-key="decisions"`, label in the course language) in `journal.md` → `## Sessions` → `### {n}. {title}` (create it before the field with `data-key="references"` if missing — the order of `templates/session-skeleton.yaml` → `section_layout.entry_order`).
    - **Images:** when a piece needs pictures (the didactics plan them, or the instructor asks), mark each spot in the draft with the neutral marker of `tasks/create-image.md` step 12 and ask **once per unit** where the pictures come from (form, plain words): "Search free photos (the design assistant looks for pictures that may be used with the photographer's name – about 1 minute per picture, you choose)" · "Have them drawn by an image program" · "Later / my own photos" (translated). Never search, download or verify images here and never start a background search: the answer only sets `__Source:__` (`free-photo` / `generated` / `own`). Each spot becomes a `wanted` entry (place, visible description without the answer, search terms), listed in the save summary and written with the same save confirmation; the search itself is the unit's image step (`:create-image {n}`, Artist-Agent). Material can be saved with markers.
 
    **Critical engagement rules — always active:**
@@ -1175,9 +1175,9 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 ## Inputs
 
 - Learning objectives from `journal.md` → `## Outline` (the field with `data-key="learning-goals"`; in older journals the `__Learning Objectives…:__` bullet)
-- Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
-- Time commitment from `journal.md` → `## Outline` (`__Time Commitment:__` bullet)
-- Didactic concept from `journal.md` → `## Didactics` (`__Didactic Concept:__` bullet)
+- Abstract from `journal.md` → `## Outline` (`data-key="abstract"`; older journals: the `__Abstract:__` bullet)
+- Time commitment from `journal.md` → `## Outline` (`data-key="time-commitment"`; older journals: `__Time Commitment:__`) and `## Course Context` → Units
+- Didactic concept from `journal.md` → `## Didactics` (`data-key="didactic-concept"`; older journals: `__Didactic Concept:__`)
 - Session Types from `journal.md` → `## Didactics` (`__Session Types:__` bullet, see `data/session-types.md`)
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style & difficulty level from `journal.md` → `## Didactics`
@@ -1266,7 +1266,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 3a. Choose a **Didactic Framework** from `data/didactic-methods.md` → "Course Frameworks" yourself, based on course type. It is documentation only: do **not** ask the instructor; name it only inside the technical details. Ask only if the instructor uses such terms themselves.
 3b. Define `__Session Types:__` (see `data/session-types.md` for the full mechanism):
    - **single-lesson**: default to one type, named after what the lesson mainly is (from the grounding answer, e.g. "introduction with practice"); skip the discussion of types unless the instructor wants to split the lesson into sub-types. The grounding check below still applies, in its short form: "Your lesson is mainly … — right?"
-   - **all other course types**: 🎛️ propose the default Session Types for this course type from the table in `data/session-types.md`, each with slug, one-line criterion, and a 2–3 item required-elements checklist. Let the instructor confirm or edit.
+   - **all other course types**: 🎛️ propose the default Session Types for this course type from the table in `data/session-types.md`, each with its display name (the slug only in the saved technical block, never in the chat), one-line criterion, and a 2–3 item required-elements checklist. Let the instructor confirm or edit.
    - Toward the instructor, call Session Types "recurring lesson patterns" (translated, or the instructor's own word) and illustrate each with one unit of this course — never "kinds of units" or the task's step names. On first mention link the term in half a sentence to the lesson phases teachers plan with, and show each pattern with its phases. If the instructor offers a word of their own, ask whether to use it on the page and in the overview.
    - The required elements of each pattern (later check criteria) appear word for word in the preview; anything added at saving is listed as its own line in the save summary.
    - 💬 Grounding check (mandatory, do not skip): when the outline already lists the units, propose the pattern for each unit yourself and let the instructor confirm one concrete unit ("Does unit N look like this in your lessons?"); only without such a list ask the instructor to name one concretely planned session, which pattern it would get, and why. If the answer doesn't fit any proposed type, revise the types before continuing — don't let an unfitting default stand.
@@ -1582,7 +1582,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
     - Append as a new `#### Persona: {icon} {name}` subsection: the `####` heading stays outside, everything below it is wrapped in `<section>…</section>`, as in the **Persona Structure** template below
 12. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 13. Suggest next step:
-    > "Persona saved. Call `:review-as-persona [Name] [number]` to use [Icon] [Name] as a reviewer for a session."
+    > "Persona saved. [Icon] [Name] can now review a unit: `:agent learner` → `:review-as-persona [Name] [number]`."
 
 ---
 
@@ -1618,11 +1618,11 @@ Includes: age, background, where they are in their training, attitude toward lea
 
 *[Source / Assumption note]*
 
-##### 3. Training & Work Context
+##### 3. Learning Context
 - Learning setting: ... (e.g., school timetable, block schedule, part-time course alongside work)
-- Typical work day / schedule: ...
-- Commute / accessibility: ...
-- Financial situation: ...
+- Typical day / schedule: ...
+- Where and with which device they learn: ...
+- Other circumstances that matter for learning (only where known — e.g. work, family, money): ...
 
 *[Source / Assumption note]*
 
@@ -1781,7 +1781,7 @@ Defines title, target audience, abstract, and learning objectives.
 1. Read `journal.md` → `## Course Context` to determine course type and conventions, and take every `Additional Notes` line "For outline: …" (or for learning objectives) as the instructor's own input — start from it, never ask for it again. If the instructor's goals are neither there nor in your memory of this session, search the chat history (`read_chat`) before asking.
 2. Collect title and target audience — take both from `## Course Context` (Working Title, target group notes) and from goals the instructor already named; only ask for what is missing or contradictory.
    - If the skill `creativity` is available (see `data/skills.md`), 🎛️ offer once before collecting the remaining inputs: 1. structured interview (default) · 2. open exploratory ideation with `creativity` first, then condense its result into the inputs below. Run it only on request; the outline itself is still written by this task.
-3. Collect time commitment — adapted by course type:
+3. Collect time commitment — prefill it from `## Course Context` → Units (the time frame of `:init-course` step 4) and ask only for what is missing; adapted by course type:
    - **lecture-series**: required (e.g., semester hours/week, total hours)
    - **workshop**: required (e.g., 1-day, 2-day block)
    - **self-paced**: optional (estimated self-study hours recommended, but not mandatory)
@@ -1912,7 +1912,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - All texts of this skeleton reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.
-7. **Before saving:** show the new unit as it will be written — every visible block of the template (status line, kind line, summary with every paragraph, content, activities, references); for changes only inside the `<details>` technical block one line in the save summary is enough with "Save" / "Change something" — also in the terminal. Then save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
+7. **Before saving** (after the checks "Type and Method first" and "Self-check before saving" below, which run before this form): show the new unit as it will be written — every visible block of the template (status line, kind line, summary with every paragraph, content, activities, references); for changes only inside the `<details>` technical block one line in the save summary is enough with "Save" / "Change something" — also in the terminal. Then save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
    The `## Sessions` section has one canonical structure:
    1. The overview directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`)
    2. One `### {number}. {title}` subsection per session below the overview
@@ -2533,6 +2533,7 @@ Use this task when:
 
 ## Inputs
 
+- `name` (optional command parameter): the template to add or update — then do not ask which one
 - `journal.md` → `## Course Context` (`__Conventions & Standards:__` and `__LiaScript conventions:__` bullets)
 - Template name, import URL, purpose, and usage rules
 - Optional runnable examples and special examples
@@ -3064,6 +3065,7 @@ This is the "scaffold mode" — fast-track for instructors who know what they wa
 ## Inputs
 
 - `templates/journal.md` (skeleton for a new `journal.md`)
+- `course-type` (optional command parameter): when given, do not ask the scope question; name it in the draft so the instructor confirms it there
 
 All collected in a single intake interview at the start:
 
@@ -3074,10 +3076,10 @@ All collected in a single intake interview at the start:
 - Time commitment (where applicable)
 - Abstract (topics, benefits)
 - 3–5 learning objectives
-- Didactic concept preference (structured/exploratory/project-based/mixed)
-- Instructor persona style (humorous/academic/practical/conversational)
+- Didactic concept preference (structured/exploratory/project-based/mixed) — derived, shown in the draft
+- Instructor persona style — derived, shown in the draft (not asked, Block 3)
 - Session Types (format variants of a unit) with the grounding answer
-- Difficulty level
+- Difficulty level — derived, shown in the draft (not asked)
 - Session count and titles (or leave titles open for auto-generation)
 - Agenda required? (for self-paced / single-lesson)
 
@@ -3191,7 +3193,7 @@ After each section is saved, print a brief progress line:
    > | Agenda         | ✅ / skipped    |
    > | Sessions       | ✅ overview + [N] subsections |
    >
-   > "Next step: `:coauthor-materials` to start with Session 1."
+   > "Next step: `:coauthor-materials 1` to start with Session 1."
 
 2. 🎛️ If no `.mcp.json` exists in the project root and the MCP gate is closed (see `data/agent-links.md`), offer the live dashboard once (single choice):
    1. **Yes** — read `templates/mcp.json` and write it as `.mcp.json` with the file-write tool (no shell copy). Then explain: requires the LiaScript DevServer (`npm install -g @liascript/devserver`); restart the agent (Claude Code: `claude --dangerously-load-development-channels server:liascript`) so `journal.md` opens in the browser with clickable actions.
@@ -3249,7 +3251,7 @@ This is a try-out in the preview, not a feature for learners: learners do not ge
    - Call `find_teacher` with **several** topics that fit the course (subject, method, target group — try more than one), and pick 3–4 people: mix women and men and regions, all suitable for the target group. One sentence each in the course language.
    - **Name each person exactly as the portrait card shows it** (the `find_teacher` name); if the course language has a common other form of the name, add it once in brackets. Pass that course-language form as `label` to `set_agent` (step 4), so card, list and chat header name the same person.
    - Ask with a `chat` form `{type: "teacher", options: [ids]}`. In the same message name the two other choices as links or a second short form: the guiding figure from `## Didactics` (if there is one) and "without a companion".
-   - If `get_state.teacher` names a teacher, take that one and ask nobody.
+   - If `get_state.teacher` names a teacher, or the command passed `companion` (a `find_teacher` id or name, or the guiding figure), take that one and ask nobody.
    - **Fallback:** if `find_teacher` or the `persona`/`view` options of `set_agent` are not available (older DevServer), offer only the guiding figure and "without a companion" and say so in one line.
 4. **Start.**
    - Confirm the choice in one planning message whose **last line is the exit sentence** ("To end, write: 'I am the teacher again'", translated) — the instructor needs it later and it stays the last planning text above the companion.
@@ -3577,7 +3579,7 @@ Run this task automatically after any task that changes project state:
   and `result` of every step the triggering write touched. The previous block
   is not a template: a fresh cache (step 8) saves rewriting unchanged keys,
   never this check.
-- Use "finished/done" only for units with a validation PASS. Instructor approval is "approved", never "finished" — in process steps, `why` texts and `note`.
+- Use "finished/done" only for units whose check passed without an open ⏳ item (Done ✅) and that are approved. Instructor approval is "approved", never "finished" — in process steps, `why` texts and `note`.
 - Keep the global process steps stable from the empty journal on: the agenda step
   is listed as `optional` until `Agenda required` is set, then `planned` (yes) or
   removed with a `note` (no). The last step, publishing, stays `optional` until the
@@ -3802,7 +3804,7 @@ Rules:
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
    A check announced at more than 3 minutes sends one lasting interim message at about half time (`data/agent-links.md` → Progress feedback).
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
-   If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified." with the anchor link to the report heading.
+   If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified." with the anchor link to the report heading, and offer `:try-as-learner {number}` once (only when the MCP gate is open).
 8. If issues found: confirm the report was saved, list the blockers briefly, and offer the fix: when every open point is one `:quick-fix` covers (one change each, no content decision), offer ✏️ `:quick-fix {number}` with its description; otherwise `:coauthor-materials {number}` (`data/agent-links.md` → Action lines).
    With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. a special need of the target group, such as read-aloud for a learner with dyslexia) is named as such and needs its own explicit confirmation. Then, if something was fixed, the short re-check of the changed area (`tasks/quick-fix.md` → Change path); if every concern was accepted, the outcome becomes PASS without a new check. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
@@ -3834,7 +3836,7 @@ Rules:
 6. **Check Session Progress:**
    - Load `journal.md` → `## Sessions` as primary source
    - Confirm the overview appears directly below `## Sessions` (status list, then the technical table in `<details>`, `templates/session-skeleton.yaml` → `section_layout.overview`) and every status line matches its table row
-   - All expected sessions have a row in the overview table
+   - All expected sessions have a row in the overview table (expected: the agenda's rows; without an agenda the number in `## Course Context` → Units, else the Outline's Session Overview)
    - Cross-check: every ✅ Skeleton row has a matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
    - Cross-check: every ✅ Material row has its material document present — a file in `materials/{number}-{slug}/README.md` in multi-file mode, or a matching `##` chapter in root `/README.md` in single-file mode (see `data/file-structure-modes.md`)
    - All sessions marked ✅ Done `[required before publishing]`
@@ -3845,7 +3847,7 @@ Rules:
 8. **Consistency check across project memory and materials:**
    - Terminology consistent (sessions-called from `journal.md` → `## Course Context` used throughout)
    - Persona tone consistent across all materials
-   - Learning objectives from `journal.md` → `## Outline` traceable through `journal.md` → `## Agenda` into materials
+   - Learning objectives from `journal.md` → `## Outline` traceable into materials — through `journal.md` → `## Agenda` if there is one
    - Numbering correct and no gaps
 
 9. **Replace `journal.md` → `## Validation` → `### Latest Validation Summary`** — bold labels in the course language with their English `data-key`, never `####` or `#####` headings (each would become its own slide); keep the English key lines `Date:`, `Mode:`, `Result:` that the publishing gate reads, as a list (lines directly below each other would merge into one paragraph):
@@ -3876,7 +3878,7 @@ Rules:
    **Course result:** the worst of (a) the course-level checks, rated with `result_rules` of `templates/session-validation.yaml`, and (b) every unit's current report — a unit with an open ⏳ item or Done ❌ makes the course FAIL (publishing waits for it), open pedagogical concerns of a unit or of the course give PASS with concerns, otherwise PASS.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
 11. After all session validation reports and the latest summary are created: suggest next step.
-    - If issues exist: "Open `:coauthor-materials {number}` to resolve the issues in Session X, then rerun `:validate-course`."
+    - If issues exist: per unit as in session mode step 8 — ✏️ `:quick-fix {number}` when every open point of the unit is one quick-fix change, otherwise `:coauthor-materials {number}` — then rerun `:validate-course`.
     - If no issues: "Course is ready for publishing. Next step: `:agent development` → `:create-project`"
 
 ---
@@ -5529,7 +5531,7 @@ template:
 
 ## Session Materials
 
-- [ ] [mechanical] All skeletons promoted to materials
+- [ ] [mechanical] Every unit with a skeleton has its material document (written together or prepared)
 - [ ] [mechanical] Outline with subchapters present
 - [ ] [pedagogical] References included per section where claims are made
 - [ ] [pedagogical] Every factual statement is correct at the stated level of simplification and traceable to a listed reference; no frightening or absolute claims without a source — in the material and in the unit's journal entry (summary, content)
@@ -5565,7 +5567,6 @@ template:
 - [ ] [pedagogical] Learning objectives from `journal.md` → `## Outline` traceable into the materials (through `## Agenda` if there is one)
 - [ ] [pedagogical] Context ↔ Outline ↔ Didactics ↔ Agenda ↔ Sessions consistent
 - [ ] [mechanical] Numbering correct, no gaps
-- [ ] [mechanical] No sessions without materials
 
 ==================== END: specs/checklists/course-quality-checklist.md ====================
 
@@ -6907,7 +6908,7 @@ Each session/unit is its own LiaScript document in its own folder.
 
 - Course content: `materials/{number}-{slug}/README.md` — one folder per session.
 - Assets: `materials/{number}-{slug}/assets/images/`, `materials/{number}-{slug}/assets/videos/`, etc. — scoped to that session, not shared with others.
-- `{slug}` is a kebab-case slug derived from the session title: lowercase, strip punctuation, spaces → hyphens, truncate to ~5 significant words if the title is long (e.g. "Are You in Scope? Essential vs. Important Entities" → `are-you-in-scope-essential-vs-important`). Umlauts and ß are transliterated (ä→ae, ö→oe, ü→ue, ß→ss); only punctuation is dropped, no filler words; keep the first ~5 words.
+- `{slug}` is a kebab-case slug derived from the session title: lowercase, strip punctuation, spaces → hyphens, keep the first ~5 words if the title is long (e.g. "Are You in Scope? Essential vs. Important Entities" → `are-you-in-scope-essential-vs-important`). Umlauts and ß are transliterated (ä→ae, ö→oe, ü→ue, ß→ss); only punctuation is dropped, no filler words; keep the first ~5 words.
 - **Compute the slug once**, when the material path is first recorded — in the technical table of `## Agenda` if an agenda exists, otherwise when the material document is first created. Every later task reuses the recorded path. If the session title changes afterward, do not silently rename the folder — flag the mismatch and ask before renaming, since links and assets may reference the existing path.
 - Typical for: `lecture-series`, `self-paced`, `workshop`, or any course with multiple sessions.
 

@@ -295,7 +295,7 @@ Run this task automatically after any task that changes project state:
   and `result` of every step the triggering write touched. The previous block
   is not a template: a fresh cache (step 8) saves rewriting unchanged keys,
   never this check.
-- Use "finished/done" only for units with a validation PASS. Instructor approval is "approved", never "finished" — in process steps, `why` texts and `note`.
+- Use "finished/done" only for units whose check passed without an open ⏳ item (Done ✅) and that are approved. Instructor approval is "approved", never "finished" — in process steps, `why` texts and `note`.
 - Keep the global process steps stable from the empty journal on: the agenda step
   is listed as `optional` until `Agenda required` is set, then `planned` (yes) or
   removed with a `note` (no). The last step, publishing, stays `optional` until the

@@ -36,7 +36,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - All texts of this skeleton reflect this style.
 5. Generate the basic structure for the session.
 6. Fill out template `templates/session-skeleton.yaml`.
-7. **Before saving:** show the new unit as it will be written — every visible block of the template (status line, kind line, summary with every paragraph, content, activities, references); for changes only inside the `<details>` technical block one line in the save summary is enough with "Save" / "Change something" — also in the terminal. Then save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
+7. **Before saving** (after the checks "Type and Method first" and "Self-check before saving" below, which run before this form): show the new unit as it will be written — every visible block of the template (status line, kind line, summary with every paragraph, content, activities, references); for changes only inside the `<details>` technical block one line in the save summary is enough with "Save" / "Change something" — also in the terminal. Then save the skeleton as a `### {number}. {title}` subsection under `journal.md` → `## Sessions`.
    The `## Sessions` section has one canonical structure:
    1. The overview directly below `## Sessions` — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`)
    2. One `### {number}. {title}` subsection per session below the overview

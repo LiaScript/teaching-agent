@@ -12,6 +12,7 @@ Use this task when:
 
 ## Inputs
 
+- `name` (optional command parameter): the template to add or update — then do not ask which one
 - `journal.md` → `## Course Context` (`__Conventions & Standards:__` and `__LiaScript conventions:__` bullets)
 - Template name, import URL, purpose, and usage rules
 - Optional runnable examples and special examples

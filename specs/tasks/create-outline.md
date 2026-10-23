@@ -23,7 +23,7 @@ Defines title, target audience, abstract, and learning objectives.
 1. Read `journal.md` → `## Course Context` to determine course type and conventions, and take every `Additional Notes` line "For outline: …" (or for learning objectives) as the instructor's own input — start from it, never ask for it again. If the instructor's goals are neither there nor in your memory of this session, search the chat history (`read_chat`) before asking.
 2. Collect title and target audience — take both from `## Course Context` (Working Title, target group notes) and from goals the instructor already named; only ask for what is missing or contradictory.
    - If the skill `creativity` is available (see `data/skills.md`), 🎛️ offer once before collecting the remaining inputs: 1. structured interview (default) · 2. open exploratory ideation with `creativity` first, then condense its result into the inputs below. Run it only on request; the outline itself is still written by this task.
-3. Collect time commitment — adapted by course type:
+3. Collect time commitment — prefill it from `## Course Context` → Units (the time frame of `:init-course` step 4) and ask only for what is missing; adapted by course type:
    - **lecture-series**: required (e.g., semester hours/week, total hours)
    - **workshop**: required (e.g., 1-day, 2-day block)
    - **self-paced**: optional (estimated self-study hours recommended, but not mandatory)
