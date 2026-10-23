@@ -33,7 +33,7 @@ template:
     "the point corrected" — a count always shows the points still open, never only the original findings) · PASS with concerns → "passed with concerns – your
     decision needed" · PASS with ⏳ items → "passed – still missing: {what}" ({what} = what learners still miss, as a noun
     phrase with a number: "1 photo", "2 pictures for the self-check"; never a command or step name as subject) · PASS →
-    "passed" (all translated).
+    "passed" (all translated); PASS for a draft the instructor has not approved yet → "passed – waiting for your approval".
     "Usable with learners now" (mandatory, translated): "yes" (nothing open) · "yes, with limits: {what}" (⏳ items or open
     concerns that do not stop the learners) · "not yet: {why}" (an error or a task learners cannot solve yet). Derived from the
     open ❌ and ⏳ items, never from the result word alone. The overview shows it as the **first** line of the unit's card
@@ -48,7 +48,7 @@ template:
     phrase for the same state. Where the instructor meets the short re-check first (chat, closing summary), explain it in
     the same sentence: "I look over the changed pages once more, about {m} minutes" (translated).
     A language pack lists these words under `terms` (`passedMissing`, `recheckShort`, `recheckExplain`, `correctionOpen`,
-    `correctionAllFixed`, `correctionOneFixed`, `usableYes`, `usableLimited`, `usableNo`) and older wordings under `outdatedTerms`;
+    `correctionAllFixed`, `correctionOneFixed`, `approvalOpen`, `usableYes`, `usableLimited`, `usableNo`) and older wordings under `outdatedTerms`;
     `validate-journal.mjs` recognises them (e.g. a step name as subject of "still follows", "revised – check open", a re-check
     without "short") and recommends the current term — never copy an old outcome line into a status line.
   result_rules:

@@ -353,6 +353,7 @@
   "correctionOpen": "Korrektur nötig: {open} von {n} Punkten offen",
   "correctionAllFixed": "alle {n} Punkte korrigiert",
   "correctionOneFixed": "der Punkt ist korrigiert",
+  "approvalOpen": "bestanden – wartet auf Ihre Freigabe",
   "usableYes": "ja",
   "usableLimited": "ja, mit Einschränkungen: {what}",
   "usableNo": "noch nicht: {why}",

@@ -414,6 +414,11 @@ for (const [key, entries] of fileMode ? groups : []) {
     const target = loose(entry.fields.file.replace(/^\[[^\]]*\]\((.*)\)$/, "$1"));
     if (!loose(text).includes(target) && !(!/^\w+:/.test(target) && loose(text).includes(target.split("/").at(-1)))) warnings.push(`image entry "${entry.slug}" (unit ${entry.unit}) is ${entry.status}, but ${where} does not show its file ${short(entry.fields.file, 80)}`);
   }
+  // A photo from a free collection needs its credit line (author, licence, file page) in the material's credits chapter.
+  for (const entry of entries.filter(item => item.status === "inserted" && /free-photo/i.test(item.fields.source ?? "") && item.fields.page)) {
+    const page = loose(entry.fields.page.replace(/^\[[^\]]*\]\((.*)\)$/, "$1"));
+    if (!loose(text).includes(page)) warnings.push(`image entry "${entry.slug}" (unit ${entry.unit}) is an inserted free photo, but ${where} has no credit line for it (its file page ${short(entry.fields.page, 80)}) – add it to the image credits chapter (tasks/create-image.md → Free photos step 6)`);
+  }
   const open = entries.filter(item => ["wanted", "candidate", "selected", "prompt-ready"].includes(item.status)).length;
   const placeholders = analyseMaterial(text).markers.length;
   if (open !== placeholders) warnings.push(`${where}: ${open} open image entr${open === 1 ? "y" : "ies"} (wanted, candidate, selected, prompt-ready) but ${placeholders} image placeholder${placeholders === 1 ? "" : "s"} – every open entry has one placeholder, an inserted image none`);

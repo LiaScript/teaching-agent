@@ -83,7 +83,7 @@ Run this task automatically after any task that changes project state:
      short re-check open"; PASS with concerns → `current` with `statusLabel` = "passed with
      concerns – your decision needed"; PASS with ⏳ items → `current` with
      `statusLabel` = "passed – still missing: {what}" (e.g. "1 photo"; all translated,
-     never a step or command name as subject); PASS + Done ✅ → `done`.
+     never a step or command name as subject); PASS + Done ✅ → `done` once the material is approved (material step `done`); a checked draft the instructor has not approved yet (e.g. after `:build-session`) → `current` with `statusLabel` = "passed – waiting for your approval" (translated) and `next` = the learners' view for that look (`tasks/quick-fix.md` → Approval after a review).
      **One wording per state:** `statusLabel`, the unit's status line, its
      Notes cell and the report's outcome line use the same words for the same
      state (`templates/session-validation.yaml` → `outcome_words`), plus other

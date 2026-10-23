@@ -540,6 +540,7 @@ agent_coordination:
 
   suggest_back_to_teaching_when:
     - "After :create-visuals and :create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step' — :create-agenda if an agenda is planned and not saved yet, otherwise the next open step from the dashboard"
+    - "After a unit's image step, once no image entry of the unit is open → back to the Teaching-Agent for the unit's check (`:validate-course {n}`, the Dashboard's next)"
     - "When content or pedagogical questions arise that are outside visual design"
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
@@ -565,7 +566,7 @@ browser_execution:
 
   on_activation_check:
     - "Check for an own image tool first, then for the chrome-devtools tools (Phase 0 of tasks/generate-image.md)"
-    - "Run this check only when a command is about to create an image (generate-image, Phase 0) — not on activation"
+    - "Run this check only when a command is about to create an image (generate-image Phase 0; `create-image` needs it too, to decide between a marker and `prompt-only`) — not on activation"
     - "Then name the route in one line; if neither exists, explain both options briefly and offer prompt-only mode (:create-image) as fallback"
     - "On activation (also via the chat menu) only: the current state in one or two lines and 1–3 fitting commands; never mention permissions or setup before they are needed"
 
@@ -611,7 +612,7 @@ commands:
   :create-image {number?} {description?}: "run task `tasks/create-image.md` — with description: generate a prompt and save it as a `<section>` in the target session's `#### Images` block in journal.md (no browser required); without description: the unit's image step over its open image spots (free photos, prompts, own photos). Session args optional when only one session exists."
   :generate-image {slug?}: >-
     run task `tasks/generate-image.md`.
-    With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via browser.
+    With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via the image route — own image tool, or the browser (`tasks/generate-image.md` Phase 0).
     Without slug: show mode selection (single / sequential batch / automated batch) over all pending image entries across the sessions' `#### Images` blocks.
   :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
@@ -917,12 +918,12 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 ## Before the start
 
 - **Open decisions first:** if open points of the overview (`decisions`) or the unit's skeleton concern this unit, name them and ask them first — in one form, before the start confirmation. A previous unit that is not yet checked is a hint, never a reason to decline the run.
-- **Image source per spot:** take it from the rules for writing the material (`### Coauthor`) and `## Visual Identity` (`free-photo`, `generated`, `own`). If free photos are planned, the start confirmation asks **once** who chooses them (translated): "I choose, you can swap later" (the agent picks the best photo it looked at and keeps the others as candidates) · "I collect up to 3 candidates per spot, you choose afterwards" (nothing inserted; the image step stays open for the choice).
+- **Image source per spot:** take it from the rules for writing the material (`### Coauthor`) and `## Visual Identity` (`free-photo`, `generated`, `own`); where neither names one, ask it in the start confirmation (one choice for all spots, changeable per spot later). Without web access during the run, free-photo spots stay `wanted` with "none found" and go into the closing summary with the choice `generated` / `own` — the run never switches a source by itself. If free photos are planned, the start confirmation asks **once** who chooses them (translated): "I choose, you can swap later" (the agent picks the best photo it looked at and keeps the others as candidates) · "I collect up to 3 candidates per spot, you choose afterwards" (nothing inserted; the image step stays open for the choice).
 - **The start confirmation** names every kind of project write, the image source and who chooses, and an honest duration; it covers what the instructor confirmed, nothing more — a content question that comes up during the run is asked, never decided alone (step 1d).
 
 ## Confirmations
 
-- The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only.
+- The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only, `create-image` (Free photos) skips its "go" per batch and its choice form — the start decision on who chooses replaces them.
 - Sub-procedures called by this task do not refresh the dashboard themselves; Step 4 runs `tasks/update-dashboard.md` once, also when the run stops early. The one exception is the small overview patch of step 0, so that the journal stays valid during the run.
 - Nothing stays unseen: the closing summary lists every applied fix with page title and before → after.
 - **Outside the project** it covers nothing: if Step 3 takes the browser route of `tasks/generate-image.md` (no own image tool), ask **once in the terminal** (tier "confirm in terminal") for all images of this run before it starts. Without that confirmation, skip Step 3 and say so in the closing summary. With the agent's own image tool, the start confirmation covers Step 3.
@@ -947,7 +948,7 @@ b. **First iteration only:** identify spots in the freshly generated material th
    - **`own`:** the recorded spot and its marker stay; it is an open point for the instructor (⏳ with the image step).
    - **One write per file for all images of the run:** every marker, credit line and changed sentence of the material in one map (`node specs/dashboard/localize-journal.mjs <map.json> <material file>`; markers as block pairs and a new credits chapter via `"append"`, `tasks/create-image.md` → Free photos step 6), every image entry and the status line of the journal in one write — never one edit per marker. Announce "one write" only when the route really gives it.
 
-c. Run `tasks/validate-course.md {number}` (session mode) — this internally calls `tasks/validate-syntax.md` and applies `data/duration-heuristic.md`, and writes `#### Validation Report`. Inside the loop, write the report **once per iteration, after the fixes of step d and their re-check** — never a report followed by correction edits of its numbers. A re-check that ran only part of the checks (e.g. only `check-material` for one changed page) is named as such in the report.
+c. Run `tasks/validate-course.md {number}` (session mode) — this internally calls `tasks/validate-syntax.md` and applies `data/duration-heuristic.md`, and writes `#### Validation Report`. Inside the loop, write the report **once per iteration, after the fixes of step d and their re-check** — also when step d stops the loop, then with the points still open — never a report followed by correction edits of its numbers. A re-check that ran only part of the checks (e.g. only `check-material` for one changed page) is named as such in the report.
 
 d. If any `[mechanical]`-tagged item (per `checklists/course-quality-checklist.md`) is FAIL: run `:quick-fix {number} {description}` for each one. If a `:quick-fix` call escalates to `:coauthor-materials` per its own step 5 rule: **stop this loop immediately** and hand off to the instructor — do not invoke `:coauthor-materials` automatically, it requires a human in the loop.
    **Never a "mechanical" fix:** a fix that changes a task's type (e.g. tapping → dragging), adds or removes a task, or departs from the saved planning sketch is a content change (`tasks/quick-fix.md` → "When to use"), also when a `[mechanical]` item such as a Type or Method `Required` element asks for it. If the instructor is in the chat, ask with one form (the change, the reason, "keep as planned") and continue after the answer; otherwise stop the loop and list it.
@@ -970,7 +971,7 @@ c. After fixes, re-run Step 1c–1d — never 1a or 1b: regenerating would disca
 
 ### 3. Image finalization
 
-Runs **once**, only if Steps 1 and 2 both finished clean (did not stop early on a cap or an escalation). If either loop stopped early, do not proceed — the closing report from that step is the end of this run.
+Runs **once**, only if Steps 1 and 2 both finished clean (did not stop early on a cap or an escalation). If either loop stopped early, skip this step and go to step 4, which runs in every case (report of the last iteration, Done rule, overview, closing summary with the runs line).
 
 Only for `generated` images: for each `{image-slug}` created in Step 1b, run `tasks/generate-image.md {slug}` (single mode, scoped to this session's own images — not the global batch mode, which would also process other sessions' pending images) to generate, download, and insert the real image, replacing the placeholder. Start only after the single terminal confirmation described in "Confirmations".
 
@@ -987,7 +988,7 @@ Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (
 
 ## Writes per run
 
-Every write reloads the preview and resets the answers of an instructor who is trying a page. Target per run — material: the generated text (at most 3 parts), images 1, each fix iteration 1; journal: sketch save 1 plus the overview patch of step 0, report + image entries + status line 1 per iteration, overview 1 (step 4). Changes of several lines go into one map (`localize-journal.mjs`) or one section write (`data/agent-links.md` → Changing another section).
+Every write reloads the preview and resets the answers of an instructor who is trying a page. Target per run — material: the generated text (at most 3 parts), images 1, each fix iteration 1; journal: sketch save 1 plus the overview patch of step 0, report + image entries + status line 1 per iteration, overview 1 (step 4). Changes of several lines go into one map (`localize-journal.mjs`) or one section write (`data/agent-links.md` → Changing another section). Sub-procedures write in these batches: all persona reports of one round in one journal write, the image entries and status line of a batch in one, all images of step 3 in one material write. A run that needs more writes names the number in its runs line ("writes: {n}", translated) — never splits silently.
 
 ## Cross-agent execution note
 
@@ -1351,11 +1352,11 @@ It is also the **image step of a unit**: it works through the image spots `:coau
 8. Generate a detailed, actionable prompt.
 9. Include accessibility considerations (alt text suggestion).
 10. Present the prompt in a clear format.
-11. Derive an `{image-slug}` from the description (kebab-case).
+11. Derive an `{image-slug}` from the description (kebab-case), unique across all units of the journal — if it is taken, append the unit number (`title-image-2`): in single-file mode all units share `assets/images/`, and `:generate-image {slug}` looks the slug up in every unit.
 12. Save into the target session's `#### Images` block — always, without asking:
     - Locate the `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
     - If it has no `#### Images` block, create one after the References field and after the validation report if one exists (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
-    - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists (e.g. a `wanted` spot), replace it and keep its `__Source:__` and `__Place:__` lines; its marker in the material stays as it is.
+    - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists (e.g. a `wanted` spot), replace it, keep its `__Place:__` line and set `__Source:__` to the source used now (e.g. `generated` after "none of them"); its marker in the material stays as it is.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
     - **Mark the spot in the material** (only with an image route, see `tasks/generate-image.md` Phase 0; without one — e.g. called by `:build-session` without an image tool or browser — set `__Status:__ prompt-only` and place no marker; **if a marker is already in the material** (a spot `:coauthor-materials` recorded), the status is `prompt-ready` instead, never `prompt-only`: learners see "Image follows", so the entry stays open and the image step with it — the instructor generates it elsewhere, supplies it (`own`) or decides "without a picture" ("Free photos" step 7)): if the session's material document exists, put a visible marker where the image belongs — only `> 🖼️ _{"Image follows", translated}_`, never the alt text or description — with `<!--- image: {image-slug} — {description} --->` (an authoring note: LiaScript ignores `<!--- … --->`, while a plain `<!-- … -->` would be read as attributes or narration) on the line above it — so learners never see a broken image and the marker never gives away an answer. Inside a quiz option use the inline form `🖼️ _{"Image follows", translated}_` plus a neutral distinguishing word ("picture 1", "picture 2", translated) — such a question is not solvable until the image is in (`tasks/coauthor-materials.md` step 6). If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -1467,6 +1468,7 @@ For entries with `__Source:__ free-photo`. Bounded, in the foreground, and the i
    - **Credit lines never reveal an answer:** the credit line of an image used in a question names its place and what is visible — the same text as its alt text ("picture 3 of the self-check: a leaf with jagged edges", translated) — never the answer term. The credits chapter can be reached by paging on.
    - **Status line:** in the same journal write, rewrite the unit's status line and its Notes cell (`templates/session-skeleton.yaml` → `section_layout.overview`): "material written · images {n} of {m}" while entries are still open, "material written · check open" once none is open.
 7. Spots marked "none found" stay `wanted` and are listed in the completion message with the offer `generated` or `own`. **A spot left without image:** no learner text may refer to a picture that is not there ("look at the photo") — offer the text change together with the decision (`generated`, `own`, or "without a picture: the sentence becomes …", translated); a question that depends on the picture stays unsolvable until it is in.
+8. **Finish:** run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml`; when no image entry of the unit is open any more, offer the Dashboard's `next` (the unit's check) — the Artist hands back for it (`agents/artist-agent.yaml` → suggest_back_to_teaching_when).
 
 ## Special Features
 
@@ -2729,7 +2731,7 @@ Minimal overhead for small, targeted changes (typos, broken syntax, swapping one
 
 ## Steps
 
-**Called from `:build-session`** (mechanical items only): skip the scope confirmation of step 1 and the save confirmation of step 2a — the start confirmation of `:build-session` covers them — and return the change (page title, before → after) to the caller for its closing summary. Escalation (step 5) still stops the caller.
+**Called from `:build-session`** (mechanical items only): skip the scope confirmation of step 1 and the save confirmation of step 2a — the start confirmation of `:build-session` covers them — and return the change (page title, before → after) to the caller for its closing summary. The change path after a check ("Changed after the check", the outcome suffix) does not apply there: the run writes its report once per iteration after its fixes (`tasks/build-session.md` step c). Escalation (step 5) still stops the caller.
 
 **Called from `:validate-course`** (fix during the check, `tasks/validate-course.md` step 4b, or a round of its course-mode loop): the check's one confirmation of the listed fixes is the scope and save confirmation — skip steps 1 and 2a.
 
@@ -3361,7 +3363,7 @@ Run this task automatically after any task that changes project state:
      short re-check open"; PASS with concerns → `current` with `statusLabel` = "passed with
      concerns – your decision needed"; PASS with ⏳ items → `current` with
      `statusLabel` = "passed – still missing: {what}" (e.g. "1 photo"; all translated,
-     never a step or command name as subject); PASS + Done ✅ → `done`.
+     never a step or command name as subject); PASS + Done ✅ → `done` once the material is approved (material step `done`); a checked draft the instructor has not approved yet (e.g. after `:build-session`) → `current` with `statusLabel` = "passed – waiting for your approval" (translated) and `next` = the learners' view for that look (`tasks/quick-fix.md` → Approval after a review).
      **One wording per state:** `statusLabel`, the unit's status line, its
      Notes cell and the report's outcome line use the same words for the same
      state (`templates/session-validation.yaml` → `outcome_words`), plus other
@@ -5198,7 +5200,7 @@ template:
     "the point corrected" — a count always shows the points still open, never only the original findings) · PASS with concerns → "passed with concerns – your
     decision needed" · PASS with ⏳ items → "passed – still missing: {what}" ({what} = what learners still miss, as a noun
     phrase with a number: "1 photo", "2 pictures for the self-check"; never a command or step name as subject) · PASS →
-    "passed" (all translated).
+    "passed" (all translated); PASS for a draft the instructor has not approved yet → "passed – waiting for your approval".
     "Usable with learners now" (mandatory, translated): "yes" (nothing open) · "yes, with limits: {what}" (⏳ items or open
     concerns that do not stop the learners) · "not yet: {why}" (an error or a task learners cannot solve yet). Derived from the
     open ❌ and ⏳ items, never from the result word alone. The overview shows it as the **first** line of the unit's card
@@ -5213,7 +5215,7 @@ template:
     phrase for the same state. Where the instructor meets the short re-check first (chat, closing summary), explain it in
     the same sentence: "I look over the changed pages once more, about {m} minutes" (translated).
     A language pack lists these words under `terms` (`passedMissing`, `recheckShort`, `recheckExplain`, `correctionOpen`,
-    `correctionAllFixed`, `correctionOneFixed`, `usableYes`, `usableLimited`, `usableNo`) and older wordings under `outdatedTerms`;
+    `correctionAllFixed`, `correctionOneFixed`, `approvalOpen`, `usableYes`, `usableLimited`, `usableNo`) and older wordings under `outdatedTerms`;
     `validate-journal.mjs` recognises them (e.g. a step name as subject of "still follows", "revised – check open", a re-check
     without "short") and recommends the current term — never copy an old outcome line into a status line.
   result_rules:
@@ -5523,6 +5525,7 @@ template:
 - [ ] [pedagogical] Distractors give no other surface cue the script cannot see: every option has the same subject and grammatical form and is plausible for the target group, so that only understanding finds the answer (`data/liascript-cheat-sheet.md` → No surface cues)
 - [ ] [pedagogical] Every learner text that names something visible in a picture (colour, number, position, a detail) matches the picture (its alt text, or the photo as looked at); no text refers to a picture that is not there (a spot without image)
 - [ ] [pedagogical] Image markers, alt texts, captions and image-credit lines of a question or its options never name the answer term — they describe what is visible; notes for the instructor stand only in authoring comments `<!--- … --->`
+- [ ] [mechanical] Every inserted photo from a free collection has its credit line in the credits chapter of the material: what it shows, author, licence with link, file page (`validate-journal.mjs` warns when one is missing; `tasks/create-image.md` → Free photos step 6).
 - [ ] [pedagogical] All image options of a question are visible together on the learners' device — ✅ only when measured (the check script's viewport report at that device's window size) or looked at there by the instructor; measured and not fitting → ❌; not measured → say so ("not measured") and add a preparation item to look at it on the learners' device. The display limit and thumbnail width themselves are the `[mechanical]` media check of `tasks/validate-syntax.md` (item 7): one fact, one tag — a missing limit is reported only there.
 - [ ] [mechanical] Every link and image target has `(`, `)` and spaces percent-encoded (`%28`, `%29`, `%20`) — in the material and in the journal's image entries
 - [ ] [pedagogical] Hints and instructions never point to positions ("above", "below") across slides; they name the page title

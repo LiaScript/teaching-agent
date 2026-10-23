@@ -38,6 +38,7 @@ agent_coordination:
 
   suggest_back_to_teaching_when:
     - "After :create-visuals and :create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step' — :create-agenda if an agenda is planned and not saved yet, otherwise the next open step from the dashboard"
+    - "After a unit's image step, once no image entry of the unit is open → back to the Teaching-Agent for the unit's check (`:validate-course {n}`, the Dashboard's next)"
     - "When content or pedagogical questions arise that are outside visual design"
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
@@ -63,7 +64,7 @@ browser_execution:
 
   on_activation_check:
     - "Check for an own image tool first, then for the chrome-devtools tools (Phase 0 of tasks/generate-image.md)"
-    - "Run this check only when a command is about to create an image (generate-image, Phase 0) — not on activation"
+    - "Run this check only when a command is about to create an image (generate-image Phase 0; `create-image` needs it too, to decide between a marker and `prompt-only`) — not on activation"
     - "Then name the route in one line; if neither exists, explain both options briefly and offer prompt-only mode (:create-image) as fallback"
     - "On activation (also via the chat menu) only: the current state in one or two lines and 1–3 fitting commands; never mention permissions or setup before they are needed"
 
@@ -109,7 +110,7 @@ commands:
   :create-image {number?} {description?}: "run task `tasks/create-image.md` — with description: generate a prompt and save it as a `<section>` in the target session's `#### Images` block in journal.md (no browser required); without description: the unit's image step over its open image spots (free photos, prompts, own photos). Session args optional when only one session exists."
   :generate-image {slug?}: >-
     run task `tasks/generate-image.md`.
-    With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via browser.
+    With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via the image route — own image tool, or the browser (`tasks/generate-image.md` Phase 0).
     Without slug: show mode selection (single / sequential batch / automated batch) over all pending image entries across the sessions' `#### Images` blocks.
   :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"

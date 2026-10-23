@@ -1330,3 +1330,21 @@ test("own {one, many} labels for steps choose the form by the total, the progres
   const one = dashboard.renderComponent("View", "plural2", { ...data, units: [{ ...data.units[0], process: { steps: [{ title: "a", state: "done" }] } }] });
   assert.match(one, /1 sur 1 étape</);
 });
+
+test("validate-journal warns when an inserted free photo has no credit line in the material", () => {
+  const page = "https://commons.wikimedia.org/wiki/File:Blatt.jpg";
+  const file = "https://commons.wikimedia.org/wiki/Special:FilePath/Blatt.jpg?width=330";
+  const journal = `<!--\nlanguage: de\n-->\n\n# Kurs\n\n## Course Context\n\n* __File Structure:__\n  1. Mode: single-file\n\n## Sessions\n\n### 1. Eins\n\n#### Images\n\n<section>\n\n#### blatt\n\n* __Status:__ inserted\n* __Source:__ free-photo\n* __File:__ ${file}\n* __Alt text:__ Ein Blatt\n* __Author:__ A. Autorin\n* __License:__ [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)\n* __Page:__ [Datei](${page})\n\n</section>\n\n## Dashboard\n\n\`\`\`json @Dashboard.View\n${JSON.stringify({ title: "Kurs", next })}\n\`\`\`\n`;
+  const run = readme => {
+    const dir = mkdtempSync(join(tmpdir(), "credits-check-"));
+    writeFileSync(join(dir, "journal.md"), journal);
+    writeFileSync(join(dir, "README.md"), readme);
+    const result = spawnSync(process.execPath, [validatorScript, join(dir, "journal.md")], { encoding: "utf8" });
+    rmSync(dir, { recursive: true, force: true });
+    return result.stdout + result.stderr;
+  };
+  const missing = run(`# Kurs\n\n## Eins\n\n![Ein Blatt](${file})\n`);
+  assert.match(missing, /image entry "blatt" \(unit 1\) is an inserted free photo, but README\.md has no credit line for it/);
+  const credited = run(`# Kurs\n\n## Eins\n\n![Ein Blatt](${file})\n\n## Bildnachweise\n\n- Seite 1: ein Blatt – A. Autorin – [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) – [Datei](${page})\n`);
+  assert.doesNotMatch(credited, /no credit line/, credited);
+});
