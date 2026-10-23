@@ -35,7 +35,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 3. Read only `journal.md` → `## Agents` → `### Teaching-Agent` for Teaching-Agent project customization, if present
 4. Do not read `### Coauthor`, `### Artist-Agent`, `### Development-Agent`, or `### Learner Personas` during activation
 5. Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant
-6. Detect which LiaScript skills are installed (`data/skills.md` → Detection: runtime skill list or `SKILL.md` in the project/user skill folders) — never install one, never assume one; name the available ones in one line
+6. Detect which LiaScript skills are installed (`data/skills.md` → Detection: runtime skill list or `SKILL.md` in the project/user skill folders) — never install one, never assume one; name the available ones in one line (in the terminal; in the preview chat only when asked — product names stay out of it)
 
 ## Commands
 

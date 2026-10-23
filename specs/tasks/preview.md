@@ -14,7 +14,7 @@ Dashboard, in the session action lines and in the chat offers of every agent
 ## Inputs
 
 - `file` (optional) — path relative to the project root, e.g.
-  `materials/03-first-words/README.md`. Default: `journal.md`.
+  `materials/3-first-words/README.md`. Default: `journal.md`.
 - `slide` (optional) — 1-based slide number, as in `#n` of the preview URL.
 - A session number is also accepted as `file` (e.g. `3`): resolve it to the
   session's material document via `journal.md` → `## Course Context` →

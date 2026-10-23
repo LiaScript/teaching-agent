@@ -45,6 +45,7 @@ workflow:
       - Validation
       - Analysis Status
       - Notes Backup
+      - Publishing
 
   sequence:
     # Phase 0: Project Initialization
@@ -410,8 +411,8 @@ workflow:
       Course structure defined:
       - Agenda with {{session_count}} sessions (net working time per slot included)
       Choose approach:
-      1. Iterative: Create→Promote→Coauthor one session at a time
-      2. Batch: Create all→Promote all→Coauthor all
+      1. Unit 1 together: :create-session 1 → :coauthor-materials 1 (always the first unit)
+      2. Afterwards: the other units together the same way, or prepared with :build-session after a short sketch
 
     session_development_complete: |
       All sessions developed:

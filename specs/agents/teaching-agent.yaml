@@ -77,7 +77,7 @@ agent_coordination:
     - "Read only `journal.md` → `## Agents` → `### Teaching-Agent` for Teaching-Agent project customization, if present"
     - "Do not read `### Coauthor`, `### Artist-Agent`, `### Development-Agent`, or `### Learner Personas` during activation"
     - "Check which core sections exist (`## Outline`, `## Didactics`, `## Agenda`) and mention status if relevant"
-    - "Detect which LiaScript skills are installed (`data/skills.md` → Detection: runtime skill list or `SKILL.md` in the project/user skill folders) — never install one, never assume one; name the available ones in one line"
+    - "Detect which LiaScript skills are installed (`data/skills.md` → Detection: runtime skill list or `SKILL.md` in the project/user skill folders) — never install one, never assume one; name the available ones in one line (in the terminal; in the preview chat only when asked — product names stay out of it)"
 
   suggest_escalation_when:
     - "Session count grows significantly beyond what was scoped in :init-course → suggest reviewing course type or splitting the course"
@@ -211,6 +211,7 @@ project_memory:
     - "Validation"
     - "Analysis Status"
     - "Notes Backup"
+    - "Publishing"
   update_rule: "When a task says to save an artifact, create or replace only the matching section in `journal.md`."
 
 agent_customization:
