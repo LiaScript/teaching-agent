@@ -110,11 +110,11 @@ test("a course entry returns from a unit to the global process", () => {
 test("action buttons show their icon; agent: links default to ▶️", () => {
   const html = dashboard.renderComponent("View", "i", { lang: "de", title: "X",
     next: { label: "Prüfen", href: "agent:teaching/validate-course", command: ":validate-course", icon: "🔍" },
-    decisions: [{ title: "A", kind: "decide", how: "B", label: "Überarbeiten", href: "agent:teaching/create-outline", command: ":create-outline" }],
+    decisions: [{ title: "A", kind: "decide", how: "B", label: "Gliederung erstellen", href: "agent:teaching/create-outline", command: ":create-outline" }],
     explore: [{ icon: "💬", title: "Fragen", description: "D", label: "Hilfe", href: "agent:teaching/help", command: ":help" }],
     links: [{ label: "Lernziele", href: "#outline" }] });
   assert.match(html, /dashboard-button-primary"[^>]*><span class="dashboard-button-label"><span class="dashboard-button-icon" aria-hidden="true">🔍<\/span> Prüfen/);
-  assert.match(html, /<span class="dashboard-button-icon" aria-hidden="true">▶️<\/span> Überarbeiten/);
+  assert.match(html, /<span class="dashboard-button-icon" aria-hidden="true">▶️<\/span> Gliederung erstellen/);
   assert.match(html, /<span class="dashboard-button-icon" aria-hidden="true">💬<\/span> Hilfe/);
   assert.match(html, /<h4>Fragen<\/h4>/);
   assert.doesNotMatch(html, /dashboard-button-icon[^<]*<\/span> Lernziele/);
