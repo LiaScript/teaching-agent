@@ -29,7 +29,7 @@ Which way is used is decided in Phase 0. Only the browser route needs the **chro
 
 Decide by the tools the running agent actually has — never by its name:
 
-1. **Own image tool** — the agent has a built-in tool that turns a prompt into an image file (e.g. Codex). Use it: no browser, no ChatGPT window. Writes only inside the project, so it needs the normal chat confirmation (tier "confirm in chat" in `data/agent-links.md`; inside `:build-session` its start confirmation covers it). Continue with Phase 2a/2b, then [Phase 3D](#phase-3d-own-image-tool).
+1. **Own image tool** — the agent has a built-in tool that turns a prompt into an image file (e.g. Codex). Use it: no browser, no ChatGPT window. Writes only inside the project, so it needs the normal chat confirmation (tier "confirm in chat" in `data/agent-links.md`; inside `:build-session` its start confirmation covers it). Without a slug, choose the mode as in Phase 1 step 4 (single or sequential batch; the automated batch is browser-only). Continue with Phase 2a/2b, then [Phase 3D](#phase-3d-own-image-tool).
 2. **Browser route** — no own image tool, but the chrome-devtools MCP tools are available. Opens an external browser session, so it keeps the terminal confirmation. Continue with Phase 1.
 3. **Neither** — explain both options in one short message (an agent with its own image tool, or the browser setup below) and stop. A `prompt-ready` entry stays open (its marker is in the material): show its prompt and offer, in one form, `own` (the instructor supplies the picture) or "without a picture" (`tasks/create-image.md` → Free photos step 7) — never send the instructor back to `:create-image` for it. New prompts without a marker are saved by `:create-image` as `prompt-only`.
 
@@ -82,7 +82,7 @@ google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug
 4. Read the slug and target path per entry from its `#### {image-slug}` heading and `__File:__` field.
 5. Skip if already generated:
    - `__Status:__` is `generated`, **or** the file at `__File:__` already exists → mark `⏭ skipped`
-   - otherwise (`__Status:__ prompt-ready` and no file yet) → add to queue
+   - otherwise (`__Status:__ prompt-ready`, or `prompt-only` now that a route exists, and no file yet) → add to queue; a `prompt-only` entry has no marker in the material — Phase 5b inserts the image at its place and says where
    - entries without a prompt (`wanted`, `candidate`, `selected`, `inserted` — free photos and own photos, `tasks/create-image.md` → Free photos) are never queued
 6. Print queue:
    ```
@@ -191,7 +191,7 @@ After each image: log result (`✅ done` / `❌ failed`), continue to next.
    ```
 
 10. Monitor browser console for `[batch] ✅ / ❌` logs.
-11. After completion, collect results from console output.
+11. After completion, collect results from console output, then move every downloaded `{slug}.png` from the browser's download folder to its `__File:__` path as in Phase 5 and check that it arrived — only then Phase 5b.
 
 ---
 

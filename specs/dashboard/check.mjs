@@ -1396,3 +1396,11 @@ test("the single-unit macro shows the learners' view with its eye icon, as the o
   const html = dashboard.renderComponent("Unit", "u1", { title: "A", state: "draft", view: { href: "agent:teaching/preview?file=1", command: ":preview 1" } });
   assert.doesNotMatch(html, /▶️/, html);
 });
+
+test("fetch-thumb takes only standard Commons widths and never downloads an original larger than the preview", () => {
+  for (const width of [120, 250, 330, 500]) assert.equal(thumb.checkWidth(width), width);
+  for (const width of [20, 300, 499, 501, 1.5]) assert.throws(() => thumb.checkWidth(width), /standard width/);
+  assert.equal(thumb.previewUrl({ thumburl: "https://upload.wikimedia.org/x/330px-a.jpg", url: "https://upload.wikimedia.org/a.jpg", width: 4000 }, 330), "https://upload.wikimedia.org/x/330px-a.jpg");
+  assert.equal(thumb.previewUrl({ url: "https://upload.wikimedia.org/small.png", width: 200 }, 330), "https://upload.wikimedia.org/small.png", "a small original is its own preview");
+  assert.throws(() => thumb.previewUrl({ url: "https://upload.wikimedia.org/big.jpg", width: 4000 }, 330), /no preview/);
+});

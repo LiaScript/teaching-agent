@@ -10,7 +10,7 @@ import { resolve, relative, isAbsolute, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const usage = `Usage: node specs/dashboard/fetch-thumb.mjs <file page URL | File:Name.jpg | Name.jpg> [--width n]
-  Saves a thumbnail of a Wikimedia Commons file (default 500 px wide, at most 500) into
+  Saves a thumbnail of a Wikimedia Commons file (default 500 px wide; --width 120, 250, 330 or 500) into
   .cache/thumbs/ and prints: thumbnail path, file URL (Special:FilePath, percent-encoded – append
   ?width=330 or ?width=500), original file, author, licence, licence URL and file page.
 Exit code 0: thumbnail saved · 2: invalid call, file not found, network or download error.`;
@@ -88,6 +88,19 @@ export function safeName(title) {
 
 // The API may name thumb.wikimedia.org with tracking parameters; the same path is served by
 // upload.wikimedia.org, so the download stays on the two allowed hosts.
+// Commons serves thumbnails in standard widths; other widths are rounded up to a large file or rejected.
+export const STANDARD_WIDTHS = [120, 250, 330, 500];
+export function checkWidth(width) {
+  if (!STANDARD_WIDTHS.includes(width)) throw new Error(`--width takes a standard width of Commons: ${STANDARD_WIDTHS.join(", ")}`);
+  return width;
+}
+// The preview to download: the thumbnail, or the original only when it is not larger than the preview.
+export function previewUrl(info, width) {
+  if (info.thumburl) return info.thumburl;
+  if (info.url && Number(info.width) <= width) return info.url;
+  throw new Error(`no preview of ${width} px from Commons – the original (${info.width ?? "?"} px) is not downloaded`);
+}
+
 export function uploadUrl(url) {
   const parsed = new URL(url);
   if (parsed.hostname === "thumb.wikimedia.org") parsed.hostname = "upload.wikimedia.org";
@@ -125,8 +138,7 @@ async function main() {
   let width = 500;
   const at = args.indexOf("--width");
   if (at >= 0) {
-    width = Number(args[at + 1]);
-    if (!Number.isInteger(width) || width < 20 || width > 500) throw new Error("--width takes a whole number from 20 to 500 (Commons serves standard widths such as 330 and 500)");
+    width = checkWidth(Number(args[at + 1]));
     args.splice(at, 2);
   }
   const unknown = args.find(arg => arg.startsWith("--"));
@@ -142,7 +154,7 @@ async function main() {
   if (!page || page.missing || page.invalid || !page.imageinfo?.[0]) throw new Error(`not found on Wikimedia Commons: ${title}`);
   const info = page.imageinfo[0];
   const meta = info.extmetadata ?? {};
-  const thumbUrl = uploadUrl(info.thumburl || info.url);
+  const thumbUrl = uploadUrl(previewUrl(info, width));
   if (!allowed(thumbUrl)) throw new Error(`unexpected thumbnail host: ${thumbUrl}`);
 
   let bytes;
