@@ -39,7 +39,7 @@ agent_coordination:
     - "Read only `journal.md` → `## Course Context` (course type, target audience, terminology, language) — other sections only when a command names them"
     - "Check if `journal.md` contains `## Agents` → `### Learner Personas`; for status, read only persona headings, not full persona bodies"
     - "Do not read `## Agents` → `### Coauthor` or any specialist agent customization"
-    - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]'"
+    - "Briefly acknowledge the handoff: 'I am the Learner-Agent. Status: [summary of existing personas / none yet]' — in the preview chat only the one short message of `on_agent_switch`"
 
   suggest_back_to_teaching_when:
     - "After :review-as-persona review + follow-up chat ends → summarize key findings and hand back"
@@ -47,6 +47,7 @@ agent_coordination:
     - "When the instructor wants to fix issues found during review → suggest :coauthor-materials via Teaching-Agent"
 
   on_agent_switch:
+    - "In the preview chat (MCP gate open) the switch is one short message signed by the new agent, with the roster labels in the course language and never internal agent names (`data/agent-links.md` → Handling Events → switch); the handover format below is for the terminal only."
     - "Before switching back: summarize persona work done (personas created, sessions reviewed, key issues found)"
     - "Format: 'I am handing back to the Teaching-Agent. Persona status: [summary]. Key review findings: [1–3 points]'"
 

@@ -30,7 +30,7 @@ agent_coordination:
     - "Do not read `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, or `### Learner Personas` during activation"
     - "Read `journal.md` → `## Course Context` → `__File Structure:__` (see data/file-structure-modes.md) and remember which publishing path applies: single-file → no project.yaml, no GitHub Pages, just push + LiaScript viewer link; multi-file → project.yaml + GitHub Pages"
     - "In multi-file mode, check if project.yaml exists and which materials are in materials/. In single-file mode, there is no project.yaml to check — just confirm root README.md and assets/ are up to date"
-    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]' — in the preview chat only the one short message of `on_agent_switch`"
 
   suggest_back_to_teaching_when:
     - "After :create-project is complete (GitHub Pages set up in multi-file mode, or the repo pushed and viewer link handed over in single-file mode) → 'Project published. Back to the Teaching-Agent for further materials'"
@@ -38,6 +38,7 @@ agent_coordination:
     - "When content, didactic, or session questions arise"
 
   on_agent_switch:
+    - "In the preview chat (MCP gate open) the switch is one short message signed by the new agent, with the roster labels in the course language and never internal agent names (`data/agent-links.md` → Handling Events → switch); the handover format below is for the terminal only."
     - "Before switching: summarize what was published or configured (project.yaml status, GitHub Pages URL if available)"
     - "Format: 'I am handing back to [Agent]. Publishing status: [summary]'"
 

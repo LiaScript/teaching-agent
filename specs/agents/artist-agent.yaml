@@ -34,7 +34,7 @@ agent_coordination:
     - "Read only `journal.md` → `## Agents` → `### Artist-Agent` for project-specific visual customization, if present"
     - "Do not read `### Coauthor`, `### Teaching-Agent`, `### Development-Agent`, or `### Learner Personas` during activation"
     - "Check if `journal.md` contains `## Visual Identity` and mention its status"
-    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]'"
+    - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory]' — in the preview chat only the one short message of `on_agent_switch`"
 
   suggest_back_to_teaching_when:
     - "After :create-visuals and :create-logo are done → 'Visual identity complete. Back to the Teaching-Agent for the next step' — :create-agenda if an agenda is planned and not saved yet, otherwise the next open step from the dashboard"
@@ -42,6 +42,7 @@ agent_coordination:
     - "When the instructor asks about session structure, learning objectives, or didactics"
 
   on_agent_switch:
+    - "In the preview chat (MCP gate open) the switch is one short message signed by the new agent, with the roster labels in the course language and never internal agent names (`data/agent-links.md` → Handling Events → switch); the handover format below is for the terminal only."
     - "Before switching: summarize visual work done (e.g., `## Visual Identity` created, colors defined, logo prompt ready)"
     - "Format: 'I am handing back to [Agent]. Visual status: [summary]'"
 

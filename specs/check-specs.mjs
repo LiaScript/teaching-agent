@@ -495,3 +495,13 @@ test("older journals: the validator's migration hint leads to a confirmed migrat
   assert.match(task, /the layout changes of `migrate-journal\.mjs`, only after the instructor's\n\s+"Update"/);
   assert.match(read("dashboard/validate-journal.mjs"), /older journal layout – run `node specs\/dashboard\/migrate-journal\.mjs`/);
 });
+
+test("the agent YAML carries no outdated journal rules: no {{…}} skeletons, all write ways, re-reading named inputs", () => {
+  const yaml = read("agents/teaching-agent.yaml");
+  assert.doesNotMatch(yaml, /keep their `\{\{\.\.\.\}\}` placeholder skeleton/, "the empty journal has one-line notes, not {{…}} skeletons");
+  assert.doesNotMatch(yaml, /bullet skeleton per section/);
+  assert.doesNotMatch(yaml, /only with the file-edit tool, and re-read/, "the line replacer and write_section are allowed write ways too");
+  assert.match(yaml, /every file its Inputs mark as read completely/);
+  assert.match(yaml, /Read `specs\/agents\/teaching-agent\.yaml` completely once per session/);
+  for (const name of ["teaching", "artist", "learner", "development"]) assert.match(read(`agents/${name}-agent.yaml`), /the switch is one short message signed by the new agent/, `${name}-agent.yaml`);
+});
