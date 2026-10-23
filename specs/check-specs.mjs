@@ -34,7 +34,7 @@ const required = {
   "tasks/preview.md": ["never switches the agent", "agent:{active agent}/preview"],
   "agents/learner-agent.yaml": ["other sections only when a command names them"],
   "data/session-types.md": ["never the course's total time", "never equal the default unit words", "Objectives and duration of a session", "Never leave a check without objectives"],
-  "tasks/update-dashboard.md": ["\"passed – waiting for your approval\"", "never another check of the same state", "`review-{unit}-{n}`", "starts with `published` (an English key, never translated)", "States are exclusive", "The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\"", "**`next` names one step.**", "**Image step:**", "Link only headings outside HTML blocks", "A partial state is visible everywhere it is named", "**and the current state**", "never the unit heading", "`labels.decide` and `labels.prepare`", "check: correction needed ({n})", "**Fresh cache:**", "never this check", "**One wording per state:**", "gets **two** actions", "does not hold this offer back", "\"passed – still missing: {what}\"", "**One ranking of the three measures:**", "**How the learners see it:**", "\"check: correction needed: {open} of {n} points open\"", "never `plan`", "a review with fixes alone is no approval"],
+  "tasks/update-dashboard.md": ["6. the one-line note under `## Sessions`", "\"passed – waiting for your approval\"", "never another check of the same state", "`review-{unit}-{n}`", "starts with `published` (an English key, never translated)", "States are exclusive", "The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\"", "**`next` names one step.**", "**Image step:**", "Link only headings outside HTML blocks", "A partial state is visible everywhere it is named", "**and the current state**", "never the unit heading", "`labels.decide` and `labels.prepare`", "check: correction needed ({n})", "**Fresh cache:**", "never this check", "**One wording per state:**", "gets **two** actions", "does not hold this offer back", "\"passed – still missing: {what}\"", "**One ranking of the three measures:**", "**How the learners see it:**", "\"check: correction needed: {open} of {n} points open\"", "never `plan`", "a review with fixes alone is no approval"],
   "tasks/quick-fix.md": ["The change path after a check (\"Changed after the check\", the outcome suffix) does not apply there", "Every change after a check makes the unit \"short re-check open\"", "2a. **Show and confirm:**", "**Called from `:validate-course`** (fix during the check", "without one, say so in the dated line", "does not reopen a check", "Change path after a check", "**One journal write per fix:**", "Changed after the check", "never leave a done to-do standing", "Called from `:build-session`", "**Find them first:**", "**The Notes cell states the state, not a list of changes:**", "offer both variants in the same form", "short re-check open", "Change a task's type", "is searched in every unit", "**Approval after a review:**", "\"correction needed: {open} of {n} points open\""],
   "tasks/generate-image.md": ["never send the instructor back to `:create-image` for it", "add the image `![{alt text}]({path})` below the prompt", "replace the marker", "never by its name", "Only once the file exists"],
   "tasks/build-session.md": ["where neither names one, ask it in the start confirmation", "`create-image` (Free photos) skips its \"go\" per batch", "go to step 4, which runs in every case", "names the number in its runs line", "**`free-photo` and `own`: record the spot first**", "is not blocking: the image step resolves it", "do not refresh the dashboard themselves", "prompt-only mode", "every factual statement that could not be verified", "one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**", "**read completely once before the run**", "**Open decisions first:**", "a hint, never a reason to decline the run", "**Image source per spot:**", "**Check the sketch before the start:**", "**Overview patch in the same save:**", "in parts of at most about a minute of generation each", "**Never a \"mechanical\" fix:**", "write the report **once per iteration, after the fixes of step d", "insert the best looked-at candidate **before step c**", "**One write per file for all images of the run:**", "**Runs line**", "## Writes per run", "try-as-learner?number={number}", "**Usable first:**", "**Approval stays with the instructor:**"],
@@ -48,10 +48,10 @@ const required = {
   "data/liascript-cheat-sheet.md": ["A pair of `$` starts math everywhere outside code", "**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\"", "**Encode link targets.**", "**Image size.**", "`- [[?]] {|>}{Hint text}`", "A `vh` limit does not guarantee the fit", "**Controls as learners see them**", "never \"speaker\", \"loudspeaker\"", "A hint appears only when the learner taps the light bulb", "**No surface cues:**"],
   "templates/course-context.yaml": ["layout:", "Target Group"],
   "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
-  "templates/course-didactics.yaml": ["layout:"],
+  "templates/course-didactics.yaml": ["key: guiding-figure (visible)", "content guidance only", "layout:"],
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
   "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "check: correction needed ({n})", "short re-check open", "never a second phrase such as \"revised\"", "passed with concerns – your decision needed", "never\n        relative to another optional block", "images {n} of {m}", "Stays 2–4 sentences", "- **{{date}}:** [Decision", "as second link after", "\"check: correction needed: {open} of {n} points open\""],
-  "templates/project-dashboard.yaml": ["One ranking of the three measures", "Every unit with material gets `view`", "usable: 'Once a check report exists", "view: 'Once the material exists"],
+  "templates/project-dashboard.yaml": ["`source: {check: n, date?}`", "One ranking of the three measures", "Every unit with material gets `view`", "usable: 'Once a check report exists", "view: 'Once the material exists"],
   "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
   "templates/session-validation.yaml": ["Counts take the form of their number", "\"the point corrected\"", "also in units created later", "could not be verified", "the heading stays outside", "counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "<section data-key=\"validation-report\">", "correction needed ({n})", "Usable with learners now", "Changed after the check", "Unit entry (journal)", "Each fact is reported once", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**", "passed – still missing: {what}", "never a command or step name as subject", "One wording per state", "short re-check open", "\"correction needed: {open} of {n} points open\"", "`outdatedTerms`", "`units[].usable`"],
   "templates/journal.md": ["\"title\": \"Publish\"", "journal-start", "## Publishing", "Still empty"],
@@ -507,4 +507,37 @@ test("the agent YAML carries no outdated journal rules: no {{…}} skeletons, al
   assert.match(yaml, /every file its Inputs mark as read completely/);
   assert.match(yaml, /Read `specs\/agents\/teaching-agent\.yaml` completely once per session/);
   for (const name of ["teaching", "artist", "learner", "development"]) assert.match(read(`agents/${name}-agent.yaml`), /the switch is one short message signed by the new agent/, `${name}-agent.yaml`);
+});
+
+test("language packs cover the empty journal in both directions: every visible line is translated or an English key tasks read", () => {
+  const template = read("templates/journal.md");
+  const visible = template.replace(/^<!--[\s\S]*?-->/, "").replace(/```[\s\S]*?```/g, "").replace(/<!--[\s\S]*?-->/g, "")
+    .split("\n").map(line => line.trimEnd()).filter(line => line.trim() && line.trim() !== "---" && !/^<\/?(section|details)>$/.test(line.trim()));
+  // Keys tasks read stay English: entry headings under Templates/Agents, `__Label:__` lines, inline-code values, table rows.
+  const key = line => /^### /.test(line) || /^\s*\* __[^_]+:__/.test(line) || /^\s+`[^`]+`$/.test(line) || /^\|/.test(line);
+  for (const name of readdirSync(join(specs, "templates", "i18n"))) {
+    const pack = JSON.parse(read(`templates/i18n/${name}`));
+    const covered = new Set(pack.replace.map(([from]) => from.trimEnd()));
+    const missing = visible.filter(line => !covered.has(line) && !key(line));
+    assert.deepEqual(missing, [], `${name}: visible template lines without a translation`);
+  }
+});
+
+test("a language pack's Dashboard has the structure of the template's, and --lang gives a valid journal", () => {
+  const template = read("templates/journal.md");
+  const english = JSON.parse(template.match(/```json @Dashboard\.View\n([\s\S]*?)\n```/)[1]);
+  for (const name of readdirSync(join(specs, "templates", "i18n"))) {
+    const pack = JSON.parse(read(`templates/i18n/${name}`));
+    const shape = data => ({ next: [data.next.href, data.next.command, data.next.icon], steps: data.process.steps.map(step => step.state), explore: data.explore.map(item => item.href), links: data.links.length });
+    assert.deepEqual(shape(pack.dashboard), shape(english), `${name}: Dashboard structure differs from templates/journal.md`);
+    assert.equal(pack.dashboard.next.title, pack.dashboard.process.steps.find(step => step.state === "current").title, `${name}: next.title is the current step's title`);
+    const dir = mkdtempSync(join(tmpdir(), "pack-check-"));
+    writeFileSync(join(dir, "journal.md"), template);
+    const code = name.replace(/\.json$/, "");
+    const run = spawnSync(process.execPath, [join(specs, "dashboard", "localize-journal.mjs"), "--lang", code], { cwd: dir, encoding: "utf8" });
+    assert.equal(run.status, 0, run.stdout + run.stderr);
+    const check = spawnSync(process.execPath, [join(specs, "dashboard", "validate-journal.mjs"), join(dir, "journal.md")], { encoding: "utf8" });
+    assert.equal(check.status, 0, check.stdout + check.stderr);
+  }
+  assert.equal(english.next.title, english.process.steps.find(step => step.state === "current").title, "templates/journal.md: next.title is the current step's title");
 });

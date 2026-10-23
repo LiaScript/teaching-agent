@@ -34,7 +34,7 @@
       // Partial value while the material is produced: required unit steps done / all required unit steps.
       courseStepsMaterial: (done, total) => `Material: ${done} von ${total} ${total === 1 ? "Schritt" : "Schritten"}`,
       processEyebrow: "So entsteht das Material", processTitle: "Arbeitsstand", result: "Liegt vor:", nextStep: "Nächster Schritt:",
-      processEmpty: "Für diese Einheit sind noch keine Arbeitsschritte eingetragen.",
+      processEmpty: "Hier sind noch keine Arbeitsschritte eingetragen.",
       courseProcessEmpty: "Für den Kurs sind noch keine Arbeitsschritte eingetragen.", plan: "Planung ansehen",
       // First line of a unit card (units[].usable), from the report's line "usable with learners now".
       "usable.yes": "Mit den Lernenden nutzbar: ja", "usable.limited": "Mit den Lernenden nutzbar: ja, mit Einschränkungen",
@@ -69,7 +69,7 @@
       courseSteps: (done, total) => `${done} of ${total} planning ${total === 1 ? "step" : "steps"}`,
       courseStepsMaterial: (done, total) => `Material: ${done} of ${total} ${total === 1 ? "step" : "steps"}`,
       processEyebrow: "How the material is made", processTitle: "Current state", result: "Ready:", nextStep: "Next step:",
-      processEmpty: "No work steps recorded for this unit yet.",
+      processEmpty: "No work steps recorded here yet.",
       courseProcessEmpty: "No work steps recorded for the course yet.", plan: "See planning",
       "usable.yes": "Usable with learners: yes", "usable.limited": "Usable with learners: yes, with limits",
       "usable.no": "Usable with learners: not yet", usableMissing: what => `still missing: ${what}`,
@@ -269,12 +269,19 @@
       throw new Error("Dashboard data must be an object.");
     }
     if (!Array.isArray(input.units ?? [])) throw new Error("units must be a list.");
+    // Text fields of the wrong type would pass here and break the page while rendering.
+    const text = (value, name) => { if (value != null && typeof value !== "string") throw new Error(`${name} must be text, not ${Array.isArray(value) ? "a list" : typeof value}.`); };
+    ["title", "eyebrow", "unitsTitle", "progressTitle", "decisionsTitle", "prepareTitle", "exploreTitle", "courseLabel", "emptyUnits", "footer"].forEach(name => text(input[name], name));
+    if (input.unitLabel != null && (typeof input.unitLabel !== "object" || ["one", "many"].some(form => typeof input.unitLabel[form] !== "string"))) {
+      throw new Error('unitLabel must be {"one": text, "many": text}.');
+    }
     const ids = new Set();
     const units = (input.units ?? []).map((unit, index) => {
       const id = String(unit.id ?? index + 1);
       if (ids.has(id)) throw new Error(`Duplicate unit id: ${id}`);
       ids.add(id);
       if (!unit.title) throw new Error("A unit needs a title.");
+      ["title", "statusLabel", "summary"].forEach(name => text(unit[name], `unit ${id}: ${name}`));
       return { ...unit, id, state: state(unit.state), process: processData(unit.process), ...(unit.href == null ? {} : { href: actionData({ href: unit.href }).href }),
         usable: usableData(unit.usable), ...(unit.view == null ? {} : { view: actionData({ icon: "👁", ...unit.view }) }) };
     });

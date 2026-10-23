@@ -234,7 +234,8 @@ Run this task automatically after any task that changes project state:
       4. the `## Templates` entry of the dashboard template, via `tasks/manage-templates.md`
          and only if it is missing (step 8);
       5. the layout changes of `migrate-journal.mjs`, only after the instructor's
-         "Update" (step 9).
+         "Update" (step 9);
+      6. the one-line note under `## Sessions`, which follows the state (Rules → "The one-line note under `## Sessions`").
 11. Confirm the dashboard was updated only after step 9 passed, and name the next
     recommended command. If the MCP gate is open (`data/agent-links.md`), `goto` the
     Dashboard slide, check with `get_state`, and post the next action as an

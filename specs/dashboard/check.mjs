@@ -253,10 +253,10 @@ test("a unit without work steps shows its state, its summary and a neutral empty
   const panel = html.split('class="dashboard-process"')[1];
   assert.match(panel, /dashboard-process-fallback"><span class="dashboard-status dashboard-status-planned">/);
   assert.match(panel, /<p class="dashboard-process-summary">25 Minuten, eine Aufgabe\.<\/p>/);
-  assert.match(panel, /Für diese Einheit sind noch keine Arbeitsschritte eingetragen\./);
+  assert.match(panel, /Hier sind noch keine Arbeitsschritte eingetragen\./);
   assert.doesNotMatch(html, /Ablauf/, "the empty text avoids words of the course plan");
   const en = dashboard.renderComponent("View", "f2", { ...data, lang: "en" });
-  assert.match(en, /No work steps recorded for this unit yet\./);
+  assert.match(en, /No work steps recorded here yet\./);
   const own = dashboard.renderComponent("View", "f3", { ...data, lang: "fr", labels: { processEmpty: "Aucune étape." } });
   assert.match(own, /Aucune étape\./);
   const course = dashboard.renderComponent("View", "f4", { lang: "de", title: "X" });
@@ -818,7 +818,7 @@ test("validate-journal prints the visible groups, checks report anchors and the 
   const usable = { state: "no", missing: ["1 Korrektur"] };
   const units = [{ id: 1, title: "E1", state: "current", href: "#1.-e1", usable, process: { steps: [{ title: "Material", state: "current" }] } },
     { id: 2, title: "E2", state: "current", href: "#2.-e2", usable, process: { steps: [{ title: "Material", state: "current" }] } }];
-  const report = n => `#### Prüfbericht – Einheit ${n}\n\n<section data-key="validation-report">\n\n**Ergebnis:** Korrektur nötig (1)\n\n<details>\n\n__Result:__ FAIL\n\n</details>\n\n</section>\n\n`;
+  const report = n => `#### Prüfbericht – Einheit ${n}\n\n<section data-key="validation-report">\n\n**Ergebnis:** Korrektur nötig (1)\n\n**Jetzt mit den Lernenden nutzbar:** noch nicht: 1 Korrektur\n\n<details>\n\n__Result:__ FAIL\n\n</details>\n\n</section>\n\n`;
   const sessionsWith = (first, second) => `## Sessions – Einheiten\n\n### 1. E1\n\nText\n\n${first}### 2. E2\n\nText\n\n${second}`;
   const fromCheck = href => ({ key: "review-1-a", title: "Quelle ersetzen?", how: "B", label: "Zum Prüfbericht", href, source: { check: 1, date: "2026-10-23" } });
   const good = validate({ title: "Kurs", next, units, subtitle: "Zwei Punkte aus der Prüfung entscheiden Sie in Ruhe.",
@@ -1017,7 +1017,7 @@ test("check-material counts read-aloud texts in hints apart, and says when no im
 
 test("validate-journal wants the report's outcome words in the unit's status line and statusLabel (R10-D5) and names the cache patch for a missing href (R10-D4)", () => {
   const units = label => [{ id: 1, title: "E1", state: "review", href: "#1.-e1", statusLabel: label, usable: { state: "limited", missing: ["1 Foto"] }, process: { steps: [{ title: "Material", state: "done" }] } }];
-  const report = "#### Prüfbericht – Einheit 1\n\n<section data-key=\"validation-report\">\n\n**Ergebnis:** bestanden – es fehlt noch: 1 Foto (23.10.2026) – 1 Punkt seither geändert – kurze Nachprüfung offen\n\n**Nach der Prüfung geändert:**\n\n- 23.10.2026 · S1 · Satz gekürzt · Kurzprüfung\n\n<details>\n\n__Result:__ PASS\n\n</details>\n\n</section>\n\n";
+  const report = "#### Prüfbericht – Einheit 1\n\n<section data-key=\"validation-report\">\n\n**Ergebnis:** bestanden – es fehlt noch: 1 Foto (23.10.2026) – 1 Punkt seither geändert – kurze Nachprüfung offen\n\n**Jetzt mit den Lernenden nutzbar:** ja, mit Einschränkungen: 1 Foto\n\n**Nach der Prüfung geändert:**\n\n- 23.10.2026 · S1 · Satz gekürzt · Kurzprüfung\n\n<details>\n\n__Result:__ PASS\n\n</details>\n\n</section>\n\n";
   const sessionsOf = status => `## Sessions – Einheiten\n\n1. E1 – ${status}\n\n### 1. E1\n\nText\n\n${report}`;
   const same = "bestanden – es fehlt noch: 1 Foto – 1 Punkt seither geändert – kurze Nachprüfung offen";
   const clean = validate({ title: "Kurs", next, units: units(same) }, sessionsOf(same));
@@ -1347,4 +1347,22 @@ test("validate-journal warns when an inserted free photo has no credit line in t
   assert.match(missing, /image entry "blatt" \(unit 1\) is an inserted free photo, but README\.md has no credit line for it/);
   const credited = run(`# Kurs\n\n## Eins\n\n![Ein Blatt](${file})\n\n## Bildnachweise\n\n- Seite 1: ein Blatt – A. Autorin – [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) – [Datei](${page})\n`);
   assert.doesNotMatch(credited, /no credit line/, credited);
+});
+
+test("text fields of the wrong type fail in buildModel instead of breaking the page (validator green, page red)", () => {
+  assert.throws(() => dashboard.buildModel({ unitsTitle: { one: "Kapitel", many: "Kapiteln" } }), /unitsTitle/);
+  assert.throws(() => dashboard.buildModel({ unitLabel: { one: 1, many: 2 } }), /unitLabel/);
+  assert.throws(() => dashboard.buildModel({ units: [{ title: "A", statusLabel: ["x"] }] }), /statusLabel/);
+  assert.doesNotThrow(() => dashboard.buildModel({ unitsTitle: "Kapitel", unitLabel: { one: "Kapitel", many: "Kapiteln" } }));
+});
+
+test("the provisional hint also finds learning objectives saved under their data-key in the course language", () => {
+  const journal = `<!--\nlanguage: de\n-->\n\n# Kurs\n\n## Course Context\n\n- Zielgruppe: vorgemerkt, noch offen\n\n## Outline\n\n<!-- data-key="learning-goals" -->\n**Lernziele:**\n\n1. Die Kinder benennen drei Teile.\n\n## Dashboard\n\n\`\`\`json @Dashboard.View\n${JSON.stringify({ title: "Kurs", next })}\n\`\`\`\n`;
+  inProject(journal, ({ validate }) => assert.match(validate().output, /provisional/));
+});
+
+test("a check report without the line 'usable with learners now' is named", () => {
+  const report = "#### Prüfbericht – Einheit 1\n\n<section data-key=\"validation-report\">\n\n**Ergebnis:** bestanden\n\nDas passt: alles.\n\n<details>\n\n__Result:__ PASS\n\n</details>\n\n</section>\n\n";
+  const result = validate({ title: "Kurs", next, units: [{ id: 1, title: "E1", state: "review", href: "#1.-e1", usable: { state: "yes" } }] }, `## Sessions\n\n### 1. E1\n\nText\n\n${report}`);
+  assert.match(result.output, /unit 1: the check report has no line "usable with learners now"/, result.output);
 });

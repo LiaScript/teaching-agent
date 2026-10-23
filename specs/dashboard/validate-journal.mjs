@@ -108,7 +108,11 @@ function findHints() {
   if (mode === "single-file" && /eigene[nr]? (Link|Datei)|own (link|file)/i.test(layoutRow)) {
     hints.push({ key: "file-structure", text: "Course Context describes one link/file per unit, but File Structure is single-file" });
   }
-  if (/vorgemerkt|provisional/i.test(context) && /Learning Objectives/.test(outline) && /\n\s*1\.\s+\S/.test(outline.split(/Learning Objectives/)[1] ?? "")) {
+  // Saved objectives: under the key comment data-key="learning-goals" (label in the course language) or, in older
+  // journals, under the English label "Learning Objectives".
+  const goalsMarker = /data-key=["']learning-goals["']|Learning Objectives/;
+  const objectivesSaved = goalsMarker.test(outline) && /\n\s*1\.\s+\S/.test(outline.split(goalsMarker)[1]?.split(/<!--\s*data-key=|\n\s*[*-] __/)[0] ?? "");
+  if (/vorgemerkt|provisional/i.test(context) && objectivesSaved) {
     hints.push({ key: "provisional", text: "Course Context still contains provisional entries although the learning objectives are saved" });
   }
   const slugs = [...didactics.matchAll(/slug:\s*`([^`]+)`/g)].map(match => match[1]);
@@ -479,6 +483,7 @@ for (const report of reports) {
   // its card) carries the same answer.
   const usableLine = visible.split("\n").map(line => line.trim()).filter(line => /^\*\*[^*\n]+:\*\*\s*\S/.test(line))[1] ?? "";
   const reported = usableState(usableLine.replace(/^\*\*[^*\n]+:\*\*\s*/, ""));
+  if (!reported) warnings.push(`unit ${report.unit || "?"}: the check report has no line "usable with learners now" right below its outcome (or its value is none of ${[terms.usableYes, terms.usableLimited, terms.usableNo].map(term => `"${term}"`).join(", ")}) – the line is mandatory (templates/session-validation.yaml → outcome_words)`);
   if (unit && !unit.usable) warnings.push(`unit ${report.unit} has a check report but no usable – write units[${report.unit}].usable {"state": ${reported ? `"${reported}"` : "yes|limited|no"}${reported && reported !== "yes" ? ', "missing": [what is still missing]' : ""}} from the report's line "${short(usableLine || "usable with learners now", 70)}"; it is the first line of the unit's card`);
   else if (unit && reported && unit.usable.state !== reported) warnings.push(`unit ${report.unit}: usable is "${unit.usable.state}", but the report says "${short(usableLine, 70)}" (${reported}) – usable follows the report`);
   // Outdated wording (R11-D1): recommend the current terms, never the report's old words.

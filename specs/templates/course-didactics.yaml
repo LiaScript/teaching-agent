@@ -8,6 +8,7 @@ template:
     section: Didactics
   title: 'Course Didactics'
   notes:
+    - 'The `sections` below say what each item contains. Their `* __Label:__` lines are content guidance only: visible items get a label in the course language with their `key` as `<!-- data-key="…" -->` above it (`layout`); technical fields keep their English label inside `<details>`.'
     - 'Never use headings under `## Didactics` — the section titles below are internal structure; follow `layout` (visible part + `<details>`).'
   layout: |
     Write the section for the instructor first, technical keys last:
@@ -32,36 +33,43 @@ template:
   sections:
     - id: didactic-concept
       title: Didactic Concept
+      key: 'key: didactic-concept (visible)'
       template: |
         * __Didactic Concept:__
           [Teaching methods, learning phases, didactic considerations — e.g. lesson rhythm (hook → example → explanation → task → self-check), scaffolding strategy, error culture.]
     - id: professor-persona
       title: Professor Persona
+      key: 'key: guiding-figure (visible)'
       template: |
         * __Professor Persona:__
           [Name, background, expertise, and role of the instructor persona — 3–5 sentences, written so other agents can adopt the character.]
     - id: teaching-style
       title: Teaching Style
+      key: 'key: language-style (visible) — the technical field `Teaching Style` in <details> too'
       template: |
         * __Teaching Style:__
           [e.g. humorous, academic, practical, conversational — and how it shows concretely in the material.]
     - id: course-type
       title: Course Type
+      key: 'technical only (in <details>)'
       template: |
         * __Course Type:__
           [The course type copied from `## Course Context` (lecture-series | self-paced | workshop | single-lesson) and what it means for pacing and learner autonomy.]
     - id: didactic-framework
       title: Didactic Framework
+      key: 'technical only (in <details>)'
       template: |
         * __Didactic Framework:__ {{framework name}}
           [One line: why this framework fits this course.]
     - id: default-session-method
       title: Default Session Method
+      key: 'technical only (in <details>)'
       template: |
         * __Default Session Method:__ {{method name (slug: `{{slug}}`) or `none`}}
           [One line: why this method fits this course, or why no specific method was chosen.]
     - id: session-types
       title: Session Types
+      key: 'key: lesson-patterns (visible) — the technical field `Session Types` with slugs in <details> too'
       template: |
         * __Session Types:__
           1. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion: what makes a session this type]
@@ -70,11 +78,13 @@ template:
              Required: [2–3 concrete, checkable required elements]
     - id: difficulty-level
       title: Difficulty Level
+      key: 'key: difficulty (visible) — the technical field `Difficulty Level` in <details> too'
       template: |
         * __Difficulty Level:__
           [beginner | intermediate | advanced] — [what this implies for explanations, prerequisites, and complexity progression.]
     - id: persona-sample
       title: Persona Voice Sample
+      key: 'key: voice-sample (visible)'
       template: |
         * __Persona Voice Sample:__
           [A short example paragraph (3–5 sentences) written in the EXACT voice of this persona,

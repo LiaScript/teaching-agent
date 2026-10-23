@@ -33,7 +33,7 @@ template:
     notice: 'Optional: provisional sample data or pending decisions'
     unitsTitle: 'Label from `## Course Context` → Terminology (sessions-called)'
     unitLabel: '{one, many}: the word for one unit and for several, in the course language, from `## Course Context` → Terminology (sessions-called) — used in the progress line "1 of 4 …"; `many` in the form that follows "of" (German: dative plural after "von", e.g. `{"one": "Modul", "many": "Modulen"}`)'
-    labels: 'Only when the course language is neither German nor English: every fixed text of the library translated, keyed as listed in `specs/dashboard/README.md` → `labels`; counted texts as {one, many} with the placeholders listed there. Never `plan` in German or English (the planning link keeps its name)'
+    labels: 'For German or English only `decide` and `prepare` (and, where the course has its own word for the learners, `usable.*` and `viewMaterial` — `tasks/update-dashboard.md` step 8); when the course language is neither German nor English: every fixed text of the library translated, keyed as listed in `specs/dashboard/README.md` → `labels`; counted texts as {one, many} with the placeholders listed there. Never `plan` in German or English (the planning link keeps its name)'
     units:
       - id: 'Stable number from Sessions / Agenda'
         title: 'Unit title'
@@ -61,7 +61,7 @@ template:
       label: 'Understandable action label'
       href: 'Allowed `agent:` link or section anchor'
       command: 'Readable command; required for `agent:` links'
-    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?, icon?}; `label` is required when `href` is set and names the destination (e.g. "See outline"), never the question; a section anchor (`#…`) is shown as a plain text link, only an `agent:` link becomes a button'
+    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?, icon?, source?}; `source: {check: n, date?}` marks a point that comes from the check of unit n (its `href` then links that report heading, `validate-journal.mjs` checks both); `label` is required when `href` is set and names the destination (e.g. "See outline"), never the question; a section anchor (`#…`) is shown as a plain text link, only an `agent:` link becomes a button'
     plan: 'Provisional planning {title?, note, rows: [{label, text}]} — only while no agenda exists'
     explore: 'Optional action cards with icon/title/description/label/href/command; icon is shown in the button, same symbols as `next.icon` but never the icon of `next` (default `▶️` for `agent:` links), so exactly one button stands for the next step'
     links: 'Section links with label/href (full heading slug)'

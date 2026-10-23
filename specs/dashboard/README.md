@@ -464,7 +464,7 @@ Unbekannte Schlüssel, falsche Formen und unbekannte Platzhalter erzeugen einen 
 - Exit-Code 0: Vorschaubild gespeichert, 2: ungültiger Aufruf, Datei nicht gefunden, Netz- oder Downloadfehler (eine Zeile `fetch-thumb: …`, kein Stacktrace).
 
 ```bash
-node specs/dashboard/fetch-thumb.mjs "https://commons.wikimedia.org/wiki/File:Queen_Bee_(16545241268).jpg" --width 330
+node specs/dashboard/fetch-thumb.mjs "https://commons.wikimedia.org/wiki/File:Example_(1).jpg" --width 330
 ```
 
 ## Suchen ohne grep

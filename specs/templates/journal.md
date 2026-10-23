@@ -20,11 +20,12 @@ This is where your course plan grows. You bring your teaching idea; the assistan
   "context": "No topic, target group or time frame yet",
   "subtitle": "In the first step you tell the assistant what you want to teach. Everything else builds on that frame.",
   "next": {
-    "title": "Start a new course",
+    "title": "Set the frame",
     "why": "Topic, target group and format are the basis for learning objectives and material. The assistant asks for them one by one.",
     "label": "Start course",
     "href": "agent:teaching/init-course",
-    "command": ":init-course"
+    "command": ":init-course",
+    "icon": "▶️"
   },
   "unitsTitle": "Units",
   "units": [],
@@ -40,7 +41,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
       {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."},
       {"title": "Publish", "state": "optional", "why": "Optional: share the checked course as a link."}
     ],
-    "note": "You can step back at any time. A draft only counts as finished once you have approved it."
+    "note": "You can step back at any time. A unit only counts as finished once its check has passed and you have approved it."
   },
   "explore": [
     {"icon": "⚡", "title": "Fast track", "description": "One interview fills context, objectives and didactics at once.", "label": "Fast track", "href": "agent:teaching/scaffold", "command": ":scaffold"},
@@ -170,23 +171,25 @@ _No units yet – they are created after the didactics (and the agenda, if one i
 
 {{visible kind line: display names of type and method}}
 
-**Summary:**
+Each bold label is in the course language and carries its key comment on the line above it (data-key = summary, content, activities, decisions, references — templates/session-skeleton.yaml); the comment is left out here only because it would end this note.
+
+**{{"Summary", translated}}:**
 
 {{2–4 sentences: focus, didactic intent, known stumbling blocks}}
 
-**Content:**
+**{{"Content", translated}}:**
 
 {{topic list / content skeleton per templates/session-skeleton.yaml}}
 
-**Activities:**
+**{{"Activities", translated}}:**
 
 1. {{activity}}
 
-**Decisions:**
+**{{"Decisions", translated}}:**
 
 - **{{date}}:** {{instructor decision about this unit — added during :coauthor-materials; a bullet with the date in bold, never a numbered item that starts with the date}}
 
-**References:**
+**{{"References", translated}}:**
 
 1. {{reference}}
 

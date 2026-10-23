@@ -190,8 +190,8 @@ prerequisites and confirmation tiers apply unchanged.
 A section may carry one **action line**: a single paragraph directly below its
 heading (before the `<!--- Filled by … --->` comment), marked with the LiaScript attribute
 comment `<!-- class="journal-actions" -->`. The class styles the line and marks
-it as generated — `tasks/update-dashboard.md` creates and refreshes exactly
-these paragraphs and nothing else.
+it as generated — `tasks/update-dashboard.md` creates and refreshes these paragraphs and, in
+source sections, only the few derived lines its "writes only" list names.
 
 ```markdown
 ## Outline

@@ -3515,7 +3515,8 @@ Run this task automatically after any task that changes project state:
       4. the `## Templates` entry of the dashboard template, via `tasks/manage-templates.md`
          and only if it is missing (step 8);
       5. the layout changes of `migrate-journal.mjs`, only after the instructor's
-         "Update" (step 9).
+         "Update" (step 9);
+      6. the one-line note under `## Sessions`, which follows the state (Rules → "The one-line note under `## Sessions`").
 11. Confirm the dashboard was updated only after step 9 passed, and name the next
     recommended command. If the MCP gate is open (`data/agent-links.md`), `goto` the
     Dashboard slide, check with `get_state`, and post the next action as an
@@ -4244,6 +4245,7 @@ template:
     section: Didactics
   title: 'Course Didactics'
   notes:
+    - 'The `sections` below say what each item contains. Their `* __Label:__` lines are content guidance only: visible items get a label in the course language with their `key` as `<!-- data-key="…" -->` above it (`layout`); technical fields keep their English label inside `<details>`.'
     - 'Never use headings under `## Didactics` — the section titles below are internal structure; follow `layout` (visible part + `<details>`).'
   layout: |
     Write the section for the instructor first, technical keys last:
@@ -4268,36 +4270,43 @@ template:
   sections:
     - id: didactic-concept
       title: Didactic Concept
+      key: 'key: didactic-concept (visible)'
       template: |
         * __Didactic Concept:__
           [Teaching methods, learning phases, didactic considerations — e.g. lesson rhythm (hook → example → explanation → task → self-check), scaffolding strategy, error culture.]
     - id: professor-persona
       title: Professor Persona
+      key: 'key: guiding-figure (visible)'
       template: |
         * __Professor Persona:__
           [Name, background, expertise, and role of the instructor persona — 3–5 sentences, written so other agents can adopt the character.]
     - id: teaching-style
       title: Teaching Style
+      key: 'key: language-style (visible) — the technical field `Teaching Style` in <details> too'
       template: |
         * __Teaching Style:__
           [e.g. humorous, academic, practical, conversational — and how it shows concretely in the material.]
     - id: course-type
       title: Course Type
+      key: 'technical only (in <details>)'
       template: |
         * __Course Type:__
           [The course type copied from `## Course Context` (lecture-series | self-paced | workshop | single-lesson) and what it means for pacing and learner autonomy.]
     - id: didactic-framework
       title: Didactic Framework
+      key: 'technical only (in <details>)'
       template: |
         * __Didactic Framework:__ {{framework name}}
           [One line: why this framework fits this course.]
     - id: default-session-method
       title: Default Session Method
+      key: 'technical only (in <details>)'
       template: |
         * __Default Session Method:__ {{method name (slug: `{{slug}}`) or `none`}}
           [One line: why this method fits this course, or why no specific method was chosen.]
     - id: session-types
       title: Session Types
+      key: 'key: lesson-patterns (visible) — the technical field `Session Types` with slugs in <details> too'
       template: |
         * __Session Types:__
           1. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion: what makes a session this type]
@@ -4306,11 +4315,13 @@ template:
              Required: [2–3 concrete, checkable required elements]
     - id: difficulty-level
       title: Difficulty Level
+      key: 'key: difficulty (visible) — the technical field `Difficulty Level` in <details> too'
       template: |
         * __Difficulty Level:__
           [beginner | intermediate | advanced] — [what this implies for explanations, prerequisites, and complexity progression.]
     - id: persona-sample
       title: Persona Voice Sample
+      key: 'key: voice-sample (visible)'
       template: |
         * __Persona Voice Sample:__
           [A short example paragraph (3–5 sentences) written in the EXACT voice of this persona,
@@ -4487,11 +4498,12 @@ This is where your course plan grows. You bring your teaching idea; the assistan
   "context": "No topic, target group or time frame yet",
   "subtitle": "In the first step you tell the assistant what you want to teach. Everything else builds on that frame.",
   "next": {
-    "title": "Start a new course",
+    "title": "Set the frame",
     "why": "Topic, target group and format are the basis for learning objectives and material. The assistant asks for them one by one.",
     "label": "Start course",
     "href": "agent:teaching/init-course",
-    "command": ":init-course"
+    "command": ":init-course",
+    "icon": "▶️"
   },
   "unitsTitle": "Units",
   "units": [],
@@ -4507,7 +4519,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
       {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."},
       {"title": "Publish", "state": "optional", "why": "Optional: share the checked course as a link."}
     ],
-    "note": "You can step back at any time. A draft only counts as finished once you have approved it."
+    "note": "You can step back at any time. A unit only counts as finished once its check has passed and you have approved it."
   },
   "explore": [
     {"icon": "⚡", "title": "Fast track", "description": "One interview fills context, objectives and didactics at once.", "label": "Fast track", "href": "agent:teaching/scaffold", "command": ":scaffold"},
@@ -4637,23 +4649,25 @@ _No units yet – they are created after the didactics (and the agenda, if one i
 
 {{visible kind line: display names of type and method}}
 
-**Summary:**
+Each bold label is in the course language and carries its key comment on the line above it (data-key = summary, content, activities, decisions, references — templates/session-skeleton.yaml); the comment is left out here only because it would end this note.
+
+**{{"Summary", translated}}:**
 
 {{2–4 sentences: focus, didactic intent, known stumbling blocks}}
 
-**Content:**
+**{{"Content", translated}}:**
 
 {{topic list / content skeleton per templates/session-skeleton.yaml}}
 
-**Activities:**
+**{{"Activities", translated}}:**
 
 1. {{activity}}
 
-**Decisions:**
+**{{"Decisions", translated}}:**
 
 - **{{date}}:** {{instructor decision about this unit — added during :coauthor-materials; a bullet with the date in bold, never a numbered item that starts with the date}}
 
-**References:**
+**{{"References", translated}}:**
 
 1. {{reference}}
 
@@ -4946,7 +4960,7 @@ template:
     notice: 'Optional: provisional sample data or pending decisions'
     unitsTitle: 'Label from `## Course Context` → Terminology (sessions-called)'
     unitLabel: '{one, many}: the word for one unit and for several, in the course language, from `## Course Context` → Terminology (sessions-called) — used in the progress line "1 of 4 …"; `many` in the form that follows "of" (German: dative plural after "von", e.g. `{"one": "Modul", "many": "Modulen"}`)'
-    labels: 'Only when the course language is neither German nor English: every fixed text of the library translated, keyed as listed in `specs/dashboard/README.md` → `labels`; counted texts as {one, many} with the placeholders listed there. Never `plan` in German or English (the planning link keeps its name)'
+    labels: 'For German or English only `decide` and `prepare` (and, where the course has its own word for the learners, `usable.*` and `viewMaterial` — `tasks/update-dashboard.md` step 8); when the course language is neither German nor English: every fixed text of the library translated, keyed as listed in `specs/dashboard/README.md` → `labels`; counted texts as {one, many} with the placeholders listed there. Never `plan` in German or English (the planning link keeps its name)'
     units:
       - id: 'Stable number from Sessions / Agenda'
         title: 'Unit title'
@@ -4974,7 +4988,7 @@ template:
       label: 'Understandable action label'
       href: 'Allowed `agent:` link or section anchor'
       command: 'Readable command; required for `agent:` links'
-    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?, icon?}; `label` is required when `href` is set and names the destination (e.g. "See outline"), never the question; a section anchor (`#…`) is shown as a plain text link, only an `agent:` link becomes a button'
+    decisions: 'Open points: list of {key, kind: decide|prepare|internal, title, why?, how (required unless internal), href?, command?, label?, icon?, source?}; `source: {check: n, date?}` marks a point that comes from the check of unit n (its `href` then links that report heading, `validate-journal.mjs` checks both); `label` is required when `href` is set and names the destination (e.g. "See outline"), never the question; a section anchor (`#…`) is shown as a plain text link, only an `agent:` link becomes a button'
     plan: 'Provisional planning {title?, note, rows: [{label, text}]} — only while no agenda exists'
     explore: 'Optional action cards with icon/title/description/label/href/command; icon is shown in the button, same symbols as `next.icon` but never the icon of `next` (default `▶️` for `agent:` links), so exactly one button stands for the next step'
     links: 'Section links with label/href (full heading slug)'
@@ -5746,8 +5760,8 @@ prerequisites and confirmation tiers apply unchanged.
 A section may carry one **action line**: a single paragraph directly below its
 heading (before the `<!--- Filled by … --->` comment), marked with the LiaScript attribute
 comment `<!-- class="journal-actions" -->`. The class styles the line and marks
-it as generated — `tasks/update-dashboard.md` creates and refreshes exactly
-these paragraphs and nothing else.
+it as generated — `tasks/update-dashboard.md` creates and refreshes these paragraphs and, in
+source sections, only the few derived lines its "writes only" list names.
 
 ```markdown
 ## Outline

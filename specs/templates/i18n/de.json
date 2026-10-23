@@ -1,5 +1,5 @@
 {
- "_about": "Language pack for the EMPTY journal template (specs/templates/journal.md): applied by `node specs/dashboard/localize-journal.mjs --lang de` in one write. Regenerate when the template changes; check-specs compares it with the template. Covers every visible line of the empty template, so init-course step 11 has nothing left to translate except the unit word in `unitLines`. `terms` are the current state words in this language (templates/session-validation.yaml → outcome_words); `outdatedTerms` lists older wordings as [pattern, term key] — validate-journal.mjs recognises them and recommends the term instead.",
+ "_about": "Language pack for the EMPTY journal template (specs/templates/journal.md): applied by `node specs/dashboard/localize-journal.mjs --lang de` in one write. Regenerate when the template changes; check-specs compares it with the template. Covers every visible line of the empty template except the English keys tasks read (entry headings and `__Label:__` lines under Templates and Agents, the technical table header, the Publishing fields) — check-specs checks both directions; init-course step 11 then only replaces the unit word in `unitLines`. `terms` are the current state words in this language (templates/session-validation.yaml → outcome_words); `outdatedTerms` lists older wordings as [pattern, term key] — validate-journal.mjs recognises them and recommends the term instead.",
  "language": "de",
  "labels": {
   "teaching": "Planungsassistent",
@@ -292,7 +292,7 @@
      "why": "Optional: den geprüften Kurs als Link teilen."
     }
    ],
-   "note": "Sie können jederzeit einen Schritt zurückgehen. Fertig ist eine Einheit erst, wenn ihre Prüfung bestanden ist und sie als erledigt markiert wurde."
+   "note": "Sie können jederzeit einen Schritt zurückgehen. Fertig ist eine Einheit erst, wenn ihre Prüfung bestanden ist und Sie sie freigegeben haben."
   },
   "explore": [
    {
