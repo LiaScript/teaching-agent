@@ -194,6 +194,16 @@ Run this task automatically after any task that changes project state:
    Exit code 2 means likely contradictions while `decisions` is empty, or a
    malformed report: fix (step 6) and run it again. Do not use other ad-hoc
    commands (e.g. `python3 -m json.tool`).
+   **Older journal layout:** if it names an older journal layout (`{{…}}`
+   skeletons in unfilled sections, `#### Validation Report` headings of an older
+   template), run `node specs/dashboard/migrate-journal.mjs --check` and show its
+   list in plain words ("Your journal still uses an older layout. I would update
+   it – only the presentation, none of your entries:" plus the list, translated),
+   with "Update" / "Not now" (tier "confirm in chat"). "Update" → run
+   `node specs/dashboard/migrate-journal.mjs`, then validate again; a line it
+   lists under "Left for you" is a section filled by hand — name it and propose
+   filling or removing that line in the same form. "Not now" → write no
+   Dashboard and say that the overview stays at its last state until then.
 10. Refresh the action lines:
     - For every heading listed in `data/agent-links.md` → Action lines (core `##`
       sections and every `### {n}. {title}` under `## Sessions`): replace the
@@ -222,7 +232,9 @@ Run this task automatically after any task that changes project state:
          line with the terminology (step 8) — the start of every heading stays unchanged;
       3. the dashboard template `import:` line in the main header, once (step 8);
       4. the `## Templates` entry of the dashboard template, via `tasks/manage-templates.md`
-         and only if it is missing (step 8).
+         and only if it is missing (step 8);
+      5. the layout changes of `migrate-journal.mjs`, only after the instructor's
+         "Update" (step 9).
 11. Confirm the dashboard was updated only after step 9 passed, and name the next
     recommended command. If the MCP gate is open (`data/agent-links.md`), `goto` the
     Dashboard slide, check with `get_state`, and post the next action as an

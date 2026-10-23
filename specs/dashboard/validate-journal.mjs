@@ -255,15 +255,20 @@ for (const [, link] of startLinks.matchAll(/\]\((#[^)\s]+)\)/g)) {
 const summary = section("Validation").split(/^### Latest Validation Summary[^\n]*\n/m)[1]?.split(/^#{1,3} /m)[0].replace(/<!--[\s\S]*?-->/g, "") ?? "";
 if (/\b(Date|Result):/.test(summary) && !(/\bMode:\s*\S/.test(summary) && /\bResult:\s*\S/.test(summary))) problems.push("Latest Validation Summary needs the key lines Mode: and Result: (read by the publishing gate)");
 // Template placeholders ({{…}}) must never be visible in the title or the Dashboard.
+// Journals written with the template before fe18ee1 still show {{…}} skeletons: migrate-journal.mjs moves them
+// to the current layout (representation only). LiaScript in inline code (`{{1}}`, `{{|>}}`) is no placeholder.
+const migrateHint = "older journal layout – run `node specs/dashboard/migrate-journal.mjs` (representation only; `--check` lists the changes first)";
 const title = headingBody.match(/^# (.+)$/m)?.[1] ?? "";
-if (title.includes("{{")) problems.push(`course title "${title}" is a template placeholder – use a neutral title in the course language ("New course", translated)`);
+if (title.includes("{{")) problems.push(`course title "${title}" is a template placeholder – use a neutral title in the course language ("New course", translated); ${migrateHint}`);
+let placeholderSection = "";
 const visiblePlaceholders = source.replace(/^<!--[\s\S]*?-->/, "").replace(/```[\s\S]*?```/g, "").replace(/<!--[\s\S]*?-->/g, "")
-  .split("\n").filter(line => line.includes("{{") && !line.startsWith("# "));
-if (visiblePlaceholders.length) problems.push(`${visiblePlaceholders.length} visible template placeholder line(s) ({{…}}), e.g. "${visiblePlaceholders[0].trim().slice(0, 80)}" – an unfilled section shows only its one-line note; skeletons come from templates/*.yaml`);
+  .split("\n").map(line => ({ line: line.replace(/`[^`\n]*`/g, ""), section: (placeholderSection = /^## /.test(line) ? line.slice(3).split(/\s+–\s+/)[0] : placeholderSection) }))
+  .filter(({ line }) => line.includes("{{") && !line.startsWith("# "));
+if (visiblePlaceholders.length) problems.push(`${visiblePlaceholders.length} visible template placeholder line(s) ({{…}}) in ${[...new Set(visiblePlaceholders.map(item => item.section || "the header"))].join(", ")}, e.g. "${visiblePlaceholders[0].line.trim().slice(0, 80)}" – an unfilled section shows only its one-line note; ${migrateHint}; in a section filled by hand, fill or remove the line`);
 (function walkTexts(value, path) {
   if (Array.isArray(value)) value.forEach((item, index) => walkTexts(item, `${path}[${index}]`));
   else if (value && typeof value === "object") Object.entries(value).forEach(([key, item]) => walkTexts(item, path ? `${path}.${key}` : key));
-  else if (typeof value === "string" && value.includes("{{")) problems.push(`Dashboard ${path} shows a template placeholder: "${value}"`);
+  else if (typeof value === "string" && value.includes("{{")) problems.push(`Dashboard ${path} shows a template placeholder: "${value}"${path === "footer" && value.includes("{{YYYY-MM-DD}}") ? ` – ${migrateHint}` : ""}`);
 })(JSON.parse(source.match(/```json @Dashboard\.View\n([\s\S]*?)\n```/)?.[1] ?? "{}"), "");
 // Visible commands must not show raw placeholders like {description}.
 for (const href of hrefs) if (/\{[a-z_-]+\??\}/i.test(href)) problems.push(`link ${href} contains a raw placeholder – pass the value or omit the parameter`);
@@ -424,7 +429,7 @@ sourceLines.forEach((line, index) => {
 const reports = reportHeadings(section("Sessions")).map(report => ({ ...report, anchor: anchorOf(report.title) }));
 const byAnchor = new Map();
 reports.forEach(report => byAnchor.set(report.anchor, [...(byAnchor.get(report.anchor) ?? []), report]));
-for (const [, same] of byAnchor) if (same.length > 1) problems.push(`check report heading "#### ${same[0].title}" appears ${same.length} times (units ${same.map(report => report.unit || "?").join(", ")}) – its anchor is ambiguous; give every unit's report its own heading (e.g. with the unit number)`);
+for (const [, same] of byAnchor) if (same.length > 1) problems.push(`check report heading "#### ${same[0].title}" appears ${same.length} times (units ${same.map(report => report.unit || "?").join(", ")}) – its anchor is ambiguous; give every unit's report its own heading (e.g. with the unit number)${/^Validation Report\b/.test(same[0].title) ? `; ${migrateHint}` : ""}`);
 const reportAnchors = new Set(reports.map(report => report.anchor));
 const linkOf = item => decodeURIComponent(String(item.href ?? "")).toLowerCase();
 model.decisions.filter(item => item.source).forEach(item => {

@@ -390,6 +390,13 @@ link: ./dashboard.css
 
 Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, in Kleinbuchstaben, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <draft.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
 
+Ältere Journale: Ein Journal aus einer älteren Vorlage zeigt in nicht ausgefüllten Abschnitten noch `{{…}}`-Gerüste oder Prüfberichte unter `#### Validation Report`. `validate-journal.mjs` meldet das als „older journal layout“. `node specs/dashboard/migrate-journal.mjs --check` listet die Änderungen, ohne zu schreiben. Ohne `--check` setzt das Skript die Darstellung auf den aktuellen Stand, nur die Darstellung, nie Inhalte:
+- Leere Abschnitte bekommen die Einzeiler der aktuellen Vorlage, in der Kurssprache aus dem Sprachpaket. Die Überschrift bleibt, wie sie ist.
+- Ein Platzhalter im Titel wird zum neutralen Titel, die Fußzeile des Dashboards verliert ihren Datumsplatzhalter.
+- Prüfberichte bekommen die Überschrift „Prüfbericht – {Einheitenwort} {n}“ mit `<section data-key="validation-report">` direkt darunter; eine Überschrift, die noch innerhalb ihres `<section>` stand, kommt davor.
+
+Abschnitte, in denen ausgefüllte Zeilen neben `{{…}}`-Zeilen stehen, lässt es unverändert und nennt sie unter „Left for you“ (Exit 2). Die Lehrkraft bestätigt die Migration vorher (`tasks/update-dashboard.md` Schritt 9). Gegen Rückschritte prüft `check.mjs` die Migration an `fixtures/journal-84484ae.md`, dem leeren Journal vor der Umstellung.
+
 `validate-journal.mjs` prüft außerdem den Ablaufplan gegen die Übersicht: Zeilen der Einheitentabelle werden an der Nummer erkannt (`| 1 |`, auch `| 1. |` und `| 1\. |`). Hat `## Agenda` eine Tabelle ohne erkennbare Nummernzeilen, meldet es „agenda table found, but no numbered rows recognised“ statt eines fehlenden Ablaufplans. Hat eine Einheit `process.steps` und eine andere nicht, ist das ein Fehler: Jede Einheit bekommt von Anfang an dieselben Materialschritte, eine noch nicht begonnene mit allen Schritten `planned`. Plant `## Agenda` Einheiten, während der Einzeiler unter `## Sessions` noch sagt, sie entstünden erst nach der Didaktik (Vorlage oder Sprachpaket `specs/templates/i18n/*.json` → `unitLines`, Einheitenwort darf ersetzt sein), wird auch das gemeldet.
 
 Unter „Warnings:“ nennt `validate-journal.mjs` wahrscheinliche Widersprüche, die den Exit-Code nicht ändern:

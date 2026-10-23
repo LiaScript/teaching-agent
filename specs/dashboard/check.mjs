@@ -1153,3 +1153,104 @@ test("now.mjs prints UTC, the local time with its offset and the age of a chat t
   assert.equal(bad.status, 2);
   assert.match(bad.stdout, /Exit code: 2/);
 });
+
+// Older journals (R11-D2): journals created before the template change of fe18ee1 still show {{…}}
+// skeletons in unfilled sections and the report heading "Validation Report". migrate-journal.mjs moves
+// them to the current layout (representation only); the validator points there instead of blocking.
+const validatorScript = fileURLToPath(new URL("./validate-journal.mjs", import.meta.url));
+const migrateScript = fileURLToPath(new URL("./migrate-journal.mjs", import.meta.url));
+const oldJournal = readFileSync(new URL("./fixtures/journal-84484ae.md", import.meta.url), "utf8");
+function inProject(text, run) {
+  const dir = mkdtempSync(join(tmpdir(), "migrate-check-"));
+  writeFileSync(join(dir, "journal.md"), text);
+  const script = (path, ...args) => { const result = spawnSync(process.execPath, [path, ...args], { cwd: dir, encoding: "utf8" }); return { status: result.status, output: result.stdout + result.stderr }; };
+  try { return run({ validate: () => script(validatorScript), migrate: (...args) => script(migrateScript, ...args), read: () => readFileSync(join(dir, "journal.md"), "utf8") }); }
+  finally { rmSync(dir, { recursive: true, force: true }); }
+}
+const visibleOutsideCode = text => text.replace(/^<!--[\s\S]*?-->/, "").replace(/```[\s\S]*?```/g, "").replace(/<!--[\s\S]*?-->/g, "").replace(/`[^`\n]*`/g, "");
+
+test("validate-journal does not take LiaScript in inline code ({{1}}, {{|>}}) for a template placeholder", () => {
+  const result = validate({ title: "Kurs", next }, "## Sessions\n\n### 1. Eins\n\n- Vorlesen ✅ `{{|>}}` vor Absätzen, Animation `{{1}}`\n\n");
+  assert.doesNotMatch(result.output, /template placeholder/, result.output);
+});
+
+test("an older journal layout is named as such and points to migrate-journal.mjs", () => {
+  inProject(oldJournal, ({ validate }) => {
+    const result = validate();
+    assert.equal(result.status, 2, result.output);
+    assert.match(result.output, /older journal layout/);
+    assert.match(result.output, /node specs\/dashboard\/migrate-journal\.mjs/);
+  });
+});
+
+test("migrate-journal brings the empty journal of 84484ae to the current layout", () => {
+  inProject(oldJournal, ({ validate, migrate, read }) => {
+    const run = migrate();
+    assert.equal(run.status, 0, run.output);
+    const text = read();
+    assert.doesNotMatch(visibleOutsideCode(text), /\{\{/, "no visible placeholder is left");
+    assert.match(text, /^# New course$/m);
+    assert.match(text, /^## Course Context\n\n<!-- class="journal-actions" -->\n\[▶️ Start course\]/m);
+    assert.match(text, /^_Still empty – filled with “Start course”._$/m);
+    assert.match(text, /"footer": "new, empty project"/);
+    assert.match(text, /^## Agents$/m, "sections without placeholders stay");
+    const after = validate();
+    assert.equal(after.status, 0, after.output);
+  });
+});
+
+test("migrate-journal translates the migrated lines with the course's language pack and keeps translated headings", () => {
+  const german = oldJournal.replace(/^language: en$/m, "language: de").replace(/^## Course Context$/m, "## Course Context – Kursrahmen").replace(/^## Outline$/m, "## Outline – Gliederung");
+  inProject(german, ({ migrate, read }) => {
+    const run = migrate();
+    assert.equal(run.status, 0, run.output);
+    const text = read();
+    assert.match(text, /^# Neuer Kurs$/m);
+    assert.match(text, /^## Course Context – Kursrahmen\n\n<!-- class="journal-actions" -->\n\[▶️ Kurs starten\]/m);
+    assert.match(text, /^_Noch leer – wird mit „Kurs starten“ ausgefüllt._$/m);
+    assert.match(text, /^## Outline – Gliederung$/m);
+  });
+});
+
+test("migrate-journal --check lists the changes and writes nothing", () => {
+  inProject(oldJournal, ({ migrate, read }) => {
+    const run = migrate("--check");
+    assert.equal(run.status, 0, run.output);
+    assert.match(run.output, /Course Context/);
+    assert.match(run.output, /Visual Identity/);
+    assert.equal(read(), oldJournal);
+  });
+});
+
+test("migrate-journal leaves a partly filled section alone and names it", () => {
+  const partly = oldJournal.replace("  {{name of the lecture or course}}", "  Erste Schritte");
+  inProject(partly, ({ migrate, read }) => {
+    const run = migrate();
+    assert.equal(run.status, 2, run.output);
+    assert.match(run.output, /Outline.*by hand/);
+    assert.match(read(), /^  Erste Schritte$/m);
+    assert.match(read(), /^_Still empty – filled with “Start course”._$/m, "the other sections are migrated");
+  });
+});
+
+test("migrate-journal gives older check reports the current heading with unit word and number, and the section key", () => {
+  const journal = `<!--\nlanguage: de\n-->\n\n# Kurs\n\n## Course Context – Kursrahmen\n\n* __Terminology:__\n  1. sessions-called: Baustein\n\n## Sessions – Bausteine\n\n### 1. Eins\n\n#### Validation Report – Prüfbericht\n\n__Date:__ 2026-10-06\n\n- Ergebnis: bestanden\n\n### 2. Zwei\n\n#### Validation Report – Prüfbericht\n\n<section>\n\n**Ergebnis:** bestanden\n\n</section>\n\n---\n\n## Dashboard\n\n\`\`\`json @Dashboard.View\n{"title": "Kurs"}\n\`\`\`\n`;
+  inProject(journal, ({ validate, migrate, read }) => {
+    const run = migrate();
+    assert.equal(run.status, 0, run.output);
+    const text = read();
+    assert.match(text, /^#### Prüfbericht – Baustein 1\n\n<section data-key="validation-report">\n\n__Date:__ 2026-10-06\n\n- Ergebnis: bestanden\n\n<\/section>\n\n### 2\. Zwei$/m);
+    assert.match(text, /^#### Prüfbericht – Baustein 2\n\n<section data-key="validation-report">\n\n\*\*Ergebnis:\*\* bestanden\n\n<\/section>$/m);
+    assert.doesNotMatch(validate().output, /appears 2 times/);
+  });
+});
+
+test("migrate-journal moves a report heading out of its <section> and reads the unit word from \"unit (Einheit)\"", () => {
+  const journal = `<!--\nlanguage: de\n-->\n\n# Kurs\n\n## Course Context – Kursrahmen\n\n* __Terminology:__\n  1. sessions-called: unit (Einheit)\n\n## Sessions – Einheiten\n\n### 1. Eins\n\n<section>\n\n#### Validation Report\n\n**Ergebnis:** bestanden\n\n</section>\n\n---\n\n## Dashboard\n\n\`\`\`json @Dashboard.View\n{"title": "Kurs"}\n\`\`\`\n`;
+  inProject(journal, ({ validate, migrate, read }) => {
+    const run = migrate();
+    assert.equal(run.status, 0, run.output);
+    assert.match(read(), /^### 1\. Eins\n\n#### Prüfbericht – Einheit 1\n\n<section data-key="validation-report">\n\n\*\*Ergebnis:\*\* bestanden\n\n<\/section>$/m);
+    assert.doesNotMatch(validate().output, /heading inside <section>/);
+  });
+});

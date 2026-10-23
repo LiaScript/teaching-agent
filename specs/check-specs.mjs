@@ -476,3 +476,22 @@ test("outdated state wordings are recognised, never recommended; the current ter
   assert.doesNotMatch(run.output, /write "passed – images still follows/);
 });
 
+
+test("every helper script in specs/dashboard is on the shell list of the YAML and of the built CLAUDE.md", () => {
+  const yaml = read("agents/teaching-agent.yaml");
+  const built = readFileSync(join(specs, "..", "CLAUDE.md"), "utf8");
+  const scripts = readdirSync(join(specs, "dashboard")).filter(name => name.endsWith(".mjs") && name !== "check.mjs");
+  for (const name of scripts) {
+    assert.ok(yaml.includes(`\`node specs/dashboard/${name}`), `agents/teaching-agent.yaml: ${name} is missing from the shell list`);
+    assert.ok(built.includes(`\`node specs/dashboard/${name}`), `CLAUDE.md: ${name} is missing – run python specs/build.py`);
+  }
+});
+
+test("older journals: the validator's migration hint leads to a confirmed migration in update-dashboard (R11-D2)", () => {
+  const task = read("tasks/update-dashboard.md");
+  assert.match(task, /\*\*Older journal layout:\*\*/);
+  assert.match(task, /`node specs\/dashboard\/migrate-journal\.mjs --check`/);
+  assert.match(task, /"Update" \/ "Not now" \(tier "confirm in chat"\)/);
+  assert.match(task, /the layout changes of `migrate-journal\.mjs`, only after the instructor's\n\s+"Update"/);
+  assert.match(read("dashboard/validate-journal.mjs"), /older journal layout – run `node specs\/dashboard\/migrate-journal\.mjs`/);
+});
