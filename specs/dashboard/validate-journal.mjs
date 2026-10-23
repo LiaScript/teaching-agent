@@ -27,13 +27,14 @@ const packs = (() => {
 // The current state words in English (templates/session-validation.yaml → outcome_words); the pack of
 // the course language overrides them. A warning recommends only these, never a report's own wording.
 const englishTerms = {
+  skeleton: "planning sketch",
   passedMissing: "passed – still missing: {what}",
   recheckShort: "{n} point(s) changed since – short re-check open",
   correctionOpen: "correction needed: {open} of {n} points open",
   usableYes: "yes", usableLimited: "yes, with limits: {what}", usableNo: "not yet: {why}"
 };
 const englishOutdated = [["still follows", "passedMissing"], ["(?<!\\p{L})revised(?!\\p{L})", "recheckShort"],
-  ["(?<!short )re-check open", "recheckShort"], ["correction needed \\(\\d+\\)(?=.*changed since)", "correctionOpen"]];
+  ["(?<!short )re-check open", "recheckShort"], ["correction needed \\(\\d+\\)(?=.*changed since)", "correctionOpen"], ["skeleton ✅", "skeleton"]];
 const coursePack = packs.find(pack => String(pack.language ?? "").slice(0, 2).toLowerCase() === language);
 const terms = { ...englishTerms, ...(coursePack?.terms ?? {}) };
 const outdatedPatterns = [...englishOutdated, ...packs.flatMap(pack => pack.outdatedTerms ?? [])]

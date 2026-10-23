@@ -365,6 +365,6 @@
   ["folgt noch", "passedMissing"],
   ["(?<!\\p{L})überarbeitet(?!\\p{L})", "recheckShort"],
   ["(?<!kurze )Nachprüfung offen", "recheckShort"],
-  ["Korrektur nötig \\(\\d+\\)(?=.*seither)", "correctionOpen"]
+  ["Korrektur nötig \\(\\d+\\)(?=.*seither)", "correctionOpen"], ["Skelett ✅", "skeleton"]
  ]
 }

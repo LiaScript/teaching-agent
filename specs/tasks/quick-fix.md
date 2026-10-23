@@ -31,19 +31,25 @@ Minimal overhead for small, targeted changes (typos, broken syntax, swapping one
 
 ## Steps
 
-**Called from `:build-session`** (mechanical items only): skip the scope confirmation of step 1 and the save confirmation — the start confirmation of `:build-session` covers them — and return the change (page title, before → after) to the caller for its closing summary. Escalation (step 5) still stops the caller.
+**Called from `:build-session`** (mechanical items only): skip the scope confirmation of step 1 and the save confirmation of step 2a — the start confirmation of `:build-session` covers them — and return the change (page title, before → after) to the caller for its closing summary. Escalation (step 5) still stops the caller.
+
+**Called from `:validate-course`** (fix during the check, `tasks/validate-course.md` step 4b): the check's one confirmation of the listed fixes is the scope and save confirmation — skip steps 1 and 2a.
 
 1. **Scope confirmation:** State what will be changed and the acceptance criterion:
    - "I will [describe the change] in [material document]. The change is complete when [condition]. Correct? (Yes / Adjust scope)"
 
-2. **Make the targeted change only** — no refactoring, no adjacent edits, no style improvements beyond the stated fix.
+2. **Prepare the targeted change only** — no refactoring, no adjacent edits, no style improvements beyond the stated fix. Nothing is written yet.
+   - New or changed learner text follows the current patterns of `data/liascript-cheat-sheet.md` (hints read aloud where `narrator:` is set, controls named as the page shows them). If a pattern is not applied because a decision is still open, say so in the form of step 2a and offer both variants in the same form. A writing rule for every unit is a course decision (rules for writing the material, `:save-decision`), never an open point of one unit. A pattern the instructor reports in one unit (e.g. answer options that give the answer away) is searched in every unit and proposed as such a rule.
+
+2a. **Show and confirm:** show the full new wording of every changed passage — page title, before → after, never only a description of the change — and ask "Save" / "Change something" (translated). This is the single write confirmation of this task; "Change something" returns to step 2.
+
+2b. **Save** after "Save": the material in one write; the journal lines in one map ("One journal write per fix" above).
 
 3. **Mini-validation of the affected section:**
    - Run `tasks/validate-syntax.md` scoped to the changed area — do not restate syntax rules here.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), consult it when the fix touches a construct the cheat sheet does not cover.
    - Persona/tone consistent with `journal.md` → `## Didactics`?
    - No unintended regression in surrounding content?
-   - New or changed learner text follows the current patterns of `data/liascript-cheat-sheet.md` (hints read aloud where `narrator:` is set, controls named as the page shows them). Check it **before the save form**: if a pattern is not applied because a decision is still open, say so in the summary and offer both variants in the same form. A writing rule for every unit is a course decision (rules for writing the material, `:save-decision`), never an open point of one unit. A pattern the instructor reports in one unit (e.g. answer options that give the answer away) is searched in every unit and proposed as such a rule.
 
 4. **Report result:**
    - ✅ "Fix applied and validated — done."

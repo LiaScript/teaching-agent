@@ -27,6 +27,7 @@ Converts a **Session** into a detailed **Session Material**.
 
 ## Steps
 
+0. **Existing material:** if the unit already has material (its overview row shows Material ✅, or the material document / `##` chapter exists), this task would replace it — also everything worked out together in `:coauthor-materials` and every fix since. Before anything else, say so in one plain sentence (page count, date of the last check if any) and ask "Replace" / "Keep" (translated; tier "confirm in chat"). "Keep" ends the task without a write and offers `:quick-fix` or `:coauthor-materials` for changes instead. Not when called from `:build-session`, which asks this itself (`tasks/build-session.md` → Content loop, step a). After "Replace", the unit's earlier check no longer applies: Done ❌, status line "material written · check open" (translated, `templates/session-skeleton.yaml`), the old report stays until the next `:validate-course {number}` replaces it.
 1. Load the matching skeleton subsection from `journal.md` → `## Sessions`.
 2. Read `journal.md` → `## Course Context` for terminology and conventions.
 3. Adopt didactic concept and course type from Didactics.

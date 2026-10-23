@@ -1254,3 +1254,13 @@ test("migrate-journal moves a report heading out of its <section> and reads the 
     assert.doesNotMatch(validate().output, /heading inside <section>/);
   });
 });
+
+test("the old word for the planning sketch ('Skelett ✅', 'skeleton ✅') is outdated wording; a unit title with the word is not", () => {
+  const sessions = status => `## Sessions – Einheiten\n\n1. Das Skelett – ${status}\n\n### 1. Das Skelett\n\nText\n\n`;
+  const unit = statusLabel => ({ title: "Kurs", next, units: [{ id: 1, title: "Das Skelett", state: "planned", href: "#1.-das-skelett", statusLabel }] });
+  const old = validate(unit("Skelett ✅ · Material offen"), sessions("Skelett ✅ · Material offen"));
+  assert.match(old.output, /unit 1: status line "Skelett ✅ · Material offen" uses outdated wording .* the current wording is "Planungsskizze"/);
+  assert.match(old.output, /unit 1: statusLabel "Skelett ✅ · Material offen" uses outdated wording/);
+  const current = validate(unit("Planungsskizze ✅ · Material offen"), sessions("Planungsskizze ✅ · Material offen"));
+  assert.doesNotMatch(current.output, /outdated wording/, current.output);
+});
