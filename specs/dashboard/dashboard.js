@@ -98,7 +98,9 @@
   }
   function fill(key, label, args) {
     const [count, total, unitLabel] = args;
-    const template = typeof label === "string" ? label : label[count === 1 ? "one" : "many"];
+    // Step counts name their noun after the total ("1 of 3 steps"); the progress line's verb follows the finished units.
+    const by = ["steps", "courseSteps", "courseStepsMaterial"].includes(key) ? total : count;
+    const template = typeof label === "string" ? label : label[by === 1 ? "one" : "many"];
     const values = Object.fromEntries(ARGS[key].map((name, index) => [name, args[index]]));
     if (key === "progressText") {
       const words = unitLabel?.one && unitLabel?.many ? unitLabel : TEXT[lang].unitWords ?? TEXT.en.unitWords;

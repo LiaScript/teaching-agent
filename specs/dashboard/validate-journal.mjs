@@ -343,10 +343,13 @@ const unitBlock = id => sessions.split(new RegExp(`^### ${id}\\. `, "m"))[1]?.sp
 const passed = id => /#### Validation Report[\s\S]*?__Result:__\s*PASS(?!\s*with)/.test(unitBlock(id));
 const statusLines = new Map([...sessions.replace(/<!--[\s\S]*?-->/g, "").replace(/<details>[\s\S]*?<\/details>/g, "").split(/^### /m)[0]
   .matchAll(/^(\d+)\.\s+(.+)$/gm)].map(match => [match[1], match[2].trim()]));
-// `{n}. {title} – {status}`: the status is what follows the unit title, else what follows the last dash.
+// `{n}. {title} – {status}`: the status is what follows the unit title (of the overview or of its ### heading),
+// else what follows the first dash – status words contain dashes themselves.
+const headingTitles = new Map([...sessions.matchAll(/^### (\d+)\.\s+(.+?)\s*$/gm)].map(match => [match[1], match[2]]));
 const statusOf = unit => {
   const line = statusLines.get(unit.id) ?? "";
-  const rest = line.startsWith(unit.title) ? line.slice(unit.title.length) : line.replace(/^.*\s(?=[–-]\s)/, "");
+  const title = [unit.title, headingTitles.get(String(unit.id))].find(item => item && line.startsWith(item));
+  const rest = title ? line.slice(title.length) : line.replace(/^.*?\s(?=[–-]\s)/, "");
   return rest.match(/^\s*[–-]\s+(.+)$/)?.[1] ?? "";
 };
 model.units.forEach(unit => {
@@ -480,7 +483,8 @@ for (const report of reports) {
     continue;
   }
   if (!word || !unit || doneRows.has(report.unit)) continue;
-  const expected = `${word}${changed ? ` – ${changed[1]}` : ""}`;
+  const recheckTail = String(terms.recheckShort).split(/\s+–\s+/).slice(1).join(" – ");
+  const expected = `${word}${changed ? ` – ${changed[1]}${recheckTail ? ` – ${recheckTail}` : ""}` : ""}`;
   for (const [where, text] of [["status line", statusLines.has(report.unit) ? statusOf(unit) : null], ["statusLabel", unit.statusLabel]]) {
     if (text == null || !String(text).trim()) continue;
     const lower = String(text).toLowerCase();

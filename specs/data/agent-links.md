@@ -600,6 +600,7 @@ language (`## Course Context` → Language).
   `node specs/dashboard/localize-journal.mjs <map.json> <material file>`, or the
   whole file written once after reading it — never one edit per line (every
   write reloads the preview and resets the instructor's quiz answers).
+- **State words from the language pack:** with a language pack for the course language (`specs/templates/i18n/<code>.json`), its `terms` are the wording of every state — word for word in reports, status lines, the overview and the chat; never a synonym.
 - **Plain language:** never show command names, slugs, file names, section
   keys or product names of the platform (the course player, the server — say
   "the program that shows the page") in the chat text, except as the inline code right after an action link.

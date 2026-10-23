@@ -1025,7 +1025,7 @@ test("validate-journal wants the report's outcome words in the unit's status lin
   assert.doesNotMatch(clean.output, /Warnings:/, clean.output);
   const other = validate({ title: "Kurs", next, units: units("überarbeitet – Prüfung offen") }, sessionsOf("überarbeitet – Prüfung offen"));
   assert.equal(other.status, 0, "warnings only");
-  assert.match(other.output, /unit 1: status line "überarbeitet – Prüfung offen" does not carry the report's outcome "bestanden – es fehlt noch: 1 Foto – 1 Punkt seither geändert"/);
+  assert.match(other.output, /unit 1: status line "überarbeitet – Prüfung offen" does not carry the report's outcome "bestanden – es fehlt noch: 1 Foto – 1 Punkt seither geändert – kurze Nachprüfung offen"/);
   assert.match(other.output, /unit 1: statusLabel "überarbeitet – Prüfung offen" does not carry/);
   const missing = validate({ title: "Kurs", next, units: [{ id: 1, title: "E1", state: "current", process: { steps: [{ title: "Material", state: "planned" }] } }] }, "## Sessions – Einheiten\n\n### 1. E1\n\nText\n\n");
   assert.equal(missing.status, 2, missing.output);
@@ -1303,4 +1303,30 @@ test("an image placeholder inside a quiz option carries a distinguishing word af
   assert.ok(isImageMarker("- [[ ]] 🖼️ _Image follows_ picture 2"));
   assert.ok(!isImageMarker("- [( )] 🖼️ ![Bild 1](blatt.jpg)"), "a real image is no placeholder");
   assert.ok(!isImageMarker("📷 _Nimm_ ein Foto vom Himmel auf."), "an instruction is no placeholder");
+});
+
+test("the status line is read after the unit title of its heading, and a recommended wording keeps the short re-check", () => {
+  const view = { href: "agent:teaching/preview?file=1", command: ":preview 1" };
+  const outcome = "bestanden – es fehlt noch: 1 Foto (23.10.2026) – 1 Punkt seither geändert – kurze Nachprüfung offen";
+  const state = "bestanden – es fehlt noch: 1 Foto – 1 Punkt seither geändert – kurze Nachprüfung offen";
+  const report = `#### Prüfbericht – Einheit 1\n\n<section data-key="validation-report">\n\n**Ergebnis:** ${outcome}\n\n**Jetzt mit den Lernenden nutzbar:** ja, mit Einschränkungen: 1 Foto\n\n**Nach der Prüfung geändert:**\n\n- 23.10.2026 · S1 · Satz gekürzt · Kurzprüfung\n\n<details>\n\n__Result:__ PASS\n\n</details>\n\n</section>\n\n`;
+  const sessions = status => `## Sessions – Einheiten\n\n1. Erste Schritte – ${status}\n\n<details><summary>Technik</summary>\n\n| # | Title | Type | Method | Skeleton | Material | Done | Notes |\n|---|---|---|---|---|---|---|---|\n| 1 | Erste Schritte | a | b | ✅ | ✅ | ❌ | ${state} |\n\n</details>\n\n### 1. Erste Schritte\n\n<!-- class="journal-actions" -->\n[▶️ Bilder einfügen](agent:artist/create-image?number=1) \`:agent artist\` → \`:create-image 1\` · [👁 So sehen es die Lernenden](agent:teaching/preview?file=1) \`:preview 1\`\n\nText\n\n${report}`;
+  // The overview calls the unit "E1"; the status line uses the heading's title.
+  const unit = { id: 1, title: "E1", state: "review", href: "#1.-erste-schritte", view, usable: { state: "limited", missing: ["1 Foto"] }, statusLabel: state, process: { steps: [{ title: "Material", state: "done" }] } };
+  const same = validate({ title: "Kurs", next, units: [unit] }, sessions(state));
+  assert.doesNotMatch(same.output, /status line .* does not carry/, same.output);
+  const short = validate({ title: "Kurs", next, units: [unit] }, sessions("bestanden – es fehlt noch: 1 Foto"));
+  assert.match(short.output, /status line "bestanden – es fehlt noch: 1 Foto" does not carry .* write "bestanden – es fehlt noch: 1 Foto – 1 Punkt seither geändert – kurze Nachprüfung offen"/);
+});
+
+test("own {one, many} labels for steps choose the form by the total, the progress line by the finished units", () => {
+  const steps = { one: "{done} sur {total} étape", many: "{done} sur {total} étapes" };
+  const data = { lang: "fr", title: "X", labels: { steps, progressText: { one: "{done} sur {total} {unit} est terminée", many: "{done} sur {total} {unit} sont terminées" } },
+    unitLabel: { one: "unité", many: "unités" },
+    units: [{ id: 1, title: "A", state: "done", process: { steps: [{ title: "a", state: "done" }, { title: "b", state: "planned" }, { title: "c", state: "planned" }] } }, { id: 2, title: "B", state: "planned" }] };
+  const html = dashboard.renderComponent("View", "plural1", data);
+  assert.match(html, /1 sur 3 étapes/);
+  assert.match(html, /1 sur 2 unités est terminée/);
+  const one = dashboard.renderComponent("View", "plural2", { ...data, units: [{ ...data.units[0], process: { steps: [{ title: "a", state: "done" }] } }] });
+  assert.match(one, /1 sur 1 étape</);
 });
