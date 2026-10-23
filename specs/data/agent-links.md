@@ -443,7 +443,10 @@ language (`## Course Context` → Language).
 - **End your turn after a form:** after sending a form (or any question),
   prepare nothing that takes more than a few seconds before the answer
   arrives — an event cannot reach you while you are still generating. On the
-  answer, send the status line first, then do the work.
+  answer, send the status line first, then do the work. **Inside an autonomous
+  run** (`tasks/build-session.md`) the run does not stop at a form: it continues
+  in parts with what does not depend on the answer and looks for it between
+  parts (Long runs); it ends the turn only when nothing independent is left.
 - **No echo of form answers:** the chat shows every answer as the user's
   bubble ("question: answer"). Do not repeat it; echo only how you interpret a
   typed answer.

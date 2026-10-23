@@ -53,7 +53,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
    - **lecture-series**: sessions with time slots and weekly schedule
    - **workshop**: blocks with approximate time per block
    - **self-paced**: modules with estimated duration only — unless the learners work in fixed time slots (e.g. lessons in which they study at their own pace); then plan per slot as in step 5c
-   - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
+   - **single-lesson** (if agenda is yes): **exactly one unit row** — No. 1, the lesson with its length and all objectives; its phases (sections/chapters with minutes) go into the time budget (`time-budget`) as a short list, never as numbered rows: the units table counts units (`data/session-types.md` → "Objectives and duration of a session" reads the lesson's row, `validate-journal.mjs` compares rows and units)
 
    When assigning a duration, `data/duration-heuristic.md` can help sanity-check that it's realistic for the planned content volume — this is orientation only, not a required check here (the actual check happens later in `:validate-course`).
 6a. **Self-check before the summary:** every learning objective is covered by at least one mandatory unit; an objective marked for all units appears in every row; durations add up to the time budget of 5c including a buffer — a buffer is free time **or** an explicitly movable part (then say what slower learners move and where they catch up; with 0 free minutes in a slot, say so in its own line); numbers match `## Course Context` (number and length of lessons).
