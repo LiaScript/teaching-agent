@@ -27,7 +27,7 @@ template:
     - 'No hand-written HTML, CSS, JavaScript, tables or Mermaid — the layout belongs to `dashboard/`.'
     - 'Visible texts in the course language (`## Course Context` → Language); commands and URIs stay in English.'
   fields:
-    title: 'Course title from Outline / Course Context'
+    title: 'Required: course title from Outline / Course Context ("New course", translated, while there is none) – validate-journal.mjs rejects a Dashboard without it'
     context: 'Target group and time frame'
     subtitle: 'Current state of work in plain words; no repeated counters'
     notice: 'Optional: provisional sample data or pending decisions'

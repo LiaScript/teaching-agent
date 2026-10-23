@@ -1404,3 +1404,11 @@ test("fetch-thumb takes only standard Commons widths and never downloads an orig
   assert.equal(thumb.previewUrl({ url: "https://upload.wikimedia.org/small.png", width: 200 }, 330), "https://upload.wikimedia.org/small.png", "a small original is its own preview");
   assert.throws(() => thumb.previewUrl({ url: "https://upload.wikimedia.org/big.jpg", width: 4000 }, 330), /no preview/);
 });
+
+test("the Dashboard of a journal needs a title (without one the page shows an empty heading)", () => {
+  const without = validate({ next });
+  assert.equal(without.status, 2, without.output);
+  assert.match(without.output, /Dashboard has no title/);
+  assert.match(validate({ title: "  ", next }).output, /Dashboard has no title/);
+  assert.doesNotThrow(() => dashboard.buildModel({}), "the library itself stays open for single components");
+});

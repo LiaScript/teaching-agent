@@ -160,6 +160,7 @@ if (shownTexts.states.length) console.log(`States (as shown): ${shownTexts.state
 if (shownTexts.usable.length) console.log(`Usable (as shown): ${shownTexts.usable.map(item => `${item.id} "${item.text}"`).join(" · ")}`);
 
 const problems = [];
+if (!String(model.title ?? "").trim()) problems.push("Dashboard has no title – write the course title (or \"New course\", translated) into title; without it the page shows an empty heading");
 const hints = findHints();
 if (hints.length) {
   console.log("Hints:");
