@@ -1,0 +1,31 @@
+name: Spec checks
+
+# Runs the guards of the Teaching-Agent specs on every push and pull request:
+# key rules of the specs, the dashboard library and scripts, the empty journal,
+# and whether the generated agent files are up to date with specs/build.py.
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Spec guards
+        run: node specs/check-specs.mjs
+      - name: Dashboard library and scripts
+        run: node specs/dashboard/check.mjs
+      - name: Empty journal is valid
+        run: node specs/dashboard/validate-journal.mjs specs/templates/journal.md
+      - name: Generated agent files are up to date
+        run: |
+          pip install pyyaml
+          python specs/build.py
+          git diff --exit-code -- CLAUDE.md AGENTS.md .windsurfrules .cursor/rules/agent.md .github/copilot-instructions.md dist/web-bundle.md
