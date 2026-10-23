@@ -588,7 +588,9 @@ language (`## Course Context` → Language).
   replace a section with `read_section` + `write_section` (hash-checked, layout
   kept), or put all line changes of one save into one map for
   `node specs/dashboard/localize-journal.mjs <map.json>` (it is a general
-  all-or-nothing line replacer, not only for languages); action lines and
+  all-or-nothing line replacer, not only for languages: a pair may replace a
+  block of consecutive lines that occurs once, write several lines, and
+  `"append"` adds lines at the end of the file); action lines and
   one-line notes go into the same pass. Target for "own section + two foreign
   sections + overview": at most 5 writes. The same for material files: several
   line changes of one correction go into one write — one map for

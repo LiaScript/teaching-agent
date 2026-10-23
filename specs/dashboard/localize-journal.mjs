@@ -16,6 +16,12 @@
 //   file exactly (trailing spaces ignored). Every pair must match exactly one
 //   line — or at least one with a third item "all" (["  none", "  keine", "all"]) —
 //   otherwise nothing is written (exit 2), so a stale map never half-applies.
+// - A first item with line breaks is a block of consecutive lines and must match
+//   exactly once (e.g. an image marker: its unique slug comment plus the visible
+//   placeholder line that repeats elsewhere). A second item with line breaks
+//   writes several lines. Pairs apply in order.
+// - "append": [lines] adds lines at the end of the file (e.g. a new back-matter
+//   chapter such as the image credits).
 // In map mode the Dashboard JSON block is not touched; write it afterwards with write-dashboard.mjs.
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -51,14 +57,25 @@ if (map.language) {
   else lines[index] = `language: ${map.language}`;
 }
 for (const [from, to, all] of map.replace ?? []) {
-  if (typeof from !== "string" || typeof to !== "string" || from.includes("\n") || to.includes("\n")) {
-    problems.push(`pair ${JSON.stringify([from, to])}: both items must be single lines`);
+  if (typeof from !== "string" || typeof to !== "string" || !from.trim()) {
+    problems.push(`pair ${JSON.stringify([from, to])}: both items must be text, the first not empty`);
     continue;
   }
-  const hits = lines.map((line, index) => line.trimEnd() === from.trimEnd() ? index : -1).filter(index => index >= 0);
-  if (all === "all" ? hits.length < 1 : hits.length !== 1) problems.push(`"${from}" matches ${hits.length} lines (needs ${all === "all" ? "at least" : "exactly"} 1)`);
-  else if (hits.some(dashboard)) problems.push(`"${from}" is inside the Dashboard block – use write-dashboard.mjs`);
-  else hits.forEach(index => { lines[index] = to; });
+  const block = from.split("\n").map(line => line.trimEnd());
+  const matchesAt = index => block.every((line, offset) => lines[index + offset]?.trimEnd() === line);
+  const hits = lines.map((line, index) => matchesAt(index) ? index : -1).filter(index => index >= 0);
+  const unit = block.length > 1 ? "blocks" : "lines";
+  if (block.length > 1 && all === "all") problems.push(`block "${block[0]}" …: "all" is for single lines only`);
+  else if (all === "all" ? hits.length < 1 : hits.length !== 1) problems.push(`"${block.length > 1 ? `${block[0]} …` : from}" matches ${hits.length} ${unit} (needs ${all === "all" ? "at least" : "exactly"} 1)`);
+  else if (hits.some(index => block.some((_, offset) => dashboard(index + offset)))) problems.push(`"${block[0]}" is inside the Dashboard block – use write-dashboard.mjs`);
+  else [...hits].reverse().forEach(index => lines.splice(index, block.length, ...to.split("\n")));
+}
+if (map.append !== undefined) {
+  if (!Array.isArray(map.append) || map.append.some(line => typeof line !== "string")) problems.push('"append" must be a list of lines');
+  else {
+    while (lines.length && lines.at(-1) === "") lines.pop();
+    lines.push(...map.append.flatMap(line => line.split("\n")), "");
+  }
 }
 let dashboardLines = null;
 if (map.dashboard) {
@@ -84,6 +101,6 @@ if (dashboardLines) {
   lines.splice(start + 1, end - start - 1, ...dashboardLines);
 }
 writeFileSync(file, lines.join("\n"));
-console.log(`OK: ${map.replace?.length ?? 0} lines replaced${map.language ? `, language: ${map.language}` : ""}${dashboardLines ? ", Dashboard replaced" : ""} in one write`);
+console.log(`OK: ${map.replace?.length ?? 0} replacement(s)${map.append ? `, ${map.append.length} line(s) appended` : ""}${map.language ? `, language: ${map.language}` : ""}${dashboardLines ? ", Dashboard replaced" : ""} in one write`);
 if (map.labels) console.log(`Roster labels: ${JSON.stringify(map.labels)}`);
 console.log("Exit code: 0");

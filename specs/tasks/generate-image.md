@@ -31,7 +31,7 @@ Decide by the tools the running agent actually has — never by its name:
 
 1. **Own image tool** — the agent has a built-in tool that turns a prompt into an image file (e.g. Codex). Use it: no browser, no ChatGPT window. Writes only inside the project, so it needs the normal chat confirmation (tier "confirm in chat" in `data/agent-links.md`; inside `:build-session` its start confirmation covers it). Continue with Phase 2a/2b, then [Phase 3D](#phase-3d-own-image-tool).
 2. **Browser route** — no own image tool, but the chrome-devtools MCP tools are available. Opens an external browser session, so it keeps the terminal confirmation. Continue with Phase 1.
-3. **Neither** — explain both options in one short message (an agent with its own image tool, or the browser setup below) and stop. Suggest `:create-image` for prompt-only mode.
+3. **Neither** — explain both options in one short message (an agent with its own image tool, or the browser setup below) and stop. A `prompt-ready` entry stays open (its marker is in the material): show its prompt and offer, in one form, `own` (the instructor supplies the picture) or "without a picture" (`tasks/create-image.md` → Free photos step 7) — never send the instructor back to `:create-image` for it. New prompts without a marker are saved by `:create-image` as `prompt-only`.
 
 Tool names differ per agent: the chrome-devtools tools are e.g. `mcp_chrome-devtools_list_pages` in VS Code and `mcp__…chrome-devtools__list_pages` in Claude Code — match by the tool name ending (`list_pages`, `resize_page`, `navigate_page`, `evaluate_script`).
 

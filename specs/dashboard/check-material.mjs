@@ -43,7 +43,8 @@ Exit code 0: no errors · 1: errors in the material · 2: invalid call or render
 // `> 🖼️ _Image follows: alt text_` (tasks/create-image.md) or `*📷 Photo follows*`.
 // The words are in the course language, so only the symbol and the emphasis are matched.
 const picture = "(?:\\u{1F5BC}\\uFE0F?|\\u{1F4F7}|\\u{1F4F8})";
-const markerLine = new RegExp(`^(?:([*_]{1,2})\\s*${picture}.*\\1|${picture}\\s*([*_]{1,2})\\S.*\\2)$`, "u");
+// A placeholder inside a quiz option may end with a neutral distinguishing word and number ("picture 2").
+const markerLine = new RegExp(`^(?:([*_]{1,2})\\s*${picture}.*\\1|${picture}\\s*([*_]{1,2})\\S.*\\2)(?:\\s+\\p{L}+\\s*\\d+)?$`, "u");
 const optionLine = /^\s*[-*+]\s+\[(\(\s*[Xx]?\s*\)|\[\s*[Xx]?\s*\])\]\s?(.*)$/;
 const hintLine = /^\s*[-*+]\s+\[\[\?\]\]/;
 

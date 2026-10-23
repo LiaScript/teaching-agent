@@ -1264,3 +1264,43 @@ test("the old word for the planning sketch ('Skelett ✅', 'skeleton ✅') is ou
   const current = validate(unit("Planungsskizze ✅ · Material offen"), sessions("Planungsskizze ✅ · Material offen"));
   assert.doesNotMatch(current.output, /outdated wording/, current.output);
 });
+
+// The line replacer (localize-journal.mjs <map.json> <file>): one write for many changes of one file, also
+// for the image step – a marker block found by its slug, a replacement of several lines, a new chapter at the end.
+const localizeScript = fileURLToPath(new URL("./localize-journal.mjs", import.meta.url));
+function replaceIn(text, map) {
+  const dir = mkdtempSync(join(tmpdir(), "localize-check-"));
+  writeFileSync(join(dir, "README.md"), text);
+  writeFileSync(join(dir, "map.json"), JSON.stringify(map));
+  const run = spawnSync(process.execPath, [localizeScript, "map.json", "README.md"], { cwd: dir, encoding: "utf8" });
+  const after = readFileSync(join(dir, "README.md"), "utf8");
+  rmSync(dir, { recursive: true, force: true });
+  return { status: run.status, output: run.stdout + run.stderr, after };
+}
+const markerMaterial = "# Kurs\n\n## Seite 1\n\n<!--- image: blatt — ein Blatt --->\n> 🖼️ _Bild folgt_\n\n## Seite 2\n\n<!--- image: baum — ein Baum --->\n> 🖼️ _Bild folgt_\n\nSieh dir das Foto an.\n";
+
+test("the line replacer replaces a block of lines found by its first line, also when its other lines repeat", () => {
+  const run = replaceIn(markerMaterial, { replace: [["<!--- image: blatt — ein Blatt --->\n> 🖼️ _Bild folgt_", "![Ein Blatt](https://example.org/blatt.jpg)"]] });
+  assert.equal(run.status, 0, run.output);
+  assert.match(run.after, /## Seite 1\n\n!\[Ein Blatt\]\(https:\/\/example\.org\/blatt\.jpg\)\n\n## Seite 2\n\n<!--- image: baum — ein Baum --->\n> 🖼️ _Bild folgt_/);
+});
+
+test("the line replacer writes several lines for one and appends a chapter at the end", () => {
+  const run = replaceIn(markerMaterial, { replace: [["Sieh dir das Foto an.", "Sieh dir das Foto an.\n\nWas fällt dir auf?"]], append: ["", "## Bildnachweise", "", "- Seite 1: ein Blatt – Autorin – CC BY 4.0"] });
+  assert.equal(run.status, 0, run.output);
+  assert.match(run.after, /Sieh dir das Foto an\.\n\nWas fällt dir auf\?\n\n## Bildnachweise\n\n- Seite 1: ein Blatt – Autorin – CC BY 4\.0\n$/);
+});
+
+test("the line replacer writes nothing when a block does not match exactly once", () => {
+  const twice = replaceIn(markerMaterial, { replace: [["<!--- image: blatt — ein Blatt --->", "x"], ["> 🖼️ _Bild folgt_\n\nSieh", "y"]] });
+  assert.equal(twice.status, 2, twice.output);
+  assert.match(twice.output, /matches 0 blocks/);
+  assert.equal(twice.after, markerMaterial, "all or nothing");
+});
+
+test("an image placeholder inside a quiz option carries a distinguishing word after it and is still a placeholder", () => {
+  assert.ok(isImageMarker("- [( )] 🖼️ _Bild folgt_ Bild 1"));
+  assert.ok(isImageMarker("- [[ ]] 🖼️ _Image follows_ picture 2"));
+  assert.ok(!isImageMarker("- [( )] 🖼️ ![Bild 1](blatt.jpg)"), "a real image is no placeholder");
+  assert.ok(!isImageMarker("📷 _Nimm_ ein Foto vom Himmel auf."), "an instruction is no placeholder");
+});
