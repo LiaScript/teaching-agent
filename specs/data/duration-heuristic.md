@@ -21,7 +21,7 @@ Reading pace depends on the course type from `journal.md` → `## Course Context
 
 For each activity, discussion, exercise, or quiz block in the material:
 
-- **If the material states a duration explicitly** (e.g. "(15 Min)", "ca. 10 Minuten") — use that value.
+- **If the material states a duration explicitly** (e.g. "(15 Min)", "ca. 10 Minuten") — use that value. The same for listening time the agenda or the planning sketch names for read-aloud texts: count those minutes as stated, not again as reading time.
 - **Otherwise, fall back to this rough table** (adjustable, not precise):
 
 | Activity type | Default estimate |
@@ -44,6 +44,10 @@ Compare the total estimate to the session's declared duration (`data/session-typ
 - Compare with **one** number: the middle of the estimated range. Count a teacher-led phase once — as its stated duration, not again as reading time of the text shown on the board.
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.
 - This is an **`[advisory]` item** (see the tags in `checklists/course-quality-checklist.md`): a hint, never ❌, never a fail, never part of an automated fix loop — final judgment stays with the instructor, or with a persona review if one is available (see `tasks/review-as-persona.md`; a persona's "this feels too short/rushed" comment is a stronger signal than the formula alone).
+
+## Naming the estimate
+
+In reports, chat and closing summaries name the estimate by what it counts, never by a name ("the formula", "the calculation"): "Rule of thumb: {words} words at {pace} words per minute plus {x} minutes per question = {total} min; repeated listening is not counted" (translated), then the comparison with the declared duration.
 
 ## Where this is used
 

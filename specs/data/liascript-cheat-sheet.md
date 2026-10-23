@@ -235,7 +235,7 @@ The line beginning with `--` is interpreted as the citation/source line.
 
    - Each `--{{n}}--` block contains a **spoken comment** read aloud during the corresponding animation step.
    - Comments should sound like **explanatory sentences**, not bullet points.
-   - **Optional:** `{{|>}}` creates a play button for manual playback.
+   - **Optional:** `{{|>}}` creates a play button for manual playback (it shows a small play triangle ▶, no text — see section 10 → Controls as learners see them).
    - The voice is defined in the header (`narrator`) but can be overridden per section via comment:
 
      ```lia
@@ -298,6 +298,41 @@ Multimedia links can be included locally (relative paths) or externally (URLs).
 
 ??[oEmbed / Link text](https://example.org/resource "Optional oEmbed caption")
 ```
+
+**Encode link targets.** LiaScript ends a link or image target at the first
+`(` — also balanced parentheses, which CommonMark allows — and a bare URL keeps
+its full text but gets a cut-off address. In every link and image target
+percent-encode `(` as `%28`, `)` as `%29` and spaces as `%20`, and write a bare
+URL as `[label](encoded URL)`:
+
+```lia
+![A leaf with jagged edges](https://commons.wikimedia.org/wiki/Special:FilePath/Leaf_%28example%29.jpg?width=330)
+```
+
+**Image size.** A style comment directly after the image (same line) sets its
+display size; it also works inside quiz options. Images that are answer options
+of one question get a height limit so the question and all options fit one
+screen of the target device; a large page photo may get one too:
+
+```lia
+Which picture shows a ripe fruit?
+
+- [( )] ![Picture 1: …](https://example.org/a.jpg)<!-- style="max-height: 30vh" -->
+- [(X)] ![Picture 2: …](https://example.org/b.jpg)<!-- style="max-height: 30vh" -->
+
+![A wide landscape photo](https://example.org/c.jpg)<!-- style="width: 30%" -->
+```
+
+Request a matching file size from the collection, too: Wikimedia Commons
+serves only standard thumbnail widths (e.g. `?width=330` for answer options and
+small pictures, `?width=500` for page photos); other widths are rounded up to a
+much larger file or rejected.
+
+A `vh` limit does not guarantee the fit: the page header, the introduction and
+the question do not shrink with the window, and image-only options stand one
+below the other. Whether a question fits is known only from a measurement at the
+learners' window size (the check script's viewport report) or from a look at the
+learners' device (`data/agent-links.md` → Say how you checked).
 
 **Accessibility (A11y)**
 
@@ -457,10 +492,23 @@ Composer of the 9th:
 
 **Quizzes for young learners / self-checks**
 
+Pick the pattern by the didactics. **Hint instead of solution** (no automatic solution): no `data-max-trials`.
+
 ```lia
 Which one is right?
 
-<!-- data-hint-button="1" data-max-trials="2" data-solution-button="false" -->
+<!-- data-hint-button="1" data-solution-button="false" -->
+- [( )] option A
+- [(X)] option B
+[[?]] a hint in plain words
+```
+
+**Solution after n tries** (the didactics allow it): `data-max-trials` plus a feedback line for the shown solution.
+
+```lia
+Which one is right?
+
+<!-- data-hint-button="1" data-max-trials="2" data-solution-button="false" data-text-resolved="Here is the solution – look at it again." -->
 - [( )] option A
 - [(X)] option B
 [[?]] a hint in plain words
@@ -471,8 +519,23 @@ Which one is right?
 - `data-hint-button="1"`: hint button after the 1st wrong try; `data-max-trials="2"`: the solution is shown automatically after the 2nd wrong try.
 - `data-solution-button="false"` hides the "show solution" button. **Without it the button is visible from the start**, also when `data-max-trials` is set.
 - Free-text tasks: always `data-solution-button="false"`.
-- Read answer options aloud with inline playback on the option (`{|>}{option text}`) instead of repeating them in the question text.
+- Read answer options aloud with inline playback on the option (`{|>}{option text}`) instead of repeating them in the question text. Hint texts the same way where the target group needs read-aloud: `- [[?]] {|>}{Hint text}` — the play button appears when the hint is shown.
+- Every option has its own text (two equal options make the quiz unsolvable); an option that waits for an image carries a neutral word ("picture 1"), never the answer.
+- **No surface cues:** only understanding may find the answer. Options of one question are about equally long (the correct one never clearly the longest), built the same way (same subject, same grammatical form, the same first word where the others share one), and the correct one changes its position from question to question. Gap cards carry no article, case ending or capital letter that tells their gap — the article stays in the sentence. A sentence with gaps is not also written out as its own line on the page. `check-material.mjs` reports what it can measure ("Answer patterns").
+- No table or matrix quiz wider than 3 short columns; on narrow screens prefer several single-choice questions.
 - Feedback lines can be changed per quiz (since LiaScript 2.0): `data-text-solved`, `data-text-failed`, `data-text-resolved` — inline Markdown or a single emoji; an empty value hides the line. For the whole course, define them once as header macros (`@ok: ⭐ Super!`) and use `data-text-solved="@ok"`. Surveys have no such attributes.
+
+**Controls as learners see them**
+
+| Control | What the page shows |
+|---|---|
+| read aloud (block or inline) | a small play triangle ▶ (⏸ while playing) without text — in a small box before a block, in a circle before an inline text or option |
+| hint (`[[?]]`) | a light bulb without text, after the first wrong check |
+| check | a button with the player's word for "check" (translated by the player), followed by the number of checks |
+| solution | hidden with `data-solution-button="false"` |
+
+- Learner texts, plans and the companion name a control by what the page shows, or show the symbol itself ("tap ▶", translated) — never "speaker", "loudspeaker" or another icon the page does not have. The tooltips are not visible on touch screens.
+- A hint appears only when the learner taps the light bulb: say so in plans and texts ("after a wrong try the light bulb gives a hint", translated) — never "a hint comes after the first mistake".
 
 ---
 
@@ -660,7 +723,7 @@ The animation pattern `{{|>}}` creates a play button. When clicked, the section 
 This section will be read aloud when the play button is clicked.
 ```
 
-**Note:** The `narrator` in the header defines the voice for speech output, but it can be overridden per section:
+**Note:** The `narrator` in the header defines the voice for speech output; without it LiaScript reads with a default English voice, whatever `language:` says. Embedded snippets (e.g. a chat message with `{{|>}}`) need their own header comment with `narrator:` and `language:`. The narrator can be overridden per section:
 
 ```lia
 ...
@@ -694,6 +757,8 @@ This section will be read in Russian when the play button is clicked, visible on
 - ❌ Unclosed code blocks (always open/close with three backticks)
 - ❌ Wrong heading order (`###` without preceding `##`)
 - ❌ Media without alt text
+- ❌ Unencoded `(`, `)` or spaces in a link or image target (cuts the address, §5)
+- ❌ Image answer options without a size limit (one option fills the screen, §5)
 - ❌ Ambiguous or unclear quiz questions
 - ❌ Overly long sections without structure
 

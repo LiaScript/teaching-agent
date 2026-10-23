@@ -12,17 +12,18 @@ template:
   layout: |
     Write the section for the instructor first, technical keys last:
     1. One bold lead line in the course language, e.g. "**Lesson design:** confirmed on {date}." (translated).
-    2. Visible, in the course language only (no slugs, enum words, file names or English method names);
-       labels keep the English key first and a translation after an en dash:
-       * __Didactic Concept – <translation>:__ numbered phases of a lesson, partner work, notes for the instructor
-       * __Professor Persona – <translation of "guiding figure">:__ who guides the learners (the key is historical;
-         it never means a professor — the persona type is set in Course Context)
-       * __Language style – <translation>:__ how the material talks
-       * __Lesson types – <translation>:__ one line per type: name in the course language — when it is used — what it must contain
-       * __Difficulty – <translation>:__ in teacher words
-       * __Persona Voice Sample – <translation>:__ as a quote
+    2. Visible, in the course language only (no slugs, enum words, file names or English method names).
+       Visible bold labels only in the course language; each carries its key invisibly in the attribute
+       comment directly above it (`<!-- data-key="…" -->`):
+       * `didactic-concept` — the phases of a lesson ("lesson flow", translated), partner work, notes for the instructor
+       * `guiding-figure` — who guides the learners ("guiding figure", translated; older journals: `Professor Persona` —
+         the key is historical and never means a professor; the persona type is set in Course Context)
+       * `language-style` — how the material talks
+       * `lesson-patterns` — one line per Session Type: name in the course language — when it is used — what it must contain
+       * `difficulty` — in teacher words
+       * `voice-sample` — as a quote ("voice sample", translated)
        Short paragraphs or lists, at most about 3 sentences per item.
-    3. `<details><summary>{"Technical settings for the assistant", translated}</summary>` with the machine fields
+    3. `<details><summary>{"Settings for the assistant – nothing to read here", translated}</summary>` with the machine fields
        (`Teaching Style`, `Course Type` copied from Course Context, `Didactic Framework`, `Default Session Method`,
        `Session Types` with slugs, `Difficulty Level`), then `</details>`.
     Session Type slugs: lowercase ASCII words in the course language, unique; they appear only in technical
@@ -52,17 +53,17 @@ template:
     - id: didactic-framework
       title: Didactic Framework
       template: |
-        * __Didactic Framework:__ {{framework name}} (see `data/didactic-methods.md`)
+        * __Didactic Framework:__ {{framework name}}
           [One line: why this framework fits this course.]
     - id: default-session-method
       title: Default Session Method
       template: |
-        * __Default Session Method:__ {{method name (slug: `{{slug}}`) or `none`}} (see `data/didactic-methods.md`)
+        * __Default Session Method:__ {{method name (slug: `{{slug}}`) or `none`}}
           [One line: why this method fits this course, or why no specific method was chosen.]
     - id: session-types
       title: Session Types
       template: |
-        * __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
+        * __Session Types:__
           1. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion: what makes a session this type]
              Required: [2–3 concrete, checkable required elements]
           2. __{{display name}}__ (slug: `{{slug}}`) — [one-line criterion]

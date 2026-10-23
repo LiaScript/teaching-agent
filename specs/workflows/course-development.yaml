@@ -195,11 +195,11 @@ workflow:
                 Interactive co-authoring in the Coauthor role:
                 - Works the content out from the skeleton in the dialog — no generated draft first
                 - Creates the material document at the first Save (data/file-structure-modes.md → "Creating the material document")
-                - Suggest images (call artist-agent if needed); iterate until the instructor approves
+                - Records image spots as `wanted` entries in #### Images (source free-photo / generated / own, chosen by the instructor) — never searches images itself; iterate until the instructor approves
             - agent: artist
-              command: :create-image {number?} {description}
+              command: :create-image {number?} {description?}
               optional: true
-              notes: "Create image prompts during coauthoring as needed"
+              notes: "The unit's image step (only when image spots are open): free photos (bounded, in batches, instructor chooses, licence and credit), prompts, own photos — before the check"
             - command: :validate-course {number}
               notes: |
                 Session-level check after coauthor approval:
@@ -218,7 +218,7 @@ workflow:
               optional: true
               notes: |
                 Every change to a unit that already has a validation report (also after a try-out) follows the change path:
-                full wording shown → save → mini-check → dated line in the report → unit state derived again
+                full wording shown → save → mini-check → dated line under "Changed after the check" in the report, all journal lines in one write → unit state derived again
             - agent: learner
               command: :review-as-persona {name} {number}
               optional: true
@@ -472,14 +472,17 @@ workflow:
     learner_agent_commands:
       - :review-as-persona {name} {number}
       - :list-learners
+      - :preview {file?} {slide?}
 
     artist_agent_commands:
       - :create-visuals
       - :create-logo
-      - :create-image {number?} {description}
+      - :create-image {number?} {description?}
       - :generate-image {slug?}
+      - :preview {file?} {slide?}
 
     development_agent_commands:
       - :manage-git
       - :create-project
       - :update-project
+      - :preview {file?} {slide?}

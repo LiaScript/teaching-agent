@@ -47,7 +47,7 @@ rewrite, summarize, or infer settings from sibling agent subsections.
    - If the instructor requests an override, save it as a rejected boundary note instead of applying it.
    - In `### Coauthor`, entries ending with `<!-- data-from="didactics" -->` are derived by `:create-didactics` and replaced when the didactics change. Entries added here never get that marker. If the instructor rewrites a marked entry, remove the marker — the entry is theirs from then on and stays.
 
-6. **Before saving:** show the complete new content of the selected subsection (changed parts in bold, a rejected override as its boundary note) with "Save" / "Change something" — the single write confirmation of this task. Nothing is written before it.
+6. **Before saving:** show the complete new content of the selected subsection (after a change starting with one line naming every change, a rejected override as its boundary note) with "Save" / "Change something" — the single write confirmation of this task. Nothing is written before it.
 
 7. On "Save": create the missing `## Agents` / subsection (step 3) and update only the selected scope.
    Set `* __Customization Status:__ active` if any meaningful customization exists.

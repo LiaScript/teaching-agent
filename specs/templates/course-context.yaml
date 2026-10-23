@@ -13,7 +13,7 @@ template:
     2. The confirmed summary table from the chat, word for word, with labels in the course language and no slugs
        (header row "| Item | Decided |", translated), preceded by the line `<!-- data-type="none" -->`
        so LiaScript does not offer charts or sorting.
-    3. `<details><summary>{"Technical settings for the assistant", translated}</summary>` containing all
+    3. `<details><summary>{"Settings for the assistant – nothing to read here", translated}</summary>` containing all
        `* __Label:__` blocks below (keys stay English so tasks can read them), then `</details>`.
     The table and the technical block must say the same; if they would differ, ask the instructor before saving.
     Never store notes about the instructor's computer or preview browser (e.g. missing voices) — they are not course facts.

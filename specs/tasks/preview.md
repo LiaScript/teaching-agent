@@ -4,7 +4,8 @@
 
 Shows a course file in the LiaScript DevServer preview — a session's material,
 the root `README.md`, or `journal.md` itself. Used by the `👁` links in the
-Dashboard and in the session action lines (see `data/agent-links.md`).
+Dashboard, in the session action lines and in the chat offers of every agent
+(see `data/agent-links.md`).
 
 ## Command
 
@@ -31,8 +32,9 @@ Dashboard and in the session action lines (see `data/agent-links.md`).
    - Call `get_state`. If a browser is connected, use it; otherwise follow the
      server's instructions for opening the preview.
    - Call `goto` with `file` and, if given, `slide`.
-   - Post one chat line with a link back:
-     `[👁 Back to the journal](agent:teaching/preview) `:preview``.
+   - Post one chat line with a link back, named after the active agent:
+     `[👁 Back to the journal](agent:{active agent}/preview) `:preview``
+     (e.g. `agent:artist/preview` while the Artist works).
 4. **MCP gate closed:** tell the instructor how to open the file:
    `liadev --live -i {file}` (LiaScript DevServer), or the VS Code LiaScript
    preview. Do not start a server yourself.
@@ -41,3 +43,6 @@ Dashboard and in the session action lines (see `data/agent-links.md`).
 
 - Read-only: never modify files.
 - Never open files outside the project root.
+- Navigation command of every agent (`data/agent-links.md` → URI Convention):
+  it runs in the active persona and never switches the agent; a task that is
+  running (e.g. between two image batches) continues afterwards.

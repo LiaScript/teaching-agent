@@ -4,13 +4,17 @@
 
 Generates a detailed image prompt for course materials based on a user description, aligned with the visual style guide.
 Creates professional, actionable prompts for AI image generators that maintain visual consistency with the course identity.
+It is also the **image step of a unit**: it works through the image spots `:coauthor-materials` recorded as `wanted` entries — prompts for `generated`, a bounded search in free photo collections for `free-photo` (see "Free photos" below), and a request for the file for `own`.
 
 ## Command
 
-`:create-image {number?} {description}` — `{number}` identifies the target session; `{description}` is what should be visualized.
+`:create-image {number?} {description?}` — `{number}` identifies the target session; `{description}` is what should be visualized.
 
 - If `{number}` is omitted and exactly **one** session exists in `journal.md` → `## Sessions`, use that session without asking.
 - If `{number}` is omitted and **multiple** sessions exist, ask which session the image belongs to (numbered list).
+- **Without `{description}`** (the unit's image step, e.g. `agent:artist/create-image?number=3`): work through every entry of that session's `#### Images` block whose `__Status:__` is `wanted`, `candidate` or `selected`, grouped by `__Source:__` — `generated` → steps 1–13 per entry (the entry's description is the user description); `free-photo` → "Free photos"; `own` → ask the instructor for the file, then insert it as in "Free photos" step 6. If no such entry exists, ask what should be visualized.
+  If the unit's material has image markers (visible placeholders or `<!--- image: … --->` comments) without a matching `#### Images` entry — material written before image spots existed — first create one `wanted` entry per marker (page title and role from the material, description from the marker or the chat, never the answer term) and show them as one list; then work through them. These entries may be saved together with the first batch's save confirmation instead of a separate save. In the same material write, rewrite every remaining old marker to the current form (`<!--- image: {image-slug} — {description} --->` + visible marker, step 12) so that "Free photos" step 6 finds it by its slug.
+  Candidates from an earlier search (a cache file, an earlier sitting) count only after the look and licence check of this run (Free photos step 3), and are recorded with their origin ("from an earlier search", translated).
 
 ## Inputs
 
@@ -21,6 +25,7 @@ Creates professional, actionable prompts for AI image generators that maintain v
 - Course context from `journal.md` → `## Outline` (`__Abstract:__` bullet) (for thematic alignment)
 - Course language from `journal.md` → `## Course Context` (Language field — for in-image text language)
 - File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`) — determines the asset path saved in `__File:__` below
+- Specs to re-read completely for the image step (Handling step 5 of `data/agent-links.md` counts them as named templates): `templates/session-skeleton.yaml` (entry order, status words, summary rule) and `data/file-structure-modes.md` → "Creating the material document" (markers, credits chapter)
 
 ## Output
 
@@ -52,10 +57,10 @@ Creates professional, actionable prompts for AI image generators that maintain v
 11. Derive an `{image-slug}` from the description (kebab-case).
 12. Save into the target session's `#### Images` block — always, without asking:
     - Locate the `### {number}. {title}` subsection in `journal.md` → `## Sessions`.
-    - If it has no `#### Images` block, create one directly after `**References:**` (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
-    - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists, replace it.
+    - If it has no `#### Images` block, create one after the References field and after the validation report if one exists (before `#### Persona Reviews` if present; `templates/session-skeleton.yaml` → `section_layout.entry_order`).
+    - Append a new `<section>` entry using the **Journal Entry Format** below. If a `<section>` with the same `#### {image-slug}` already exists (e.g. a `wanted` spot), replace it and keep its `__Source:__` and `__Place:__` lines; its marker in the material stays as it is.
     - Confirm: "Prompt saved: `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Images` → `{image-slug}`"
-    - **Mark the spot in the material** (only with an image route, see `tasks/generate-image.md` Phase 0; without one — e.g. called by `:build-session` without an image tool or browser — set `__Status:__ prompt-only` and place no marker): if the session's material document exists, put a visible marker where the image belongs — `> 🖼️ _{"Image follows", translated}: {alt text}_` with `<!--- image: {image-slug} --->` (an authoring note: LiaScript ignores `<!--- … --->`, while a plain `<!-- … -->` would be read as attributes or narration) on the line above it — so learners never see a broken image. If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
+    - **Mark the spot in the material** (only with an image route, see `tasks/generate-image.md` Phase 0; without one — e.g. called by `:build-session` without an image tool or browser — set `__Status:__ prompt-only` and place no marker; a marker `:coauthor-materials` already placed stays, and the entry becomes an open point for the instructor): if the session's material document exists, put a visible marker where the image belongs — only `> 🖼️ _{"Image follows", translated}_`, never the alt text or description — with `<!--- image: {image-slug} — {description} --->` (an authoring note: LiaScript ignores `<!--- … --->`, while a plain `<!-- … -->` would be read as attributes or narration) on the line above it — so learners never see a broken image and the marker never gives away an answer. Inside a quiz option use the inline form `🖼️ _{"Image follows", translated}_` plus a neutral distinguishing word ("picture 1", "picture 2", translated) — such a question is not solvable until the image is in (`tasks/coauthor-materials.md` step 6). If the document does not exist yet, the task that creates it places the marker (`data/file-structure-modes.md` → "Creating the material document").
 13. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ## Output Format
@@ -122,9 +127,54 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 - One `<section>` per image; multiple images stack under the same `#### Images` block.
 - `:generate-image` saves to the exact `{path}` recorded here — it does not re-derive the path independently.
 
+**Image spots (`wanted`)** — written by `:coauthor-materials` with its save confirmation, before any image exists:
+
+```markdown
+<section>
+
+#### {image-slug}
+
+* __Status:__ wanted
+* __Source:__ free-photo | generated | own
+* __Place:__ {page title} – {role, e.g. "option 2 of the self-check"}
+* __Description:__ {what is visible — never the answer term}
+* __Search terms:__ {terms for a photo collection, usually English}
+
+</section>
+```
+
+Status flow per source — `generated`: `wanted` → `prompt-ready` / `prompt-only` → `generated` (this task, then `:generate-image`); `free-photo`: `wanted` → `candidate` → `selected` → `inserted` ("Free photos" below); `own`: `wanted` → `inserted` once the instructor's file is in. An entry is **open** while its status is `wanted`, `candidate`, `selected` or `prompt-ready`; open entries make the unit's image step (`tasks/update-dashboard.md` step 4).
+
+- **To-dos for one image** (e.g. "replace with a smaller crop", "check on the target device") go as `* __To do:__ …` into that entry and into the `next` of the unit's image step — never into the unit's summary (`templates/session-skeleton.yaml` → summary).
+- **Compact once inserted:** an `inserted` entry keeps only `__Status:__`, `__Source:__`, `__Place:__`, `__File:__`, `__Alt text:__`, `__Author:__`, `__License:__`, `__Page:__` (and an open `__To do:__`) — drop `__Description:__`, `__Search terms:__` and `__Candidates:__`. Exception: a photo the agent chose itself in `:build-session` keeps its other looked-at candidates under `__Candidates:__` until the instructor has seen the unit, so it can be swapped without a new search. All `inserted` entries of a unit stand together at the end of its `#### Images` block inside one `<details><summary>{n} images inserted</summary>` (translated); open entries stay above it, in full.
+- **Link targets** in `__File:__`, `__Page:__` and `__Candidates:__` are percent-encoded like every Markdown link target (`data/agent-links.md` → Link targets): `(` → `%28`, `)` → `%29`, space → `%20`; a page is written as `[label](encoded URL)`, never as a bare URL.
+
+## Free photos
+
+For entries with `__Source:__ free-photo`. Bounded, in the foreground, and the instructor chooses — inside `:build-session` the instructor decides once at the start whether the agent chooses (the instructor can swap later) or only collects candidates (`tasks/build-session.md` → Before the start, step 1b); then step 5 is replaced by that choice.
+
+1. **Announce honestly:** about 1 minute per spot (each candidate is looked at and its licence read from its own file data). With more than 5 spots work in batches of up to 5 — first the images that tasks and self-checks depend on — and name the batch and its time ("5 pictures for the tasks first, about 5 minutes", translated). Send a status per spot; when the announced time is over, a status with a new estimate.
+2. **Run it yourself, in the foreground:** never hand the search to a background agent the instructor waits for, and never end the turn while it runs (`data/agent-links.md` → Never end a turn on a promise).
+3. **Search** free collections (e.g. Wikimedia Commons, Openverse) with the entry's search terms. Per spot at most **3 candidates**. Only licences that allow use in a public course: public domain, CC0, CC BY, CC BY-SA (never NC or ND unless the instructor decides so).
+   - **Look at every candidate before you show it:** run `node specs/dashboard/fetch-thumb.mjs <file page URL | file name>` (on its own; it stores a thumbnail of at most 500 px in `.cache/thumbs/` and prints author, licence, licence URL and the encoded direct file URL), then open the thumbnail with the file-reading tool. Another route of the environment that stores the image locally (a fetch tool, then the file-reading tool) is fine too; a thumbnail URL with a non-standard width fails (Wikimedia: only standard widths such as 330 or 500).
+   - **Check what the spot needs:** the subject is large enough and easy to find for the target group, it shows what the description says, and nothing in it contradicts the material or gives away the answer of a question.
+   - **Licence from the file data:** take author and licence **verbatim** from the script output or from the candidate's own file page — never from a search summary, never from a summarizing fetch prompt.
+   - **If a candidate cannot be looked at:** say so before the first batch in one line ("I could not look at the photos myself", translated), label every unseen candidate `(not looked at)` in the chat and in `__Candidates:__`, and show 2–3 candidates per spot instead of one. Never claim or imply that you looked at a photo you did not open (`data/agent-links.md` → Say how you checked).
+   - No suitable candidate after about 2 minutes: mark the spot "none found" and move on.
+   - **Texts match the chosen photo:** after choosing, re-read the page's texts, the question and its hints against the photo — every colour, number, position or detail they name is what the photo shows (its alt text); change the sentence, not the facts, in the same write as the insert.
+4. **Record** the candidates in the entry (`__Status:__ candidate`, one line each under `__Candidates:__`: `[title](encoded file page) – author – licence`, plus `(not looked at)` or the origin of an earlier search where it applies) — written after the instructor's go in the chat (tier "confirm in chat"), once per batch.
+5. **Let the instructor choose** in the chat: show the candidates of a spot as images (with author and licence; image targets percent-encoded, `data/agent-links.md` → Link targets) and ask with a form per spot, at most 4 spots per form; "none of them" offers `generated` or `own` for that spot. A chosen candidate → `__Status:__ selected`.
+6. **Insert:** `__File:__` = the encoded direct file URL (from the script output or the file page) with a **standard thumbnail width** of the collection (no download — the course loads the photo from the collection; if the instructor wants local copies, the instructor saves them into the asset folder of `data/file-structure-modes.md` and `__File:__` becomes that path). Wikimedia: `…/Special:FilePath/{encoded file name}?width=330` for answer options and small pictures, `?width=500` for page photos — other widths are rounded up to a large file or rejected. Add `__Alt text:__` (what is visible, never the answer term), `__Author:__`, `__License:__` (with link) and `__Page:__` (`[label](encoded file page)`) to the entry, replace the marker `<!--- image: {image-slug} … --->` + `> 🖼️ _…_` in the material with `![{alt text}]({file})`, and add the credit to the material's credits chapter ("Image credits", translated: one line per image — what it shows, author, licence with link, file page), a back-matter chapter that stays last (`data/file-structure-modes.md` → "Creating the material document"). Then `__Status:__ inserted`. All inserts of one batch go into one write per file (`data/agent-links.md` → Changing another section): **one replacement map** for every marker, credit line and changed sentence of the material (`node specs/dashboard/localize-journal.mjs <map.json> <material file>`), and one write for the image entries and status line of the journal — never one edit per marker. Announce "one write" only when the route really gives it.
+   - **Encode every link target** (material, journal, chat): `(` → `%28`, `)` → `%29`, space → `%20` — LiaScript cuts a target at the first unencoded `(` (`data/agent-links.md` → Link targets).
+   - **Display size:** images that are answer options of one question get a display limit directly after the image, `![{alt text}]({file})<!-- style="max-height: 30vh" -->` (for wide images also `width: 30%`), so that the question and all its image options fit one screen of the target device; a page photo gets `<!-- style="max-height: 50vh" -->` when it would push the text off the screen (`data/liascript-cheat-sheet.md` §5).
+   - **Credit lines never reveal an answer:** the credit line of an image used in a question names its place and what is visible — the same text as its alt text ("picture 3 of the self-check: a leaf with jagged edges", translated) — never the answer term. The credits chapter can be reached by paging on.
+   - **Status line:** in the same journal write, rewrite the unit's status line and its Notes cell (`templates/session-skeleton.yaml` → `section_layout.overview`): "material written · images {n} of {m}" while entries are still open, "material written · check open" once none is open.
+7. Spots marked "none found" stay `wanted` and are listed in the completion message with the offer `generated` or `own`. **A spot left without image:** no learner text may refer to a picture that is not there ("look at the photo") — offer the text change together with the decision (`generated`, `own`, or "without a picture: the sentence becomes …", translated); a question that depends on the picture stays unsolvable until it is in.
+
 ## Special Features
 
 - Suggests diagram alternatives (Mermaid, ASCII art) if appropriate
+- Alt texts, descriptions, captions and credit lines of an image used in a question never name the answer term — describe what is visible
 - Offers multiple prompt variations for different styles
 - Can generate prompts for image series (maintaining consistency)
 - Considers educational context and pedagogical goals
@@ -132,7 +182,8 @@ Resolve `{path}` from `journal.md` → `## Course Context` → `__File Structure
 ## Usage
 
 This task is invoked when:
-- Creating images for lecture materials (`:coauthor-materials`)
+- Running a unit's image step: the `wanted` entries recorded by `:coauthor-materials` (without `{description}`)
+- Creating images for lecture materials (`:coauthor-materials` suggests the Artist-Agent; it never searches images itself)
 - Designing diagrams or illustrations
 - Generating visual aids for specific concepts
 - Creating consistent imagery across sessions

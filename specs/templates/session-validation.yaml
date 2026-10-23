@@ -1,28 +1,58 @@
 template:
   id: session-validation
   name: 'Session Validation Report'
-  version: 1.1
+  version: 1.2
   output:
     format: markdown
     filename: journal.md
     section: Sessions
     parent: "### {{number}}. {{title}}"
-    heading: "#### Validation Report"
+    heading: '#### {{"Validation report", translated}} – {{unit word}} {{number}}'
+    marker: '<section data-key="validation-report">'
     replace_existing: true
   title: 'Session {{number}} Validation'
   layout: |
-    One slide only: the heading stays outside, everything below it sits in one `<section>…</section>`. Write:
-    1. `#### Validation Report – {{"Validation report", translated}}` (tasks find it by the start of the heading line).
-    2. Visible, in the course language and in plain words (every label translated): outcome with result and date,
-       then what works and what is still missing as short lists — refer to page titles of the material,
+    One slide only: the heading stays outside, everything below it sits in one `<section data-key="validation-report">…</section>`. Write:
+    1. `#### {{"Validation report", translated}} – {{unit word}} {{number}}` — visible text in the course language only (no English
+       key in the heading), unique per unit, so its anchor leads to exactly this report (`tasks/update-dashboard.md` → Anchors).
+       Tasks and check scripts find the report by `data-key="validation-report"` on the `<section>` directly below the heading;
+       in older journals by a heading that starts with `#### Validation Report` — the next check renames it. Where a task says
+       `#### Validation Report`, it means this block.
+    2. Visible, in the course language and in plain words (every label translated): outcome with result and date, the line
+       "usable with learners now", then what works, what was changed after the check (only once something was) and what is
+       still missing as short lists — refer to page titles of the material,
        never to line numbers (also not inside the details), never to items by number only ("decision 3"):
        give a short title instead. Use the instructor's words for what learners see.
     3. `<details><summary>{{"Technical report", translated}}</summary>` with `__Date:__`, `__Material:__`, `__Result:__`,
        `__Mode:__` (English keys, read by tasks and the publishing gate) and the findings as **bold
        labels** — never `#####` headings (each heading becomes its own slide). Then `</details>`.
+  outcome_words: |
+    The visible outcome never sounds like a grade; it says how much is left. `__Result:__` keeps the English key for the gates.
+    FAIL → "correction needed ({n})" ({n} = the open points that cause it; once points were fixed after the check:
+    "correction needed: {open} of {n} points open", and "all {n} points corrected" once none is open — a count always
+    shows the points still open, never only the original findings) · PASS with concerns → "passed with concerns – your
+    decision needed" · PASS with ⏳ items → "passed – still missing: {what}" ({what} = what learners still miss, as a noun
+    phrase with a number: "1 photo", "2 pictures for the self-check"; never a command or step name as subject) · PASS →
+    "passed" (all translated).
+    "Usable with learners now" (mandatory, translated): "yes" (nothing open) · "yes, with limits: {what}" (⏳ items or open
+    concerns that do not stop the learners) · "not yet: {why}" (an error or a task learners cannot solve yet). Derived from the
+    open ❌ and ⏳ items, never from the result word alone. The overview shows it as the **first** line of the unit's card
+    (`units[].usable` {state: yes | limited | no, missing: [what is still missing]}, `tasks/update-dashboard.md` step 3) —
+    before open points and process steps; keep the line current when a change after the check fixes something.
+    After a change made after the check (`tasks/quick-fix.md`) the outcome line stays until the re-check, followed by
+    " – {n} point(s) changed since – short re-check open" (translated).
+    One wording per state: the unit's status line, its Notes cell and the overview's `statusLabel` repeat these words
+    (`templates/session-skeleton.yaml` → `section_layout.overview`, `tasks/update-dashboard.md` step 3) — never a second
+    phrase for the same state. Where the instructor meets the short re-check first (chat, closing summary), explain it in
+    the same sentence: "I look over the changed pages once more, about {m} minutes" (translated).
+    A language pack lists these words under `terms` (`passedMissing`, `recheckShort`, `recheckExplain`, `correctionOpen`,
+    `correctionAllFixed`, `usableYes`, `usableLimited`, `usableNo`) and older wordings under `outdatedTerms`;
+    `validate-journal.mjs` recognises them (e.g. a step name as subject of "still follows", "revised – check open", a re-check
+    without "short") and recommends the current term — never copy an old outcome line into a status line.
   result_rules:
-    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio) — an image marker in the material; prompt-only image prompts (no image route) are no deferral. Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
-    - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**.'
+    - '0. `[mechanical]` findings fixed during the check (`tasks/validate-course.md` → session mode step 4b) no longer count: listed as fixed during the check in "What works" and as ✅ in the technical report.'
+    - '1. Decide deferrals in the **first** run and mark them ⏳ with the named later step; a deferred item is never ❌. Deferrable is only media still to be produced in a named later step (images, audio) — an image marker in the material, and a question that depends on it (unsolvable until the image step); prompt-only image prompts (no image route) are no deferral. Publishing metadata (contact address, license) is never a unit finding — the publishing gate checks it, so it never blocks Done.'
+    - '2. Any other ❌ on a required element (Session Type or Method `Required`) or a `[mechanical]` item → **FAIL**. A required element counts as met only within this unit''s own material; another unit counts only with a recorded decision (`tasks/validate-course.md` → session mode step 4). Each fact is reported once, under the one tag the checklist gives it; a second check that touches it refers to that finding.'
     - '3. Open `[pedagogical]` ❌ without a fix → **PASS with concerns**, listed under "Still missing" with who decides.'
     - '3b. A factual statement that could not be verified (no web access or `reference-checker`) and is not yet confirmed by the instructor is an open `[pedagogical]` concern (rule 3), listed with its page title; the instructor confirms or corrects it — a confirmation is a dated decision.'
     - '4. Otherwise **PASS** (⏳ items stay listed under "Still missing" with their step). Done ✅ in the overview follows only once no ⏳ item is left.'
@@ -33,19 +63,27 @@ template:
     - id: report-heading
       title: Report Heading
       template: |
-        #### Validation Report – {{"Validation report", translated}}
+        #### {{"Validation report", translated}} – {{unit word}} {{number}}
+
+        <section data-key="validation-report">
     - id: summary
       title: Summary for the instructor
       template: |
-        **{{"Outcome", translated}}:** {{passed | not passed | passed with concerns – your decision needed | passed – {{later step}} still follows}} ({{date}})
+        **{{"Outcome", translated}}:** {{correction needed ({{n}}) | correction needed: {{open}} of {{n}} points open | all {{n}} points corrected | passed with concerns – your decision needed | passed – still missing: {{what}} | passed}} ({{date}}){{ – {{n}} point(s) changed since – short re-check open}}
+
+        **{{"Usable with learners now", translated}}:** {{yes | yes, with limits: {{what}} | not yet: {{why}}}}
 
         **{{"What works", translated}}:**
 
         - {{plain-language finding, with page titles of the material}}
 
+        **{{"Changed after the check", translated}}:** (only once a change was made after this check — `tasks/quick-fix.md`)
+
+        - {{date}} · {{page title}} · {{change}} · {{how it was checked: mini-check | measured at {{window}} | looked at by the instructor}}
+
         **{{"Still missing", translated}}:**
 
-        - {{⏳ before a deferred item}} {{point}} – {{when, or in which step}}
+        - {{⏳ before a deferred item}} {{point}} – {{when, or in which step}} (a point fixed after the check leaves this list; a partly fixed one stays with what is still open)
 
         <details>
         <summary>{{"Technical report", translated}}</summary>
@@ -78,6 +116,11 @@ template:
       template: |
         **LiaScript Syntax:**
         - {{liascript_syntax_findings}}
+    - id: unit-entry
+      title: Unit entry (journal)
+      template: |
+        **Unit entry (journal):**
+        - {{checklist "Session Subsections": fields present, numbered lists; summary and content describe the material as it is now — no to-dos, no remarks about fixed points; factual statements checked as in the material}}
     - id: method-consistency
       title: Method Consistency
       template: |
@@ -106,3 +149,5 @@ template:
       template: |
 
         </details>
+
+        </section>

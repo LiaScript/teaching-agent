@@ -16,7 +16,10 @@ Can be run in two modes:
 - `tasks/validate-syntax.md` — full LiaScript syntax check, called as a sub-procedure (single source of truth for syntax rules)
 - `data/duration-heuristic.md` — reading time + activity time estimate, compared against the declared duration
 - `data/didactic-methods.md` — Session Method `Required` checklists, if a session method is in use
-- `templates/session-validation.yaml` — template for each stored session validation report
+- `templates/session-validation.yaml` — template for each stored session validation report (heading, outcome words, layout)
+- `templates/session-skeleton.yaml` — read completely: status words of the overview and `section_layout.entry_order` (where the report goes)
+- `data/session-types.md` — read completely: objectives and duration of a session, resolving its type (step 2)
+- `tasks/update-dashboard.md` and `templates/project-dashboard.yaml` — read right before the overview is written (step 6)
 - File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`)
 - For session mode: the material document for this session (resolved per File Structure mode), matching overview row in `journal.md` → `## Sessions`, and matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
 - For course mode: `journal.md` sections (`## Outline`, `## Didactics`, `## Agenda`, `## Sessions`) and all material documents (`materials/` in multi-file mode, or the `##` chapters of root `README.md` in single-file mode)
@@ -33,9 +36,10 @@ Each session has at most one current validation report, rendered from `templates
 
 Rules:
 - Store the report under the matching `### {number}. {title}` session subsection.
-- The report heading is always `#### Validation Report`.
-- The `#### Validation Report` heading stands outside; everything below it is wrapped in a single `<section>…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide". Inside the report, findings use **bold labels**, never `#####` headings; the technical part sits in `<details>` below a visible plain-language summary (template `layout`).
-- If the session already has a `#### Validation Report`, replace it completely.
+- The report heading is in the course language and unique per unit: `#### {"Validation report", translated} – {unit word} {number}`, with `<section data-key="validation-report">` directly below it (`templates/session-validation.yaml` → `layout`). Tasks find the report by that key; where a task says `#### Validation Report`, it means this block. In older journals a heading that starts with `#### Validation Report` is the same report: replace it with the new heading at its place in the entry order.
+- The report heading stands outside; everything below it is wrapped in a single `<section data-key="validation-report">…</section>` block (same technique as `#### Images` in `tasks/create-image.md`), so LiaScript shows it as one slide — see `data/liascript-cheat-sheet.md` → "Additional Rule: Subheadings within a Slide". Inside the report, findings use **bold labels**, never `#####` headings; the technical part sits in `<details>` below a visible plain-language summary (template `layout`).
+- If the session already has a validation report, replace it completely (also its heading and position).
+- Every link that names a check report — a decision's `href`, an action, a chat message — targets that report's heading anchor (`tasks/update-dashboard.md` → Anchors), never the unit heading; the completion message of a check links it.
 - Do not keep historical session validation reports.
 - Session mode does not update `journal.md` → `## Validation`.
 - Full course validation replaces `journal.md` → `## Validation` → `### Latest Validation Summary` for publishing decisions.
@@ -58,7 +62,11 @@ Rules:
    - [ ] References present where content claims are made
    - [ ] `[only if the skill `reference-checker` is available — see `data/skills.md` — and web access exists]` The session's references verified with `reference-checker`; record its summary (✅ / ⚠️ / 🚨 counts) and every 🚨 entry as findings in the report. Without the skill or web access, skip this check and say so in one line.
    - [ ] Content satisfies the `Required` checklist of this session's declared type in `journal.md` → `## Didactics` → `__Session Types:__` (see `data/session-types.md`). If the type has no required elements defined, flag this as a Session Types gap rather than skipping the check.
+   - **Required means in this unit:** a `Required` element of the type or method is met only by this unit's own material. A reference to another unit ("the explaining follows in unit 4") counts only with a recorded decision (`:save-decision`, scope e.g. "all units of this method"); otherwise it is ❌ (result rule 2) — or, if the element does not fit this unit at all, a Session Types / Method gap the instructor decides.
    - [ ] `[if the session has a **Method:** line]` Content satisfies the `Required` checklist of the declared Session Method in `data/didactic-methods.md` — checked independently of, and in addition to, the Type check above.
+   - [ ] Image options fit the learners' device: only as measured by `check-material` (its viewport report — name the window) or looked at by the instructor; otherwise "not measured" plus a preparation item (checklist, `data/agent-links.md` → Say how you checked). A missing warning is no measurement.
+   - [ ] Answer options give nothing away and texts match their pictures: the "Answer patterns" warnings of `check-material`, plus a read of every question, option, hint and page text against its picture (checklist → Session Materials)
+   - [ ] The unit entry in `journal.md` (summary, content) describes the material as it is now: no to-dos or remarks about fixed points, factual statements checked as in the material — report field `Unit entry (journal)`.
    - [ ] Estimated duration per `data/duration-heuristic.md` (reading time + activity time, not word count alone) is within 70%–150% of the declared duration of this session (step 2). This is `[advisory]` — record the flag either way as a hint, never as ❌ or ⏳, and never change the result because of it.
 
    **Persona & style checks:**
@@ -74,8 +82,10 @@ Rules:
    - [ ] The project metadata header includes the matching `import: {url}` line for every documented template
    - [ ] Template use follows the examples and constraints documented in `## Templates`
 
+4b. **Fix during the check** (session mode; not when called from `:build-session`, whose loop fixes mechanical items): before setting the result, offer in **one** chat confirmation to fix every `[mechanical]` finding that needs no content decision (one targeted change each, `tasks/quick-fix.md` steps 2–3, all in one material write; then `check-material` again). Fixed items no longer count (result rule 0) and are listed as fixed during the check. One round, no loop; declined or not cleanly fixed items count as found.
 5. Fill `templates/session-validation.yaml` for this session with:
    - Material path
+   - The visible outcome words and the mandatory line "usable with learners now" (template `outcome_words`) — "correction needed ({n})", never a grade word such as "failed"
    - Result: PASS / FAIL / PASS with concerns — apply `result_rules` of the template in their order (deferrals ⏳ decided in the first run; other ❌ on required/mechanical → FAIL; open pedagogical ❌ → PASS with concerns; otherwise PASS). Publishing metadata (contact address, license) is never a finding of a unit check — the publishing gate checks it.
    - Mode: session
    - Date
@@ -86,13 +96,16 @@ Rules:
    - Method consistency, the duration hint, the reference check summary and template findings — each in its own field of the template, also when there is nothing to report there
    - Recommended actions — check them against the session's decisions list (`data-key="decisions"`) first; never recommend something the instructor has already decided against
    - Page titles of the material as references — never line numbers
-   - The visible plain-language summary (`**Outcome:**`, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
-6. Create or replace the rendered `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in the matching session subsection under `journal.md` → `## Sessions`, directly after the action line and the technical details (`templates/session-skeleton.yaml` → `section_layout.entry_order`).
+   - The visible plain-language summary (`**Outcome:**`, usable with learners now, what works, what is still missing) above the technical `<details>`, as the template's `layout` describes
+   - The field `Unit entry (journal)` (step 4)
+6. Create or replace the rendered report — heading plus `<section data-key="validation-report">…</section>` (see Validation Storage rules above) — in the matching session subsection under `journal.md` → `## Sessions`, after the skeleton fields and before `#### Images` (`templates/session-skeleton.yaml` → `section_layout.entry_order`).
    Update the overview table in `## Sessions`: set **Done ✅** only with `Result: PASS` (not "PASS with concerns") and no open ⏳ item; otherwise set Done ❌ — also when it was ✅ before. Rewrite the unit's status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).
+   Right after this write send "✅ Saved: …" with the outcome and the line "usable with learners now" in one line each, plus the anchor link to the report — never hold the result back until the overview is written. Details follow in step 7.
    Then run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+   A check announced at more than 3 minutes sends one lasting interim message at about half time (`data/agent-links.md` → Progress feedback).
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
-   If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified. Report saved in `journal.md` → `## Sessions` → `### {number}. {title}` → `#### Validation Report`."
-8. If issues found: confirm the report was saved, list the blockers briefly, and ask the instructor whether to open `:coauthor-materials` to fix them.
+   If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified." with the anchor link to the report heading.
+8. If issues found: confirm the report was saved, list the blockers briefly, and offer the fix: when every open point is one `:quick-fix` covers (one change each, no content decision), offer ✏️ `:quick-fix {number}` with its description; otherwise `:coauthor-materials {number}` (`data/agent-links.md` → Action lines).
    With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. a special need of the target group, such as read-aloud for a learner with dyslexia) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
@@ -129,7 +142,7 @@ Rules:
    - All sessions marked ✅ Done `[required before publishing]`
 
 7. **Check each material document** (same LiaScript + content checks as Session Mode Step 4).
-   For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching `#### Validation Report`, wrapped in `<section>…</section>` (see Validation Storage rules above), in that session subsection under `journal.md` → `## Sessions`. Then set Done in the overview table exactly as in session mode step 6 — in both directions: a unit whose report no longer passes, or has an open ⏳ item, goes back to Done ❌ — and rewrite its status line (`templates/session-skeleton.yaml` → `section_layout.overview`).
+   For each material file, fill `templates/session-validation.yaml` with `Mode: course` and create or replace the matching validation report — heading plus `<section data-key="validation-report">…</section>` at its place in the entry order (see Validation Storage rules above) — in that session subsection under `journal.md` → `## Sessions`. Then set Done in the overview table exactly as in session mode step 6 — in both directions: a unit whose report no longer passes, or has an open ⏳ item, goes back to Done ❌ — and rewrite its status line (`templates/session-skeleton.yaml` → `section_layout.overview`).
 
 8. **Consistency check across project memory and materials:**
    - Terminology consistent (sessions-called from `journal.md` → `## Course Context` used throughout)

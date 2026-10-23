@@ -14,43 +14,50 @@ const read = path => readFileSync(join(specs, path), "utf8");
 
 // File → sentences that must stay (one key phrase per rule).
 const required = {
-  "tasks/init-course.md": ["also for \"mixed\"", "is not saved", "English stay only keys that tasks read", "For a single lesson do not ask", "only if the instructor has named the number of units", "builds LiaScript courses only — never ask for a platform", "Accessibility is not asked", "follow the course language in terminal mode too", "the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
+  "tasks/init-course.md": ["also for \"mixed\"", "is not saved", "English stay only keys that tasks read", "For a single lesson do not ask", "Ask this only once the time frame (step 4) is known", "never offer an internal threshold", "what the mapped keys change in the material", "builds LiaScript courses only — never ask for a platform", "Accessibility is not asked", "follow the course language in terminal mode too", "the only write allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
   "tasks/scaffold-course.md": ["Teaching style and difficulty level are not asked", "run the \"Self-check before saving\"", "Guiding figure / instructor persona", "No agenda — decided with the course frame", "8b. Set `language:`", "Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
   "tasks/create-outline.md": ["Start from the instructor's goal", "Repeat this time check after every revision"],
   "tasks/create-didactics.md": ["in its short form", "do **not** ask the instructor", "`layout` of `templates/course-didactics.yaml`", "merge, never overwrite", "data-from=\"didactics\""],
   "tasks/create-agenda.md": ["unless the learners work in fixed time slots", "Net working time per time slot", "Clean up Session Type slugs before writing them", "Self-check before the summary", "If later: stop here", "do not ask about methods"],
-  "tasks/create-session-skeleton.md": ["also in the terminal", "data-key", "Show the new unit", "can be solved with the material the learners get"],
-  "tasks/coauthor-materials.md": ["not for a single lesson", "**Course-wide decisions**", "never present it as checked", "Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first", "never before it —"],
-  "tasks/validate-course.md": ["heading stands outside; everything below it is wrapped", "Items only the instructor can resolve are not in scope", "With **PASS with concerns**", "Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide"],
-  "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration"],
+  "tasks/create-session-skeleton.md": ["also in the terminal", "data-key", "Show the new unit", "can be solved with the material the learners get", "**Type and Method first:**"],
+  "tasks/promote-session.md": ["with their task type", "**No surface cues**"],
+  "tasks/coauthor-materials.md": ["not for a single lesson", "**Course-wide decisions**", "never present it as checked", "Fact check before showing", "New rule → re-check", "Material ✅ means the document exists", "do not run `:promote-session` first", "never before it —", "Never search, download or verify images here", "is **not solvable** yet", "Insert images now", "controls named as the page shows them", "`- **{date}:** {decision}`", "`- **{date}:** material approved`"],
+  "tasks/validate-course.md": ["Answer options give nothing away", "heading stands outside; everything below it is wrapped", "Items only the instructor can resolve are not in scope", "With **PASS with concerns**", "Chat summary", "result_rules", "`[advisory]` items such as the duration flag are not in scope", "Never offer \"publish anyway\"", "in both directions", "A session PASS must not hide", "**Fix during the check**", "**Required means in this unit:**", "never hold the result back", "Image options fit the learners' device"],
+  "checklists/course-quality-checklist.md": ["`[advisory]` = computed mechanically", "[advisory] Estimated duration", "All image options of a question are visible together", "one fact, one tag", "*and* hint texts can be read aloud", "met only by this unit's own material", "no to-dos, no remarks about single images", "image-credit lines", "Every control named in a learner text", "[mechanical] No answer-pattern warning", "Distractors give no other surface cue", "names something visible in a picture"],
   "data/file-structure-modes.md": ["Umlauts and ß are transliterated", "Title slide (single-file, first unit)", "`narrator:` a voice for that language", "3. **Images:**"],
-  "tasks/create-image.md": ["`<!--- image: {image-slug} --->`", "`prompt-only`", "no visual identity yet", "Mark the spot in the material"],
+  "tasks/create-image.md": ["`<!--- image: {image-slug} — {description} --->`", "never the alt text or description", "## Free photos", "at most **3 candidates**", "never hand the search to a background agent", "`prompt-only`", "no visual identity yet", "Mark the spot in the material", "Look at every candidate before you show it", "fetch-thumb.mjs", "`(not looked at)`", "standard thumbnail width", "max-height: 30vh", "Credit lines never reveal an answer", "images {n} of {m}", "Compact once inserted", "rewrite every remaining old marker", "never from a summarizing fetch prompt", "**Texts match the chosen photo:**", "**A spot left without image:**", "**one replacement map**", "keeps its other looked-at candidates"],
   "data/skills.md": ["workflow versions"],
-  "data/duration-heuristic.md": ["the middle of the estimated range", "Count a teacher-led phase once"],
+  "data/duration-heuristic.md": ["the middle of the estimated range", "Count a teacher-led phase once", "## Naming the estimate", "never by a name"],
+  "tasks/preview.md": ["never switches the agent", "agent:{active agent}/preview"],
   "agents/learner-agent.yaml": ["other sections only when a command names them"],
   "data/session-types.md": ["never equal the default unit words", "Objectives and duration of a session", "Never leave a check without objectives"],
-  "tasks/update-dashboard.md": ["never another check of the same state", "`review-{unit}-{n}`", "starts with `published` (an English key, never translated)", "States are exclusive", "The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\""],
-  "tasks/quick-fix.md": ["without one, say so in the dated line", "does not reopen a check", "Change path after a check", "Called from `:build-session`"],
+  "tasks/update-dashboard.md": ["never another check of the same state", "`review-{unit}-{n}`", "starts with `published` (an English key, never translated)", "States are exclusive", "The last step, publishing", "This task writes only:", "the start of every heading stays unchanged", "punctuation kept", "#3.-why-do-leaves-fall?", "write-dashboard.mjs", "Sign of life first", "Exactly one definition of \"finished\"", "**`next` names one step.**", "**Image step:**", "Link only headings outside HTML blocks", "A partial state is visible everywhere it is named", "**and the current state**", "never the unit heading", "`labels.decide` and `labels.prepare`", "check: correction needed ({n})", "**Fresh cache:**", "never this check", "**One wording per state:**", "gets **two** actions", "does not hold this offer back", "\"passed – still missing: {what}\"", "**One ranking of the three measures:**", "**How the learners see it:**", "\"check: correction needed: {open} of {n} points open\"", "never `plan`", "a review with fixes alone is no approval"],
+  "tasks/quick-fix.md": ["without one, say so in the dated line", "does not reopen a check", "Change path after a check", "**One journal write per fix:**", "Changed after the check", "never leave a done to-do standing", "Called from `:build-session`", "**Find them first:**", "**The Notes cell states the state, not a list of changes:**", "offer both variants in the same form", "short re-check open", "Change a task's type", "is searched in every unit", "**Approval after a review:**", "\"correction needed: {open} of {n} points open\""],
   "tasks/generate-image.md": ["add the image `![{alt text}]({path})` below the prompt", "replace the marker", "never by its name", "Only once the file exists"],
-  "tasks/build-session.md": ["do not refresh the dashboard themselves", "prompt-only mode", "every factual statement that could not be verified", "one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**"],
+  "tasks/build-session.md": ["do not refresh the dashboard themselves", "prompt-only mode", "every factual statement that could not be verified", "one that makes the unit unusable for that persona", "only the named `#### Persona:` entry", "Repeat c–d", "never 1a or 1b", "ask **once in the terminal**", "**read completely once before the run**", "**Open decisions first:**", "a hint, never a reason to decline the run", "**Image source per spot:**", "**Check the sketch before the start:**", "**Overview patch in the same save:**", "in parts of at most about a minute of generation each", "**Never a \"mechanical\" fix:**", "write the report **once per iteration, after the fixes of step d", "insert the best looked-at candidate **before step c**", "**One write per file for all images of the run:**", "**Runs line**", "## Writes per run", "try-as-learner?number={number}", "**Usable first:**", "**Approval stays with the instructor:**"],
   "tasks/create-project.md": ["never the assistant's own files", "1b. Only once the gate is open", "the contact address was not saved either", "never `.cache/`", "**Version:**", "**Contact address:**", "Read the repository before anything changes", "Show the plan, then confirm in the terminal"],
   "tasks/update-project.md": ["Show the plan, then confirm in the terminal"],
   "tasks/configure-agent.md": ["Nothing is written before it", "the entry is theirs from then on"],
   "tasks/create-learner-persona.md": ["Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["checked only by the publishing gate", "Findings returned to a caller never contain line numbers", "is never ❌ for it"],
-  "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback", "Preview required"],
-  "data/agent-links.md": ["checked ✅ → 👁 `preview`", "check failed → `coauthor-materials?number={n}`", "`agent` (`:configure-agent`) is one of", "`slide` is a positive integer", "never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang"],
-  "data/liascript-cheat-sheet.md": ["A pair of `$` starts math everywhere outside code", "**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\""],
+  "tasks/try-as-learner.md": ["find_teacher", "a computer program plays this role", "Fallback", "Preview required", "Name each person exactly as the portrait card shows it", "**last line is the exit sentence**", "\"Back to planning\"", "one fixed sentence announcing the help", "**Name controls as the page shows them**", "**Only what the events show:**", "a hint stage counts as seen only if `hints` reached it", "**Current patterns first:**", "**course decision**", "planning conversation stays visible"],
+  "data/agent-links.md": ["checked ✅ → 👁 `preview`", "check: correction needed → ✏️ `quick-fix?number={n}&description=…`", "**Layout and devices:**", "A missing warning is no proof", "Relative day words", "at about half time with an interim result", "Name open points by their titles", "never the unit heading", "`agent` (`:configure-agent`) is one of", "`slide` is a positive integer", "never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang", "**Times:**", "*search result\n  only*", "never end a turn while\n  announced work runs in the background", "header\n  comment like the material header", "**Link targets:**", "`preview` belongs to every agent", "**Never for `preview`:**", "Greetings and farewells carry no time", "*looked at*", "what the instructor may do now", "Read the group titles **before**", "replaces the server's general \"stay silent\"", "| wrong, `trial` 2 (before `help`) |", "| `solved` after at least one wrong check |", "On the self-check", "`node specs/dashboard/now.mjs [<timestamp>]`", "never \"speaker\" for the play triangle ▶", "right before **every** Dashboard write", "with a \"Back to\n  planning\" button", "**Long runs:**", "*read as an extract*", "tool call** is a `chat` status with the expected duration", "\"step {i} of {n}: …\"", "let it be prepared after a short sketch", "**Learners' view:**", "never \"To unit {n}\""],
+  "data/liascript-cheat-sheet.md": ["A pair of `$` starts math everywhere outside code", "**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\"", "**Encode link targets.**", "**Image size.**", "`- [[?]] {|>}{Hint text}`", "A `vh` limit does not guarantee the fit", "**Controls as learners see them**", "never \"speaker\", \"loudspeaker\"", "A hint appears only when the learner taps the light bulb", "**No surface cues:**"],
   "templates/course-context.yaml": ["layout:", "Target Group"],
   "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
   "templates/course-didactics.yaml": ["layout:"],
   "templates/course-agenda.yaml": ["layout:", "Time Budget"],
-  "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "check failed – revision needed", "revised – check open", "passed with concerns – your decision needed", "never\n        relative to another optional block"],
+  "templates/session-skeleton.yaml": ["data-key=\"summary\"", "<details>", "a visible status list", "so list and table never disagree", "check: correction needed ({n})", "short re-check open", "never a second phrase such as \"revised\"", "passed with concerns – your decision needed", "never\n        relative to another optional block", "images {n} of {m}", "Stays 2–4 sentences", "- **{{date}}:** [Decision", "as second link after", "\"check: correction needed: {open} of {n} points open\""],
+  "templates/project-dashboard.yaml": ["One ranking of the three measures", "Every unit with material gets `view`", "usable: 'Once a check report exists", "view: 'Once the material exists"],
   "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
-  "templates/session-validation.yaml": ["also in units created later", "could not be verified", "the heading stays outside", "counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "Validation Report – ", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**"],
-  "templates/journal.md": ["* __Session Overview:__", "* __Time Budget:__", "\"title\": \"Publish\"", "* __Didactic Framework:__", "copied from Course Context", "journal-start", "Target Group", "## Publishing"],
+  "templates/session-validation.yaml": ["also in units created later", "could not be verified", "the heading stays outside", "counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "<section data-key=\"validation-report\">", "correction needed ({n})", "Usable with learners now", "Changed after the check", "Unit entry (journal)", "Each fact is reported once", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**", "passed – still missing: {what}", "never a command or step name as subject", "One wording per state", "short re-check open", "\"correction needed: {open} of {n} points open\"", "`outdatedTerms`", "`units[].usable`"],
+  "templates/journal.md": ["\"title\": \"Publish\"", "journal-start", "## Publishing", "Still empty"],
+  "templates/course-outline.yaml": ["Session Overview"],
+  "templates/course-agenda.yaml": ["Time Budget"],
+  "templates/course-didactics.yaml": ["Didactic Framework", "copied from Course Context"],
+  "templates/course-context.yaml": ["Target Group"],
   "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
-  "agents/teaching-agent.yaml": [":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**"],
+  "agents/teaching-agent.yaml": [":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**", "`node specs/dashboard/now.mjs [<timestamp>]`"],
 };
 
 for (const [file, phrases] of Object.entries(required)) {
@@ -82,6 +89,12 @@ test("the workflow quick reference lists every agent command with its signature"
     const listed = [...list.matchAll(/^\s*- (:.+)$/gm)].map(match => match[1].trim());
     assert.deepEqual(keys.filter(key => !listed.includes(key)), [], `${agent}: missing in quick_reference`);
     assert.deepEqual(listed.filter(key => !keys.includes(key) && !generic.has(key.split(" ")[0])), [], `${agent}: unknown in quick_reference`);
+  }
+});
+
+test("preview is a navigation command of every agent", () => {
+  for (const agent of ["teaching", "artist", "learner", "development"]) {
+    assert.match(read(`agents/${agent}-agent.yaml`), /^  :preview \{file\?\} \{slide\?\}:/m, `${agent} has no :preview`);
   }
 });
 
@@ -206,8 +219,20 @@ test("reports inside sessions and the course summary use bold labels, not ##### 
   }
 });
 
+test("the check report: course-language heading per unit, found by its key, placed behind the skeleton", () => {
+  const template = read("templates/session-validation.yaml");
+  const heading = template.match(/id: report-heading[\s\S]*?template: \|\n\s+(#### .*)/)?.[1] ?? "";
+  assert.ok(heading && !/Validation Report/.test(heading), `report heading carries the English key: ${heading}`);
+  assert.match(heading, /\{\{number\}\}/, "report heading is not unique per unit");
+  assert.match(template, /<section data-key="validation-report">/);
+  const order = read("templates/session-skeleton.yaml").match(/entry_order: >-([\s\S]*?)\n  title:/)?.[1] ?? "";
+  assert.ok(order.indexOf("References") >= 0 && order.indexOf("References") < order.indexOf("the validation report"), "the report must follow the skeleton fields");
+  assert.ok(order.indexOf("the validation report") < order.indexOf("#### Images"), "the report comes before #### Images");
+  assert.ok(!read("tasks/validate-course.md").includes("The report heading is always `#### Validation Report`"));
+});
+
 test("no persona or scenario data from tandem tests in the specs", () => {
-  const words = /\b(biene\w*|bienenvolk|sabine|jonas|frida|summi|krüger)\b/i;
+  const words = /\b(biene\w*|bienenvolk|sabine|jonas|frida|summi|krüger|merian|wochenplan|pollen\w*|ipad)\b/i;
   const walk = dir => readdirSync(dir).flatMap(name => {
     const path = join(dir, name);
     return statSync(path).isDirectory() ? (name === "node_modules" ? [] : walk(path)) : [path];
@@ -368,3 +393,86 @@ test("the journal check finds the visible outcome in any course language", () =>
   assert.equal(missing.status, 2, missing.output);
   assert.match(missing.output, /without visible summary/);
 });
+
+test("language packs carry one wording per state: passed with something missing, the short re-check (R10-S4)", () => {
+  for (const name of existsSync(join(specs, "templates", "i18n")) ? readdirSync(join(specs, "templates", "i18n")) : []) {
+    const terms = JSON.parse(read(`templates/i18n/${name}`)).terms ?? {};
+    for (const key of ["passedMissing", "recheckShort", "recheckExplain"]) assert.ok(terms[key], `${name}: terms.${key} is missing`);
+    assert.ok(!("recheckPending" in terms), `${name}: the old term recheckPending is back`);
+    assert.match(terms.passedMissing, /\{what\}/, `${name}: passedMissing names what is missing, never a step`);
+  }
+  assert.ok(!/later step\}? (still )?follows/.test(read("templates/session-validation.yaml") + read("templates/session-skeleton.yaml") + read("tasks/update-dashboard.md")), "a step name is the subject of an outcome again");
+});
+
+test("every language pack matches the empty journal template line by line", () => {
+  const template = read("templates/journal.md").split("\n").map(line => line.trimEnd());
+  for (const name of existsSync(join(specs, "templates", "i18n")) ? readdirSync(join(specs, "templates", "i18n")) : []) {
+    const pack = JSON.parse(read(`templates/i18n/${name}`));
+    const misses = pack.replace.filter(([from, , all]) => { const n = template.filter(line => line === from.trimEnd()).length; return all === "all" ? n < 1 : n !== 1; }).map(([from]) => from);
+    assert.deepEqual(misses, [], `${name}: lines not found exactly once in templates/journal.md`);
+    assert.ok(pack.dashboard && pack.labels, `${name}: needs dashboard and labels`);
+    assert.ok(!JSON.stringify(pack).includes("{{"), `${name}: template placeholder`);
+  }
+});
+
+test("no template prescribes a numbered item that starts with a date; decisions are '- **{date}:** …' (R11-S4)", () => {
+  const files = [...readdirSync(join(specs, "templates")).filter(name => /\.(ya?ml|md)$/.test(name)).map(name => `templates/${name}`),
+    ...readdirSync(join(specs, "tasks")).map(name => `tasks/${name}`), ...readdirSync(join(specs, "data")).map(name => `data/${name}`)];
+  const leading = /^\s*\d+\.\s+(?:\{\{[^}]*\bdate\b|\[[^\]]*\bdate\b|\d{1,2}\.\d{1,2}\.\d{2,4}|\d{4}-\d{2}-\d{2})/i;
+  const hits = files.flatMap(file => read(file).split("\n").map(line => [file, line]))
+    .filter(([, line]) => leading.test(line) || /^\s*\d+\.\s.*\bwith date\b/i.test(line));
+  assert.deepEqual(hits.map(([file, line]) => `${file}: ${line.trim().slice(0, 80)}`), []);
+  assert.match(read("templates/session-skeleton.yaml"), /<!-- data-key="decisions" -->\n\s+\*\*\{\{"Decisions", translated\}\}:\*\*\n\n\s+- \*\*\{\{date\}\}:\*\* /);
+  assert.match(read("templates/journal.md"), /^- \*\*\{\{date\}\}:\*\* /m);
+});
+
+test("the overview answers 'usable with learners now' first and shows each unit's learners' view (R11-S1, R11-S2)", () => {
+  const library = read("dashboard/dashboard.js");
+  const texts = lang => library.split(`    ${lang}: {`)[1]?.split(/\n    \}/)[0] ?? "";
+  for (const lang of ["de", "en"]) {
+    for (const key of ['"usable.yes"', '"usable.limited"', '"usable.no"', "usableMissing", "checkedNone", "usableUnits", "usableLimitedShort", "viewMaterial", "plan:"]) {
+      assert.ok(texts(lang).includes(key), `dashboard.js ${lang} lacks ${key}`);
+    }
+  }
+  assert.match(texts("en"), /plan: "See planning"/);
+  assert.ok(!/planLabel/.test(library), "the planning link can be renamed again (planLabel)");
+  // Every unit with material has a view link: in the schema, the task, the action line rule and the validator.
+  assert.match(read("templates/project-dashboard.yaml"), /^\s+view: 'Once the material exists: \{href: "agent:teaching\/preview\?file=\{n\}"/m);
+  assert.match(read("tasks/update-dashboard.md"), /gets `view` \(`agent:teaching\/preview\?file=\{n\}`/);
+  assert.match(read("data/agent-links.md"), /\*\*Learners' view:\*\* once the material exists, the line also carries 👁 `preview\?file=\{n\}`/);
+  const validator = read("dashboard/validate-journal.mjs");
+  assert.match(validator, /but no view – add units/);
+  assert.match(validator, /its action line has no 👁 preview link/);
+  assert.match(validator, /has a check report but no usable/);
+  // Card order: usable → open points (status chip) → process steps.
+  const card = library.match(/function unit\(input, selected = false, viewId\) \{[\s\S]*?\n  \}/)?.[0] ?? "";
+  const content = card.match(/const content = `([^\n]*)`;/)?.[1] ?? "";
+  assert.ok(content.indexOf("usableLine(") >= 0 && content.indexOf("usableLine(") < content.indexOf("status(") && content.indexOf("status(") < content.indexOf("stepText"), "unit card order is not usable → status → steps");
+});
+
+test("outdated state wordings are recognised, never recommended; the current terms match the template (R11-D1)", () => {
+  const validation = read("templates/session-validation.yaml");
+  const validator = read("dashboard/validate-journal.mjs");
+  const english = validator.match(/const englishTerms = \{([\s\S]*?)\};/)?.[1] ?? "";
+  for (const [key, term] of [...english.matchAll(/(\w+): "([^"]+)"/g)].map(match => [match[1], match[2]])) {
+    if (/^usable/.test(key)) continue;
+    const words = term.replace(/^\{n\} /, "");
+    assert.ok(validation.includes(words), `validate-journal.mjs term ${key} "${term}" is not the wording of templates/session-validation.yaml`);
+  }
+  for (const name of existsSync(join(specs, "templates", "i18n")) ? readdirSync(join(specs, "templates", "i18n")) : []) {
+    const pack = JSON.parse(read(`templates/i18n/${name}`));
+    for (const key of ["correctionOpen", "usableYes", "usableLimited", "usableNo"]) assert.ok(pack.terms?.[key], `${name}: terms.${key} is missing`);
+    assert.ok(Array.isArray(pack.outdatedTerms) && pack.outdatedTerms.length, `${name}: outdatedTerms is missing`);
+    for (const [pattern, term] of pack.outdatedTerms) {
+      assert.doesNotThrow(() => new RegExp(pattern, "iu"), `${name}: outdatedTerms pattern ${pattern}`);
+      assert.ok(pack.terms[term], `${name}: outdatedTerms names the unknown term ${term}`);
+      assert.ok(!new RegExp(pattern, "iu").test(pack.terms[term]), `${name}: the current term ${term} matches its own outdated pattern ${pattern}`);
+    }
+  }
+  // An outdated outcome in a journal: the warning names the current term, never the old words.
+  const report = "**Outcome:** passed – images still follows (2026-10-19) – 1 point(s) changed since – re-check open\n\n**Usable with learners now:** yes, with limits: 1 photo\n\n**Changed after the check:**\n\n- 2026-10-20 · Start · shorter · mini-check";
+  const run = checkJournal(journal({ outcome: report }).replace("language: fr", "language: en"));
+  assert.match(run.output, /uses outdated wording \("images still follows", "re-check open"\) – never copy it; the current wording is "passed – still missing: \{what\}", "\{n\} point\(s\) changed since – short re-check open"/);
+  assert.doesNotMatch(run.output, /write "passed – images still follows/);
+});
+

@@ -41,5 +41,7 @@ Converts a **Session** into a detailed **Session Material**.
 7. Generate planned outline.
 8. Apply template.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as authoring reference for every LiaScript construct in the material; otherwise use `data/liascript-cheat-sheet.md`.
+   - Produce the tasks the skeleton names, with their task type — a different type is the instructor's decision (`tasks/quick-fix.md` → "When to use").
+   - Answer options and gap cards follow `data/liascript-cheat-sheet.md` → Quizzes for young learners → **No surface cues** (read it completely), and every hint or page text that names something in a picture matches that picture.
 9. Save the material as described in `data/file-structure-modes.md` → "Creating the material document": path (reuse the path recorded in the agenda), metadata header (author, language, theme, template imports) and the overview update (Material ✅ with its status line).
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

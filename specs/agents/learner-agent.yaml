@@ -65,6 +65,7 @@ agent_links:
 commands:
   :review-as-persona {name} {number}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
   :list-learners: "list all personas defined in `journal.md` → `## Agents` → `### Learner Personas`; read only persona headings and one-line overview snippets"
+  :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -73,6 +74,7 @@ commands:
 dependencies:
   tasks:
     - review-as-persona.md
+    - preview.md
 
 fuzzy-matching:
   - 85% confidence threshold

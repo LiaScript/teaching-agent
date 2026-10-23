@@ -5,7 +5,7 @@ color: <span style="display:inline-block;width:1.5rem;height:1.5rem;background-c
 import: ./specs/dashboard/README.md
 -->
 
-# {{Course Working Title}}
+# New course
 
 This is where your course plan grows. You bring your teaching idea; the assistant in the chat helps you turn it into learning objectives, activities and finished material. You check every proposal and decide what is kept. **Nothing is saved without your confirmation.**
 
@@ -33,7 +33,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
     "description": "The steps from the topic to validated material. This overview always shows where we are.",
     "steps": [
       {"title": "Set the frame", "state": "current", "why": "Topic, target group, format and language shape everything that follows.", "next": "Click “Start course” and answer the questions."},
-      {"title": "Learning objectives and scope", "state": "planned", "why": "Clear objectives say what learners can do at the end."},
+      {"title": "Outline and learning objectives", "state": "planned", "why": "Clear objectives say what learners can do at the end."},
       {"title": "Didactics", "state": "planned", "why": "Methods, task formats and support that fit the objectives."},
       {"title": "Agenda", "state": "optional", "why": "Decided with the frame: order and duration of the units."},
       {"title": "Create material", "state": "planned", "why": "Explanations, tasks and self-checks grow out of the planning."},
@@ -52,7 +52,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
     {"label": "Outline", "href": "#outline"},
     {"label": "Notes", "href": "#notes-backup"}
   ],
-  "footer": "{{YYYY-MM-DD}} · new, empty project"
+  "footer": "new, empty project"
 }
 ```
 
@@ -61,108 +61,33 @@ This is where your course plan grows. You bring your teaching idea; the assistan
 ## Course Context
 
 <!-- class="journal-actions" -->
-[✏️ Revise context](agent:teaching/init-course) `:init-course` · [🔍 Analyze existing course](agent:teaching/analyze-existing) `:analyze-existing`
+[▶️ Start course](agent:teaching/init-course) `:init-course`
 
-_Filled by `:init-course` from `templates/course-context.yaml`._
+<!--- Filled by :init-course from templates/course-context.yaml (layout: summary table + <details>). --->
 
-* __Course Type:__
-  1. Type: {{lecture-series | self-paced | workshop | single-lesson | improve-existing}}
-  2. Working Title: {{working title}}
-  3. Target Group: {{who learns, how many, where}}
-
-* __Terminology:__
-  1. sessions-called: {{session | unit | block | lesson | ...}}
-
-* __Course Profile:__
-  1. Persona type: {{professor | coach | facilitator | tutor}}
-  2. Agenda required: {{yes | optional | no}}
-  3. Pacing: {{scheduled | learner-driven | event-based}}
-  4. Assessment defaults: {{one or more of quizzes, self-check quizzes, reflection, group work, assignments — or none}}
-  5. Units: {{count × length, if known}}
-
-* __File Structure:__
-  1. Mode: {{single-file | multi-file}} — see `data/file-structure-modes.md`
-  2. Session folder naming: {{n/a for single-file | `{number}-{slug}`}}
-
-* __Conventions & Standards:__
-  1. Language: {{de | en | other}}
-  2. Tone: {{formal | informal | conversational}}
-  3. Person: {{Sie | Du | you}} — learners in the material
-  4. Instructor Address: {{Sie | Du | you}} — the instructor in chat and dashboard
-  5. Author: {{display name for the material header}}
-  6. Contact: {{e-mail, or empty — needed only before publishing}}
-
-* __LiaScript conventions:__
-  - {{project-specific rules; mention required templates briefly — details belong in `## Templates`}}
-
-* __Additional Notes:__
-  - {{project-specific rules, constraints, or reminders — remove if none}}
+_Still empty – filled with “Start course”._
 
 ---
 
 ## Outline
 
 <!-- class="journal-actions" -->
-[✏️ Revise outline](agent:teaching/create-outline) `:create-outline`
+[▶️ Create outline](agent:teaching/create-outline) `:create-outline`
 
-_Filled by `:create-outline` from `templates/course-outline.yaml`._
+<!--- Filled by :create-outline from templates/course-outline.yaml. --->
 
-* __Title:__
-  {{name of the lecture or course}}
-
-* __Target Audience:__
-  {{who is this course for? prior knowledge, age group, equipment}}
-
-* __Time Commitment:__
-  {{estimated commitment, e.g. hours per week or total hours}}
-
-* __Abstract:__
-  {{detailed abstract with all topics, benefits, and application}}
-
-* __Learning Objectives:__
-  1. {{clear learning objective with application scenario}}
-  2. {{clear learning objective with application scenario}}
-  3. {{clear learning objective with application scenario}}
-
-* __Session Overview:__
-  {{session → objective → self-check, as a list or a table with at most 3 columns}}
+_Still empty – created with “Create outline”, the step after the course frame._
 
 ---
 
 ## Didactics
 
 <!-- class="journal-actions" -->
-[✏️ Revise didactics](agent:teaching/create-didactics) `:create-didactics` · [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals`
+[▶️ Create didactics](agent:teaching/create-didactics) `:create-didactics` · [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals`
 
-_Filled by `:create-didactics` from `templates/course-didactics.yaml`._
+<!--- Filled by :create-didactics from templates/course-didactics.yaml. --->
 
-* __Didactic Concept:__
-  {{teaching methods, learning phases, didactic considerations — e.g. lesson rhythm, scaffolding, error culture}}
-
-* __Professor Persona:__
-  {{name, background, expertise, and role of the instructor persona}}
-
-* __Teaching Style:__
-  {{e.g. humorous, academic, practical, conversational — and how it shows in the material}}
-
-* __Course Type:__
-  {{copied from Course Context: lecture-series | self-paced | workshop | single-lesson — and what it means for pacing}}
-
-* __Didactic Framework:__
-  {{framework name (see `data/didactic-methods.md`)}}
-
-* __Default Session Method:__
-  {{method name (slug) or `none`}}
-
-* __Session Types:__ (format variants of one {{sessions-called}} — see `data/session-types.md`)
-  1. __{{display name}}__ (slug: `{{slug}}`) — {{one-line criterion}}
-     Required: {{2–3 required elements}}
-
-* __Difficulty Level:__
-  {{beginner | intermediate | advanced}}
-
-* __Persona Voice Sample:__
-  {{3–5 sentences written in the exact voice of the persona, explaining a core course concept — anchors tone for all co-authoring}}
+_Still empty – created with “Create didactics”, the step after the outline._
 
 ---
 
@@ -171,39 +96,9 @@ _Filled by `:create-didactics` from `templates/course-didactics.yaml`._
 <!-- class="journal-actions" -->
 [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals` · [🎨 Logo](agent:artist/create-logo) `:agent artist` → `:create-logo`
 
-_Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
+<!--- Filled by :create-visuals (optional) from templates/visuals.yaml. --->
 
-* __Logo Generation Guidelines:__
-  1. Style: {{...}}
-  2. Format: {{...}}
-  3. Elements: {{...}}
-  4. Mood: {{...}}
-
-* __Logo Color Palette:__
-  1. Primary: @color(#000000) — {{name}}
-  2. Secondary: @color(#000000) — {{name}}
-  3. Accent: @color(#000000) — {{name}}
-  4. Background: @color(#FFFFFF) — {{name}}
-
-* __Course Image Generation Guidelines:__
-  1. Style: {{...}}
-  2. Color scheme: {{...}}
-  3. Composition: {{...}}
-  4. Mood: {{...}}
-  5. In-image text language: {{...}}
-
-* __Image Consistency Rules:__
-  - {{palette, character design, backgrounds, fonts}}
-
-* __Website Color Palette:__
-  1. Primary: @color(#000000) — {{usage}}
-  2. Accent: @color(#000000) — {{usage}}
-  3. Text: @color(#000000) — {{usage}}
-  4. Background: @color(#FFFFFF) — {{usage}}
-  5. Surface: @color(#FFFFFF) — {{usage}}
-
-* __Example Prompts:__
-  1. Logo: "{{full image-generation prompt}}"
+_Optional – the design assistant fills this in when you want a consistent look for images and colours._
 
 ---
 
@@ -212,7 +107,7 @@ _Filled by `:create-visuals` (optional) from `templates/visuals.yaml`._
 <!-- class="journal-actions" -->
 [▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
-_Managed by `:manage-templates` from `templates/course-templates.yaml`._
+<!--- Managed by :manage-templates from templates/course-templates.yaml. --->
 
 LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
@@ -248,30 +143,11 @@ More community templates can be found at [topics/liascript-template](https://git
 ## Agenda
 
 <!-- class="journal-actions" -->
-[✏️ Revise agenda](agent:teaching/create-agenda) `:create-agenda`
+[▶️ Create agenda](agent:teaching/create-agenda) `:create-agenda`
 
-_Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the course profile says agenda: no)._
+<!--- Filled by :create-agenda from templates/course-agenda.yaml (skip if the course profile says agenda: no). --->
 
-* __Overview:__
-  {{number of sessions, duration, pacing — 2–4 sentences}}
-
-* __Time Budget:__
-  {{per time slot: slot length − setup − wrap-up = working time; sum of the mandatory units; buffer}}
-
-* __Modules / Sessions:__
-
-  <!-- data-type="none" -->
-  | No. | Title | Time | Kind | Objectives |
-  |---|---|---|---|---|
-  | 1 | {{title (mandatory/optional)}} | {{time}} | {{display name of the Session Type}} | {{objectives}} |
-
-  <details><summary>Technical settings for the assistant</summary>
-
-  | No. | type slug | method slug | material path |
-  |---|---|---|---|
-  | 1 | {{slug}} | {{method slug}} | {{material path, see `data/file-structure-modes.md`}} |
-
-  </details>
+_Still empty – created with “Create agenda”, the step after the didactics._
 
 ---
 
@@ -280,11 +156,13 @@ _Filled by `:create-agenda` from `templates/course-agenda.yaml` (skip if the cou
 <!-- class="journal-actions" -->
 [▶️ Didactics first](agent:teaching/create-didactics) `:create-didactics`
 
-_Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:validate-course`. Overview first — status list, then the technical table in `<details>` (`templates/session-skeleton.yaml` → `section_layout.overview`) — then one `### {n}. {title}` subsection per session._
+<!--- Managed by :create-session, :promote-session, :coauthor-materials and :validate-course. Overview first — status list, then the technical table in <details> (templates/session-skeleton.yaml → section_layout.overview) — then one `### {n}. {title}` subsection per session. --->
+
+_No units yet – they are created after the didactics (and the agenda, if one is planned)._
 
 <!--- One subsection per session, structured like this:
 
-### {{n}}. {{Session Title}}
+`### {n}. {Session Title}` (the heading line of each subsection)
 
 {{action line: `class="journal-actions"` attribute comment + state-dependent links, see `data/agent-links.md`}}
 
@@ -306,16 +184,17 @@ _Managed by `:create-session`, `:promote-session`, `:coauthor-materials`, and `:
 
 **Decisions:**
 
-1. {{instructor decision about this unit, with date — added during :coauthor-materials}}
+- **{{date}}:** {{instructor decision about this unit — added during :coauthor-materials; a bullet with the date in bold, never a numbered item that starts with the date}}
 
 **References:**
 
 1. {{reference}}
 
-The block order is fixed in `templates/session-skeleton.yaml` → `section_layout.entry_order`: the `#### Validation Report`
-(after :validate-course) follows the action line and the technical details, before the
-skeleton; `#### Images` (created by :create-image only when the first image exists) and
-`#### Persona Reviews` (after :review-as-persona) come last, in this order. Never use `#####` headings inside a session.
+The block order is fixed in `templates/session-skeleton.yaml` → `section_layout.entry_order`: action line, technical
+details, then the skeleton fields; after them the validation report (after :validate-course; a heading in the course
+language, "Validation report – {unit} {n}", above `<section data-key="validation-report">`), `#### Images` (created with
+the first image entry, by :coauthor-materials or :create-image) and `#### Persona Reviews` (after :review-as-persona),
+in this order. Never use `#####` headings inside a session.
 --->
 
 <details><summary>Technical overview</summary>
@@ -333,12 +212,15 @@ skeleton; `#### Images` (created by :create-image only when the first image exis
 <!-- class="journal-actions" -->
 [▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [▶️ New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`
 
-_Agent-specific project customizations and learner personas._
-_Read-scope rule: Coauthor and specialist agents are direct `###` subsections; each agent reads only its assigned subsection._
+<!--- Read-scope rule: Coauthor and specialist agents are direct ### subsections; each agent reads only its assigned subsection. --->
+
+_Project-specific settings of the assistants and learner profiles._
 
 <section>
 
 ### Coauthor
+
+_Rules for writing the material: voice of the guide, hints, limits._
 
 * __Customization Status:__ inactive
 * __Role / Persona:__
@@ -394,16 +276,15 @@ _Read-scope rule: Coauthor and specialist agents are direct `###` subsections; e
 
 ### Learner Personas
 
-_Optional — filled by `:create-learner-persona`. One `#### Persona: {icon} {name}` subsection per persona (structure defined in `tasks/create-learner-persona.md`)._
+<!--- Optional — filled by :create-learner-persona. One `#### Persona: {icon} {name}` subsection per persona (structure: tasks/create-learner-persona.md). --->
+
+_No learner profiles yet._
 
 ---
 
 ## Validation
 
-<!-- class="journal-actions" -->
-[🔍 Validate course](agent:teaching/validate-course) `:validate-course`
-
-_Replaced by `:validate-course` (course mode). The `### Latest Validation Summary` below is the authoritative publishing gate — publishing requires `Mode: course` and `Result: PASS`. Per-session reports live in `## Sessions` → `#### Validation Report`, not here._
+<!--- Replaced by :validate-course (course mode). The ### Latest Validation Summary below is the authoritative publishing gate — publishing requires `Mode: course` and `Result: PASS`. Per-session reports live in ## Sessions → #### Validation Report, not here. The action line is added by update-dashboard once every unit has material. --->
 
 ### Latest Validation Summary
 
@@ -414,7 +295,7 @@ Course check not yet run. Unit checks are under "Sessions"; the course check run
 
 ## Publishing
 
-_Maintained by the Development-Agent (`:create-project`, `:update-project`): read from the repository before anything is published. The dashboard shows it._
+<!--- Maintained by the Development-Agent (:create-project, :update-project): read from the repository before anything is published. The dashboard shows it. __State:__ stays an English key. --->
 
 * __Repository:__ none yet
 * __Branch:__ —
@@ -425,7 +306,9 @@ _Maintained by the Development-Agent (`:create-project`, `:update-project`): rea
 
 ## Analysis Status
 
-_Only used for improve-existing courses — filled by `:analyze-existing`._
+<!--- Filled by :analyze-existing. --->
+
+_Only used when an existing course is improved._
 
 ---
 
@@ -434,5 +317,6 @@ _Only used for improve-existing courses — filled by `:analyze-existing`._
 <!-- class="journal-actions" -->
 [▶️ Save notes](agent:teaching/save-notes) `:save-notes` · [▶️ Save decision](agent:teaching/save-decision) `:save-decision <title>`
 
-_Appended to by `:save-notes` and `:save-decision` from `templates/note-backup.yaml`._
-_Each note is one append-only `### {Type, in the course language}: {Descriptive Title} ({YYYY-MM-DD})` subsection._
+<!--- Appended to by :save-notes and :save-decision from templates/note-backup.yaml. Each note is one append-only `### {Type, in the course language}: {Descriptive Title} ({YYYY-MM-DD})` subsection. --->
+
+_No notes yet._

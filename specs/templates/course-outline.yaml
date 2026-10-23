@@ -9,37 +9,46 @@ template:
   title: 'Course Outline'
   layout: |
     The section is read by the instructor. Write it like this:
-    - Bullet labels carry a translation in the course language after an en dash, English key first
-      (e.g. `* __Learning Objectives – <translation>:__`), so tasks still find the key.
+    - Visible bold labels only in the course language. Each carries its key invisibly in the
+      attribute comment directly above it (`<!-- data-key="learning-goals" -->`, keys = the
+      section ids below); tasks find a field by that key, in older journals by a label that starts
+      with the English title.
     - Content in the course language, plain words, no slugs, no file names, no template paths.
     - Escape a number at the start of a line that is not a list item (`3\. grade` → write `3\.`),
       otherwise Markdown turns it into a numbered list.
-    - Objectives as a numbered list; the session → objective → self-check overview as a list or a table
-      with at most 3 columns.
+    - Objectives as a numbered list; under each objective, the observable step and the basic /
+      extension levels as an indented sub-list with labels in the course language (never one run-on
+      paragraph); the session → objective → self-check overview as a list or a table with at most
+      3 columns.
   sections:
     - id: title
       title: Title
       template: |
+        <!-- data-key="title" -->
         * __Title:__
           [Name of the lecture or course]
     - id: target-audience
       title: Target Audience
       template: |
+        <!-- data-key="target-audience" -->
         * __Target Audience:__
           [Who is this course/lecture for?]
     - id: time-commitment
       title: Time Commitment
       template: |
+        <!-- data-key="time-commitment" -->
         * __Time Commitment:__
           [Estimated time commitment, e.g., semester hours per week or total hours]
     - id: abstract
       title: Abstract
       template: |
+        <!-- data-key="abstract" -->
         * __Abstract:__
           [Detailed abstract with all topics, benefits, and application.]
     - id: learning-goals
       title: Learning Objectives
       template: |
+        <!-- data-key="learning-goals" -->
         * __Learning Objectives:__
           1. [Clear learning objective with application scenario]
           2. [Clear learning objective with application scenario]
@@ -47,5 +56,6 @@ template:
     - id: session-overview
       title: Session Overview
       template: |
+        <!-- data-key="session-overview" -->
         * __Session Overview:__
           [session → objective → self-check, as a list or a table with at most 3 columns]

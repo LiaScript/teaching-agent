@@ -60,6 +60,16 @@
 .lia-dashboard .dashboard-unit-number { display: inline-grid; place-items: center; min-width: 1.8em; height: 1.8em; background: var(--dashboard-soft); color: var(--dashboard-muted); border-radius: 6px; font-size: .85em; }
 .lia-dashboard .dashboard-unit-content { min-width: 0; display: flex; align-items: flex-start; gap: .35em; flex-direction: column; }
 .lia-dashboard .dashboard-unit-summary { color: var(--dashboard-muted); font-size: .82em; }
+/* First line of a unit card: usable with learners now (ranked before open points and process steps). */
+.lia-dashboard .dashboard-usable { display: inline-flex; align-items: baseline; gap: .35em; font-size: .85em; font-weight: 650; color: var(--dashboard-ink); }
+.lia-dashboard .dashboard-usable-yes > span[aria-hidden], .lia-dashboard .dashboard-usable-limited > span[aria-hidden] { color: var(--dashboard-accent); }
+.lia-dashboard .dashboard-usable-no > span[aria-hidden] { color: var(--dashboard-muted); }
+.lia-dashboard .dashboard-process-usable { margin: .6em 0 0; }
+.lia-dashboard .dashboard-progress .dashboard-progress-usable { color: var(--dashboard-ink); }
+/* The learners' view of a unit with material: a button of its own below the card. */
+.lia-dashboard .dashboard-unit-view { display: block; margin: .3em 0 0 2.55em; font-size: .85em; }
+.lia-dashboard .dashboard-unit-view .dashboard-action-link { margin-top: 0; }
+.lia-dashboard .dashboard-process-link { display: flex; flex-wrap: wrap; gap: 0 1em; }
 .lia-dashboard .dashboard-status { display: inline-flex; align-items: center; gap: .35em; font-size: .75em; line-height: 1.4; font-weight: 600; color: var(--dashboard-muted); background: var(--dashboard-soft); border-radius: 99px; padding: .2em .55em; }
 .lia-dashboard .dashboard-status-done { color: var(--dashboard-accent); background: var(--dashboard-accent-soft); }
 .lia-dashboard .dashboard-status-current, .lia-dashboard .dashboard-status-review { color: var(--dashboard-current); background: var(--dashboard-current-soft); }
@@ -79,6 +89,8 @@
 .lia-dashboard .dashboard-step-next { font-size: .85em; }
 .lia-dashboard .dashboard-process-note { border-top: 1px solid var(--dashboard-border); padding-top: .8em; font-size: .8em; color: var(--dashboard-muted); }
 .lia-dashboard .dashboard-empty { padding: .8em 0; color: var(--dashboard-muted); font-size: .9em; }
+.lia-dashboard .dashboard-process-fallback { margin-top: 1em; }
+.lia-dashboard .dashboard-process-summary { margin: .6em 0 0; font-size: .9em; }
 .lia-dashboard .dashboard-explore { border-top: 1px solid var(--dashboard-border); padding: 0 1.5em; }
 .lia-dashboard .dashboard-explore summary { padding: 1em 0; cursor: pointer; font-weight: 650; }
 .lia-dashboard .dashboard-explore-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1em; padding-bottom: 1em; }
@@ -92,6 +104,9 @@
 .lia-dashboard a:focus-visible, .lia-dashboard button:focus-visible, .lia-dashboard summary:focus-visible { outline: 3px solid var(--dashboard-current); outline-offset: 3px; }
 .lia-dashboard.dashboard-component { padding: .75em; }
 .lia-dashboard.dashboard-component .dashboard-hero { padding: 1em; }
+@media (min-width: 900px) {
+  .lia-dashboard .dashboard-workspace { grid-template-columns: minmax(280px, 1fr) minmax(0, 1.3fr); }
+}
 @media (max-width: 720px) {
   .lia-dashboard .dashboard-workspace { grid-template-columns: minmax(0, 1fr); }
   .lia-dashboard .dashboard-units { border-right: 0; border-bottom: 1px solid var(--dashboard-border); }
@@ -136,14 +151,27 @@
 .lia-dashboard .dashboard-decisions ul { margin: 0; padding-left: 1.2em; }
 .lia-dashboard .dashboard-decisions li { margin: .25em 0; }
 .lia-dashboard .dashboard-decision-why { color: var(--dashboard-muted, #55625c); }
+/* Herkunft eines offenen Punkts („aus der Prüfung vom …“): kleines Etikett hinter dem Titel. */
+.lia-dashboard .dashboard-decision-source { display: inline-block; margin: 0 .3em; padding: 0 .5em; border: 1px solid var(--dashboard-border); border-radius: 999px; font-size: .8em; font-weight: 600; white-space: nowrap; color: var(--dashboard-muted, #55625c); background: rgba(255, 255, 255, .6); }
+@media (prefers-color-scheme: dark) {
+  .lia-dashboard .dashboard-decision-source { background: rgba(0, 0, 0, .25); }
+}
+/* Ein Verweis zu einem Abschnitt ist ein Textlink, kein Aktions-Button. */
+.lia-dashboard .dashboard-decision-link { display: inline-block; margin-top: .2em; font-size: .92em; font-weight: 650; color: var(--dashboard-accent); text-decoration: underline; text-underline-offset: .2em; }
 
 /* Vorläufige Planung, solange keine Einheiten angelegt sind */
 .lia-dashboard .dashboard-plan h4 { margin: .2em 0 .3em; }
 .lia-dashboard .dashboard-plan-note { margin: 0 0 .6em; font-size: .9em; color: var(--dashboard-muted, #55625c); }
+/* Lange Titel dürfen die Textspalte nicht verdrängen: der Titel nimmt höchstens 40 %,
+   in einer schmalen Spalte steht er über dem Text. */
+.lia-dashboard .dashboard-plan { container-type: inline-size; }
 .lia-dashboard .dashboard-plan dl { margin: 0; }
-.lia-dashboard .dashboard-plan dl > div { display: grid; grid-template-columns: minmax(5.5em, auto) 1fr; gap: .6em; padding: .45em 0; border-bottom: 1px solid var(--dashboard-border); }
-.lia-dashboard .dashboard-plan dt { font-weight: 650; }
-.lia-dashboard .dashboard-plan dd { margin: 0; }
+.lia-dashboard .dashboard-plan dl > div { display: grid; grid-template-columns: minmax(5.5em, 40%) minmax(0, 1fr); gap: .6em; padding: .45em 0; border-bottom: 1px solid var(--dashboard-border); }
+.lia-dashboard .dashboard-plan dt { font-weight: 650; min-width: 0; overflow-wrap: break-word; hyphens: auto; }
+.lia-dashboard .dashboard-plan dd { margin: 0; min-width: 0; }
+@container (max-width: 26em) {
+  .lia-dashboard .dashboard-plan dl > div { grid-template-columns: minmax(0, 1fr); gap: .1em; }
+}
 
 @media (prefers-color-scheme: dark) {
   .lia-dashboard .dashboard-decisions { background: #2b2a1d; }

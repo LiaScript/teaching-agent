@@ -1,0 +1,370 @@
+{
+ "_about": "Language pack for the EMPTY journal template (specs/templates/journal.md): applied by `node specs/dashboard/localize-journal.mjs --lang de` in one write. Regenerate when the template changes; check-specs compares it with the template. Covers every visible line of the empty template, so init-course step 11 has nothing left to translate except the unit word in `unitLines`. `terms` are the current state words in this language (templates/session-validation.yaml → outcome_words); `outdatedTerms` lists older wordings as [pattern, term key] — validate-journal.mjs recognises them and recommends the term instead.",
+ "language": "de",
+ "labels": {
+  "teaching": "Planungsassistent",
+  "artist": "Gestaltungsassistent",
+  "learner": "Lernenden-Check",
+  "development": "Veröffentlichungsassistent"
+ },
+ "unitWord": {
+  "one": "Einheit",
+  "many": "Einheiten"
+ },
+ "unitLines": [
+  "## Sessions – Einheiten",
+  "_Noch keine Einheiten – sie entstehen nach der Didaktik (und dem Ablaufplan, wenn einer geplant ist)._",
+  "Die Kursprüfung ist noch nicht gelaufen. Die Prüfungen der einzelnen Einheiten stehen unter „Einheiten“; die Kursprüfung kommt vor dem Veröffentlichen."
+ ],
+ "replace": [
+  [
+   "# New course",
+   "# Neuer Kurs"
+  ],
+  [
+   "This is where your course plan grows. You bring your teaching idea; the assistant in the chat helps you turn it into learning objectives, activities and finished material. You check every proposal and decide what is kept. **Nothing is saved without your confirmation.**",
+   "Hier wächst Ihr Kursplan. Sie bringen Ihre Idee mit; der Assistent im Chat hilft Ihnen, daraus Lernziele, Aufgaben und fertiges Material zu entwickeln. Sie prüfen jeden Vorschlag und entscheiden, was bleibt. **Ohne Ihre Bestätigung wird nichts gespeichert.**"
+  ],
+  [
+   "[Open the overview →](#dashboard)",
+   "[Zur Übersicht →](#dashboard-–-übersicht)"
+  ],
+  [
+   "## Dashboard",
+   "## Dashboard – Übersicht"
+  ],
+  [
+   "## Course Context",
+   "## Course Context – Kursrahmen"
+  ],
+  [
+   "[▶️ Start course](agent:teaching/init-course) `:init-course`",
+   "[▶️ Kurs starten](agent:teaching/init-course) `:init-course`"
+  ],
+  [
+   "_Still empty – filled with “Start course”._",
+   "_Noch leer – wird mit „Kurs starten“ ausgefüllt._"
+  ],
+  [
+   "## Outline",
+   "## Outline – Gliederung"
+  ],
+  [
+   "[▶️ Create outline](agent:teaching/create-outline) `:create-outline`",
+   "[▶️ Gliederung erstellen](agent:teaching/create-outline) `:create-outline`"
+  ],
+  [
+   "_Still empty – created with “Create outline”, the step after the course frame._",
+   "_Noch leer – entsteht mit „Gliederung erstellen“, dem Schritt nach dem Kursrahmen._"
+  ],
+  [
+   "## Didactics",
+   "## Didactics – Didaktik"
+  ],
+  [
+   "[▶️ Create didactics](agent:teaching/create-didactics) `:create-didactics` · [🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals`",
+   "[▶️ Didaktik planen](agent:teaching/create-didactics) `:create-didactics` · [🎨 Gestaltung](agent:artist/create-visuals) `:agent artist` → `:create-visuals`"
+  ],
+  [
+   "_Still empty – created with “Create didactics”, the step after the outline._",
+   "_Noch leer – entsteht mit „Didaktik planen“, dem Schritt nach der Gliederung._"
+  ],
+  [
+   "## Visual Identity",
+   "## Visual Identity – Gestaltung"
+  ],
+  [
+   "[🎨 Visual identity](agent:artist/create-visuals) `:agent artist` → `:create-visuals` · [🎨 Logo](agent:artist/create-logo) `:agent artist` → `:create-logo`",
+   "[🎨 Gestaltung](agent:artist/create-visuals) `:agent artist` → `:create-visuals` · [🎨 Logo](agent:artist/create-logo) `:agent artist` → `:create-logo`"
+  ],
+  [
+   "_Optional – the design assistant fills this in when you want a consistent look for images and colours._",
+   "_Freiwillig – der Gestaltungsassistent füllt das aus, wenn Bilder und Farben einheitlich aussehen sollen._"
+  ],
+  [
+   "## Templates",
+   "## Templates – Vorlagen"
+  ],
+  [
+   "[▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`",
+   "[▶️ Vorlagen verwalten](agent:teaching/manage-templates) `:manage-templates`"
+  ],
+  [
+   "LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.",
+   "Die LiaScript-Vorlagen dieses Projekts werden im Kopf ganz oben in `journal.md` eingebunden und auch in jeder Materialdatei, die sie nutzt."
+  ],
+  [
+   "More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.",
+   "Weitere Vorlagen der Gemeinschaft gibt es unter [topics/liascript-template](https://github.com/topics/liascript-template). Eine ausgewählte Vorlage wird mit ihrer `import:`-Zeile in den Projektkopf eingetragen, hier beschrieben und im Material genauso eingebunden."
+  ],
+  [
+   "  Renders the project overview (next step, units, work process, open points) from one JSON data block.",
+   "  Zeigt die Übersicht des Projekts (nächster Schritt, Einheiten, Arbeitsstand, offene Punkte) aus einem einzigen Datenblock."
+  ],
+  [
+   "  1. Showing the planning state in `## Dashboard` of `journal.md`",
+   "  1. Den Planungsstand unter `## Dashboard` in `journal.md` anzeigen"
+  ],
+  [
+   "  1. Keep the import in the main metadata header.",
+   "  1. Die Einbindung im Kopf von `journal.md` stehen lassen."
+  ],
+  [
+   "  2. Regenerate the data block with `:update-dashboard`; never edit it by hand.",
+   "  2. Den Datenblock mit `:update-dashboard` neu erzeugen, nie von Hand ändern."
+  ],
+  [
+   "  1. Component documentation and examples: `specs/dashboard/README.md`; check with `node specs/dashboard/validate-journal.mjs`.",
+   "  1. Beschreibung und Beispiele: `specs/dashboard/README.md`; Prüfung mit `node specs/dashboard/validate-journal.mjs`."
+  ],
+  [
+   "## Agenda",
+   "## Agenda – Ablaufplan"
+  ],
+  [
+   "[▶️ Create agenda](agent:teaching/create-agenda) `:create-agenda`",
+   "[▶️ Ablaufplan erstellen](agent:teaching/create-agenda) `:create-agenda`"
+  ],
+  [
+   "_Still empty – created with “Create agenda”, the step after the didactics._",
+   "_Noch leer – entsteht mit „Ablaufplan erstellen“, dem Schritt nach der Didaktik._"
+  ],
+  [
+   "## Sessions",
+   "## Sessions – Einheiten"
+  ],
+  [
+   "[▶️ Didactics first](agent:teaching/create-didactics) `:create-didactics`",
+   "[▶️ Zuerst die Didaktik](agent:teaching/create-didactics) `:create-didactics`"
+  ],
+  [
+   "_No units yet – they are created after the didactics (and the agenda, if one is planned)._",
+   "_Noch keine Einheiten – sie entstehen nach der Didaktik (und dem Ablaufplan, wenn einer geplant ist)._"
+  ],
+  [
+   "<details><summary>Technical overview</summary>",
+   "<details><summary>Technische Übersicht</summary>"
+  ],
+  [
+   "## Agents",
+   "## Agents – Assistenten"
+  ],
+  [
+   "[▶️ Configure agent](agent:teaching/configure-agent) `:configure-agent <agent>` · [▶️ New learner persona](agent:teaching/create-learner-persona) `:create-learner-persona`",
+   "[▶️ Assistenten anpassen](agent:teaching/configure-agent) `:configure-agent <agent>` · [▶️ Neues Lernendenprofil](agent:teaching/create-learner-persona) `:create-learner-persona`"
+  ],
+  [
+   "_Project-specific settings of the assistants and learner profiles._",
+   "_Projektbezogene Einstellungen der Assistenten und Lernendenprofile._"
+  ],
+  [
+   "  none",
+   "  keine",
+   "all"
+  ],
+  [
+   "  1. none",
+   "  1. keine",
+   "all"
+  ],
+  [
+   "  1. Do not override base workflow, validation, safety, or epistemic rules.",
+   "  1. Die Grundregeln für Ablauf, Prüfung, Sicherheit und Quellen nicht außer Kraft setzen.",
+   "all"
+  ],
+  [
+   "  1. Do not override base visual consistency, accessibility, or uncertainty rules.",
+   "  1. Die Grundregeln für einheitliche Gestaltung, Barrierefreiheit und Unsicherheit nicht außer Kraft setzen."
+  ],
+  [
+   "  1. Do not override validation gates, git safety, or publishing checks.",
+   "  1. Prüfschwellen, Git-Sicherheit und Veröffentlichungsprüfungen nicht außer Kraft setzen."
+  ],
+  [
+   "### Learner Personas",
+   "### Learner Personas – Lernendenprofile"
+  ],
+  [
+   "_No learner profiles yet._",
+   "_Noch keine Lernendenprofile._"
+  ],
+  [
+   "## Validation",
+   "## Validation – Prüfung"
+  ],
+  [
+   "### Latest Validation Summary",
+   "### Latest Validation Summary – Letzte Kursprüfung"
+  ],
+  [
+   "Course check not yet run. Unit checks are under \"Sessions\"; the course check runs before publishing.",
+   "Die Kursprüfung ist noch nicht gelaufen. Die Prüfungen der einzelnen Einheiten stehen unter „Einheiten“; die Kursprüfung kommt vor dem Veröffentlichen."
+  ],
+  [
+   "## Publishing",
+   "## Publishing – Veröffentlichung"
+  ],
+  [
+   "* __Repository:__ none yet",
+   "* __Repository:__ noch keins"
+  ],
+  [
+   "## Analysis Status",
+   "## Analysis Status – Analysestand"
+  ],
+  [
+   "_Only used when an existing course is improved._",
+   "_Nur nötig, wenn ein bestehender Kurs überarbeitet wird._"
+  ],
+  [
+   "## Notes Backup",
+   "## Notes Backup – Notizen"
+  ],
+  [
+   "[▶️ Save notes](agent:teaching/save-notes) `:save-notes` · [▶️ Save decision](agent:teaching/save-decision) `:save-decision <title>`",
+   "[▶️ Notizen sichern](agent:teaching/save-notes) `:save-notes` · [▶️ Entscheidung festhalten](agent:teaching/save-decision) `:save-decision <title>`"
+  ],
+  [
+   "_No notes yet._",
+   "_Noch keine Notizen._"
+  ],
+  [
+   "_Rules for writing the material: voice of the guide, hints, limits._",
+   "_Regeln für das Schreiben des Materials: Stimme der Begleitfigur, Hinweise, Grenzen._"
+  ]
+ ],
+ "dashboard": {
+  "title": "Willkommen – Ihr Kurs ist noch leer",
+  "context": "Noch kein Thema, keine Zielgruppe, kein Zeitrahmen",
+  "subtitle": "Im ersten Schritt erzählen Sie dem Assistenten, was Sie unterrichten möchten. Alles Weitere baut auf diesem Rahmen auf.",
+  "next": {
+   "title": "Den Rahmen festlegen",
+   "why": "Thema, Zielgruppe und Format sind die Grundlage für Lernziele und Material. Der Assistent fragt sie nacheinander ab.",
+   "label": "Kurs starten",
+   "href": "agent:teaching/init-course",
+   "command": ":init-course",
+   "icon": "▶️"
+  },
+  "unitLabel": {
+   "one": "Einheit",
+   "many": "Einheiten"
+  },
+  "unitsTitle": "Einheiten",
+  "units": [],
+  "process": {
+   "title": "So entsteht Ihr Kurs",
+   "description": "Die Schritte vom Thema bis zum geprüften Material. Diese Übersicht zeigt immer, wo wir gerade stehen.",
+   "steps": [
+    {
+     "title": "Den Rahmen festlegen",
+     "state": "current",
+     "why": "Thema, Zielgruppe, Format und Sprache prägen alles, was folgt.",
+     "next": "Klicken Sie auf „Kurs starten“ und beantworten Sie die Fragen."
+    },
+    {
+     "title": "Gliederung und Lernziele",
+     "state": "planned",
+     "why": "Klare Lernziele sagen, was die Lernenden am Ende können."
+    },
+    {
+     "title": "Didaktik",
+     "state": "planned",
+     "why": "Methoden, Aufgabenformen und Unterstützung, die zu den Lernzielen passen."
+    },
+    {
+     "title": "Ablaufplan",
+     "state": "optional",
+     "why": "Wird mit dem Rahmen entschieden: Reihenfolge und Dauer der Einheiten."
+    },
+    {
+     "title": "Material erstellen",
+     "state": "planned",
+     "why": "Erklärungen, Aufgaben und Selbsttests entstehen aus der Planung."
+    },
+    {
+     "title": "Prüfen und überarbeiten",
+     "state": "planned",
+     "why": "Verständlichkeit und Passung zu den Lernzielen werden geprüft, bevor das Material eingesetzt wird."
+    },
+    {
+     "title": "Veröffentlichen",
+     "state": "optional",
+     "why": "Optional: den geprüften Kurs als Link teilen."
+    }
+   ],
+   "note": "Sie können jederzeit einen Schritt zurückgehen. Fertig ist eine Einheit erst, wenn ihre Prüfung bestanden ist und sie als erledigt markiert wurde."
+  },
+  "explore": [
+   {
+    "icon": "⚡",
+    "title": "Schnellstart",
+    "description": "Ein einziges Gespräch füllt Rahmen, Lernziele und Didaktik auf einmal.",
+    "label": "Schnellstart",
+    "href": "agent:teaching/scaffold",
+    "command": ":scaffold"
+   },
+   {
+    "icon": "🔍",
+    "title": "Bestehenden Kurs verbessern",
+    "description": "Nur wenn es schon LiaScript-Material gibt, das überarbeitet werden soll.",
+    "label": "Kurs analysieren",
+    "href": "agent:teaching/analyze-existing",
+    "command": ":analyze-existing"
+   },
+   {
+    "icon": "💬",
+    "title": "Einfach fragen",
+    "description": "Fragen Sie in eigenen Worten, wann immer etwas unklar ist.",
+    "label": "Was kann der Assistent?",
+    "href": "agent:teaching/help",
+    "command": ":help"
+   }
+  ],
+  "links": [
+   {
+    "label": "Kursrahmen",
+    "href": "#course-context-–-kursrahmen"
+   },
+   {
+    "label": "Gliederung",
+    "href": "#outline-–-gliederung"
+   },
+   {
+    "label": "Notizen",
+    "href": "#notes-backup-–-notizen"
+   }
+  ],
+  "footer": "neues, leeres Projekt · {date}"
+ },
+ "terms": {
+  "skeleton": "Planungsskizze",
+  "writingRules": "Regeln für das Schreiben des Materials",
+  "materialWritten": "Material geschrieben · Prüfung offen",
+  "imagesMissing": "Material geschrieben · Bilder fehlen",
+  "imagesPartial": "Material geschrieben · Bilder {n} von {m}",
+  "imageStep": "Bilder einfügen",
+  "checkCorrection": "Prüfung: Korrektur nötig ({n})",
+  "passedMissing": "bestanden – es fehlt noch: {what}",
+  "validationReport": "Prüfbericht",
+  "usableNow": "Jetzt mit den Lernenden nutzbar",
+  "changedAfterCheck": "Nach der Prüfung geändert",
+  "recheckShort": "{n} Punkt(e) seither geändert – kurze Nachprüfung offen",
+  "recheckExplain": "ich sehe die geänderten Seiten noch einmal durch, etwa {m} Minuten",
+  "correctionOpen": "Korrektur nötig: {open} von {n} Punkten offen",
+  "correctionAllFixed": "alle {n} Punkte korrigiert",
+  "usableYes": "ja",
+  "usableLimited": "ja, mit Einschränkungen: {what}",
+  "usableNo": "noch nicht: {why}",
+  "viewMaterial": "So sehen es die Lernenden",
+  "seePlanning": "Planung ansehen",
+  "approveAsk": "Passt {unit} {n} so?",
+  "approve": "Freigeben",
+  "changeSomething": "Noch etwas ändern"
+ },
+ "outdatedTerms": [
+  ["folgt noch", "passedMissing"],
+  ["(?<!\\p{L})überarbeitet(?!\\p{L})", "recheckShort"],
+  ["(?<!kurze )Nachprüfung offen", "recheckShort"],
+  ["Korrektur nötig \\(\\d+\\)(?=.*seither)", "correctionOpen"]
+ ]
+}

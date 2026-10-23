@@ -8,7 +8,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 
 ## Inputs
 
-- Learning objectives from `journal.md` → `## Outline` (`__Learning Objectives:__` bullet)
+- Learning objectives from `journal.md` → `## Outline` (the field with `data-key="learning-goals"`; in older journals the `__Learning Objectives…:__` bullet)
 - Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
 - Time commitment from `journal.md` → `## Outline` (`__Time Commitment:__` bullet)
 - Didactic concept from `journal.md` → `## Didactics` (`__Didactic Concept:__` bullet)
@@ -56,7 +56,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
    - **single-lesson** (if agenda is yes): sections/chapters within the lesson, no time slots
 
    When assigning a duration, `data/duration-heuristic.md` can help sanity-check that it's realistic for the planned content volume — this is orientation only, not a required check here (the actual check happens later in `:validate-course`).
-6a. **Self-check before the summary:** every learning objective is covered by at least one mandatory unit; an objective marked for all units appears in every row; durations add up to the time budget of 5c including a buffer; numbers match `## Course Context` (number and length of lessons).
+6a. **Self-check before the summary:** every learning objective is covered by at least one mandatory unit; an objective marked for all units appears in every row; durations add up to the time budget of 5c including a buffer — a buffer is free time **or** an explicitly movable part (then say what slower learners move and where they catch up; with 0 free minutes in a slot, say so in its own line); numbers match `## Course Context` (number and length of lessons).
 7. Fill the `templates/course-agenda.yaml` template with the results.
-8. **Before saving** show the agenda as text (whole version, changes in bold after a revision) with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Agenda` following `templates/course-agenda.yaml` → `layout`, no sub-headings.
+8. **Before saving** show the agenda as text (after a revision it starts with one line naming every change — see `data/agent-links.md` → Nothing unseen gets saved; new preparation items and open points for the overview are listed in future tense) with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Agenda` following `templates/course-agenda.yaml` → `layout`, no sub-headings.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

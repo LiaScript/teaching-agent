@@ -42,7 +42,7 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 4. **Alerts** (§3): alert blockquotes use only supported types (`NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`); every line of the alert starts with `>`.
 5. **Citations** (§3): citation blockquotes have a `--` source line, preceded by an empty `>` line.
 6. **Animations & TTS** (§4, §14): `--{{n}}--` / `{{n}}` numbering resets to 0 after each `##`; every `{{n}}` animated content block has a matching `--{{n}}--` TTS comment; narrator overrides use the `<!-- narrator: ... -->` form; `{{|>}}` play-button syntax is well-formed where used.
-7. **Media** (§5): every `![]`, `?[]`, `!?[]`, `??[]` element has meaningful alt text/caption.
+7. **Media** (§5): every `![]`, `?[]`, `!?[]`, `??[]` element has meaningful alt text/caption; every link and media target has `(`, `)` and spaces percent-encoded (an unencoded `(` cuts the address); image answer options carry a display limit (`<!-- style="max-height: …" -->` directly after the image) and request a standard thumbnail width (cheat sheet §5). This is the only place the limit is checked; whether the options fit the learners' screen is the `[pedagogical]` checklist item, never a syntax finding.
 8. **Diagrams** (§6): Mermaid code blocks tagged `@mermaid`; ASCII diagrams tagged `ascii`.
 9. **Formulas** (§7): inline `$...$` and block `$$...$$` LaTeX delimiters correctly paired.
 10. **Quizzes & surveys** (§10, §10b): classic quiz syntax (`[(X)]` single choice, `[[X]]` multiple choice, `[[answer]]` text quiz, `?[...]` open question) **and** survey variants (`[[___]]` text input, single-/multi-choice vector, single-/multi-choice matrix) are correctly formed.
@@ -61,7 +61,7 @@ Syntax check: {material path}
 4. Alerts — ✅/❌ [findings, page titles]
 5. Citations — ✅/❌ [findings, page titles]
 6. Animations & TTS — ✅/❌ [findings, page titles]
-7. Media alt text — ✅/❌ [findings, page titles]
+7. Media (alt text, encoded targets, image size) — ✅/❌ [findings, page titles]
 8. Diagrams — ✅/❌ [findings, page titles]
 9. Formulas — ✅/❌ [findings, page titles]
 10. Quizzes & surveys — ✅/❌ [findings, page titles]

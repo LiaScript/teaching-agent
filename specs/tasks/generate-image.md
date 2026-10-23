@@ -83,6 +83,7 @@ google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug
 5. Skip if already generated:
    - `__Status:__` is `generated`, **or** the file at `__File:__` already exists → mark `⏭ skipped`
    - otherwise (`__Status:__ prompt-ready` and no file yet) → add to queue
+   - entries without a prompt (`wanted`, `candidate`, `selected`, `inserted` — free photos and own photos, `tasks/create-image.md` → Free photos) are never queued
 6. Print queue:
    ```
    Batch queue: {N} to process, {M} skipped (already done)
@@ -283,7 +284,7 @@ For each queued entry (single or sequential batch):
 ## Phase 5b: Update Journal Entry *(all modes)*
 
 - Only once the file exists at the `__File:__` path: in the `<section>` for `{slug}`, set `__Status:__` to `generated` and add the image `![{alt text}]({path})` below the prompt. If it does not, keep `prompt-ready` and report where the file is.
-- In the material, replace the marker `<!--- image: {slug} --->` (older journals: `<!-- image: {slug} -->`) + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker (e.g. status `prompt-only`), insert the image at the place it belongs and say where. Only then is the image visible to learners.
+- In the material, replace the marker `<!--- image: {slug} … --->` (older journals: `<!-- image: {slug} -->`) + `> 🖼️ _…_` with the image `![{alt text}]({path relative to the material document})`. Without a marker (e.g. status `prompt-only`), insert the image at the place it belongs and say where. Only then is the image visible to learners.
 
 ---
 

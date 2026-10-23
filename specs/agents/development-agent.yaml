@@ -88,6 +88,7 @@ commands:
   :manage-git: "run task `tasks/manage-git.md`"
   :create-project: "run task `tasks/create-project.md`"
   :update-project: "run task `tasks/update-project.md`"
+  :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -98,6 +99,7 @@ dependencies:
     - manage-git.md
     - create-project.md
     - update-project.md
+    - preview.md
   data:
     - liascript-workflows.md
 

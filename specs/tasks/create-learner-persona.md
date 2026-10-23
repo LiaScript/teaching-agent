@@ -14,7 +14,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 ## Inputs
 
 - Name (optional — agent suggests if not provided)
-- Target audience from `journal.md` → `## Outline` (`__Target Audience:__` bullet)
+- Target audience from `journal.md` → `## Outline` (the field with `data-key="target-audience"`; in older journals the `__Target Audience…:__` bullet)
 - Difficulty level, course type, and style from `journal.md` → `## Didactics`
 - `templates/agents.yaml` — used if `journal.md` → `## Agents` does not exist yet
 - Optional: research data provided by instructor (for data-driven mode)

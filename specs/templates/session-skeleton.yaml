@@ -11,9 +11,18 @@ template:
       overview: >-
         Directly below `## Sessions`, in this order:
         (1) a visible status list in the course language, one numbered line per unit in session order,
-        `{n}. {title} – {status}` with status "skeleton ✅ · material open", "material ready · check open",
-        "check failed – revision needed", "revised – check open", "passed with concerns – your decision needed",
-        "passed – {later step} follows" or "checked ✅" (translated; a Notes entry follows after " – ");
+        `{n}. {title} – {status}` with status "planning sketch ✅ · material open" (the fixed word for skeleton, `data/agent-links.md` → Plain language), "material written · check open"
+        ("material written · images missing" while image spots are open and none is inserted yet, `tasks/create-image.md` → Image spots;
+        "material written · images {n} of {m}" once at least one of the m entries is inserted and others are still open — the count is
+        part of the status word, so a partial state stays visible; never "ready" or
+        "finished" before a check — a language pack lists these under `terms`),
+        "check: correction needed ({n})" (never a grade word such as "failed"; {n} as in the report's outcome),
+        "passed with concerns – your decision needed", "passed – still missing: {what}" or "checked ✅" — once a
+        report exists, the same words as its outcome line (`templates/session-validation.yaml` → `outcome_words`);
+        after changes made after the check "{outcome} – {n} point(s) changed since – short re-check open", where a
+        FAIL outcome counts the points still open: "check: correction needed: {open} of {n} points open" (one wording
+        per state in status line, Notes cell and `statusLabel`, never a second phrase such as "revised"; translated;
+        other open state such as "images {n} of {m}" follows after " – ");
         (2) `<details><summary>{"Technical overview", translated}</summary>`, then `<!-- data-type="none" -->`
         and the table `| # | Title | Type | Method | Skeleton | Material | Done | Notes |` (the Method
         column only if `__Default Session Method:__` is not `none`), then `</details>`.
@@ -27,9 +36,11 @@ template:
       entry_order: >-
         Inside each `### {{number}}. {{title}}` subsection, always in this order: action line →
         `<details>` "Technical settings and more actions" (Type, Method, further commands) →
-        `#### Validation Report` (once a check ran) → visible kind line → Summary → Content → Activities →
-        Decisions (once the first exists) → References → `#### Images` (once the first image exists) →
-        `#### Persona Reviews` (once a review exists). A task inserts its block at this position, never
+        visible kind line → Summary → Content → Activities → Decisions (once the first exists) → References →
+        the validation report (once a check ran; heading and `<section data-key="validation-report">`,
+        `templates/session-validation.yaml`) → `#### Images` (once the first image entry exists) →
+        `#### Persona Reviews` (once a review exists). So the unit's slide shows the unit and the report's
+        slide only the report. A task inserts its block at this position, never
         relative to another optional block.
   title: 'Session {{number}}'
   sections:
@@ -42,7 +53,7 @@ template:
       template: |
         <!-- class="journal-actions" -->
         [▶️ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
-      note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
+      note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Once the material exists, the line also carries the learners'' view as second link after " · ", never only inside the `<details>` block: 👁 "How learners see it" (translated, with the course''s word for learners) on `agent:teaching/preview?file={{number}}` with the command `:preview {{number}}`. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
     - id: type
       title: Type (technical)
       template: |
@@ -66,7 +77,7 @@ template:
       title: Kind (visible)
       template: |
         <!-- data-key="kind" -->
-        **{{"Kind", translated}}:** {{display name of the type in the course language}} · **{{"Checklist", translated}}:** {{display name of the method in the course language, or "none" translated}}
+        **{{"Kind", translated}}:** {{display name of the type in the course language}}{{ · **"Also pay attention to", translated:** display name of the method in the course language — only when it differs from the course default in `## Didactics`; otherwise omit}}
     - id: summary
       title: Summary
       template: |
@@ -74,6 +85,7 @@ template:
         **{{"Summary", translated}}:**
 
         [Short overview, reference to agenda, relevance, didactics. May contain more than one paragraph.]
+      note: 'Stays 2–4 sentences on the focus and the stumbling points of the unit. To-dos and remarks about single images or later fixes never go here: an image to-do goes as `__To do:__` into its `#### Images` entry and into the `next` of the image step (`tasks/create-image.md` → Journal Entry Format); other open points go to the overview.'
     - id: content
       title: Content
       template: |
@@ -95,8 +107,8 @@ template:
         <!-- data-key="decisions" -->
         **{{"Decisions", translated}}:**
 
-        1. [Decision of the instructor about this session, with date]
-      note: 'Filled by `:coauthor-materials` whenever the instructor decides something about this session; read by `:coauthor-materials` and `:validate-course` before recommending anything. Omit until the first decision exists.'
+        - **{{date}}:** [Decision of the instructor about this session]
+      note: 'Filled by `:coauthor-materials` whenever the instructor decides something about this session; read by `:coauthor-materials` and `:validate-course` before recommending anything. Omit until the first decision exists. One bullet per decision, the date in bold before it — never a numbered item that starts with the date (`1. 23.10.2026: …` renders as "1.23.10. 2026"; decisions are named by a short title, never by number).'
     - id: references
       title: References & Sources
       template: |
