@@ -1412,3 +1412,36 @@ test("the Dashboard of a journal needs a title (without one the page shows an em
   assert.match(validate({ title: "  ", next }).output, /Dashboard has no title/);
   assert.doesNotThrow(() => dashboard.buildModel({}), "the library itself stays open for single components");
 });
+
+// Write budget (data/chat-dialog.md → Changing another section: at most 5 writes per save; build-session's
+// runs line): the write scripts count their writes in .cache/writes.json and warn from the 6th within 10 minutes.
+const writeCount = await import("./write-count.mjs");
+
+test("the write scripts count their writes and warn from the 6th within ten minutes", () => {
+  const dir = mkdtempSync(join(tmpdir(), "writes-"));
+  try {
+    const at = minutes => new Date(Date.UTC(2026, 9, 23, 10, minutes));
+    for (let i = 0; i < 5; i++) assert.equal(writeCount.countWrite(dir, "localize-journal", "journal.md", at(i)), null, `write ${i + 1} is within the budget`);
+    const sixth = writeCount.countWrite(dir, "write-dashboard", "journal.md", at(5));
+    assert.match(sixth, /^Warning: 6th write within 10 minutes \(5 × localize-journal, 1 × write-dashboard\) – every write reloads the preview/);
+    assert.equal(writeCount.countWrite(dir, "localize-journal", "journal.md", at(30)), null, "older writes no longer count");
+    writeFileSync(join(dir, ".cache", "writes.json"), "kaputt");
+    assert.equal(writeCount.countWrite(dir, "localize-journal", "journal.md", at(31)), null, "a broken log starts again");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test("the line replacer warns at the 6th write of a project within ten minutes", () => {
+  const dir = mkdtempSync(join(tmpdir(), "writes-run-"));
+  try {
+    writeFileSync(join(dir, "README.md"), "# Kurs\n\nZeile 0\n");
+    let output = "";
+    for (let i = 0; i < 6; i++) {
+      writeFileSync(join(dir, "map.json"), JSON.stringify({ replace: [[`Zeile ${i}`, `Zeile ${i + 1}`]] }));
+      const run = spawnSync(process.execPath, [localizeScript, "map.json", "README.md"], { cwd: dir, encoding: "utf8" });
+      assert.equal(run.status, 0, run.stdout + run.stderr);
+      output = run.stdout;
+      if (i < 5) assert.doesNotMatch(output, /Warning: \d+th write/, `run ${i + 1}`);
+    }
+    assert.match(output, /Warning: 6th write within 10 minutes \(6 × localize-journal\)/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});

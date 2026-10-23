@@ -14,6 +14,7 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { countWrite } from "./write-count.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -145,7 +146,11 @@ if (!changes.length && !leftovers.length) {
 }
 if (changes.length) console.log(`${check ? "Would change" : "Changed"} (representation only):\n${changes.map(item => `- ${item}`).join("\n")}`);
 if (untranslated && replacements.length) console.log(`No language pack for "${language}": the migrated lines are English – translate them into the course language.`);
-if (changes.length && !check) writeFileSync(target, lines.join("\n"));
+if (changes.length && !check) {
+  writeFileSync(target, lines.join("\n"));
+  const budget = countWrite(process.cwd(), "migrate-journal", file);
+  if (budget) console.log(budget);
+}
 if (leftovers.length) {
   console.log(`Left for you:\n${leftovers.map(item => `- ${item}`).join("\n")}`);
   console.log("Exit code: 2");

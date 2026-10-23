@@ -27,6 +27,7 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { countWrite } from "./write-count.mjs";
 
 const args = process.argv.slice(2);
 if (args[0] === "--lang" && !args[1]) {
@@ -106,6 +107,8 @@ if (dashboardLines) {
   lines.splice(start + 1, end - start - 1, ...dashboardLines);
 }
 writeFileSync(file, lines.join("\n"));
+const budget = countWrite(process.cwd(), "localize-journal", file);
 console.log(`OK: ${map.replace?.length ?? 0} replacement(s)${map.append ? `, ${map.append.length} line(s) appended` : ""}${map.language ? `, language: ${map.language}` : ""}${dashboardLines ? ", Dashboard replaced" : ""} in one write`);
 if (map.labels) console.log(`Roster labels: ${JSON.stringify(map.labels)}`);
+if (budget) console.log(budget);
 console.log("Exit code: 0");

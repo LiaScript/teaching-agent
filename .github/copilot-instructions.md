@@ -997,7 +997,7 @@ Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (
 
 ## Writes per run
 
-Every write reloads the preview and resets the answers of an instructor who is trying a page. Target per run — material: the generated text (at most 3 parts), images 1, each fix iteration 1; journal: sketch save 1 plus the overview patch of step 0, report + image entries + status line 1 per iteration, overview 1 (step 4). Changes of several lines go into one map (`localize-journal.mjs`) or one section write (`data/chat-dialog.md` → Changing another section). Sub-procedures write in these batches: all persona reports of one round in one journal write, the image entries and status line of a batch in one, all images of step 3 in one material write. A run that needs more writes names the number in its runs line ("writes: {n}", translated) — never splits silently.
+Every write reloads the preview and resets the answers of an instructor who is trying a page. Target per run — material: the generated text (at most 3 parts), images 1, each fix iteration 1; journal: sketch save 1 plus the overview patch of step 0, report + image entries + status line 1 per iteration, overview 1 (step 4). Changes of several lines go into one map (`localize-journal.mjs`) or one section write (`data/chat-dialog.md` → Changing another section). Sub-procedures write in these batches: all persona reports of one round in one journal write, the image entries and status line of a batch in one, all images of step 3 in one material write. A run that needs more writes names the number in its runs line ("writes: {n}", translated; the write scripts' log `.cache/writes.json` counts theirs, writes with the file-edit tool are added) — never splits silently.
 
 ## Cross-agent execution note
 
@@ -6150,7 +6150,10 @@ runs in the preview chat, and wherever a task names them also in the terminal. W
   line changes of one correction go into one write — one map for
   `node specs/dashboard/localize-journal.mjs <map.json> <material file>`, or the
   whole file written once after reading it — never one edit per line (every
-  write reloads the preview and resets the instructor's quiz answers).
+  write reloads the preview and resets the instructor's quiz answers). The write
+  scripts count their writes (`.cache/writes.json`) and print a warning from the
+  6th write within 10 minutes: take it as a stop — put the rest of the save into
+  one map or one section write. Writes with the file-edit tool are not counted.
 - **Describing a coming task:** say what the instructor will decide, in the
   instructor's words — never a task's step names or internal terms.
 - **Tables in the chat:** at most 3 columns with short cells (about 25

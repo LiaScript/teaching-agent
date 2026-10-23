@@ -72,7 +72,10 @@ runs in the preview chat, and wherever a task names them also in the terminal. W
   line changes of one correction go into one write — one map for
   `node specs/dashboard/localize-journal.mjs <map.json> <material file>`, or the
   whole file written once after reading it — never one edit per line (every
-  write reloads the preview and resets the instructor's quiz answers).
+  write reloads the preview and resets the instructor's quiz answers). The write
+  scripts count their writes (`.cache/writes.json`) and print a warning from the
+  6th write within 10 minutes: take it as a stop — put the rest of the save into
+  one map or one section write. Writes with the file-edit tool are not counted.
 - **Describing a coming task:** say what the instructor will decide, in the
   instructor's words — never a task's step names or internal terms.
 - **Tables in the chat:** at most 3 columns with short cells (about 25

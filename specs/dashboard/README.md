@@ -390,6 +390,8 @@ link: ./dashboard.css
 
 Modellprüfungen: `node specs/dashboard/check.mjs` aus dem Projektordner. Den Dashboard-Datensatz in `journal.md` prüft `node specs/dashboard/validate-journal.mjs` (auch alle `#`-Links gegen die echten LiaScript-Anker – vollständiger Überschriftentext, in Kleinbuchstaben, Leerzeichen → „-“, Satzzeichen bleiben – und rohe Platzhalter in sichtbaren Befehlen). Geschrieben wird der Block nur mit `node specs/dashboard/write-dashboard.mjs <draft.json>`: Entwurf prüfen, Block in einem Schreibvorgang ersetzen, danach validieren.
 
+Schreibbudget: `write-dashboard.mjs`, `localize-journal.mjs` und `migrate-journal.mjs` tragen jeden Schreibvorgang in `.cache/writes.json` ein (Modul `write-count.mjs`) und warnen ab dem 6. Schreibvorgang innerhalb von 10 Minuten, denn jeder Schreibvorgang lädt die Vorschau neu und setzt die Quizantworten zurück. Schreibvorgänge mit dem Edit-Werkzeug zählt der Zähler nicht.
+
 Ältere Journale: Ein Journal aus einer älteren Vorlage zeigt in nicht ausgefüllten Abschnitten noch `{{…}}`-Gerüste oder Prüfberichte unter `#### Validation Report`. `validate-journal.mjs` meldet das als „older journal layout“. `node specs/dashboard/migrate-journal.mjs --check` listet die Änderungen, ohne zu schreiben. Ohne `--check` setzt das Skript die Darstellung auf den aktuellen Stand, nur die Darstellung, nie Inhalte:
 - Leere Abschnitte bekommen die Einzeiler der aktuellen Vorlage, in der Kurssprache aus dem Sprachpaket. Die Überschrift bleibt, wie sie ist.
 - Ein Platzhalter im Titel wird zum neutralen Titel, die Fußzeile des Dashboards verliert ihren Datumsplatzhalter.

@@ -47,7 +47,7 @@ const required = {
   "data/agent-links.md": ["**Effort for the instructor**","**Order of the first reply:**","named or composed by an event","with two exceptions, both setup","**Inside an autonomous\n  run**","at about half time with an interim result","`agent` (`:configure-agent`) is one of","`slide` is a positive integer","never material or anything the instructor wrote","Language before the frame","Lost or unseen messages","Typed answers","Temporary companion","Learner view","reply_to","reload_pending","never end a turn while\n  announced work runs in the background","`preview` belongs to every agent","**Never for `preview`:**","**Long runs:**","tool call** is a `chat` status with the expected duration","\"step {i} of {n}: …\""],
   "data/chat-wording.md": ["never with a word of your own such as \"helpers\"","**State words from the language pack:**","Relative day words","Name open points by their titles","never the unit heading","One way to start","**Times:**","Greetings and farewells carry no time","Read the group titles **before**","`node specs/dashboard/now.mjs [<timestamp>]`","never \"speaker\" for the play triangle ▶"],
   "data/chat-language.md": ["browser_lang"],
-  "data/chat-dialog.md": ["**What the instructor does not want saved**","except a status that says you are waiting for the instructor","`\"append\"` adds lines at the end of the file","Reuse what is known","Tables in the chat","Changing another section","header\n  comment like the material header","what the instructor may do now"],
+  "data/chat-dialog.md": ["The write\n  scripts count their writes (`.cache/writes.json`)", "**What the instructor does not want saved**","except a status that says you are waiting for the instructor","`\"append\"` adds lines at the end of the file","Reuse what is known","Tables in the chat","Changing another section","header\n  comment like the material header","what the instructor may do now"],
   "data/chat-checks.md": ["`--viewport` with the window size of the learners' device","**Layout and devices:**","A missing warning is no proof","Say how you checked","*search result\n  only*","*looked at*","*read as an extract*"],
   "data/chat-companion.md": ["**Workaround for DevServer 1.2.19 (N63):**","replaces the server's general \"stay silent\"","| wrong, `trial` 2 (before `help`) |","| `solved` after at least one wrong check |","On the self-check","with a \"Back to\n  planning\" button"],
   "data/journal-links.md": ["checked ✅ → 👁 `preview`","check: correction needed → ✏️ `quick-fix?number={n}&description=…`","let it be prepared after a short sketch","**Learners' view:**","never \"To unit {n}\""],
@@ -493,7 +493,8 @@ test("outdated state wordings are recognised, never recommended; the current ter
 test("every helper script in specs/dashboard is on the shell list of the YAML and of the built CLAUDE.md", () => {
   const yaml = read("agents/teaching-agent.yaml");
   const built = readFileSync(join(specs, "..", "CLAUDE.md"), "utf8");
-  const scripts = readdirSync(join(specs, "dashboard")).filter(name => name.endsWith(".mjs") && name !== "check.mjs");
+  // Modules of the scripts declare themselves in their first line ("// Module for …") and are no commands.
+  const scripts = readdirSync(join(specs, "dashboard")).filter(name => name.endsWith(".mjs") && name !== "check.mjs" && !/^\/\/ Module for /.test(read(`dashboard/${name}`)));
   for (const name of scripts) {
     assert.ok(yaml.includes(`\`node specs/dashboard/${name}`), `agents/teaching-agent.yaml: ${name} is missing from the shell list`);
     assert.ok(built.includes(`\`node specs/dashboard/${name}`), `CLAUDE.md: ${name} is missing – run python specs/build.py`);

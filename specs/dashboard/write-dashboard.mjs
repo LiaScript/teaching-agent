@@ -13,6 +13,7 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import "./dashboard.js";
+import { countWrite } from "./write-count.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const [draftFile, journalArg] = process.argv.slice(2);
@@ -53,7 +54,12 @@ if (cacheHash && cacheHash !== blockHash(current)) {
 const json = JSON.stringify(data, null, 2);
 const next = source.replace(block, () => "```json @Dashboard.View\n" + json + "\n```");
 if (next === source) console.log("Dashboard unchanged.");
-else { writeFileSync(journal, next); console.log(`Dashboard written to ${journal}.`); }
+else {
+  writeFileSync(journal, next);
+  console.log(`Dashboard written to ${journal}.`);
+  const budget = countWrite(process.cwd(), "write-dashboard", journal);
+  if (budget) console.log(budget);
+}
 // The cache now matches the journal block: next time change only the affected keys in it.
 writeFileSync(draftFile, JSON.stringify({ ...data, _journalHash: blockHash(json) }, null, 2) + "\n");
 console.log(`Cache ${draftFile} matches the journal block (_journalHash ${blockHash(json)}) – for a small change edit only the affected keys there.`);
