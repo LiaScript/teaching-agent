@@ -26,13 +26,19 @@ Dashboard, in the session action lines and in the chat offers of every agent
 1. Resolve `file` (and `slide`) as described above. The path must stay inside
    the project root and end in `.md`; otherwise stop and say why.
 2. If the file does not exist yet, say so and offer the command that creates it
-   (e.g. `:promote-session {number}`) — as an `agent:` link in the chat
+   (`:coauthor-materials {number}`; once a unit has been worked out together and
+   approved, also `:build-session {number}`) — as an `agent:` link in the chat
    when the MCP gate is open.
 3. **MCP gate open** (`liascript` tools available, see `data/agent-links.md`):
    - Call `get_state`. If a browser is connected, use it; otherwise follow the
      server's instructions for opening the preview.
    - Call `goto` with `file` and, if given, `slide`.
-   - Post one chat line with a link back, named after the active agent:
+   - **Back to the journal** (no `file`): when `get_state.title` shows the overview
+     (the Dashboard or the course title of slide 1), say only "Here is the
+     overview again." (translated), without a link; offer the anchor link only
+     when the target cannot be confirmed and is not the overview
+     (`data/agent-links.md` → Point, don't describe).
+   - Otherwise post one chat line with a link back, named after the active agent:
      `[👁 Back to the journal](agent:{active agent}/preview) `:preview``
      (e.g. `agent:artist/preview` while the Artist works).
 4. **MCP gate closed:** tell the instructor how to open the file:

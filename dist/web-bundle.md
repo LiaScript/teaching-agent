@@ -2621,13 +2621,19 @@ Dashboard, in the session action lines and in the chat offers of every agent
 1. Resolve `file` (and `slide`) as described above. The path must stay inside
    the project root and end in `.md`; otherwise stop and say why.
 2. If the file does not exist yet, say so and offer the command that creates it
-   (e.g. `:promote-session {number}`) — as an `agent:` link in the chat
+   (`:coauthor-materials {number}`; once a unit has been worked out together and
+   approved, also `:build-session {number}`) — as an `agent:` link in the chat
    when the MCP gate is open.
 3. **MCP gate open** (`liascript` tools available, see `data/agent-links.md`):
    - Call `get_state`. If a browser is connected, use it; otherwise follow the
      server's instructions for opening the preview.
    - Call `goto` with `file` and, if given, `slide`.
-   - Post one chat line with a link back, named after the active agent:
+   - **Back to the journal** (no `file`): when `get_state.title` shows the overview
+     (the Dashboard or the course title of slide 1), say only "Here is the
+     overview again." (translated), without a link; offer the anchor link only
+     when the target cannot be confirmed and is not the overview
+     (`data/agent-links.md` → Point, don't describe).
+   - Otherwise post one chat line with a link back, named after the active agent:
      `[👁 Back to the journal](agent:{active agent}/preview) `:preview``
      (e.g. `agent:artist/preview` while the Artist works).
 4. **MCP gate closed:** tell the instructor how to open the file:
@@ -6040,7 +6046,9 @@ language (`## Course Context` → Language).
   Never leave a status line standing for more than a minute without a follow-up — except a status that says you are waiting for the instructor.
 - **Name things as the overview does:** use exactly the words the page shows
   (read them with `read_section` from the Dashboard slide) — never JSON field
-  names and never your own synonyms. The group titles for open decisions and
+  names and never your own synonyms. The other assistants are named with their
+  roster labels, never with a word of your own such as "helpers" (in a school
+  course that word may mean helper children). The group titles for open decisions and
   preparation are `labels.decide` and `labels.prepare` of the Dashboard data
   (`tasks/update-dashboard.md` step 8 always writes them). Read the group titles **before** you offer to note
   something in a group, not after. Name open points by their titles ("credits
@@ -6063,7 +6071,10 @@ language (`## Course Context` → Language).
   on it — continue here: …"). Never drop a click silently. Estimate durations
   generously and round up (a unit proposal about 2 minutes, saving with foreign
   sections 1–2 minutes); when the announced time is over, send a status with a
-  new estimate. If the first
+  new estimate. **Effort for the instructor** (how long the next unit will
+  take) names its basis — the measured time of an earlier unit from the journal
+  or the chat ("unit 2 took about 40 minutes including your review", translated)
+  — and gives the instructor's own time apart from waiting time. If the first
   content will take more than about 20 s, that first reply is a **lasting
   one-line chat message** (with `reply_to` = the click's entry) saying what is
   being prepared and honestly how long it takes ("I'm putting the proposal
@@ -6139,7 +6150,10 @@ language (`## Course Context` → Language).
   what the instructor already said in this chat or the journal and ask only for
   confirmation instead of asking again. Ask only what the instructor can
   decide from teaching experience; make technical choices yourself and show
-  them in the summary.
+  them in the summary. **What the instructor does not want saved** (a start
+  date, an agreement): say honestly that it is not kept — "Then I'll ask you
+  again next time" (translated) — and never claim that other assistants will
+  find it in the chat: they read only its latest entries.
 - **Superseded forms:** when you post a revised proposal, say that the previous
   version is superseded (a new form closes the old one; with `close` pass a
   `reason`). If an `answer` event refers to an older `ask` than your

@@ -465,7 +465,9 @@ language (`## Course Context` → Language).
   Never leave a status line standing for more than a minute without a follow-up — except a status that says you are waiting for the instructor.
 - **Name things as the overview does:** use exactly the words the page shows
   (read them with `read_section` from the Dashboard slide) — never JSON field
-  names and never your own synonyms. The group titles for open decisions and
+  names and never your own synonyms. The other assistants are named with their
+  roster labels, never with a word of your own such as "helpers" (in a school
+  course that word may mean helper children). The group titles for open decisions and
   preparation are `labels.decide` and `labels.prepare` of the Dashboard data
   (`tasks/update-dashboard.md` step 8 always writes them). Read the group titles **before** you offer to note
   something in a group, not after. Name open points by their titles ("credits
@@ -488,7 +490,10 @@ language (`## Course Context` → Language).
   on it — continue here: …"). Never drop a click silently. Estimate durations
   generously and round up (a unit proposal about 2 minutes, saving with foreign
   sections 1–2 minutes); when the announced time is over, send a status with a
-  new estimate. If the first
+  new estimate. **Effort for the instructor** (how long the next unit will
+  take) names its basis — the measured time of an earlier unit from the journal
+  or the chat ("unit 2 took about 40 minutes including your review", translated)
+  — and gives the instructor's own time apart from waiting time. If the first
   content will take more than about 20 s, that first reply is a **lasting
   one-line chat message** (with `reply_to` = the click's entry) saying what is
   being prepared and honestly how long it takes ("I'm putting the proposal
@@ -564,7 +569,10 @@ language (`## Course Context` → Language).
   what the instructor already said in this chat or the journal and ask only for
   confirmation instead of asking again. Ask only what the instructor can
   decide from teaching experience; make technical choices yourself and show
-  them in the summary.
+  them in the summary. **What the instructor does not want saved** (a start
+  date, an agreement): say honestly that it is not kept — "Then I'll ask you
+  again next time" (translated) — and never claim that other assistants will
+  find it in the chat: they read only its latest entries.
 - **Superseded forms:** when you post a revised proposal, say that the previous
   version is superseded (a new form closes the old one; with `close` pass a
   `reason`). If an `answer` event refers to an older `ask` than your
