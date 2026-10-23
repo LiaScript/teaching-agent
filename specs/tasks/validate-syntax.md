@@ -18,6 +18,7 @@ This task is also invoked internally (not just via the command) by `tasks/valida
 - The material document for this session — resolved from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`): `materials/{number}-{slug}/README.md` in multi-file mode, or the matching `##` chapter in root `/README.md` in single-file mode
 - `data/liascript-cheat-sheet.md` as the syntax reference
 - Optionally, a narrower scope (e.g. "only the changed section") when called by `quick-fix.md`
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-checks.md`
 
 ## Output
 

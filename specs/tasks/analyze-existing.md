@@ -14,6 +14,7 @@ Offers two paths for each missing core section:
 - `journal.md` → `## Course Context` (created by `:init-course`, mandatory)
 - Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`, `## Agents`
 - Existing folder: `materials/`
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

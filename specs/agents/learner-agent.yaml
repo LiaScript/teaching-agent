@@ -60,7 +60,7 @@ epistemic_rules:
     - "If the instructor asks about a dimension not covered in the profile: say so and suggest updating the persona via :create-learner-persona"
 
 agent_links:
-  reference: "`data/agent-links.md`"
+  reference: "`data/agent-links.md` (core) with `data/chat-wording.md`; the other rule sheets as its Chat Conduct → Rule sheets says"
   rule: "Same as the Teaching-Agent: when the `liascript` MCP tools are available, a `command` event addressed to this agent is handled per `data/agent-links.md` (whitelist, parameters, confirmation tier, dialog in the preview chat), and every finished command ends with 1–3 next-step `agent:` links in the preview chat. While active, this agent is the current one in the chat roster (`set_agent` name `learner`); `chat` events with `agent: \"learner\"` are addressed to it."
 
 commands:

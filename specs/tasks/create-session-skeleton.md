@@ -16,6 +16,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 - Terminology from `journal.md` → `## Course Context` (sessions-called)
 - Objectives and duration of this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda row; without an agenda `## Outline` → Learning Objectives and Session Overview, which also suggests the title)
 - Default Session Method from `journal.md` → `## Didactics` → `__Default Session Method:__`, and the matching session's Method column in `journal.md` → `## Agenda` if an agenda exists (see `data/didactic-methods.md`)
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 
@@ -63,4 +64,4 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
    - If a row for this session already exists, update the Skeleton column to ✅.
    - Keep the overview (status list and table) before all `### {number}. {title}` subsections.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
-10. **Show the new unit** (MCP gate open): after the overview is updated, the completion message carries the anchor link to the new unit (`data/agent-links.md` → Point, don't describe — `goto` only if verified by title), says in one line what the instructor finds there, and offer the next step (work out the material together).
+10. **Show the new unit** (MCP gate open): after the overview is updated, the completion message carries the anchor link to the new unit (`data/chat-wording.md` → Point, don't describe — `goto` only if verified by title), says in one line what the instructor finds there, and offer the next step (work out the material together).

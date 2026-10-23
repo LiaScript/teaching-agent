@@ -18,6 +18,7 @@ Use this task when:
 - Optional runnable examples and special examples
 - Template documentation or import source, if accessible
 - `templates/course-templates.yaml`
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

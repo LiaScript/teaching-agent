@@ -20,13 +20,14 @@ The dashboard is **derived state**. It is never the source of truth.
 - `dashboard/README.md` — component API of the installed library
 - `data/agent-links.md` — link format, action lines, and which commands fit which state
 - The `commands:` maps of `agents/*-agent.yaml` — the only commands that may appear as links
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-language.md`, `data/journal-links.md`
 
 ## Output
 
 - `journal.md` → `## Dashboard`: exactly one fenced `json @Dashboard.View` block
 - `import: ./specs/dashboard/README.md` in the main metadata header (once)
 - The action lines (`<!-- class="journal-actions" -->` paragraphs) directly below
-  the section headings listed in `data/agent-links.md`
+  the section headings listed in `data/journal-links.md` → Action lines
 
 ## Automatic Trigger
 
@@ -121,10 +122,10 @@ Run this task automatically after any task that changes project state:
    missing" once some are in. A step that is `done` returns to an earlier state only
    through a check result (FAIL, concerns), never through a later decision or new
    work: new work of another kind is its own step.
-5. After a check with FAIL or open concerns, `next` is resolving them ("Resolve concerns" / "Revise", translated), never another check of the same state — for open concerns that is `validate-course {n}`, which then goes straight through them without a new check (`tasks/validate-course.md` step 0). A FAIL whose open points are all `:quick-fix` cases (one change each, no content decision) gets the small correction as action (✏️ `quick-fix` with its description, "Correct", translated), not `coauthor-materials` (`data/agent-links.md` → Action lines).
+5. After a check with FAIL or open concerns, `next` is resolving them ("Resolve concerns" / "Revise", translated), never another check of the same state — for open concerns that is `validate-course {n}`, which then goes straight through them without a new check (`tasks/validate-course.md` step 0). A FAIL whose open points are all `:quick-fix` cases (one change each, no content decision) gets the small correction as action (✏️ `quick-fix` with its description, "Correct", translated), not `coauthor-materials` (`data/journal-links.md` → Action lines).
    Choose **exactly one** prominent next action (`next`) with an understandable
    `title`, `why`, `label`, `href`, readable `command` and `icon` (the action
-   symbol from `data/agent-links.md` → Markdown Format; the same for actions in
+   symbol from `data/journal-links.md` → Markdown Format; the same for actions in
    `decisions` and `explore`). Check prerequisites
    first: no session creation before Session Types exist, no separate agenda when
    the profile says `Agenda required: no`, no promotion without a skeleton, no
@@ -181,7 +182,7 @@ Run this task automatically after any task that changes project state:
    in the course language (keys and placeholders: `specs/dashboard/README.md`
    → `labels`); otherwise fill only `labels.decide` and `labels.prepare` with
    the library's built-in group titles of that language, so the chat can name
-   the groups exactly as the page shows them (`data/agent-links.md` → Name
+   the groups exactly as the page shows them (`data/chat-wording.md` → Name
    things as the overview does) — plus, only where the course has its own word
    for the learners, `usable.yes`, `usable.limited`, `usable.no` and
    `viewMaterial` with that word; never `plan`. Keep the translated suffix of
@@ -205,7 +206,7 @@ Run this task automatically after any task that changes project state:
    filling or removing that line in the same form. "Not now" → write no
    Dashboard and say that the overview stays at its last state until then.
 10. Refresh the action lines:
-    - For every heading listed in `data/agent-links.md` → Action lines (core `##`
+    - For every heading listed in `data/journal-links.md` → Action lines (core `##`
       sections and every `### {n}. {title}` under `## Sessions`): replace the
       `<!-- class="journal-actions" -->` paragraph directly below the heading, or
       insert one there.
@@ -219,7 +220,7 @@ Run this task automatically after any task that changes project state:
       only inside the `<details>` block; when the main action already is that preview, once.
     - Leave a line that already says the right thing untouched. When several
       lines change at once (a language switch, a new unit word), put all of them
-      into one `localize-journal.mjs` map (`data/agent-links.md` → Language
+      into one `localize-journal.mjs` map (`data/chat-language.md` → Language
       before the frame) instead of one edit per line — every write reloads the
       preview.
     - If an action line ended up below a `#### Validation Report`,

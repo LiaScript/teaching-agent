@@ -19,6 +19,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `journal.md` → `## Agents` → `### Learner Personas` — if present, drives Step 2
 - Referenced sub-procedures: `tasks/create-session-skeleton.md`, `tasks/promote-session.md`, `tasks/create-image.md`, `tasks/generate-image.md`, `tasks/validate-course.md`, `tasks/validate-syntax.md`, `tasks/review-as-persona.md`, `tasks/quick-fix.md`, `data/duration-heuristic.md`, `templates/session-skeleton.yaml`, `data/file-structure-modes.md`, `tasks/update-dashboard.md` — **read completely once before the run**, every one of them, including `tasks/generate-image.md` (Phase 0, the image route) and `tasks/quick-fix.md` (its "When to use" table decides step 1d); a later step of the same run may rely on that reading unless the specs changed
 - `data/agent-links.md` → Progress feedback and Long runs — status rhythm and questions during the run
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/chat-checks.md`, `data/journal-links.md`
 
 ## Output
 
@@ -101,7 +102,7 @@ Mark the session ✅ Done in the `journal.md` → `## Sessions` overview table (
 
 ## Writes per run
 
-Every write reloads the preview and resets the answers of an instructor who is trying a page. Target per run — material: the generated text (at most 3 parts), images 1, each fix iteration 1; journal: sketch save 1 plus the overview patch of step 0, report + image entries + status line 1 per iteration, overview 1 (step 4). Changes of several lines go into one map (`localize-journal.mjs`) or one section write (`data/agent-links.md` → Changing another section). Sub-procedures write in these batches: all persona reports of one round in one journal write, the image entries and status line of a batch in one, all images of step 3 in one material write. A run that needs more writes names the number in its runs line ("writes: {n}", translated) — never splits silently.
+Every write reloads the preview and resets the answers of an instructor who is trying a page. Target per run — material: the generated text (at most 3 parts), images 1, each fix iteration 1; journal: sketch save 1 plus the overview patch of step 0, report + image entries + status line 1 per iteration, overview 1 (step 4). Changes of several lines go into one map (`localize-journal.mjs`) or one section write (`data/chat-dialog.md` → Changing another section). Sub-procedures write in these batches: all persona reports of one round in one journal write, the image entries and status line of a batch in one, all images of step 3 in one material write. A run that needs more writes names the number in its runs line ("writes: {n}", translated) — never splits silently.
 
 ## Cross-agent execution note
 

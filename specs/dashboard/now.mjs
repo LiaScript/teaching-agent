@@ -1,4 +1,4 @@
-// The one time source for the chat rules (data/agent-links.md → Chat Conduct → Times): prints UTC, the
+// The one time source for the chat rules (`data/chat-wording.md` → Times): prints UTC, the
 // local time of this computer (the one that runs the preview) with its offset and time zone, and – with a
 // timestamp, e.g. of the last read_chat entry – the time since it, for the "about an hour" greeting rule.
 // Event and read_chat timestamps are UTC; never state a clock time from them, use the local line.

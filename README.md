@@ -254,7 +254,8 @@ Links appear in the Dashboard (the one recommended next step, further options, o
 and as one action line below each section heading. The Dashboard is a JSON data block that
 the local LiaScript library [`specs/dashboard/`](specs/dashboard/README.md) renders via
 `@Dashboard.View`; it and the action lines are written by `:update-dashboard`, the link format
-is defined in [`specs/data/agent-links.md`](specs/data/agent-links.md). The agent writes the
+is defined in [`specs/data/journal-links.md`](specs/data/journal-links.md), the handling of clicks and
+the chat rules in [`specs/data/agent-links.md`](specs/data/agent-links.md) and its topic sheets. The agent writes the
 data block only through `node specs/dashboard/write-dashboard.mjs <draft.json>` (checks the
 draft, replaces the block in one write, then validates); `node specs/dashboard/validate-journal.mjs`
 checks it on its own, including every `#` link against the real LiaScript heading anchors and

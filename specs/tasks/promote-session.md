@@ -18,6 +18,7 @@ Converts a **Session** into a detailed **Session Material**.
 - Terminology from `journal.md` → `## Course Context`
 - File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`)
 - Session Method from the skeleton's `**Method:**` line, if present, and its structural guidance from `data/didactic-methods.md` → "Session Methods"
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

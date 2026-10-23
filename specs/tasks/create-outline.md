@@ -12,6 +12,7 @@ Defines title, target audience, abstract, and learning objectives.
 - Time commitment (e.g., semester hours per week, total hours)
 - Abstract (topics, content, benefits)
 - Learning objectives (3–5 concrete goals)
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

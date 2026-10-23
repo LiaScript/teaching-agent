@@ -13,6 +13,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 - Learning objectives from `journal.md` → `## Outline`
 - Course type & conventions from `journal.md` → `## Course Context`
 - `data/didactic-methods.md` — course frameworks, session methods, and their default suggestions by course type
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 
@@ -44,7 +45,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 6. Derive the difficulty level from target group and outline; confirm it only as one line of the summary.
 7. If the delivery situation from `## Course Context` (classroom, online, self-study) shapes the lesson phases, describe that in `__Didactic Concept:__` — there is no separate field for it.
 8. Fill the `templates/course-didactics.yaml` template with the results.
-9. **Before saving** show the complete section as the instructor will read it (after a change: the whole new version, starting with one line naming every change — `data/agent-links.md` → Nothing unseen gets saved), with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Didactics` using the `layout` of `templates/course-didactics.yaml` (visible part in the course language, technical fields in `<details>`), no sub-headings.
+9. **Before saving** show the complete section as the instructor will read it (after a change: the whole new version, starting with one line naming every change — `data/chat-dialog.md` → Nothing unseen gets saved), with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Didactics` using the `layout` of `templates/course-didactics.yaml` (visible part in the course language, technical fields in `<details>`), no sub-headings.
 10. Create or update `journal.md` → `## Agents` → `### Coauthor` directly, with no `#### Coauthor` subsection — **merge, never overwrite** what the instructor added:
     - Every entry this step derives ends with the invisible marker `<!-- data-from="didactics" -->`. Replace only marked entries; keep every entry without the marker (added via `:configure-agent`) unchanged and in place.
     - The changes to `### Coauthor` are part of step 9's save summary, in future tense, described as rules for writing the material later ("When you save, I will also note these rules for writing the material: …", translated) — never as another helper or figure; nothing in it changes unseen, and no separate confirmation is needed.

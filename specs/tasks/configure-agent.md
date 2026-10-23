@@ -14,6 +14,7 @@ rewrite, summarize, or infer settings from sibling agent subsections.
 - Instructor-provided customization request
 - `journal.md` -> `## Agents` -> `### {agent}` only
 - `templates/agents.yaml`
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

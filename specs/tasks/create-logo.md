@@ -11,6 +11,7 @@ Creates a professional, actionable prompt that can be used with AI image generat
 - Abstract from `journal.md` → `## Outline` (`__Abstract:__` bullet)
 - Logo style guidelines from `journal.md` → `## Visual Identity` (`__Logo Generation Guidelines:__` bullet)
 - Logo color palette from `journal.md` → `## Visual Identity` (`__Logo Color Palette:__` bullet)
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

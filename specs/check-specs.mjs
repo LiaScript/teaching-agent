@@ -44,8 +44,14 @@ const required = {
   "tasks/create-learner-persona.md": ["##### 3. Learning Context", "Show the complete persona exactly as it will be saved"],
   "tasks/validate-syntax.md": ["checked only by the publishing gate", "Findings returned to a caller never contain line numbers", "is never ❌ for it"],
   "tasks/try-as-learner.md": ["a workaround for DevServer 1.2.19", "find_teacher", "a computer program plays this role", "Fallback", "Preview required", "Name each person exactly as the portrait card shows it", "**last line is the exit sentence**", "\"Back to planning\"", "one fixed sentence announcing the help", "**Name controls as the page shows them**", "**Only what the events show:**", "a hint stage counts as seen only if `hints` reached it", "**Current patterns first:**", "**course decision**", "planning conversation stays visible"],
-  "data/agent-links.md": ["**What the instructor does not want saved**", "never with a word of your own such as \"helpers\"", "**Effort for the instructor**", "**Workaround for DevServer 1.2.19 (N63):**", "**Order of the first reply:**", "`--viewport` with the window size of the learners' device", "**State words from the language pack:**", "named or composed by an event", "with two exceptions, both setup", "except a status that says you are waiting for the instructor", "**Inside an autonomous\n  run**", "`\"append\"` adds lines at the end of the file", "checked ✅ → 👁 `preview`", "check: correction needed → ✏️ `quick-fix?number={n}&description=…`", "**Layout and devices:**", "A missing warning is no proof", "Relative day words", "at about half time with an interim result", "Name open points by their titles", "never the unit heading", "`agent` (`:configure-agent`) is one of", "`slide` is a positive integer", "never material or anything the instructor wrote", "Language before the frame", "Lost or unseen messages", "One way to start", "Reuse what is known", "Say how you checked", "Tables in the chat", "Typed answers", "Changing another section", "Temporary companion", "Learner view", "reply_to", "reload_pending", "browser_lang", "**Times:**", "*search result\n  only*", "never end a turn while\n  announced work runs in the background", "header\n  comment like the material header", "**Link targets:**", "`preview` belongs to every agent", "**Never for `preview`:**", "Greetings and farewells carry no time", "*looked at*", "what the instructor may do now", "Read the group titles **before**", "replaces the server's general \"stay silent\"", "| wrong, `trial` 2 (before `help`) |", "| `solved` after at least one wrong check |", "On the self-check", "`node specs/dashboard/now.mjs [<timestamp>]`", "never \"speaker\" for the play triangle ▶", "right before **every** Dashboard write", "with a \"Back to\n  planning\" button", "**Long runs:**", "*read as an extract*", "tool call** is a `chat` status with the expected duration", "\"step {i} of {n}: …\"", "let it be prepared after a short sketch", "**Learners' view:**", "never \"To unit {n}\""],
-  "data/liascript-cheat-sheet.md": ["A pair of `$` starts math everywhere outside code", "**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\"", "**Encode link targets.**", "**Image size.**", "`- [[?]] {|>}{Hint text}`", "A `vh` limit does not guarantee the fit", "**Controls as learners see them**", "never \"speaker\", \"loudspeaker\"", "A hint appears only when the learner taps the light bulb", "**No surface cues:**"],
+  "data/agent-links.md": ["**Effort for the instructor**","**Order of the first reply:**","named or composed by an event","with two exceptions, both setup","**Inside an autonomous\n  run**","at about half time with an interim result","`agent` (`:configure-agent`) is one of","`slide` is a positive integer","never material or anything the instructor wrote","Language before the frame","Lost or unseen messages","Typed answers","Temporary companion","Learner view","reply_to","reload_pending","never end a turn while\n  announced work runs in the background","`preview` belongs to every agent","**Never for `preview`:**","**Long runs:**","tool call** is a `chat` status with the expected duration","\"step {i} of {n}: …\""],
+  "data/chat-wording.md": ["never with a word of your own such as \"helpers\"","**State words from the language pack:**","Relative day words","Name open points by their titles","never the unit heading","One way to start","**Times:**","Greetings and farewells carry no time","Read the group titles **before**","`node specs/dashboard/now.mjs [<timestamp>]`","never \"speaker\" for the play triangle ▶"],
+  "data/chat-language.md": ["browser_lang"],
+  "data/chat-dialog.md": ["**What the instructor does not want saved**","except a status that says you are waiting for the instructor","`\"append\"` adds lines at the end of the file","Reuse what is known","Tables in the chat","Changing another section","header\n  comment like the material header","what the instructor may do now"],
+  "data/chat-checks.md": ["`--viewport` with the window size of the learners' device","**Layout and devices:**","A missing warning is no proof","Say how you checked","*search result\n  only*","*looked at*","*read as an extract*"],
+  "data/chat-companion.md": ["**Workaround for DevServer 1.2.19 (N63):**","replaces the server's general \"stay silent\"","| wrong, `trial` 2 (before `help`) |","| `solved` after at least one wrong check |","On the self-check","with a \"Back to\n  planning\" button"],
+  "data/journal-links.md": ["checked ✅ → 👁 `preview`","check: correction needed → ✏️ `quick-fix?number={n}&description=…`","let it be prepared after a short sketch","**Learners' view:**","never \"To unit {n}\""],
+  "data/liascript-cheat-sheet.md": ["### Link targets", "A pair of `$` starts math everywhere outside code", "**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\"", "**Encode link targets.**", "**Image size.**", "`- [[?]] {|>}{Hint text}`", "A `vh` limit does not guarantee the fit", "**Controls as learners see them**", "never \"speaker\", \"loudspeaker\"", "A hint appears only when the learner taps the light bulb", "**No surface cues:**"],
   "templates/course-context.yaml": ["layout:", "Target Group"],
   "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
   "templates/course-didactics.yaml": ["key: guiding-figure (visible)", "content guidance only", "layout:"],
@@ -60,7 +66,7 @@ const required = {
   "templates/course-didactics.yaml": ["Didactic Framework", "copied from Course Context"],
   "templates/course-context.yaml": ["Target Group"],
   "workflows/course-development.yaml": [":try-as-learner", "offer :try-as-learner once (only with the preview / MCP gate open)", "change path", "One way to start", "write-dashboard.mjs"],
-  "agents/teaching-agent.yaml": ["only if they do not already arrive as `<channel>` tags", "the labels, the first reply and its one action need them", ":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**", "`node specs/dashboard/now.mjs [<timestamp>]`"],
+  "agents/teaching-agent.yaml": ["right before **every** Dashboard write", "only if they do not already arrive as `<channel>` tags", "the labels, the first reply and its one action need them", ":try-as-learner", "once (only when the MCP gate is open; it runs in the preview)", "starts with `## Outline`", "read a task file **completely**", "`node specs/dashboard/now.mjs [<timestamp>]`"],
 };
 
 for (const [file, phrases] of Object.entries(required)) {
@@ -165,7 +171,7 @@ test("authoring notes in the journal template are <!--- … ---> so LiaScript ig
   const plain = [...journal.matchAll(/<!--(?!-)([\s\S]*?)-->/g)].slice(1)
     .map(match => match[1].trim()).filter(body => !/^(class|data-[\w-]+)=/.test(body));
   assert.deepEqual(plain.map(body => body.slice(0, 60)), []);
-  assert.ok(!read("data/agent-links.md").includes("materials/03-"), "agent-links shows a zero-padded folder number again");
+  for (const sheet of ["data/agent-links.md", "data/journal-links.md", "data/chat-dialog.md", "data/chat-wording.md"]) assert.ok(!read(sheet).includes("materials/03-"), `${sheet} shows a zero-padded folder number again`);
 });
 
 test("the course is always LiaScript: no platform or accessibility question, no accessibility field", () => {
@@ -446,7 +452,7 @@ test("the overview answers 'usable with learners now' first and shows each unit'
   // Every unit with material has a view link: in the schema, the task, the action line rule and the validator.
   assert.match(read("templates/project-dashboard.yaml"), /^\s+view: 'Once the material exists: \{href: "agent:teaching\/preview\?file=\{n\}"/m);
   assert.match(read("tasks/update-dashboard.md"), /gets `view` \(`agent:teaching\/preview\?file=\{n\}`/);
-  assert.match(read("data/agent-links.md"), /\*\*Learners' view:\*\* once the material exists, the line also carries 👁 `preview\?file=\{n\}`/);
+  assert.match(read("data/journal-links.md"), /\*\*Learners' view:\*\* once the material exists, the line also carries 👁 `preview\?file=\{n\}`/);
   const validator = read("dashboard/validate-journal.mjs");
   assert.match(validator, /but no view – add units/);
   assert.match(validator, /its action line has no 👁 preview link/);
@@ -544,4 +550,28 @@ test("a language pack's Dashboard has the structure of the template's, and --lan
     assert.equal(check.status, 0, check.stdout + check.stderr);
   }
   assert.equal(english.next.title, english.process.steps.find(step => step.state === "current").title, "templates/journal.md: next.title is the current step's title");
+});
+
+test("agent rules: a lean core, topic sheets named where they are used, no reference to a moved rule", () => {
+  const core = read("data/agent-links.md");
+  assert.ok(core.split("\n").length <= 400, `data/agent-links.md has ${core.split("\n").length} lines – keep the core under 400, topics go into the rule sheets`);
+  const sheets = readdirSync(join(specs, "data")).filter(name => /^(chat-.*|journal-links)\.md$/.test(name)).map(name => `data/${name}`);
+  assert.ok(sheets.length >= 6, "the rule sheets exist");
+  const yaml = read("agents/teaching-agent.yaml");
+  for (const sheet of sheets) {
+    assert.ok(core.includes(`\`${sheet}\``), `${sheet} is missing from the index (Chat Conduct → Rule sheets)`);
+    assert.ok(yaml.includes(`- ${sheet.slice(5)}`), `${sheet} is missing from the YAML's data dependencies`);
+    assert.match(read(sheet), /^# /, `${sheet} starts with its title`);
+  }
+  // A task that refers to a sheet names it in its Inputs line "Rule sheets, read completely with this task".
+  for (const name of readdirSync(join(specs, "tasks")).filter(file => file.endsWith(".md"))) {
+    const text = read(`tasks/${name}`);
+    const line = text.split("\n").find(item => item.startsWith("- Rule sheets, read completely with this task")) ?? "";
+    // data/chat-wording.md is read with the core once per session; the other sheets go with the task.
+    for (const sheet of sheets.filter(item => item !== "data/chat-wording.md")) if (text.split("\n").filter(item => item !== line).some(item => item.includes(sheet))) assert.ok(line.includes(sheet), `tasks/${name} refers to ${sheet} but its Inputs do not name it`);
+  }
+  // Moved rules are referred to in their sheet, never through the core.
+  const moved = ["Language before the frame", "Plain language", "Name things as the overview does", "Times", "Point, don't describe", "Say how you checked", "Changing another section", "Nothing unseen gets saved", "Forms", "Field keys", "Action lines", "Markdown Format", "Link targets", "Temporary companion"];
+  const files = [...readdirSync(join(specs, "tasks")).map(name => `tasks/${name}`), ...readdirSync(join(specs, "agents")).map(name => `agents/${name}`), ...sheets, "data/agent-links.md", "templates/session-skeleton.yaml", "workflows/course-development.yaml"];
+  for (const file of files) for (const rule of moved) assert.ok(!new RegExp(`agent-links\\.md\`?\\s*→\\s*(Chat Conduct\\s*→\\s*)?"?${rule.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`).test(read(file)), `${file} refers to "${rule}" through data/agent-links.md – it lives in its rule sheet now`);
 });

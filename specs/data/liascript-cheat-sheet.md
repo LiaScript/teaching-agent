@@ -332,7 +332,7 @@ A `vh` limit does not guarantee the fit: the page header, the introduction and
 the question do not shrink with the window, and image-only options stand one
 below the other. Whether a question fits is known only from a measurement at the
 learners' window size (the check script's viewport report) or from a look at the
-learners' device (`data/agent-links.md` → Say how you checked).
+learners' device (`data/chat-checks.md` → Say how you checked).
 
 **Accessibility (A11y)**
 
@@ -351,6 +351,16 @@ learners' device (`data/agent-links.md` → Say how you checked).
 ```
 
 ---
+
+
+### Link targets
+
+In every Markdown link or image target — chat, material,
+  and journal fields such as `__File:__`, `__Page:__`, `__Candidates:__` —
+  percent-encode `(` as `%28`, `)` as `%29` and spaces as `%20`; write a bare
+  URL as `[label](encoded URL)`. LiaScript cuts a target at the first
+  unencoded `(` (file names from photo collections often contain one), and the
+  chat cannot replace a sent message with a broken image.
 
 ## 6) Diagrams
 

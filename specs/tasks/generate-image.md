@@ -17,6 +17,7 @@ Which way is used is decided in Phase 0. Only the browser route needs the **chro
 - **Batch mode:** all `<section>` image entries across every session's `#### Images` block (skips entries whose `__Status:__` is `generated` or whose file at `__File:__` already exists). Older journals use `__Datei:__` and `__Alt-Text:__` for the same fields — read them, and write `__File:__` / `__Alt text:__` when an entry is updated.
 - The agent's own image tool, or Chrome DevTools MCP availability (checked in Phase 0)
 - Course language from `journal.md` → `## Course Context` (safety-net: appended to prompt if no language instruction is already present)
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

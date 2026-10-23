@@ -23,6 +23,7 @@ or simply get a feel for how this learner experiences the material.
 - The session's decisions list (`data-key="decisions"`) in its `### {number}. {title}` subsection
 - `journal.md` → `## Course Context` — terminology and conventions
 - Matching `### {number}. {title}` subsection in `journal.md` → `## Sessions`
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/chat-checks.md`, `data/journal-links.md`
 
 ## Output
 

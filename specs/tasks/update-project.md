@@ -13,6 +13,7 @@ Publishes new or changed content. Behavior branches hard on `journal.md` → `##
 - User's git/GitHub experience (ask before proceeding)
 - File Structure mode from `journal.md` → `## Course Context` → `__File Structure:__` (see `data/file-structure-modes.md`)
 - **multi-file only:** existing `project.yaml` in the root folder; colors and style from `journal.md` → `## Visual Identity`; `data/liascript-workflows.md` — internal reference for `project.yaml` schema and workflow templates
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

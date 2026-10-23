@@ -17,6 +17,7 @@ Use this task for both:
 - Optional `related`: Outline / Didactics / Agenda / session number / material file / etc.
 - `templates/note-backup.yaml`
 - Existing `journal.md` -> `## Notes Backup`, if present
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

@@ -18,6 +18,7 @@ and serve as the basis for `:review-as-persona` feedback sessions.
 - Difficulty level, course type, and style from `journal.md` → `## Didactics`
 - `templates/agents.yaml` — used if `journal.md` → `## Agents` does not exist yet
 - Optional: research data provided by instructor (for data-driven mode)
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 

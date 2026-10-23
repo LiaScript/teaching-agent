@@ -11,7 +11,7 @@ template:
       overview: >-
         Directly below `## Sessions`, in this order:
         (1) a visible status list in the course language, one numbered line per unit in session order,
-        `{n}. {title} – {status}` with status "planning sketch ✅ · material open" (the fixed word for skeleton, `data/agent-links.md` → Plain language), "material written · check open"
+        `{n}. {title} – {status}` with status "planning sketch ✅ · material open" (the fixed word for skeleton, `data/chat-wording.md` → Plain language), "material written · check open"
         ("material written · images missing" while image spots are open and none is inserted yet, `tasks/create-image.md` → Image spots;
         "material written · images {n} of {m}" once at least one of the m entries is inserted and others are still open — the count is
         part of the status word, so a partial state stays visible; never "ready" or
@@ -53,7 +53,7 @@ template:
       template: |
         <!-- class="journal-actions" -->
         [▶️ {{"Work out together", translated}}](agent:teaching/coauthor-materials?number={{number}}) `:coauthor-materials {{number}}`
-      note: 'Exactly one main action per state, see `data/agent-links.md` → Action lines; further commands only inside the technical `<details>` block below. Once the material exists, the line also carries the learners'' view as second link after " · ", never only inside the `<details>` block: 👁 "How learners see it" (translated, with the course''s word for learners) on `agent:teaching/preview?file={{number}}` with the command `:preview {{number}}`. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
+      note: 'Exactly one main action per state, see `data/journal-links.md` → Action lines; further commands only inside the technical `<details>` block below. Once the material exists, the line also carries the learners'' view as second link after " · ", never only inside the `<details>` block: 👁 "How learners see it" (translated, with the course''s word for learners) on `agent:teaching/preview?file={{number}}` with the command `:preview {{number}}`. Labels in the course language. `tasks/update-dashboard.md` refreshes both as the session progresses (validate, preview, quick-fix, persona review).'
     - id: type
       title: Type (technical)
       template: |

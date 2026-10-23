@@ -18,6 +18,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 - Course type from `journal.md` → `## Course Context`
 - Default Session Method from `journal.md` → `## Didactics` → `__Default Session Method:__` (see `data/didactic-methods.md`)
 - `data/duration-heuristic.md` — optional orientation when estimating realistic per-session durations (not a required check at this stage)
+- Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
 
@@ -28,7 +29,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 
 1. Read `journal.md` → `## Course Context`:
    - Check `agenda` field in the profile:
-     - **`no`** → the instructor called it although the course frame says no agenda: 🎛️ ask "Create a schedule after all?" (Yes / No). Yes → set `Agenda required: yes` in `## Course Context` (`data/agent-links.md` → Changing another section, in the save of this task) and continue. No → if `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6, suggest `:create-session 1` and stop.
+     - **`no`** → the instructor called it although the course frame says no agenda: 🎛️ ask "Create a schedule after all?" (Yes / No). Yes → set `Agenda required: yes` in `## Course Context` (`data/chat-dialog.md` → Changing another section, in the save of this task) and continue. No → if `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6, suggest `:create-session 1` and stop.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
        - **Yes** — Create agenda to plan the structure
        - **No** — Proceed directly to `:create-session`
@@ -47,7 +48,7 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 5. Define sessions/modules using the terminology from `journal.md` → `## Course Context`. Assign each one a type slug from `journal.md` → `## Didactics` → `__Session Types:__` — never a hardcoded `lecture`/`exercise`.
    - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]`: assign each session the default Session Method. Choose a different method from `data/didactic-methods.md` for a session yourself only if it fits clearly better; do not ask about methods (`tasks/create-didactics.md` step 3c). Mention a change in plain words in one line of the summary, and only if it changes what the learners do. Skip all of this when the default is `none`.
 5a. **Clarify the file structure** if `## Course Context` → `__File Structure:__` conflicts with what the instructor confirmed or was never asked as a teacher question: ask it as in `tasks/init-course.md` step 6 and update only the technical `File Structure` field plus the matching table row, after confirmation.
-5b. **Clean up Session Type slugs before writing them:** run `node specs/dashboard/validate-journal.mjs`; if it reports `slug` (a duplicated slug) or `type-name` (a display name equal to a terminology word), the fix belongs to `## Didactics` — change it there only with its own confirmation (see `data/agent-links.md` → "Changing another section"), then use the result in the agenda.
+5b. **Clean up Session Type slugs before writing them:** run `node specs/dashboard/validate-journal.mjs`; if it reports `slug` (a duplicated slug) or `type-name` (a display name equal to a terminology word), the fix belongs to `## Didactics` — change it there only with its own confirmation (see `data/chat-dialog.md` → "Changing another section"), then use the result in the agenda.
 5c. **Net working time per time slot:** if the course runs in fixed slots (lessons, workshop blocks, labs), compute the working time per slot before distributing activities: subtract setup (getting devices, logging in, opening the material) and wrap-up (saving, collecting, tidying). If the instructor has not given these times, propose a default (for a school lesson about 5 minutes setup and 2–3 minutes wrap-up), say that it is an assumption, and show it as its own line in the **first** proposal so the instructor confirms it together with the times. Place whole-group phases (opening, closing) and activities bound to the instructor (one-to-one talks, listening to explanations) explicitly in the plan.
 6. Build the agenda in a structured form adapted to the pacing model:
    - **lecture-series**: sessions with time slots and weekly schedule
@@ -58,5 +59,5 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
    When assigning a duration, `data/duration-heuristic.md` can help sanity-check that it's realistic for the planned content volume — this is orientation only, not a required check here (the actual check happens later in `:validate-course`).
 6a. **Self-check before the summary:** every learning objective is covered by at least one mandatory unit; an objective marked for all units appears in every row; durations add up to the time budget of 5c including a buffer — a buffer is free time **or** an explicitly movable part (then say what slower learners move and where they catch up; with 0 free minutes in a slot, say so in its own line); numbers match `## Course Context` (number and length of lessons).
 7. Fill the `templates/course-agenda.yaml` template with the results.
-8. **Before saving** show the agenda as text (after a revision it starts with one line naming every change — see `data/agent-links.md` → Nothing unseen gets saved; new preparation items and open points for the overview are listed in future tense) with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Agenda` following `templates/course-agenda.yaml` → `layout`, no sub-headings.
+8. **Before saving** show the agenda as text (after a revision it starts with one line naming every change — see `data/chat-dialog.md` → Nothing unseen gets saved; new preparation items and open points for the overview are listed in future tense) with "Save" / "Change something". Then save by replacing the content of `journal.md` → `## Agenda` following `templates/course-agenda.yaml` → `layout`, no sub-headings.
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

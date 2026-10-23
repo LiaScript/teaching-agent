@@ -55,7 +55,7 @@ workflow:
       output: "journal.md → ## Course Context"
       notes: |
         First mandatory step for every new course — the regular start (the Dashboard's main button):
-        - The page, the chat and the read-aloud voices switch to the instructor's language with the first message (`data/agent-links.md` → Language before the frame)
+        - The page, the chat and the read-aloud voices switch to the instructor's language with the first message (`data/chat-language.md` → Language before the frame)
         - Course type asked as two teacher questions (scope + how learners work), mapped to lecture-series / self-paced / workshop / single-lesson / improve-existing
         - Reuse what the instructor already said; no unfounded recommendations; file structure asked as a teacher question
         - Set terminology, persona type, pacing, assessment defaults; author name for the material header (contact address becomes a preparation point)
@@ -69,7 +69,7 @@ workflow:
       output: "journal.md sections: Course Context, Outline, Didactics, Templates, Agenda, Sessions"
       alternative_to: [init, create_outline, create_didactics, create_agenda, create_session]
       notes: |
-        Fast-track for instructors who know what they want — offered only on request, never instead of the Dashboard's start button (`data/agent-links.md` → One way to start):
+        Fast-track for instructors who know what they want — offered only on request, never instead of the Dashboard's start button (`data/chat-wording.md` → One way to start):
         - Single intake interview collects all inputs upfront (same teacher questions as :init-course, exact numbers instead of ranges)
         - Shows a complete draft of every section before saving; only the confirmed draft is written (nothing unseen gets saved)
         - Adds `## Templates` and header imports if template requirements are provided
@@ -236,7 +236,7 @@ workflow:
 
         automated:
           description: "After one unit was worked out together and approved: build the remaining units in one bounded loop each"
-          condition: "at least one unit was worked out with :coauthor-materials and approved (data/agent-links.md → action lines)"
+          condition: "at least one unit was worked out with :coauthor-materials and approved (data/journal-links.md → Action lines)"
           sequence:
             - command: :create-session {number} {title?}
               output: "journal.md → ## Sessions"

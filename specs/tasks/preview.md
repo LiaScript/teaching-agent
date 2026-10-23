@@ -37,7 +37,7 @@ Dashboard, in the session action lines and in the chat offers of every agent
      (the Dashboard or the course title of slide 1), say only "Here is the
      overview again." (translated), without a link; offer the anchor link only
      when the target cannot be confirmed and is not the overview
-     (`data/agent-links.md` → Point, don't describe).
+     (`data/chat-wording.md` → Point, don't describe).
    - Otherwise post one chat line with a link back, named after the active agent:
      `[👁 Back to the journal](agent:{active agent}/preview) `:preview``
      (e.g. `agent:artist/preview` while the Artist works).
