@@ -62,13 +62,13 @@ Offers two paths for each missing core section:
    - `journal.md` → `## Didactics` → `:create-didactics`
    - `journal.md` → `## Agenda` → `:create-agenda`
 
-6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system:
+6b. Reconstruct or create `journal.md` → `## Sessions` from project memory and the existing file system — prepared here, written only after "Save" in step 8b:
    - Scan `journal.md` → `## Sessions` for `### {number}. {title}` subsections and for material documents per `data/file-structure-modes.md` — `materials/{number}-{slug}/README.md` (multi-file; legacy `{number}-{type}` names count too, see step 1) or `##` chapters in root `/README.md` (single-file)
    - If a legacy `journal.md` → `## Session Skeletons` section exists, use it only as migration input and move reconstructed skeletons into `## Sessions`
    - For each session found: set Skeleton ✅ if a matching `### {number}. {title}` subsection exists in `## Sessions`, Material ✅ if its material document exists, Done stays ❌ (cannot be inferred — instructor must confirm)
-   - Save the overview (status list + technical table, `templates/session-skeleton.yaml` → `section_layout.overview`) directly below `## Sessions`, before all `### {number}. {title}` subsections
+   - Prepare the overview (status list + technical table, `templates/session-skeleton.yaml` → `section_layout.overview`) directly below `## Sessions`, before all `### {number}. {title}` subsections
 
-6c. Ensure `journal.md` → `## Agents` exists:
+6c. Ensure `journal.md` → `## Agents` exists — prepared here, written only after "Save" in step 8b:
    - If missing, create it from `templates/agents.yaml`.
    - If a legacy top-level `## Learner Personas` section exists, migrate its persona entries into `journal.md` → `## Agents` → `### Learner Personas`.
    - Convert legacy persona headings from `### Persona: {icon} {name}` to `#### Persona: {icon} {name}`.
@@ -86,5 +86,7 @@ Offers two paths for each missing core section:
 
 8. Suggest a prioritized action list and the recommended next step (usually `:coauthor-materials`).
 
-9. Save the full status overview as `journal.md` → `## Analysis Status`.
+8b. **Before saving:** show in one message everything this task will still write — the detected File Structure (step 1), the reconstructed `## Sessions` overview (6b), the `## Agents` changes including the removal of a legacy `## Learner Personas` section (6c), and the status overview (step 9) — with "Save" / "Change something" (translated). This is the single write confirmation of these steps; drafts saved in step 5 had their own.
+
+9. After "Save": write the File Structure, the `## Sessions` overview, the `## Agents` changes and the full status overview as `journal.md` → `## Analysis Status` — one write per section.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

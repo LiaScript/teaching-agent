@@ -50,6 +50,7 @@ Rules:
 
 ## Session Mode Steps (`:validate-course {number}`)
 
+0. **Concerns only:** if the unit's current report says PASS with concerns and nothing changed since it (no material change, no entry in its "Changed after the check" block newer than the report), do not check again: say so in one line and go straight to the concerns (step 8, "With **PASS with concerns**"), then rewrite the report's outcome, status line and overview. A new full check runs only after a change.
 1. Load `journal.md` → `## Course Context` for course type and conventions.
 2. Load the learning objectives and declared duration of this session (`data/session-types.md` → "Objectives and duration of a session" — from `## Agenda`, without an agenda from `## Outline`).
 3. Load `data/liascript-cheat-sheet.md` as syntax reference. If the skill `liascript-syntax` is available (see `data/skills.md`), use it as second reference (see `tasks/validate-syntax.md`).
@@ -106,7 +107,7 @@ Rules:
 7. **Chat summary:** name every ❌, every ⏳ with its step, every `[pedagogical]` finding (also those you consider minor) and every `[advisory]` hint in plain words. Never write "everything else is fine" while the report lists open points; a checklist item is never downgraded to a "hint".
    If no issues found: confirm "Session {number} ({type}) — ✅ Syntax and content verified." with the anchor link to the report heading.
 8. If issues found: confirm the report was saved, list the blockers briefly, and offer the fix: when every open point is one `:quick-fix` covers (one change each, no content decision), offer ✏️ `:quick-fix {number}` with its description; otherwise `:coauthor-materials {number}` (`data/agent-links.md` → Action lines).
-   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. a special need of the target group, such as read-aloud for a learner with dyslexia) is named as such and needs its own explicit confirmation. Then re-run `:validate-course {number}`. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
+   With **PASS with concerns**: go through the concerns one at a time, as at the Publishing Gate — fix it now (`:quick-fix`, or `:coauthor-materials {number}`) or accept it as is with a short reason — for this unit (a dated entry in the session's decisions list) or, if the same concern applies to every unit, for the whole course (one `:save-decision`); listed in the save summary. A concern whose acceptance would contradict `## Course Context` (e.g. a special need of the target group, such as read-aloud for a learner with dyslexia) is named as such and needs its own explicit confirmation. Then, if something was fixed, the short re-check of the changed area (`tasks/quick-fix.md` → Change path); if every concern was accepted, the outcome becomes PASS without a new check. When called from `:build-session`, do not ask — return the result to the caller, whose loop decides.
 
 ---
 
@@ -157,6 +158,7 @@ Rules:
    - Mode: course
    - Result: PASS / FAIL / PASS with concerns
    - Issues found: N
+   - Mechanical open: N
    - Sessions checked: N
 
    <!-- data-key="course-findings" -->
@@ -185,13 +187,15 @@ Rules:
 
 Applies only when `:validate-course` runs directly in course mode. Called as a sub-procedure (e.g. by `:build-session` in session mode), it runs once and returns — the caller's own loop iterates, so loops never nest.
 
-**Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes, or after 5 iterations — whichever comes first.
+**Loop:** Repeat "fix `[mechanical]` issues → rerun `:validate-course`" until every `[mechanical]`-tagged item in `checklists/course-quality-checklist.md` passes (`Mechanical open: 0` in the summary), or after 5 iterations — whichever comes first.
 
-- In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, missing required elements, structural gaps — everything tagged `[mechanical]`. `[advisory]` items such as the duration flag are not in scope: the loop cannot fix them without inventing or cutting content.
+- **Confirm each round of fixes:** before the first change of a round, list its fixes (unit, page title, before → after) in **one** chat confirmation, as step 4b does; the changes follow `tasks/quick-fix.md` (that confirmation covers its scope and save confirmation). Declined fixes leave the loop and count as found.
+
+- In scope for the loop: LiaScript syntax findings from `tasks/validate-syntax.md`, broken links/alt text, a required element that is present but malformed (wrong syntax, missing label), structural gaps — everything tagged `[mechanical]`. A required element that is **missing** is missing content: it goes to the instructor (next item). `[advisory]` items such as the duration flag are not in scope: the loop cannot fix them without inventing or cutting content.
 - Items only the instructor can resolve are not in scope either, even when tagged `[mechanical]` — missing content or a missing unit, an approval, an answer (e.g. "all sessions Done", "no session without material"). List them at once; if only such items remain, stop now — further iterations would change nothing.
 - Never auto-loop on `[pedagogical]`-tagged items — always surface those to the instructor immediately (core rule: critical sparring partner, not a rubber stamp).
 - On hitting the 5-iteration cap without a clean mechanical pass: stop, list the remaining `[mechanical]` FAIL items, and hand back to the instructor instead of continuing.
-- See `CLAUDE.md` → "Iteration Pattern" for the general convention. Under Claude Code this can additionally be driven with `/goal "journal.md → ## Validation → ### Latest Validation Summary shows all [mechanical] checklist items passing, or stop after 5 iterations"`.
+- See `CLAUDE.md` → "Iteration Pattern" for the general convention. Under Claude Code this can additionally be driven with `/goal "journal.md → ## Validation → ### Latest Validation Summary shows Mechanical open: 0, or stop after 5 iterations"`.
 
 ---
 

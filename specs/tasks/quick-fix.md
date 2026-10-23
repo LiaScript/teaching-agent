@@ -33,7 +33,7 @@ Minimal overhead for small, targeted changes (typos, broken syntax, swapping one
 
 **Called from `:build-session`** (mechanical items only): skip the scope confirmation of step 1 and the save confirmation of step 2a — the start confirmation of `:build-session` covers them — and return the change (page title, before → after) to the caller for its closing summary. Escalation (step 5) still stops the caller.
 
-**Called from `:validate-course`** (fix during the check, `tasks/validate-course.md` step 4b): the check's one confirmation of the listed fixes is the scope and save confirmation — skip steps 1 and 2a.
+**Called from `:validate-course`** (fix during the check, `tasks/validate-course.md` step 4b, or a round of its course-mode loop): the check's one confirmation of the listed fixes is the scope and save confirmation — skip steps 1 and 2a.
 
 1. **Scope confirmation:** State what will be changed and the acceptance criterion:
    - "I will [describe the change] in [material document]. The change is complete when [condition]. Correct? (Yes / Adjust scope)"

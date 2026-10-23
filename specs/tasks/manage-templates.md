@@ -37,7 +37,9 @@ Use this task when:
    - Determine what macros or syntax it provides from the inspected source
    - Determine where it must be imported (project header, material headers, or both)
    - If the source cannot be inspected, document only confirmed usage and ask the instructor for missing macro details before inventing examples
-4. Update the main metadata header at the top of `journal.md`:
+3b. **Before saving:** show the header import lines and the `## Templates` entries as they will be written, plus the material files that will need the import, with "Save" / "Change something" (translated) — the single write confirmation of this task. Called from `:init-course` or `:scaffold`, their save summary covers it; called from `:update-dashboard` for the missing Dashboard entry (derived state), no question.
+
+4. After "Save", update the main metadata header at the top of `journal.md`:
    - Add `import: {url}` if missing
    - Do not duplicate existing imports
    - Keep existing metadata lines unchanged

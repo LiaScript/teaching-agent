@@ -121,7 +121,7 @@ Run this task automatically after any task that changes project state:
    missing" once some are in. A step that is `done` returns to an earlier state only
    through a check result (FAIL, concerns), never through a later decision or new
    work: new work of another kind is its own step.
-5. After a check with FAIL or open concerns, `next` is resolving them ("Resolve concerns" / "Revise", translated), never another check of the same state. A FAIL whose open points are all `:quick-fix` cases (one change each, no content decision) gets the small correction as action (✏️ `quick-fix` with its description, "Correct", translated), not `coauthor-materials` (`data/agent-links.md` → Action lines).
+5. After a check with FAIL or open concerns, `next` is resolving them ("Resolve concerns" / "Revise", translated), never another check of the same state — for open concerns that is `validate-course {n}`, which then goes straight through them without a new check (`tasks/validate-course.md` step 0). A FAIL whose open points are all `:quick-fix` cases (one change each, no content decision) gets the small correction as action (✏️ `quick-fix` with its description, "Correct", translated), not `coauthor-materials` (`data/agent-links.md` → Action lines).
    Choose **exactly one** prominent next action (`next`) with an understandable
    `title`, `why`, `label`, `href`, readable `command` and `icon` (the action
    symbol from `data/agent-links.md` → Markdown Format; the same for actions in
