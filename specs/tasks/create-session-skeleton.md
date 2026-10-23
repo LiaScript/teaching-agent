@@ -14,6 +14,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
 - Terminology from `journal.md` → `## Course Context` (sessions-called)
+- Objectives and duration of this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda row; without an agenda `## Outline` → Learning Objectives and Session Overview, which also suggests the title)
 - Default Session Method from `journal.md` → `## Didactics` → `__Default Session Method:__`, and the matching session's Method column in `journal.md` → `## Agenda` if an agenda exists (see `data/didactic-methods.md`)
 
 ## Output

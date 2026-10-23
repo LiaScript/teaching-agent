@@ -51,7 +51,7 @@ Session commands identify a session by its number alone (`:promote-session 3`, `
 
 ## Objectives and duration of a session
 
-Read a session's learning objectives and declared duration from its row in `journal.md` → `## Agenda`. Without an agenda (agenda: no, or not created yet): objectives from `## Outline` → Learning Objectives (`data-key="learning-goals"`) and its Session Overview (for a single lesson: all objectives); duration from `## Course Context` / `## Outline` → Time Commitment (for a single lesson: the lesson length). Never leave a check without objectives because the agenda is missing.
+Read a session's learning objectives and declared duration from its row in `journal.md` → `## Agenda`. Without an agenda (agenda: no, or not created yet): objectives from `## Outline` → Learning Objectives (`data-key="learning-goals"`) and its Session Overview (for a single lesson: all objectives); duration = the length of **one** unit from `## Course Context` → Units (count × length; for a single lesson: the lesson length), minus setup and wrap-up when the instructor named them — never the course's total time (`## Outline` → Time Commitment). Never leave a check without objectives because the agenda is missing.
 
 ## Where the slug is used
 

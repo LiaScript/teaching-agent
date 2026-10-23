@@ -15,7 +15,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `number`
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - `journal.md` → `## Sessions` — session skeleton (created if missing, see Step 0)
-- declared duration for this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda, without an agenda the time commitment)
+- declared duration for this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda, without an agenda the length of one unit)
 - `journal.md` → `## Agents` → `### Learner Personas` — if present, drives Step 2
 - Referenced sub-procedures: `tasks/create-session-skeleton.md`, `tasks/promote-session.md`, `tasks/create-image.md`, `tasks/generate-image.md`, `tasks/validate-course.md`, `tasks/validate-syntax.md`, `tasks/review-as-persona.md`, `tasks/quick-fix.md`, `data/duration-heuristic.md` — **read completely once before the run**, every one of them, including `tasks/generate-image.md` (Phase 0, the image route) and `tasks/quick-fix.md` (its "When to use" table decides step 1d); a later step of the same run may rely on that reading unless the specs changed
 - `data/agent-links.md` → Progress feedback and Long runs — status rhythm and questions during the run

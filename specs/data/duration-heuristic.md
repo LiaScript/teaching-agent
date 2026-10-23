@@ -39,7 +39,7 @@ Sum reading time and activity time for the session's total estimate.
 
 ## Comparing against the declared duration
 
-Compare the total estimate to the session's declared duration (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the time commitment).
+Compare the total estimate to the session's declared duration (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the length of one unit, never the total time).
 
 - Compare with **one** number: the middle of the estimated range. Count a teacher-led phase once — as its stated duration, not again as reading time of the text shown on the board.
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.

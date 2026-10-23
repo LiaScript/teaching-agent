@@ -527,8 +527,9 @@ language (`## Course Context` → Language).
   fetch tool that returns a quoted or summarized excerpt of a page — counts as
   a source, but is named so, never "read myself"), or *tried with answers*. A reference is listed only if its page itself
   was opened (in full, or as a named extract); a search summary is never a source. The rendered check is
-  `node specs/dashboard/check-material.mjs <material file>` (on its own, only
-  with the file; it prints slides, quizzes, read-aloud buttons, missing images
+  `node specs/dashboard/check-material.mjs <material file> [--viewport WxH]` (on its own;
+  `--viewport` with the window size of the learners' device when the target group names one, e.g.
+  a tablet upright `--viewport 768x1024`; it prints slides, quizzes, read-aloud buttons, missing images
   and errors) — if it cannot start, say so in one line. Claims about what learners see (buttons,
   feedback, solutions) count as *tried* only after a check that clicks.
   **Layout and devices:** a claim about what fits a screen or how a page looks

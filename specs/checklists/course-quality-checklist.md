@@ -48,7 +48,7 @@
 - [ ] [mechanical] Learner personas, if used, are stored under `## Agents` → `### Learner Personas`
 - [ ] [mechanical] No legacy top-level `## Learner Personas` section remains
 
-## Agenda `[if agenda flag = yes in journal.md → ## Course Context]`
+## Agenda `[if journal.md → ## Agenda has content, or the agenda flag is yes]`
 
 - [ ] [mechanical] All sessions have: title, duration, type, learning objective (the summary of a unit lives in its skeleton under `## Sessions`)
 - [ ] [pedagogical] Session learning objectives align with `journal.md` → `## Outline` learning objectives

@@ -28,12 +28,12 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 
 1. Read `journal.md` → `## Course Context`:
    - Check `agenda` field in the profile:
-     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `:create-session 1`. If `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6. Stop here.
+     - **`no`** → the instructor called it although the course frame says no agenda: 🎛️ ask "Create a schedule after all?" (Yes / No). Yes → set `Agenda required: yes` in `## Course Context` (`data/agent-links.md` → Changing another section, in the save of this task) and continue. No → if `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6, suggest `:create-session 1` and stop.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
        - **Yes** — Create agenda to plan the structure
        - **No** — Proceed directly to `:create-session`
        - **Later** — Skip agenda, create it later
-       If no: redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: continue.
+       If no: set `Agenda required: no` (one line in `## Course Context`, confirmed with this answer) and redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: set `Agenda required: yes` in the save of this task and continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called) and pacing model.
 2. Read learning objectives from the outline.

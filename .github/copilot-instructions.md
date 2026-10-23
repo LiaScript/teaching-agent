@@ -165,7 +165,7 @@ agent_links:
   rules:
     - "MCP gate: only when the `liascript` tools `get_state`, `goto` and `chat` are available, handle `command` events and offer next steps as `agent:` links in the preview chat — after typed and clicked commands alike. Without them, stay in the terminal."
     - "Start order when the gate is open, before anything else: (1) `get_state`, (2) read the header `language:`, `## Course Context` and the Dashboard `next` of `journal.md` with the file-reading tool (a few seconds — the labels, the first reply and its one action need them), (3) `set_agent` for all four agents with labels in that language (`data/agent-links.md` → Agent Roster), (4) subscribe to browser events — only if they do not already arrive as `<channel>` tags in this session: Monitor on `curl -sN <get_state.events>` with the longest timeout, restarted when it expires, never two at once, (5) `read_chat`: an open message gets a status line at once and its answer next. Then read the rest of `journal.md` and detect skills."
-    - "Keep the preview chat responsive: read files with the agent's file-reading tool (search tools if the session has them; otherwise read the section with the file-reading tool), never with shell commands (`grep`, `cat`, `head`, `ls`, `sed`, `python` …). Use the shell only for the project's check scripts, each as a single command without `;`, `&&` or pipes: `node specs/dashboard/validate-journal.mjs`, `node specs/dashboard/check-material.mjs <material file>`, `node specs/dashboard/write-dashboard.mjs <draft.json>`, `node specs/dashboard/now.mjs [<timestamp>]` (the only time source, `data/agent-links.md` → Times — never `date`), `node specs/dashboard/find.mjs [-i] <pattern> [file|folder …]` (read-only search inside the project — instead of `grep`), `node specs/dashboard/localize-journal.mjs --lang <code>` (language pack for the empty journal) and `node specs/dashboard/localize-journal.mjs <map.json> [<file>]` (all-or-nothing line replacer for `journal.md` or one material file — one write instead of many edits), `node specs/dashboard/migrate-journal.mjs [--check]` (an older journal layout to the current one, representation only — after the instructor's confirmation, `tasks/update-dashboard.md` step 9),`node specs/dashboard/fetch-thumb.mjs <file page|file name>` (preview ≤ 500 px and licence data of a Wikimedia Commons file into `.cache/thumbs/`, then look at it with the file-reading tool — never `curl` or another download). Also allowed: `cp specs/templates/journal.md journal.md`, the byte-for-byte copy of the empty journal in `init-course` / `scaffold`, and the event subscription `curl -sN <get_state.events>` of the start order (read-only, inside the Monitor). The only other shell use is inside a task confirmed in the terminal (git via `:manage-git`, Chrome start and file move on the browser route of `:generate-image`), after that confirmation. Change `journal.md` and material files only with the file-edit tool, the line replacer above, or — with the gate open — `read_section` + `write_section` (hash-checked, one write for a whole section); never with other shell scripts or heredocs; after a line-replacer write run `validate-journal.mjs` or `check-material.mjs`; several line changes in one file go into one write (`data/agent-links.md` → Changing another section). Compound shell lines can trigger a permission prompt the instructor never sees, and the chat freezes meanwhile."
+    - "Keep the preview chat responsive: read files with the agent's file-reading tool (search tools if the session has them; otherwise read the section with the file-reading tool), never with shell commands (`grep`, `cat`, `head`, `ls`, `sed`, `python` …). Use the shell only for the project's check scripts, each as a single command without `;`, `&&` or pipes: `node specs/dashboard/validate-journal.mjs`, `node specs/dashboard/check-material.mjs <material file> [--viewport WxH]` (the learners' device window when the target group names one), `node specs/dashboard/write-dashboard.mjs <draft.json>`, `node specs/dashboard/now.mjs [<timestamp>]` (the only time source, `data/agent-links.md` → Times — never `date`), `node specs/dashboard/find.mjs [-i] <pattern> [file|folder …]` (read-only search inside the project — instead of `grep`), `node specs/dashboard/localize-journal.mjs --lang <code>` (language pack for the empty journal) and `node specs/dashboard/localize-journal.mjs <map.json> [<file>]` (all-or-nothing line replacer for `journal.md` or one material file — one write instead of many edits), `node specs/dashboard/migrate-journal.mjs [--check]` (an older journal layout to the current one, representation only — after the instructor's confirmation, `tasks/update-dashboard.md` step 9),`node specs/dashboard/fetch-thumb.mjs <file page|file name>` (preview ≤ 500 px and licence data of a Wikimedia Commons file into `.cache/thumbs/`, then look at it with the file-reading tool — never `curl` or another download). Also allowed: `cp specs/templates/journal.md journal.md`, the byte-for-byte copy of the empty journal in `init-course` / `scaffold`, and the event subscription `curl -sN <get_state.events>` of the start order (read-only, inside the Monitor). The only other shell use is inside a task confirmed in the terminal (git via `:manage-git`, Chrome start and file move on the browser route of `:generate-image`), after that confirmation. Change `journal.md` and material files only with the file-edit tool, the line replacer above, or — with the gate open — `read_section` + `write_section` (hash-checked, one write for a whole section); never with other shell scripts or heredocs; after a line-replacer write run `validate-journal.mjs` or `check-material.mjs`; several line changes in one file go into one write (`data/agent-links.md` → Changing another section). Compound shell lines can trigger a permission prompt the instructor never sees, and the chat freezes meanwhile."
     - "Task files, templates and `data/agent-links.md` may change between two commands: on every command (typed or clicked) re-read with the file-reading tool the command's task file, every template it names and every file its Inputs mark as read completely (e.g. the sub-procedures of `build-session`) — also if you read them earlier in this session; `tasks/update-dashboard.md` and `templates/project-dashboard.yaml` right before the task writes the Dashboard; `data/agent-links.md` once per session and again after any notice that the specs changed. Always read a task file **completely**, not a line range: rules also stand at the end."
     - "Section headings in `journal.md` may carry a translated suffix (`## Outline – …`). When a task names `## Outline`, it means the line that starts with `## Outline`. Keep heading lines unchanged when replacing a section's content."
     - "Agent roster: when the gate is open, read `data/agent-links.md` → Agent Roster first, then declare all four agents with `set_agent` (names `teaching`, `artist`, `learner`, `development`, emojis from their `icon:`, labels in the course language as that section describes — no renaming later — except once, early, when the language changes on first contact) before the first chat message, and update the current one on every persona switch. `chat`/`answer` events carry in `agent` the persona the instructor talks to — answer as that persona; `agent:<name>/switch` (link or chat menu) means `:agent <name>`."
@@ -902,7 +902,7 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - `number`
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - `journal.md` → `## Sessions` — session skeleton (created if missing, see Step 0)
-- declared duration for this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda, without an agenda the time commitment)
+- declared duration for this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda, without an agenda the length of one unit)
 - `journal.md` → `## Agents` → `### Learner Personas` — if present, drives Step 2
 - Referenced sub-procedures: `tasks/create-session-skeleton.md`, `tasks/promote-session.md`, `tasks/create-image.md`, `tasks/generate-image.md`, `tasks/validate-course.md`, `tasks/validate-syntax.md`, `tasks/review-as-persona.md`, `tasks/quick-fix.md`, `data/duration-heuristic.md` — **read completely once before the run**, every one of them, including `tasks/generate-image.md` (Phase 0, the image route) and `tasks/quick-fix.md` (its "When to use" table decides step 1d); a later step of the same run may rely on that reading unless the specs changed
 - `data/agent-links.md` → Progress feedback and Long runs — status rhythm and questions during the run
@@ -1193,12 +1193,12 @@ Defines sessions/modules with title, duration, type (slug from `journal.md` → 
 
 1. Read `journal.md` → `## Course Context`:
    - Check `agenda` field in the profile:
-     - **`no`** → Inform the instructor that the agenda was skipped during init and suggest proceeding with `:create-session 1`. If `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6. Stop here.
+     - **`no`** → the instructor called it although the course frame says no agenda: 🎛️ ask "Create a schedule after all?" (Yes / No). Yes → set `Agenda required: yes` in `## Course Context` (`data/agent-links.md` → Changing another section, in the save of this task) and continue. No → if `## Agenda` still holds placeholders, replace them with the one-line note of `tasks/scaffold-course.md` step 6, suggest `:create-session 1` and stop.
      - **`optional`** → 🎛️ Ask with structured question (single choice):
        - **Yes** — Create agenda to plan the structure
        - **No** — Proceed directly to `:create-session`
        - **Later** — Skip agenda, create it later
-       If no: redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: continue.
+       If no: set `Agenda required: no` (one line in `## Course Context`, confirmed with this answer) and redirect to `:create-session`. If later: stop here — the agenda stays an open step in the dashboard. If yes: set `Agenda required: yes` in the save of this task and continue.
      - **`yes`** (required) → Continue without asking.
    - Read terminology (sessions-called) and pacing model.
 2. Read learning objectives from the outline.
@@ -1271,7 +1271,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - 💬 Grounding check (mandatory, do not skip): when the outline already lists the units, propose the pattern for each unit yourself and let the instructor confirm one concrete unit ("Does unit N look like this in your lessons?"); only without such a list ask the instructor to name one concretely planned session, which pattern it would get, and why. If the answer doesn't fit any proposed type, revise the types before continuing — don't let an unfitting default stand.
    - Display names in the course language; slugs as defined in the template layout (lowercase ASCII words in the course language, not English defaults). With more than one type, no display name equals a Terminology word (`sessions-called`) — choose another name before proposing (e.g. "Lernmodul" when units are called "Modul").
 
-3c. Choose a **Default Session Method** yourself (several may be combined as "a + b") from `data/didactic-methods.md` → "Session Methods", based on course type — **`none`** is allowed. Do not ask; mention it in plain words in the summary only if it changes what the learners do. This becomes the course-wide default; `:create-agenda` can override it per session later.
+3c. Choose a **Default Session Method** yourself (several may be combined as "a + b") from `data/didactic-methods.md` → "Session Methods", based on course type — **`none`** is allowed. Do not ask; name it in plain words in the summary together with its `Required` elements (one line — the check later demands them), e.g. "Every unit ends with a short self-check" (translated). This becomes the course-wide default; `:create-agenda` can override it per session later.
 4. 💬 Describe the instructor persona (expertise, role, background) — free text, discuss with instructor.
 5. Derive the teaching style from `## Course Context` (Tone) and confirm it only as one line of the summary.
 6. Derive the difficulty level from target group and outline; confirm it only as one line of the summary.
@@ -1889,6 +1889,7 @@ Creates a **skeleton** for one session (or unit/block/lesson — see `journal.md
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
 - Terminology from `journal.md` → `## Course Context` (sessions-called)
+- Objectives and duration of this session — `data/session-types.md` → "Objectives and duration of a session" (the agenda row; without an agenda `## Outline` → Learning Objectives and Session Overview, which also suggests the title)
 - Default Session Method from `journal.md` → `## Didactics` → `__Default Session Method:__`, and the matching session's Method column in `journal.md` → `## Agenda` if an agenda exists (see `data/didactic-methods.md`)
 
 ## Output
@@ -2657,7 +2658,7 @@ Converts a **Session** into a detailed **Session Material**.
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - skeleton: matching `### {number}. {title}` subsection from `journal.md` → `## Sessions`
 - didactics: content from `journal.md` → `## Didactics`
-- agenda: content from `journal.md` → `## Agenda`
+- agenda: content from `journal.md` → `## Agenda`; objectives and duration of this session per `data/session-types.md` → "Objectives and duration of a session" (without an agenda from `## Outline` and `## Course Context` → Units)
 - templates: imports and usage notes from `journal.md` → `## Templates` (if present)
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
@@ -2683,7 +2684,7 @@ Converts a **Session** into a detailed **Session Material**.
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - All texts of this material reflect this style.
-5. Insert agenda information.
+5. Insert the session's objectives and duration (from the agenda, or without one as named in Inputs).
 6. Consider didactic inputs.
 7. Generate planned outline.
 8. Apply template.
@@ -3822,7 +3823,7 @@ Rules:
    - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header
    - Template usage in materials follows the documented examples and constraints in `## Templates`
 
-5. **Check Agenda** `[if agenda flag = yes in journal.md → ## Course Context]`:
+5. **Check Agenda** `[if journal.md → ## Agenda has content, or the agenda flag is yes]`:
    - All sessions have title, duration, type, learning objective
    - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]` All sessions have a Method assigned
    - Learning objectives align with `journal.md` → `## Outline`
@@ -3869,6 +3870,7 @@ Rules:
    1. [Concrete action with file reference]
    ```
 
+   **Course result:** the worst of (a) the course-level checks, rated with `result_rules` of `templates/session-validation.yaml`, and (b) every unit's current report — a unit with an open ⏳ item or Done ❌ makes the course FAIL (publishing waits for it), open pedagogical concerns of a unit or of the course give PASS with concerns, otherwise PASS.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
 11. After all session validation reports and the latest summary are created: suggest next step.
     - If issues exist: "Open `:coauthor-materials {number}` to resolve the issues in Session X, then rerun `:validate-course`."
@@ -5484,7 +5486,7 @@ template:
 - [ ] [mechanical] Learner personas, if used, are stored under `## Agents` → `### Learner Personas`
 - [ ] [mechanical] No legacy top-level `## Learner Personas` section remains
 
-## Agenda `[if agenda flag = yes in journal.md → ## Course Context]`
+## Agenda `[if journal.md → ## Agenda has content, or the agenda flag is yes]`
 
 - [ ] [mechanical] All sessions have: title, duration, type, learning objective (the summary of a unit lives in its skeleton under `## Sessions`)
 - [ ] [pedagogical] Session learning objectives align with `journal.md` → `## Outline` learning objectives
@@ -6081,8 +6083,9 @@ language (`## Course Context` → Language).
   fetch tool that returns a quoted or summarized excerpt of a page — counts as
   a source, but is named so, never "read myself"), or *tried with answers*. A reference is listed only if its page itself
   was opened (in full, or as a named extract); a search summary is never a source. The rendered check is
-  `node specs/dashboard/check-material.mjs <material file>` (on its own, only
-  with the file; it prints slides, quizzes, read-aloud buttons, missing images
+  `node specs/dashboard/check-material.mjs <material file> [--viewport WxH]` (on its own;
+  `--viewport` with the window size of the learners' device when the target group names one, e.g.
+  a tablet upright `--viewport 768x1024`; it prints slides, quizzes, read-aloud buttons, missing images
   and errors) — if it cannot start, say so in one line. Claims about what learners see (buttons,
   feedback, solutions) count as *tried* only after a check that clicks.
   **Layout and devices:** a claim about what fits a screen or how a page looks
@@ -6489,7 +6492,7 @@ Sum reading time and activity time for the session's total estimate.
 
 ## Comparing against the declared duration
 
-Compare the total estimate to the session's declared duration (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the time commitment).
+Compare the total estimate to the session's declared duration (`data/session-types.md` → "Objectives and duration of a session" — the agenda, without an agenda the length of one unit, never the total time).
 
 - Compare with **one** number: the middle of the estimated range. Count a teacher-led phase once — as its stated duration, not again as reading time of the text shown on the board.
 - **Flag** if the estimate falls outside **70%–150%** of the declared duration.
@@ -8824,7 +8827,7 @@ Session commands identify a session by its number alone (`:promote-session 3`, `
 
 ## Objectives and duration of a session
 
-Read a session's learning objectives and declared duration from its row in `journal.md` → `## Agenda`. Without an agenda (agenda: no, or not created yet): objectives from `## Outline` → Learning Objectives (`data-key="learning-goals"`) and its Session Overview (for a single lesson: all objectives); duration from `## Course Context` / `## Outline` → Time Commitment (for a single lesson: the lesson length). Never leave a check without objectives because the agenda is missing.
+Read a session's learning objectives and declared duration from its row in `journal.md` → `## Agenda`. Without an agenda (agenda: no, or not created yet): objectives from `## Outline` → Learning Objectives (`data-key="learning-goals"`) and its Session Overview (for a single lesson: all objectives); duration = the length of **one** unit from `## Course Context` → Units (count × length; for a single lesson: the lesson length), minus setup and wrap-up when the instructor named them — never the course's total time (`## Outline` → Time Commitment). Never leave a check without objectives because the agenda is missing.
 
 ## Where the slug is used
 

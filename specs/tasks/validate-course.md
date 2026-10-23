@@ -130,7 +130,7 @@ Rules:
    - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header
    - Template usage in materials follows the documented examples and constraints in `## Templates`
 
-5. **Check Agenda** `[if agenda flag = yes in journal.md → ## Course Context]`:
+5. **Check Agenda** `[if journal.md → ## Agenda has content, or the agenda flag is yes]`:
    - All sessions have title, duration, type, learning objective
    - `[if journal.md → ## Didactics → __Default Session Method:__ is not "none"]` All sessions have a Method assigned
    - Learning objectives align with `journal.md` → `## Outline`
@@ -177,6 +177,7 @@ Rules:
    1. [Concrete action with file reference]
    ```
 
+   **Course result:** the worst of (a) the course-level checks, rated with `result_rules` of `templates/session-validation.yaml`, and (b) every unit's current report — a unit with an open ⏳ item or Done ❌ makes the course FAIL (publishing waits for it), open pedagogical concerns of a unit or of the course give PASS with concerns, otherwise PASS.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place (validation state, publishing gate, session progress).
 11. After all session validation reports and the latest summary are created: suggest next step.
     - If issues exist: "Open `:coauthor-materials {number}` to resolve the issues in Session X, then rerun `:validate-course`."

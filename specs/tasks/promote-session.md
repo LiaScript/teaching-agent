@@ -11,7 +11,7 @@ Converts a **Session** into a detailed **Session Material**.
 - the session's type — resolved from the session number as described in `data/session-types.md` → "Resolving a session's type"; never a command parameter
 - skeleton: matching `### {number}. {title}` subsection from `journal.md` → `## Sessions`
 - didactics: content from `journal.md` → `## Didactics`
-- agenda: content from `journal.md` → `## Agenda`
+- agenda: content from `journal.md` → `## Agenda`; objectives and duration of this session per `data/session-types.md` → "Objectives and duration of a session" (without an agenda from `## Outline` and `## Course Context` → Units)
 - templates: imports and usage notes from `journal.md` → `## Templates` (if present)
 - **Coauthor role from `journal.md` → `## Agents` → `### Coauthor` (mandatory handoff)**
 - Style, difficulty level, and didactic concept from `journal.md` → `## Didactics`
@@ -37,7 +37,7 @@ Converts a **Session** into a detailed **Session Material**.
    - From this step, the agent writes in the tone of the Coauthor role.
    - If the Coauthor role is missing or inactive, fall back to `journal.md` → `## Didactics` → `__Professor Persona:__`, `__Teaching Style:__`, and `__Persona Voice Sample:__`, then state that the Coauthor role should be synchronized into `## Agents`.
    - All texts of this material reflect this style.
-5. Insert agenda information.
+5. Insert the session's objectives and duration (from the agenda, or without one as named in Inputs).
 6. Consider didactic inputs.
 7. Generate planned outline.
 8. Apply template.
