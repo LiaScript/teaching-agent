@@ -1366,3 +1366,33 @@ test("a check report without the line 'usable with learners now' is named", () =
   const result = validate({ title: "Kurs", next, units: [{ id: 1, title: "E1", state: "review", href: "#1.-e1", usable: { state: "yes" } }] }, `## Sessions\n\n### 1. E1\n\nText\n\n${report}`);
   assert.match(result.output, /unit 1: the check report has no line "usable with learners now"/, result.output);
 });
+
+test("small validator and script fixes: course-language advice, finished words with ⏳, report keys with more attributes, clean errors", () => {
+  const view = { href: "agent:teaching/preview?file=1", command: ":preview 1" };
+  const report = (outcome, attrs = "") => `#### Prüfbericht – Einheit 1\n\n<section data-key="validation-report"${attrs}>\n\n**Ergebnis:** ${outcome}\n\n**Jetzt mit den Lernenden nutzbar:** ja, mit Einschränkungen: 1 Foto\n\n**Nach der Prüfung geändert:**\n\n- 23.10.2026 · S1 · Satz gekürzt · Kurzprüfung\n\n<details>\n\n__Result:__ PASS\n\n⏳ 1 Foto\n\n</details>\n\n</section>\n\n`;
+  const table = notes => `<details><summary>Technik</summary>\n\n| # | Title | Type | Method | Skeleton | Material | Done | Notes |\n|---|---|---|---|---|---|---|---|\n| 1 | E1 | a | b | ✅ | ✅ | ❌ | ${notes} |\n\n</details>\n\n`;
+  const unit = statusLabel => [{ id: 1, title: "E1", state: "current", href: "#1.-e1", view, usable: { state: "limited", missing: ["1 Foto"] }, statusLabel, process: { steps: [{ title: "Material", state: "done" }] } }];
+  const outcome = "bestanden – es fehlt noch: 1 Foto (23.10.2026) – 1 Punkt seither geändert – kurze Nachprüfung offen";
+  // 1: the Notes cell advice uses the course language's words.
+  const notes = validate({ title: "Kurs", next, units: unit("x") }, `## Sessions – Einheiten\n\n${table("anders")}### 1. E1\n\nText\n\n${report(outcome)}`);
+  assert.match(notes.output, /the Notes cell does not .* write the state with the same words: "\{outcome\} – 1 Punkt seither geändert – kurze Nachprüfung offen"/);
+  // 6: "fertig" for a unit that still waits for something (⏳) is a finished word too early.
+  const early = validate({ title: "Kurs", next, units: unit("fertig – bestanden – es fehlt noch: 1 Foto") }, `## Sessions – Einheiten\n\n### 1. E1\n\nText\n\n${report("bestanden – es fehlt noch: 1 Foto")}`);
+  assert.match(early.output, /statusLabel "fertig – bestanden – es fehlt noch: 1 Foto" says "fertig", but the unit has no passed check without open ⏳ items/);
+  // 8: a report section with a further attribute is still the report.
+  const extra = validate({ title: "Kurs", next, units: unit("bestanden – es fehlt noch: 1 Foto") }, `## Sessions – Einheiten\n\n### 1. E1\n\nText\n\n${report("bestanden – es fehlt noch: 1 Foto", ' class="report"')}`);
+  assert.doesNotMatch(extra.output, /has no line "usable with learners now"|without a passed check/, extra.output);
+  // 2: no journal, or --lang without a code: a message, never a stack trace.
+  const dir = mkdtempSync(join(tmpdir(), "nojournal-"));
+  const none = spawnSync(process.execPath, [validatorScript], { cwd: dir, encoding: "utf8" });
+  const lang = spawnSync(process.execPath, [localizeScript, "--lang"], { cwd: dir, encoding: "utf8" });
+  rmSync(dir, { recursive: true, force: true });
+  assert.notEqual(none.status, 0);
+  assert.doesNotMatch(none.stdout + none.stderr, /^\s+at /m, "no stack trace without a journal");
+  assert.doesNotMatch(lang.stdout + lang.stderr, /^\s+at /m, "no stack trace for --lang without a code");
+});
+
+test("the single-unit macro shows the learners' view with its eye icon, as the overview does", () => {
+  const html = dashboard.renderComponent("Unit", "u1", { title: "A", state: "draft", view: { href: "agent:teaching/preview?file=1", command: ":preview 1" } });
+  assert.doesNotMatch(html, /▶️/, html);
+});

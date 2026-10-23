@@ -22,12 +22,17 @@
 //   writes several lines. Pairs apply in order.
 // - "append": [lines] adds lines at the end of the file (e.g. a new back-matter
 //   chapter such as the image credits).
-// In map mode the Dashboard JSON block is not touched; write it afterwards with write-dashboard.mjs.
+// A map's optional "dashboard" replaces the Dashboard JSON block (the language packs use it); without it the
+// block is not touched – write it afterwards with write-dashboard.mjs.
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const args = process.argv.slice(2);
+if (args[0] === "--lang" && !args[1]) {
+  console.error("usage: node specs/dashboard/localize-journal.mjs --lang <code> [journal.md] – the code of a pack in specs/templates/i18n/");
+  process.exit(1);
+}
 const pack = args[0] === "--lang" ? args[1] : null;
 const mapFile = pack ? resolve(dirname(fileURLToPath(import.meta.url)), "..", "templates", "i18n", `${pack}.json`) : args[0];
 const file = (pack ? args[2] : args[1]) ?? "journal.md";

@@ -93,10 +93,12 @@ template:
     - id: metadata
       title: Metadata
       template: |
-        __Date:__ {{date}}
-        __Material:__ {{material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode (see `data/file-structure-modes.md`)}}
-        __Result:__ {{result}}
-        __Mode:__ {{mode}}
+        - __Date:__ {{date}}
+        - __Material:__ {{material path — `materials/{number}-{slug}/README.md`, or `README.md → ## {chapter title}` in single-file mode (see `data/file-structure-modes.md`)}}
+        - __Result:__ {{result}}
+        - __Mode:__ {{mode}}
+
+        (A list — lines directly below each other would merge into one paragraph.)
     - id: content
       title: Content
       template: |

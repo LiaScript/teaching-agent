@@ -11,6 +11,11 @@ import { unencodedUrls, describeUrl, analyseMaterial } from "./check-material.mj
 const here = dirname(fileURLToPath(import.meta.url));
 const candidates = ["journal.md", resolve(here, "..", "journal.md"), resolve(here, "..", "..", "journal.md")];
 const file = process.argv[2] ?? candidates.find(path => existsSync(path)) ?? "journal.md";
+if (!existsSync(file)) {
+  console.error(`No journal found (${file}) – run from the course project root or name the file: node specs/dashboard/validate-journal.mjs <journal.md>`);
+  console.log("Exit code: 2");
+  process.exit(2);
+}
 const source = readFileSync(file, "utf8");
 const language = (source.match(/^language:\s*(\w+)/m)?.[1] ?? "en").slice(0, 2).toLowerCase();
 
@@ -71,7 +76,7 @@ function section(key) {
 // A unit's check report: a #### heading that starts with "Validation Report" (older journals), or any
 // #### heading directly followed by <section data-key="validation-report"> (heading only in the course
 // language). markReports() prefixes the second form, so every check below finds both.
-const reportKey = /^<section\s+data-key=["']validation-report["']\s*>/;
+const reportKey = /^<section\s+data-key=["']validation-report["'][^>]*>/;
 function reportHeadings(text) {
   const lines = text.split("\n");
   let unit = "";
@@ -344,7 +349,8 @@ if (openStep) {
 // "Finished/ready" is reserved for a unit whose check passed (tasks/update-dashboard.md).
 const finishedWord = /(?<!\b(?:nicht|noch nicht|not|not yet|kein|keine)\s)\b(finished|ready|completed?|done|fertig(?:gestellt)?|abgeschlossen|erledigt)\b/i;
 const unitBlock = id => sessions.split(new RegExp(`^### ${id}\\. `, "m"))[1]?.split(/^### /m)[0] ?? "";
-const passed = id => /#### Validation Report[\s\S]*?__Result:__\s*PASS(?!\s*with)/.test(unitBlock(id));
+// Passed means PASS without a deferred item (⏳) – "finished" waits for those too.
+const passed = id => /#### Validation Report[\s\S]*?__Result:__\s*PASS(?!\s*with)/.test(unitBlock(id)) && !/⏳/.test(unitBlock(id).split(/^#### Validation Report/m)[1] ?? "");
 const statusLines = new Map([...sessions.replace(/<!--[\s\S]*?-->/g, "").replace(/<details>[\s\S]*?<\/details>/g, "").split(/^### /m)[0]
   .matchAll(/^(\d+)\.\s+(.+)$/gm)].map(match => [match[1], match[2].trim()]));
 // `{n}. {title} – {status}`: the status is what follows the unit title (of the overview or of its ### heading),
@@ -360,7 +366,7 @@ model.units.forEach(unit => {
   if (passed(unit.id)) return;
   for (const [where, text] of [["statusLabel", unit.statusLabel], ["status line", statusOf(unit)]]) {
     const word = String(text ?? "").match(finishedWord)?.[1];
-    if (word) warnings.push(`unit ${unit.id}: ${where} "${short(text)}" says "${word}", but the unit has no passed check (Validation Report with "Result: PASS") – name what exists, e.g. "material written · check open"`);
+    if (word) warnings.push(`unit ${unit.id}: ${where} "${short(text)}" says "${word}", but the unit has no passed check without open ⏳ items (Validation Report with "Result: PASS") – name what exists, e.g. "material written · check open"`);
   }
 });
 // Material ✅ and approved by the instructor: the material step stays done. A done step returns to an
@@ -472,7 +478,7 @@ for (const report of reports) {
   const lines = visible.split("\n").filter(line => datedLine.test(line)).length;
   if ((said || lines) && said !== lines) warnings.push(`unit ${report.unit || "?"}: the report's outcome line says ${changed ? `"${changed[1]}"` : "no change since the check"}, but its block "Changed after the check" has ${lines} dated line${lines === 1 ? "" : "s"} – one dated line per change, the same number in the outcome line`);
   const notes = notesCells.get(report.unit);
-  if (changed && notes != null && !notes.toLowerCase().includes(changed[1].toLowerCase())) warnings.push(`unit ${report.unit}: the report says "${changed[1]}", but the Notes cell does not ("${short(notes, 70)}") – write the state with the same words: "{outcome} – ${changed[1]} – short re-check open" (translated)`);
+  if (changed && notes != null && !notes.toLowerCase().includes(changed[1].toLowerCase())) warnings.push(`unit ${report.unit}: the report says "${changed[1]}", but the Notes cell does not ("${short(notes, 70)}") – write the state with the same words: "{outcome} – ${changed[1]} – ${String(terms.recheckShort).split(/\s+–\s+/).slice(1).join(" – ")}"`);
   // One wording per state (R10-D5): the unit's status line and statusLabel carry the report's outcome words
   // and its "{n} … changed since"; a unit with Done ✅ shows "checked ✅" instead.
   const bare = outcome.replace(/^\s*\*\*[^*\n]+:\*\*\s*/, "");
@@ -528,7 +534,7 @@ visibleJournal.split("\n").forEach((line, index) => {
   const heading = headingAbove(index);
   datedItems.set(heading, [...(datedItems.get(heading) ?? []), index + 1]);
 });
-for (const [heading, lines] of datedItems) warnings.push(`${lines.length} numbered item${lines.length === 1 ? " starts" : "s start"} with a date (line ${lines.join(", ")}, ${short(heading, 40)}) – it renders as "1.23.10. 2026"; write "- **{date}:** …" (templates/session-skeleton.yaml → decisions)`);
+for (const [heading, lines] of datedItems) warnings.push(`${lines.length} numbered item${lines.length === 1 ? " starts" : "s start"} with a date (line ${lines.join(", ")} under "${short(heading, 40)}") – it renders as "1.23.10. 2026"; write "- **{date}:** …" (templates/session-skeleton.yaml → decisions)`);
 // Counts in the texts of the overview (R8-D3): a number of points counts the same set wherever it
 // appears – the group named in the same sentence, the points from a check, or a whole group.
 const numberWords = { zwei: 2, beide: 2, beiden: 2, drei: 3, vier: 4, "fünf": 5, sechs: 6, sieben: 7, acht: 8, neun: 9, zehn: 10, elf: 11, "zwölf": 12,

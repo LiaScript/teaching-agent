@@ -199,7 +199,7 @@ Alle Inhalte sind Beispiele. Makros zeigen übergebene Daten; sie entscheiden ni
 ```json @Dashboard.View
 {
   "title": "Datenbanken verstehen",
-  "subtitle": "Dein Kurs nimmt Form an.",
+  "subtitle": "Ihr Kurs nimmt Form an.",
   "context": "Darstellungsbeispiel · drei fiktive Einheiten",
   "next": {"title": "Den SQL-Entwurf gemeinsam durchsehen", "why": "So stimmen wir die Aufgaben auf die Zielgruppe ab.", "label": "Möglichkeiten ansehen", "href": "agent:teaching/help", "command": ":help"},
   "process": {"title": "Kursplanung", "steps": [
@@ -212,16 +212,16 @@ Alle Inhalte sind Beispiele. Makros zeigen übergebene Daten; sie entscheiden ni
     {"id": 2, "title": "Datenmodelle", "state": "done"},
     {"id": 3, "title": "SQL", "state": "current", "process": {"steps": [
       {"title": "Lernziele klären", "state": "done", "result": "Einfache Abfragen mit SELECT und WHERE.", "why": "Die Ziele geben den Aufgaben eine klare Richtung."},
-      {"title": "Aufgaben durchsehen", "state": "current", "why": "Du kennst den Lernstand deiner Zielgruppe.", "next": "Welche Aufgabe braucht eine zusätzliche Hilfe?"},
+      {"title": "Aufgaben durchsehen", "state": "current", "why": "Sie kennen den Lernstand Ihrer Zielgruppe.", "next": "Welche Aufgabe braucht eine zusätzliche Hilfe?"},
       {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Wir gleichen Aufgaben und Lernziele ab."}
     ]}}
   ]
 }
 ```
 
-Wähle eine Einheit. Die Prozessanzeige und Auswahl ändern sich; die übergebenen Zustände und der Gesamtfortschritt bleiben erhalten. Hat eine Einheit noch keine Arbeitsschritte, zeigt die Prozessanzeige ihren Zustand, ihre `summary` und den Text `processEmpty` („Für diese Einheit sind noch keine Arbeitsschritte eingetragen.“). Fehlt auch der globale Prozess, steht dort `courseProcessEmpty`.
+Wählen Sie eine Einheit. Die Prozessanzeige und Auswahl ändern sich; die übergebenen Zustände und der Gesamtfortschritt bleiben erhalten. Hat eine Einheit noch keine Arbeitsschritte, zeigt die Prozessanzeige ihren Zustand, ihre `summary` und den Text `processEmpty` („Für diese Einheit sind noch keine Arbeitsschritte eingetragen.“). Fehlt auch der globale Prozess, steht dort `courseProcessEmpty`.
 
-Enthält der Datensatz einen globalen `process`, steht über den Einheiten der Eintrag **Gesamter Kurs**. Er zeigt wieder den Ablauf des ganzen Kurses; von dort wechselst du mit einem Klick zurück in eine Einheit. `"selected": ""` öffnet die Übersicht direkt mit dieser Kursansicht. Sein Zähler heißt „2 von 6 Planungsschritten“ (`courseSteps`) und zählt nur Pflichtschritte: Schritte im Zustand `optional` (etwa das Veröffentlichen) bleiben außen vor, ebenso in den Schrittzählern der Einheitenkarten. Solange ein Kursschritt `current` ist und mindestens ein Pflichtschritt einer Einheit `done`, bekommt der Zähler einen Teilwert aus den Einheiten: „4 von 6 Planungsschritten · Material: 1 von 12 Schritten“ (`courseStepsMaterial`: erledigte Pflichtschritte aller Einheiten / alle Pflichtschritte der Einheiten). So bleibt er in der langen Materialphase nicht stehen; neue Daten braucht das nicht.
+Enthält der Datensatz einen globalen `process`, steht über den Einheiten der Eintrag **Gesamter Kurs**. Er zeigt wieder den Ablauf des ganzen Kurses; von dort wechseln Sie mit einem Klick zurück in eine Einheit. `"selected": ""` öffnet die Übersicht direkt mit dieser Kursansicht. Sein Zähler heißt „2 von 6 Planungsschritten“ (`courseSteps`) und zählt nur Pflichtschritte: Schritte im Zustand `optional` (etwa das Veröffentlichen) bleiben außen vor, ebenso in den Schrittzählern der Einheitenkarten. Solange ein Kursschritt `current` ist und mindestens ein Pflichtschritt einer Einheit `done`, bekommt der Zähler einen Teilwert aus den Einheiten: „4 von 6 Planungsschritten · Material: 1 von 12 Schritten“ (`courseStepsMaterial`: erledigte Pflichtschritte aller Einheiten / alle Pflichtschritte der Einheiten). So bleibt er in der langen Materialphase nicht stehen; neue Daten braucht das nicht.
 
 Die Fortschrittszeile nennt ihren Gegenstand: Die Überschrift ist „Fertige {unitsTitle}“ („Fertige Lerneinheiten“; englisch „{unitsTitle} finished“, ohne `unitsTitle` aus `unitLabel.many`), außer `progressTitle` oder `labels.progress` geben sie vor. Die Leiste erscheint erst, wenn mindestens eine Einheit `done` ist. Bis dahin steht ein Satz an ihrer Stelle:
 
@@ -246,7 +246,7 @@ Eine Einheitenkarte ordnet ihre drei Maße in einer festen Reihenfolge: (1) **nu
   "context": "Darstellungsbeispiel · zwei fiktive Einheiten",
   "unitLabel": {"one": "Einheit", "many": "Einheiten"},
   "units": [
-    {"id": 1, "title": "Grundbegriffe", "state": "revision", "statusLabel": "Prüfung: Korrektur nötig: 1 von 3 Punkten offen", "href": "#dashboard",
+    {"id": 1, "title": "Grundbegriffe", "state": "revision", "statusLabel": "Prüfung: Korrektur nötig: 1 von 3 Punkten offen – 2 Punkte seither geändert – kurze Nachprüfung offen", "href": "#dashboard",
      "usable": {"state": "no", "missing": ["eine lösbare Aufgabe auf „Begriffe ordnen“"]},
      "view": {"href": "agent:teaching/preview?file=1", "command": ":preview 1"},
      "process": {"steps": [{"title": "Material", "state": "done"}, {"title": "Prüfen", "state": "revision"}]}},
@@ -262,7 +262,7 @@ Eine Einheitenkarte ordnet ihre drei Maße in einer festen Reihenfolge: (1) **nu
 
 Parameter: `Titel, Beschreibung, Kontext, Beschriftung, Link, lesbarer Befehl`.
 
-@Dashboard.Hero(Datenbanken verstehen, Dein Kurs nimmt Form an., Fiktives Beispiel, Möglichkeiten ansehen, agent:teaching/help, :help)
+@Dashboard.Hero(Datenbanken verstehen, Ihr Kurs nimmt Form an., Fiktives Beispiel, Möglichkeiten ansehen, agent:teaching/help, :help)
 
 Bei `agent:`-Links ist der lesbare Befehl erforderlich. Normale Links verwenden im letzten Parameter ein leeres Argument. Die ausführliche Begründung der nächsten Aktion wird in `Dashboard.View` über `next.why` übergeben.
 
@@ -326,7 +326,7 @@ Jeder Schritt hat `title` und `state`; `why`, `result`, `next` und `statusLabel`
   "steps": [
     {"title": "Lernziele klären", "state": "done", "result": "Drei Ziele sind abgestimmt.", "why": "Sie geben dem Material eine klare Richtung."},
     {"title": "Aufgaben entwickeln", "state": "current", "why": "Die Kinder sollen die Ziele aktiv erarbeiten.", "next": "Eine Aufgabe zum Vergleichen formulieren."},
-    {"title": "Durchsehen", "state": "planned", "why": "Du prüfst, ob die Aufgaben zu deiner Klasse passen."}
+    {"title": "Durchsehen", "state": "planned", "why": "Sie prüfen, ob die Aufgaben zu Ihrer Klasse passen."}
   ],
   "note": "Rückmeldungen können zu einer erneuten Überarbeitung führen."
 }

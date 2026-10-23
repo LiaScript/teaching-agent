@@ -8,7 +8,7 @@ import: ./README.md
 
 # Dashboard-Demo
 
-Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Materialprozess zu sehen. Die Auswahl verändert nur die Ansicht. Die zweite Seite zeigt eine vorläufige Planung mit langen Titeln, solange noch keine Einheiten angelegt sind. Die dritte zeigt den Stand nach dem Ablaufplan, bevor das erste Material entsteht, die vierte den Stand nach dem ersten erledigten Arbeitsschritt, die fünfte einen geprüften, schon nutzbaren Abend, bevor einer fertig geprüft ist.
+Dieser Entwurf zeigt sechs fiktive Einheiten. Wählen Sie eine Einheit, um ihren Materialprozess zu sehen. Die Auswahl verändert nur die Ansicht. Die zweite Seite zeigt eine vorläufige Planung mit langen Titeln, solange noch keine Einheiten angelegt sind. Die dritte zeigt den Stand nach dem Ablaufplan, bevor das erste Material entsteht, die vierte den Stand nach dem ersten erledigten Arbeitsschritt, die fünfte einen geprüften, schon nutzbaren Abend, bevor einer fertig geprüft ist.
 
 ## Dashboard
 
@@ -16,7 +16,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
 {
   "title": "Datenbanken verstehen",
   "context": "Sechs Einheiten · fiktives Darstellungsbeispiel",
-  "subtitle": "Dein Kurs nimmt Form an. Am SQL-Material arbeiten wir weiter.",
+  "subtitle": "Ihr Kurs nimmt Form an. Am SQL-Material arbeiten wir weiter.",
   "notice": "Diese Beispieldaten zeigen die Oberfläche. Sie sind keine bestätigte Kursplanung.",
   "next": {
     "title": "Den Materialentwurf für SQL erstellen",
@@ -56,7 +56,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
+            "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab.",
             "state": "done",
             "result": "Im fiktiven Beispiel abgestimmt und erledigt."
           },
@@ -100,7 +100,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
+            "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab.",
             "state": "done",
             "result": "Im fiktiven Beispiel abgestimmt und erledigt."
           },
@@ -142,7 +142,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
+            "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -179,7 +179,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
+            "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -216,7 +216,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
+            "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -253,7 +253,7 @@ Dieser Entwurf zeigt sechs fiktive Einheiten. Wähle eine Einheit, um ihren Mate
           },
           {
             "title": "Gemeinsam durchsehen",
-            "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab.",
+            "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab.",
             "state": "planned"
           },
           {
@@ -388,17 +388,17 @@ Der Ablaufplan steht, aber noch keine Einheit hat Material. Statt einer Leiste b
   "units": [
     {"id": 1, "title": "Wozu Datenbanken?", "state": "planned", "summary": "Im Ablaufplan: 90 Minuten, Beispiele sammeln und vergleichen.", "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "planned", "why": "Erklärungen, Aufgaben und Hilfen machen den Plan nutzbar."},
-          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab."},
+          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab."},
           {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Verständlichkeit und Bezug zu den Lernzielen werden geprüft."}
         ]}},
     {"id": 2, "title": "Tabellen und Beziehungen", "state": "planned", "summary": "Im Ablaufplan: 90 Minuten, eine erste Tabelle anlegen.", "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "planned", "why": "Erklärungen, Aufgaben und Hilfen machen den Plan nutzbar."},
-          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab."},
+          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab."},
           {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Verständlichkeit und Bezug zu den Lernzielen werden geprüft."}
         ]}},
     {"id": 3, "title": "Erste Abfragen", "state": "planned", "summary": "Im Ablaufplan: 90 Minuten, Fragen an die eigene Tabelle.", "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "planned", "why": "Erklärungen, Aufgaben und Hilfen machen den Plan nutzbar."},
-          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab."},
+          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab."},
           {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Verständlichkeit und Bezug zu den Lernzielen werden geprüft."}
         ]}}
   ],
@@ -419,7 +419,7 @@ Der erste Arbeitsschritt von Abend 1 ist erledigt, fertig ist noch kein Abend. D
   "unitLabel": {"one": "Abend", "many": "Abenden"},
   "next": {
     "title": "Materialentwurf für Abend 1 durchsehen",
-    "why": "Sprache und Schwierigkeit passen erst, wenn du sie auf deine Zielgruppe abgestimmt hast.",
+    "why": "Sprache und Schwierigkeit passen erst, wenn Sie sie auf Ihre Zielgruppe abgestimmt haben.",
     "label": "Möglichkeiten ansehen",
     "href": "agent:teaching/help",
     "command": ":help"
@@ -439,17 +439,17 @@ Der erste Arbeitsschritt von Abend 1 ist erledigt, fertig ist noch kein Abend. D
   "units": [
     {"id": 1, "title": "Wozu Datenbanken?", "state": "planned", "summary": "Materialentwurf liegt vor: Beispiele sammeln und vergleichen.", "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "done", "result": "Erklärung, zwei Aufgaben und eine Hilfe."},
-          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab."},
+          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab."},
           {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Verständlichkeit und Bezug zu den Lernzielen werden geprüft."}
         ]}},
     {"id": 2, "title": "Tabellen und Beziehungen", "state": "planned", "summary": "Im Ablaufplan: 90 Minuten, eine erste Tabelle anlegen.", "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "planned", "why": "Erklärungen, Aufgaben und Hilfen machen den Plan nutzbar."},
-          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab."},
+          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab."},
           {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Verständlichkeit und Bezug zu den Lernzielen werden geprüft."}
         ]}},
     {"id": 3, "title": "Erste Abfragen", "state": "planned", "summary": "Im Ablaufplan: 90 Minuten, Fragen an die eigene Tabelle.", "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "planned", "why": "Erklärungen, Aufgaben und Hilfen machen den Plan nutzbar."},
-          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab."},
+          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab."},
           {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Verständlichkeit und Bezug zu den Lernzielen werden geprüft."}
         ]}}
   ],
@@ -482,13 +482,13 @@ Abend 1 ist geprüft und mit den Lernenden nutzbar, es fehlt noch ein Foto und d
      "view": {"href": "agent:teaching/preview?file=1", "command": ":preview 1"},
      "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "done", "result": "Erklärung, zwei Aufgaben und eine Hilfe."},
-          {"title": "Gemeinsam durchsehen", "state": "done", "result": "Von dir durchgesehen und freigegeben."},
+          {"title": "Gemeinsam durchsehen", "state": "done", "result": "Von Ihnen durchgesehen und freigegeben."},
           {"title": "Bilder einfügen", "state": "current", "result": "2 von 3 Fotos eingefügt.", "next": "Das Foto für die Seite „Tabellen im Alltag“."},
           {"title": "Prüfen und überarbeiten", "state": "review", "result": "Bestanden; ein Satz seither gekürzt."}
         ]}},
     {"id": 2, "title": "Tabellen und Beziehungen", "state": "planned", "process": {"steps": [
           {"title": "Materialentwurf erstellen", "state": "planned", "why": "Erklärungen, Aufgaben und Hilfen machen den Plan nutzbar."},
-          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Du stimmst Sprache und Schwierigkeit auf deine Zielgruppe ab."},
+          {"title": "Gemeinsam durchsehen", "state": "planned", "why": "Sie stimmen Sprache und Schwierigkeit auf Ihre Zielgruppe ab."},
           {"title": "Bilder einfügen", "state": "optional", "why": "Nur wenn das Material Bilder vorsieht."},
           {"title": "Prüfen und überarbeiten", "state": "planned", "why": "Verständlichkeit und Bezug zu den Lernzielen werden geprüft."}
         ]}}
