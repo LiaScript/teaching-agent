@@ -609,6 +609,7 @@ test("check-material without a browser prints the source findings and exits with
   assert.match(output, /Missing images: 4 \(4 placeholders on: Haufenwolke · Federwolke · Selbsttest; files not checked\)/);
   assert.match(output, /Errors \(.*\): 1\n- quiz on slide "Selbsttest"/);
   assert.match(output, /Rendered check not possible: .*CHROMIUM_PATH/);
+  assert.match(output, /Rendered check not possible: no installed Playwright found/, "the reason that triggers the install offer (data/chat-checks.md → Offering the Rendered Check)");
   assert.match(output, /Exit code: 2/);
   assert.doesNotMatch(output, /^\s+at /m, "no stack trace");
   assert.equal(help.status, 0);
@@ -782,6 +783,36 @@ test("check-material takes window sizes from --viewport, else the default list",
   assert.throws(() => parseArguments(["--verbose"]), /Unknown option --verbose/);
   assert.throws(() => parseArguments(["a.md", "b.md"]), /one file only/);
   assert.deepEqual(parseArguments(["-h"]), { help: true });
+});
+
+test("check-material serves the project root, so a material in its own folder loads with its relative imports", () => {
+  const { devServer, loadFailure } = materialChecks;
+  const call = devServer("materials/1-turtle/README.md", 3041);
+  assert.deepEqual(call.args.slice(0, 2), ["--input", "."], "--input <file> serves only the file's folder: the material 404s and ../../lia-templates/… is out of reach");
+  assert.equal(call.material, "http://127.0.0.1:3041/materials/1-turtle/README.md");
+  assert.equal(call.url, "http://127.0.0.1:3041/liascript/index.html?http://127.0.0.1:3041/materials/1-turtle/README.md");
+  assert.equal(devServer("./README.md", 3041).material, "http://127.0.0.1:3041/README.md");
+  assert.equal(devServer("materials/2 Wolken/README.md", 3041).material, "http://127.0.0.1:3041/materials/2%20Wolken/README.md");
+  // LiaScript shows its own error course when the material does not load; that is no rendered check.
+  assert.equal(loadFailure({ status: 200, titles: ["Das Quadrat"] }, "a.md"), null);
+  assert.equal(loadFailure({ status: undefined, titles: ["Das Quadrat"] }, "a.md"), null, "a rendered course counts even if its request was not seen");
+  assert.match(loadFailure({ status: 404, titles: ["🙈 Ups, something went wrong", "What is LiaScript?"] }, "materials/1-turtle/README.md"), /did not load materials\/1-turtle\/README\.md \(HTTP 404\)/);
+  assert.match(loadFailure({ status: undefined, titles: ["🙈 Ups, something went wrong"] }, "a.md"), /did not load a\.md/);
+  assert.match(loadFailure({ status: undefined, titles: [] }, "a.md"), /did not load a\.md \(no answer\)/);
+});
+
+test("check-material starts its DevServer on a free port, never on a fixed one a leftover server may hold", async () => {
+  const { freePort } = materialChecks;
+  const { createServer } = await import("node:net");
+  const busy = createServer();
+  await new Promise(done => busy.listen(0, "127.0.0.1", done));
+  const taken = busy.address().port;
+  let port;
+  try { port = await freePort(); } finally { busy.close(); }
+  assert.ok(Number.isInteger(port) && port > 0 && port !== taken);
+  const source = readFileSync(fileURLToPath(new URL("./check-material.mjs", import.meta.url)), "utf8");
+  assert.doesNotMatch(source, /devServer\(file, \d+\)/, "a fixed port reaches a leftover server of another project, which then answers instead");
+  assert.match(source, /process\.once\("SIGTERM"/, "a run stopped from outside also stops its DevServer");
 });
 
 test("open points carry their source; group and state texts are readable and follow labels (R8-D3, R8-D4)", () => {

@@ -16,6 +16,7 @@ import { homedir } from "node:os";
 import { resolve, join, delimiter } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { createServer } from "node:net";
 
 const usage = `Usage: node <path>/dashboard/check-material.mjs [file] [--viewport WxH …]
   file        the material document, relative to the course project root
@@ -413,8 +414,45 @@ const notFitText = /: (does not fit|image and question do not fit)/;
 
 const require = createRequire(import.meta.url);
 
+// The DevServer serves the project root (`--input .`): `--input <file>` would serve only the file's own folder,
+// so a material in materials/{n}-{slug}/ would not load and its relative imports (../../lia-templates/{id}/README.md)
+// would be out of reach.
+export function devServer(file, port) {
+  const origin = `http://127.0.0.1:${port}`;
+  const path = file.split(/[\\/]/).filter(part => part && part !== ".").map(encodeURIComponent).join("/");
+  const material = `${origin}/${path}`;
+  return { args: ["--input", ".", "--hostname", "127.0.0.1", "--port", String(port)], origin, material, url: `${origin}/liascript/index.html?${material}` };
+}
+
+// A port no other program listens on: a fixed port may still be held by a DevServer that a stopped run left
+// behind, serving another project – the check would then render that project's file instead.
+export function freePort() {
+  return new Promise((done, fail) => {
+    const probe = createServer();
+    probe.once("error", fail);
+    probe.listen(0, "127.0.0.1", () => {
+      const { port } = probe.address();
+      probe.close(() => done(port));
+    });
+  });
+}
+
+// When the material does not load, LiaScript shows its own error course ("🙈 Ups, something went wrong"):
+// that is no rendered check of the material. Returns the reason, or null when the material rendered.
+export function loadFailure({ status, titles }, file) {
+  const errorCourse = titles.some(title => /something went wrong/i.test(title));
+  const ok = status >= 200 && status < 400;
+  if (!errorCourse && (ok || (status === undefined && titles.length))) return null;
+  if (ok) return `LiaScript could not read ${file} (it shows its error page)`;
+  return `the LiaScript DevServer did not load ${file} (${status ? `HTTP ${status}` : errorCourse ? "LiaScript shows its error page" : "no answer"})`;
+}
+
 async function playwright(root) {
-  if (process.env.PLAYWRIGHT_MODULE_PATH) return require(process.env.PLAYWRIGHT_MODULE_PATH);
+  if (process.env.PLAYWRIGHT_MODULE_PATH) {
+    try { return require(process.env.PLAYWRIGHT_MODULE_PATH); } catch {
+      throw new Error(`no installed Playwright found (PLAYWRIGHT_MODULE_PATH ${process.env.PLAYWRIGHT_MODULE_PATH} does not load)`);
+    }
+  }
   try { return createRequire(join(root, "package.json"))("playwright"); } catch {}
   const cache = resolve(homedir(), ".npm/_npx");
   for (const folder of existsSync(cache) ? await readdir(cache) : []) {
@@ -547,10 +585,14 @@ async function main() {
 
   let chromium;
   try { ({ chromium } = await playwright(root)); } catch (error) { return report(file, analysis, null, error.message); }
-  const port = 3041;
-  const origin = `http://127.0.0.1:${port}`;
+  const target = devServer(file, await freePort());
+  const { origin } = target;
   let serverError = null;
-  const server = spawn("liadev", ["--input", file, "--hostname", "127.0.0.1", "--port", String(port)], { cwd: root, stdio: "ignore" });
+  const server = spawn("liadev", target.args, { cwd: root, stdio: "ignore" });
+  // A run stopped from outside (timeout, Ctrl-C) stops its DevServer too, instead of leaving it on the port.
+  const stop = () => { server.kill(); process.exit(130); };
+  process.once("SIGINT", stop);
+  process.once("SIGTERM", stop);
   server.on("error", error => { serverError = error; });
   let browser;
   try {
@@ -562,7 +604,9 @@ async function main() {
     const notFound = new Set();
     const errors = [];
     const large = new Map();
+    let materialStatus;
     page.on("response", response => {
+      if (response.url().split(/[?#]/)[0] === target.material) materialStatus = response.status();
       if (response.status() === 404 && /\.(png|jpe?g|gif|svg|webp)(\?|$)/i.test(response.url())) {
         missing.add(decodeURIComponent(response.url().replace(origin + "/", "")));
         notFound.add(response.url());
@@ -583,13 +627,15 @@ async function main() {
     page.on("pageerror", error => { if (!/fetchError/.test(error.message)) errors.push(String(error.message).slice(0, 160)); });
 
     try {
-      await page.goto(`${origin}/liascript/index.html?${origin}/${file}`, { waitUntil: "domcontentloaded" });
+      await page.goto(target.url, { waitUntil: "domcontentloaded" });
     } catch (error) {
       return report(file, analysis, null, `the LiaScript DevServer (liadev) did not answer: ${error.message.split("\n")[0]}`);
     }
     await page.waitForTimeout(4000);
     const slides = await page.evaluate(() => Array.from(document.querySelectorAll("a.lia-toc__link")).map(a => a.innerText.trim()).filter(Boolean));
     const titles = slides.filter(title => title !== "skip navigation");
+    const failure = loadFailure({ status: materialStatus, titles }, file);
+    if (failure) return report(file, analysis, null, failure);
     const counts = { quizzes: 0, blocks: 0, inline: 0 };
     const broken = new Map();
     const warnings = [];
