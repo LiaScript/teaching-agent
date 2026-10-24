@@ -115,6 +115,16 @@ test("cards show status, both buttons and the readable command", () => {
   assert.match(html, /Grundschule/);
 });
 
+test("German page texts say Vorlage, never Template", () => {
+  const model = catalog.merge(catalog.normalize({ version: 1, templates: [valid()] }, "shared"), { entries: [], problems: [] });
+  const html = catalog.render("c1de", { ...model, lang: "de" });
+  assert.match(html, /Vorlagen durchsuchen/);
+  assert.match(html, /1 von 1 Vorlagen/);
+  assert.match(catalog.render("c1empty", { entries: [], problems: [], lang: "de" }), /Keine Vorlage passt zu dieser Suche\./);
+  const visible = html.replace(/<[^>]*>/g, " ");
+  assert.doesNotMatch(visible, /\bTemplates?\b/, "the German UI says Vorlage");
+});
+
 test("texts from the data are escaped; English is the fallback language", () => {
   const model = catalog.normalize({ version: 1, templates: [valid({ name: '<img src=x onerror="alert(1)">', note: "<b>x</b>" })] }, "shared");
   const html = catalog.render("c2", { ...model, lang: "fr" });

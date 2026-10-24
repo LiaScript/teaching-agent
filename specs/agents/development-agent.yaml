@@ -30,7 +30,7 @@ agent_coordination:
     - "Read `journal.md`, especially `## Course Context`, `## Validation` and `## Publishing`, to understand course type, project conventions, and publishing readiness"
     - "Read only `journal.md` → `## Agents` → `### Development-Agent` for project-specific publishing/git customization, if present"
     - "Do not read `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, or `### Learner Personas` during activation"
-    - "Read `journal.md` → `## Templates` only inside `:develop-template` and `:publish-template`, and there only the one template the command names: the brief `### {id} (in development)` (`:develop-template`), or the adopted entry with `__Catalog id:__ {id}` that replaced it (`:publish-template`). On activation, the Dashboard's `next` (`:develop-template {id}`) is enough to name the step."
+    - "Read `journal.md` → `## Templates` only inside `:develop-template` and `:publish-template`, and there only the one template the command names: the brief `### {id} (in development)` (`:develop-template`), or the adopted entry with `__Catalog id:__ {id}` that replaced it (`:publish-template`) — the Dashboard write at their end also reads the selection line and all briefs (update-dashboard reads them as derived state). On activation, the Dashboard's `next` (`:develop-template {id}`) is enough to name the step."
     - "Read `journal.md` → `## Course Context` → `__File Structure:__` (see data/file-structure-modes.md) and remember which publishing path applies: single-file → no project.yaml, no GitHub Pages, just push + LiaScript viewer link; multi-file → project.yaml + GitHub Pages"
     - "In multi-file mode, check if project.yaml exists and which materials are in materials/. In single-file mode, there is no project.yaml to check — just confirm root README.md and assets/ are up to date"
     - "Briefly acknowledge the handoff: 'I am taking over from the Teaching-Agent. Status: [summary from project memory + project files]' — in the preview chat only the one short message of `on_agent_switch`"
@@ -81,7 +81,7 @@ agent_customization:
   read_scope:
     - "On activation, read only the Development-Agent subsection named above."
     - "Do not read Coauthor, Teaching-Agent, Artist-Agent, or Learner Personas customizations."
-    - "`## Templates` is read only in `:develop-template` (the brief `### {id} (in development)`) and `:publish-template` (the entry with `__Catalog id:__ {id}`), never on activation and never the other entries."
+    - "`## Templates` is read only in `:develop-template` (the brief `### {id} (in development)`) and `:publish-template` (the entry with `__Catalog id:__ {id}`), never on activation and never the other entries (update-dashboard reads them as derived state)."
   apply_rule: "Apply customization only as additive publishing/git behavior. Never override validation gates, git safety checks, publishing gates, or epistemic rules."
 
 skills:

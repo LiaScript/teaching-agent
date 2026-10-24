@@ -88,7 +88,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 - After :validate-course passes → suggest `:agent development` for :create-project or :update-project
 - When the instructor mentions git, GitHub, publishing, or GitHub Pages
 - When committing or pushing changes is needed
-- When `## Templates` holds a brief `### {id} (in development)` → hand over with `agent:development/switch` (the Dashboard's `next` names `:develop-template {id}`); the Teaching-Agent checks the result later with `:manage-templates {id}`
+- When `## Templates` holds a brief `### {id} (in development)` with `__State:__ brief` or `in development` → hand over with `agent:development/switch` (the Dashboard's `next` names `:develop-template {id}`); with `ready to test` it is the Teaching-Agent's own `:manage-templates {id}` (check against the brief, then adopt) — no handover
 
 **Offer `:suggest-templates`:**
 - After :create-didactics is saved → offer `:suggest-templates` (the Dashboard's `next`); the order relative to `:create-visuals` stays open — both are offered after the didactics

@@ -129,10 +129,10 @@ function checkTemplates() {
   } else if (ids && selection !== "done – none needed") {
     const catalogIds = entries.map(entry => (entry.fields["Catalog id"] ?? "").replace(/`/g, "").trim());
     for (const id of ids.filter(id => !catalogIds.includes(id) && !briefs.some(brief => brief.id === id))) {
-      found.problems.push(`## Templates: the template selection names "${id}", but ## Templates has no entry with __Catalog id:__ ${id} and no brief "### ${id} (in development)" – adopt it with :manage-templates ${id} or write its brief`);
+      found.problems.push(`## Templates: the template selection names "${id}", but ## Templates has no entry with __Catalog id:__ ${id} and no brief "### ${id} (in development)" – adopt it with :manage-templates ${id} or write its brief (:suggest-templates); if it was removed, take ${id} out of the selection line (no id left: "done – none needed", or "open" while an activity is undecided)`);
     }
   }
-  found.briefs = briefs.map(brief => ({ id: brief.id, state: brief.fields.State }));
+  found.briefs = briefs.map(brief => ({ id: brief.id, state: brief.fields.State, usedIn: brief.fields["Used in"] ?? "" }));
   const projectDir = dirname(resolve(file));
   for (const brief of briefs) {
     const name = `brief "${brief.heading}"`;
@@ -397,6 +397,15 @@ if (/^agent:teaching\/suggest-templates\b/.test(String(model.next?.href ?? "")))
   const working = model.units.find(unit => ["current", "draft", "review", "revision"].includes(unit.state));
   if (working) warnings.push(`next suggests templates although unit ${working.id} is being worked on – next stays with the unit, :suggest-templates goes into explore (icon ➕)`);
   else if (agendaTableRows) warnings.push("next suggests templates although the agenda is saved – next stays with the agenda and the units, :suggest-templates goes into explore (icon ➕)");
+}
+// A brief takes next from a unit being worked on only when its __Used in:__ names that unit.
+const briefNext = String(model.next?.href ?? "").match(/^agent:(development\/develop-template\?id|teaching\/manage-templates\?name)=([a-z0-9-]+)/);
+const nextBrief = briefNext && openBriefs.find(brief => brief.id === briefNext[2]);
+if (nextBrief) {
+  const working = model.units.find(unit => ["current", "draft", "review", "revision"].includes(unit.state));
+  const names = id => new RegExp(`(^|\\D)${String(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\D|$)`).test(nextBrief.usedIn);
+  const command = briefNext[1].startsWith("development") ? ":develop-template" : ":manage-templates";
+  if (working && !names(working.id)) warnings.push(`next is the brief "${nextBrief.id}" although unit ${working.id} is being worked on and its __Used in:__ does not name it – next stays with the unit, ${command} ${nextBrief.id} goes into explore (icon ➕)`);
 }
 // The next step of a unit (agent: link with number=n) names that unit's current step: the course
 // step is shown by the process bar, and a second label for the same command reads as a new task.

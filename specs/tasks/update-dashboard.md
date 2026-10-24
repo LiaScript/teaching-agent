@@ -331,14 +331,17 @@ Run this task automatically after any task that changes project state:
      `in development` → `agent:development/develop-template?id={id}` (command `:agent development` →
      `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command
      `:manage-templates {id}`, "Try and adopt", translated). With several briefs the first one in the
-     section. The agenda and the units do not wait for a brief: the agenda step keeps the state it has
+     section. The brief takes `next` only when no unit is being worked on or the unit being worked on is
+     named in its `__Used in:__`; otherwise `next` stays with that unit and the brief's action
+     (`:develop-template {id}` or `:manage-templates {id}`) goes into `explore` (icon ➕) — the step stays
+     `current` (`validate-journal.mjs` warns). The agenda and the units do not wait for a brief: the agenda step keeps the state it has
      without the brief (`planned`, `current` while it is being created, `done` once saved), its button
      stays in the `## Agenda` action line, and while `next` is the brief `:create-agenda` (or the
      next unit's action) is an `explore` card (icon ➕); the units keep their actions in their
      action lines.
-  4. Selection `done – {ids}` without an open brief: `done`, `result` = the names of the adopted
-     templates as `## Templates` shows them; `done – none needed` → `done`, `result` = "none needed"
-     (translated).
+  4. Selection `done – …` (ids or `none needed`) without an open brief: `done`, `result` = the names of
+     the adopted entries as `## Templates` shows them — every entry except `### Dashboard`, also one
+     without `__Catalog id:__`; "none needed" (translated) only when there is no such entry.
   **Existing journals:** a Dashboard whose `process.steps` lack this step gets it at the next run,
   directly after the didactics step, in the state above (a missing selection line is `open`, but rule 2
   keeps `next` with an agenda or unit in progress), and `process.note` gets one appended sentence

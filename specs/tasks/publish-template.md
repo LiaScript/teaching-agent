@@ -16,7 +16,7 @@ Use this task when:
 ## Inputs
 
 - `id` (required command parameter): the `__Catalog id:__` of the adopted entry under `## Templates`
-- `journal.md` → `## Templates` → only the entry with `__Catalog id:__ {id}` (its `__Source:__`, `__Import:__`, `__Header entry:__`) and the `import:` lines of the main metadata header
+- `journal.md` → `## Templates` → only the entry with `__Catalog id:__ {id}` (its `__Source:__`, `__Import:__`, `__Header entry:__`) and the `import:` lines of the main metadata header (the Dashboard write at the end reads the selection line and all briefs — update-dashboard reads them as derived state)
 - `journal.md` → `## Course Context` (language, subject, target group, `__File Structure:__`)
 - `lia-templates/{id}/` (its `README.md` header: `version:`, macros)
 - The files that import the template, found with `node specs/dashboard/find.mjs <pattern> journal.md materials` (in single-file mode `… journal.md README.md`): for the first publication the pattern `"lia-templates/{id}/README.md"` (the local import); once published (`__Source:__ https://github.com/{owner}/{repo}@{tag}`) the pattern `"raw.githubusercontent.com/{owner}/{repo}/"` with owner and repository taken from `__Source:__` — every import then names the old tag's URL, never the local path

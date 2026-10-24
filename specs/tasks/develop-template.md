@@ -16,7 +16,7 @@ Use this task when:
 ## Inputs
 
 - `id` (required command parameter): the id of a brief `### {id} (in development)`
-- `journal.md` → `## Templates` → **only** the brief `### {id} (in development)` (the read scope of `agents/development-agent.yaml`)
+- `journal.md` → `## Templates` → **only** the brief `### {id} (in development)` (the read scope of `agents/development-agent.yaml`; the Dashboard write of step 6 reads the selection line and all briefs — update-dashboard reads them as derived state)
 - `journal.md` → `## Course Context` (language, target group)
 - Skill `liascript-templates` — **required** (`data/skills.md` → Where the Workflow Uses Them); there is no built-in replacement guide in `specs/`
 - `specs/dashboard/README.md` and `specs/dashboard/check.mjs` — the pattern for README, macros, library and model tests (read as the step needs them)

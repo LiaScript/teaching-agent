@@ -1550,6 +1550,7 @@ test("every id of a done template selection has an entry with its catalog id or 
   assert.equal(unknown.status, 2, unknown.output);
   assert.match(unknown.output, /template selection names "sql-runner", but ## Templates has no entry with __Catalog id:__ sql-runner and no brief "### sql-runner \(in development\)"/);
   assert.doesNotMatch(unknown.output, /names "python-turtle"/);
+  assert.match(unknown.output, /adopt it with :manage-templates sql-runner or write its brief \(:suggest-templates\); if it was removed, take sql-runner out of the selection line \(no id left: "done – none needed", or "open" while an activity is undecided\)/);
   const inCode = validate({ title: "Kurs", next }, templatesSection.replace("* __Catalog id:__ python-turtle", "* __Catalog id:__ `python-turtle`"));
   assert.equal(inCode.status, 0, inCode.output);
   const translated = validate({ title: "Kurs", next }, templatesSection.replace("## Templates – Vorlagen", "## Templates"));
@@ -1603,6 +1604,19 @@ test("the template step says ready to test once every open brief is, and never t
   assert.doesNotMatch(validate({ title: "Kurs", next: suggest, units: [unit("planned")] }, templatesSection).output, /next suggests templates although/);
   const planned = validate({ title: "Kurs", next: suggest, units: [unit("planned")] }, agenda(["1"]) + templatesSection);
   assert.match(planned.output, /next suggests templates although the agenda is saved – next stays with the agenda and the units, :suggest-templates goes into explore/);
+});
+
+test("a brief takes next from a unit at work only when its __Used in:__ names that unit (f)", () => {
+  const develop = { title: "Vorlagen für Aktivitäten", why: "W", label: "Vorlage entwickeln", href: "agent:development/develop-template?id=turtle-maze", command: ":develop-template turtle-maze" };
+  const unit = (id, state) => ({ id, title: `E${id}`, state, statusLabel: "Planungsskizze ✅" });
+  const other = validate({ title: "Kurs", next: develop, units: [unit("1", "current"), unit("2", "planned")] }, templatesSection);
+  assert.match(other.output, /next is the brief "turtle-maze" although unit 1 is being worked on and its __Used in:__ does not name it – next stays with the unit, :develop-template turtle-maze goes into explore \(icon ➕\)/);
+  assert.doesNotMatch(validate({ title: "Kurs", next: develop, units: [unit("1", "planned"), unit("2", "current")] }, templatesSection).output, /next is the brief/, "unit 2 uses the template");
+  assert.doesNotMatch(validate({ title: "Kurs", next: develop, units: [unit("1", "planned")] }, templatesSection).output, /next is the brief/, "no unit at work");
+  const ready = templatesSection.replace("* __State:__ brief", "* __State:__ ready to test").replace("* __Folder:__", "* __Folder:__ lia-templates/turtle-maze/");
+  const adopt = { ...develop, href: "agent:teaching/manage-templates?name=turtle-maze", command: ":manage-templates turtle-maze" };
+  const taken = validate({ title: "Kurs", next: adopt, units: [unit("1", "draft")] }, ready, { "lia-templates/turtle-maze/README.md": "# Turtle maze\n" });
+  assert.match(taken.output, /next is the brief "turtle-maze" although unit 1 is being worked on .* :manage-templates turtle-maze goes into explore/);
 });
 
 test("the empty journal has the template step after the didactics and the selection line open, without a finding", () => {
