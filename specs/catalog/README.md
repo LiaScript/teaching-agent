@@ -37,7 +37,7 @@ This catalog lists LiaScript templates that fit teaching projects: what each one
 
 ## Adding a template
 
-The shared list `specs/catalog/templates.json` changes only through a pull request. Templates you found or built for one project go into `templates.local.json` in the project root; their status is always `found` or `own`.
+The shared list `specs/catalog/templates.json` changes only through a pull request. Templates you found or built for one project go into `templates.local.json` in the project root; their status is always `found` or `own`. An own template built in the project is listed there once it is ready to test, with its local import; publishing it as its own repository switches the entry to the repository's URLs.
 
 ## Data format
 
@@ -45,7 +45,7 @@ Both files hold `{ "version": 1, "templates": [ … ] }`. Each entry has these f
 
 - `id`: lowercase letters, digits and single hyphens
 - `name`, `description`, optional `icon` (default `🧩`) and `note`
-- `import`, `repo`, `demo`: `https:` URLs
+- `import`, `repo`, `demo`: `https:` URLs — one exception: an `own` template that stays in the project (local list only) imports `./lia-templates/{id}/README.md` with its own `id`; `repo` and `demo` are optional then (`https:` when present), and its card has no "Try it" button
 - `subjects`: non-empty list of lowercase kebab-case words
 - `audiences`: non-empty list from `primary`, `secondary`, `vocational`, `higher-education`, `adult`
 - `macros`: strings starting with `@`

@@ -54,7 +54,7 @@ open (on activation, before the first `chat` call):
 - **Labels** are what the instructor reads on the chat button and under every
   message: a role noun in the course language that also works in a sentence
   about the agent ("Planning assistant", "Design assistant", "Learner check",
-  "Templates and publishing assistant" — translated). Never a topic noun the agent cannot
+  "Development assistant" — for templates and publishing; translated). Never a topic noun the agent cannot
   call itself ("I am your lesson planning" is wrong).
 - **Label language and voices:** `data/chat-language.md`.
 - **Temporary companion:** `data/chat-companion.md`.

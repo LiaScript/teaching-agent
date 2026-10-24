@@ -29,7 +29,11 @@
     if (typeof raw.id !== "string" || !KEBAB.test(raw.id)) return { error: "has an invalid id (lowercase letters, digits and single hyphens)" };
     if (!isText(raw.name)) return { error: "has no name" };
     if (!isText(raw.description)) return { error: "has no description" };
+    // An own template that stays in the project (local list only) imports ./lia-templates/{id}/README.md;
+    // its repo and demo are optional then, but https when present. Everything else is https-only.
+    const inProject = source !== "shared" && raw.status === "own" && raw.import === `./lia-templates/${raw.id}/README.md`;
     for (const field of ["import", "repo", "demo"]) {
+      if (inProject && (field === "import" || raw[field] === undefined)) continue;
       if (!isHttps(raw[field])) return { error: `needs an https URL in "${field}"` };
     }
     if (!isList(raw.subjects) || !raw.subjects.every(s => typeof s === "string" && KEBAB.test(s))) {
@@ -173,8 +177,8 @@
       <ul class="catalog-tags">${tags}</ul>
       ${entry.note ? `<p class="catalog-note">${escape(entry.note)}</p>` : ""}
       <p class="catalog-macros">${entry.macros.map(m => `<code>${escape(m)}</code>`).join(" ")}</p>
-      <p class="catalog-actions"><a class="catalog-button" href="${escape(entry.demo)}" target="_blank" rel="noopener"><span aria-hidden="true">👁</span> ${escape(t("try"))}</a>
-      <a class="catalog-button catalog-button-primary" href="agent:teaching/manage-templates?name=${encodeURIComponent(entry.id)}"><span aria-hidden="true">▶️</span> ${escape(t("adopt"))}</a>
+      <p class="catalog-actions">${entry.demo ? `<a class="catalog-button" href="${escape(entry.demo)}" target="_blank" rel="noopener"><span aria-hidden="true">👁</span> ${escape(t("try"))}</a>
+      ` : ""}<a class="catalog-button catalog-button-primary" href="agent:teaching/manage-templates?name=${encodeURIComponent(entry.id)}"><span aria-hidden="true">▶️</span> ${escape(t("adopt"))}</a>
       <code class="catalog-command">:manage-templates ${escape(entry.id)}</code></p>
     </article></li>`;
   }

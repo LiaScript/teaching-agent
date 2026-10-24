@@ -2082,12 +2082,14 @@ Use this task when:
 - Skill `liascript-templates` — **required** (`data/skills.md` → Where the Workflow Uses Them); there is no built-in replacement guide in `specs/`
 - `specs/dashboard/README.md` and `specs/dashboard/check.mjs` — the pattern for README, macros, library and model tests (read as the step needs them)
 - `data/skills.md` → Installing a Missing Skill
+- `templates.local.json` in the project root (project list, if present; data format: `specs/catalog/README.md` → Data format)
 - Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`, `data/chat-checks.md`
 
 ## Output
 
 - `lia-templates/{id}/`: `README.md` (header with the macros, one example per macro, a runnable LiaScript document), the JavaScript/CSS files beside it, `check.mjs` (model tests for `node --test`)
 - `journal.md` → `## Templates` → the brief: `__Folder:__ lia-templates/{id}/` and `__State:__` (`in development`, at the end `ready to test`)
+- `templates.local.json`: the entry `{id}` with `status: "own"` and the local import `./lia-templates/{id}/README.md` (at `ready to test`)
 - `journal.md` → `## Dashboard` updated
 
 ## Steps
@@ -2145,8 +2147,13 @@ Use this task when:
    At the cap `__State:__` stays `in development`; name the open points and offer either a new
    `:develop-template {id}` later or `agent:teaching/switch` to sharpen the brief.
 6. **Ready to test.** Every point confirmed: set `__State:__ ready to test` (one write; `__Folder:__` names
-   the folder and `lia-templates/{id}/README.md` exists), run `node specs/dashboard/validate-journal.mjs`, then
-   run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` →
+   the folder and `lia-templates/{id}/README.md` exists), run `node specs/dashboard/validate-journal.mjs`.
+   Then write or update the entry `{id}` in `templates.local.json` with the file-edit tool (create the file
+   as `{ "version": 1, "templates": [ … ] }` if missing; replace an existing entry with the same id): `id`,
+   `name`, `description` (English), `import: "./lia-templates/{id}/README.md"`, `subjects` and `audiences`
+   (from `## Course Context` and the brief's `__Audience:__`), `macros` (from the README), `status: "own"` —
+   no `repo` and no `demo` while the template stays in the project, never `status: "checked"`. Then run
+   `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` →
    `## Dashboard` in place.
 7. **Finish:** a short summary (macros, files, how each point was checked) and the hand-back:
    `agent:teaching/switch` — the Dashboard's `next` shows `:manage-templates {id}`, where the Teaching-Agent
@@ -2155,8 +2162,8 @@ Use this task when:
 
 ## Notes
 
-- This task writes only: the files in `lia-templates/{id}/`, the fields `__State:__` and `__Folder:__` of the brief `### {id} (in development)`, and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
-- It never writes other brief fields, `__Feedback rounds:__`, the selection line, adopted entries, `import:` lines (header or materials — the adoption by `:manage-templates {id}` sets them), `templates.local.json` or `specs/catalog/templates.json`, and it runs no git command.
+- This task writes only: the files in `lia-templates/{id}/`, the fields `__State:__` and `__Folder:__` of the brief `### {id} (in development)`, the entry `{id}` in `templates.local.json` (step 6), and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
+- It never writes other brief fields, `__Feedback rounds:__`, the selection line, adopted entries, `import:` lines (header or materials — the adoption by `:manage-templates {id}` sets them), other entries of `templates.local.json` or `specs/catalog/templates.json`, and it runs no git command.
 - Develop in the project, never in `specs/` and never in a folder or clone outside the project.
 - Nothing is invented: macros, library versions and APIs only from the library's documentation and what the tests and the preview showed.
 
@@ -2909,7 +2916,7 @@ Use this task when:
 
 - `lia-templates/{id}/`: its own git repository with a remote on GitHub, the topic `liascript-template` and a version tag; documentation in English unless the template is very course-specific
 - `import:` lines switched to `https://raw.githubusercontent.com/{owner}/{repo}/{tag}/README.md` in the journal header, in `## Templates` and in **every** material that imports the template; `__Source:__ https://github.com/{owner}/{repo}@{tag}`
-- `templates.local.json`: the entry `{id}` with `status: "own"`
+- `templates.local.json`: the entry `{id}` (`status: "own"`) switched from the local import to the https import plus `repo` and `demo`
 - Course `.gitignore`: `lia-templates/{id}/`
 - Optional: a prepared pull request to the Teaching-Agent repository for the shared list
 - `journal.md` → `## Dashboard` updated
@@ -2961,22 +2968,27 @@ Use this task when:
    section); then `node specs/dashboard/validate-journal.mjs` and
    `node specs/dashboard/check-material.mjs <material file>` for each changed material (the macros must
    still render from the new import). Add `lia-templates/{id}/` to the course `.gitignore`.
-4. **Project list.** Add or replace the entry `{id}` in `templates.local.json` (create the file as
-   `{ "version": 1, "templates": [ … ] }` if missing) with the file-edit tool: `id`, `name`, `description`
-   (English), `import` (the raw URL of step 3), `repo` (`https://github.com/{owner}/{repo}`), `demo`
-   (`https://liascript.github.io/course/?{import}`), `subjects` and `audiences` (from `## Course Context`),
-   `macros` (from the README), `status: "own"`, `shared: "not-offered"`. Never `status: "checked"`.
+4. **Project list.** Switch the entry `{id}` in `templates.local.json` — written by `:develop-template` with
+   the local import `./lia-templates/{id}/README.md` — with the file-edit tool: `import` becomes the raw URL
+   of step 3, and it gets `repo` (`https://github.com/{owner}/{repo}`), `demo`
+   (`https://liascript.github.io/course/?{import}`) and `shared: "not-offered"`; `status` stays `"own"`.
+   If the entry is missing, create it (and the file as `{ "version": 1, "templates": [ … ] }`) with `id`,
+   `name`, `description` (English), `subjects` and `audiences` (from `## Course Context`), `macros` (from the
+   README) and the fields above. Never `status: "checked"` in `templates.local.json`.
 5. **Shared list?** Ask whether the entry may be offered to the shared list of the Teaching-Agent: 🎛️ "Yes,
    offer it" / "No" (translated). "No" → `shared: "declined"`. "Yes" → prepare a pull request to the
    Teaching-Agent repository (`https://github.com/LiaScript/teaching-agent`) with its **own** terminal
-   confirmation: show the entry (without `shared`) and the pull request text — the maintainers check the
-   template and set `status: "checked"` with the check date when they accept it — and the commands, each
-   on its own: `gh repo fork LiaScript/teaching-agent --clone=false`,
+   confirmation: show the entry for the shared list — the project entry without `shared`, with
+   `status: "checked"` and `checked` = the date of the author's own check (`node specs/dashboard/now.mjs`),
+   so that the shared list's check passes — and the pull request text, which asks the maintainers to
+   re-verify the import, the macros and the demo against the template's README before merging; then the
+   commands, each on its own: `gh repo fork LiaScript/teaching-agent --clone=false`,
    `gh repo clone {user}/teaching-agent .cache/catalog-pr`, a branch `add-template-{id}` there, the entry
    added to `.cache/catalog-pr/specs/catalog/templates.json`, commit, push,
    `gh pr create --repo LiaScript/teaching-agent --head {user}:add-template-{id}`. Pull request opened →
-   `shared: "pull-request"`; confirmed but not opened (cancelled, error) → `shared: "offered"`. This
-   project's own `specs/catalog/templates.json` is never written.
+   `shared: "pull-request"`; confirmed but not opened (cancelled, error) → `shared: "offered"`. `checked`
+   exists only in the pull request's entry — the project entry in `templates.local.json` stays
+   `status: "own"` — and this project's own `specs/catalog/templates.json` is never written.
 6. **Later changes.** With `__Source:__ https://github.com/{owner}/{repo}@{tag}` the template is developed
    further in `lia-templates/{id}/` (its own repository) and tried in the course preview. Publishing a
    change: plan and confirm in the terminal as in step 2 — raise `version:` in the README, then
@@ -2993,7 +3005,7 @@ Use this task when:
 
 ## Notes
 
-- This task writes only: the files and the git repository in `lia-templates/{id}/` (documentation, `version:`), the `import:` lines of the journal header, of the entry in `## Templates` (`__Import:__`, `__Header entry:__`) and of the materials, the entry's `__Source:__`, the entry `{id}` in `templates.local.json`, the course `.gitignore`, the clone in `.cache/catalog-pr/` of step 5, and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
+- This task writes only: the files and the git repository in `lia-templates/{id}/` (documentation, `version:`), the `import:` lines of the journal header, of the entry in `## Templates` (`__Import:__`, `__Header entry:__`) and of the materials, the entry's `__Source:__`, the entry `{id}` in `templates.local.json` (`import`, `repo`, `demo`, `shared`), the course `.gitignore`, the clone in `.cache/catalog-pr/` of step 5, and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
 - Every git and `gh` command runs only after the confirmation in the terminal, each on its own, inside the project.
 - Never write to `specs/catalog/templates.json` of this project; it is replaced on every update of the Teaching-Agent.
 
@@ -3600,7 +3612,7 @@ JavaScript, charts, animations) are not proposed here.
    may still need no template.
 5. 🎛️ **Decision per activity** (one form, at most 4 activities per form): "Adopt {name}" (one option per
    suggestion) · "Try first" (the `demo` link opens the template's own page; in the preview chat a link,
-   in the terminal the URL — then ask again) · "Develop one ourselves" · "None needed" (translated).
+   in the terminal the URL — then ask again; an `own` entry without `demo` is tried with `:preview lia-templates/{id}/README.md`) · "Develop one ourselves" · "None needed" (translated).
 6. 💬 **Develop one ourselves — the brief.** Per such activity ask in plain words, reusing what is known
    (`data/chat-dialog.md` → Reuse what is known): what the learners do with it, what they see or get back
    after an action, which learning objective of `## Outline` it serves, the target group (prefilled from
@@ -6152,7 +6164,7 @@ open (on activation, before the first `chat` call):
 - **Labels** are what the instructor reads on the chat button and under every
   message: a role noun in the course language that also works in a sentence
   about the agent ("Planning assistant", "Design assistant", "Learner check",
-  "Templates and publishing assistant" — translated). Never a topic noun the agent cannot
+  "Development assistant" — for templates and publishing; translated). Never a topic noun the agent cannot
   call itself ("I am your lesson planning" is wrong).
 - **Label language and voices:** `data/chat-language.md`.
 - **Temporary companion:** `data/chat-companion.md`.

@@ -46,6 +46,40 @@ test("on an id clash the shared entry wins and the local one is reported", () =>
   assert.match(merged.problems.join("\n"), /python-turtle/);
 });
 
+const ownLocal = (over = {}) => {
+  const entry = valid({ id: "turtle-maze", status: "own", import: "./lia-templates/turtle-maze/README.md", ...over });
+  delete entry.checked;
+  for (const field of ["repo", "demo"]) if (!(field in over)) delete entry[field];
+  return entry;
+};
+
+test("an own template that stays in the project is accepted with its relative import, without repo and demo", () => {
+  const { entries, problems } = catalog.normalize({ version: 1, templates: [ownLocal()] }, "local");
+  assert.deepEqual(problems, []);
+  assert.equal(entries[0].import, "./lia-templates/turtle-maze/README.md");
+  assert.equal(entries[0].status, "own");
+  const linked = catalog.normalize({ version: 1, templates: [ownLocal({ repo: "https://github.com/x/turtle-maze", demo: "javascript:alert(1)" })] }, "local");
+  assert.equal(linked.entries.length, 0, "repo and demo, when present, must still be https");
+});
+
+test("a relative import is only for own local entries whose path names their own id", () => {
+  const reject = (templates, source = "local") => catalog.normalize({ version: 1, templates }, source).entries.length;
+  assert.equal(reject([ownLocal({ status: "found" })]), 0, "a found entry with a relative import");
+  assert.equal(reject([ownLocal({ import: "./lia-templates/other-id/README.md" })]), 0, "a mismatched id in the path");
+  assert.equal(reject([ownLocal({ import: "../lia-templates/turtle-maze/README.md" })]), 0, "another relative form");
+  assert.equal(reject([ownLocal({ import: "javascript:alert(1)" })]), 0, "a javascript: import");
+  assert.equal(reject([ownLocal({ status: "checked" })]), 0, "a local checked entry is treated as found");
+  assert.equal(reject([{ ...ownLocal(), status: "checked", checked: "2026-10-23" }], "shared"), 0, "the shared list stays https-only");
+  assert.equal(reject([valid({ status: "found", demo: undefined })]), 0, "a found entry still needs its demo");
+});
+
+test("a card without a demo has no 👁 button", () => {
+  const html = catalog.render("c-own", { ...catalog.normalize({ version: 1, templates: [ownLocal()] }, "local"), lang: "en" });
+  assert.doesNotMatch(html, /👁/);
+  assert.match(html, /agent:teaching\/manage-templates\?name=turtle-maze/);
+  assert.match(catalog.render("c-demo", { ...catalog.normalize({ version: 1, templates: [valid()] }, "shared"), lang: "en" }), /👁/);
+});
+
 test("a list without a templates array is one problem, not a crash", () => {
   assert.deepEqual(catalog.normalize({ version: 1 }, "local").entries, []);
   assert.equal(catalog.normalize("nonsense", "local").problems.length, 1);

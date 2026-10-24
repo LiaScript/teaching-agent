@@ -73,7 +73,7 @@ JavaScript, charts, animations) are not proposed here.
    may still need no template.
 5. 🎛️ **Decision per activity** (one form, at most 4 activities per form): "Adopt {name}" (one option per
    suggestion) · "Try first" (the `demo` link opens the template's own page; in the preview chat a link,
-   in the terminal the URL — then ask again) · "Develop one ourselves" · "None needed" (translated).
+   in the terminal the URL — then ask again; an `own` entry without `demo` is tried with `:preview lia-templates/{id}/README.md`) · "Develop one ourselves" · "None needed" (translated).
 6. 💬 **Develop one ourselves — the brief.** Per such activity ask in plain words, reusing what is known
    (`data/chat-dialog.md` → Reuse what is known): what the learners do with it, what they see or get back
    after an action, which learning objective of `## Outline` it serves, the target group (prefilled from

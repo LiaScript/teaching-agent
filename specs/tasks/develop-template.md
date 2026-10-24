@@ -21,12 +21,14 @@ Use this task when:
 - Skill `liascript-templates` — **required** (`data/skills.md` → Where the Workflow Uses Them); there is no built-in replacement guide in `specs/`
 - `specs/dashboard/README.md` and `specs/dashboard/check.mjs` — the pattern for README, macros, library and model tests (read as the step needs them)
 - `data/skills.md` → Installing a Missing Skill
+- `templates.local.json` in the project root (project list, if present; data format: `specs/catalog/README.md` → Data format)
 - Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`, `data/chat-checks.md`
 
 ## Output
 
 - `lia-templates/{id}/`: `README.md` (header with the macros, one example per macro, a runnable LiaScript document), the JavaScript/CSS files beside it, `check.mjs` (model tests for `node --test`)
 - `journal.md` → `## Templates` → the brief: `__Folder:__ lia-templates/{id}/` and `__State:__` (`in development`, at the end `ready to test`)
+- `templates.local.json`: the entry `{id}` with `status: "own"` and the local import `./lia-templates/{id}/README.md` (at `ready to test`)
 - `journal.md` → `## Dashboard` updated
 
 ## Steps
@@ -84,8 +86,13 @@ Use this task when:
    At the cap `__State:__` stays `in development`; name the open points and offer either a new
    `:develop-template {id}` later or `agent:teaching/switch` to sharpen the brief.
 6. **Ready to test.** Every point confirmed: set `__State:__ ready to test` (one write; `__Folder:__` names
-   the folder and `lia-templates/{id}/README.md` exists), run `node specs/dashboard/validate-journal.mjs`, then
-   run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` →
+   the folder and `lia-templates/{id}/README.md` exists), run `node specs/dashboard/validate-journal.mjs`.
+   Then write or update the entry `{id}` in `templates.local.json` with the file-edit tool (create the file
+   as `{ "version": 1, "templates": [ … ] }` if missing; replace an existing entry with the same id): `id`,
+   `name`, `description` (English), `import: "./lia-templates/{id}/README.md"`, `subjects` and `audiences`
+   (from `## Course Context` and the brief's `__Audience:__`), `macros` (from the README), `status: "own"` —
+   no `repo` and no `demo` while the template stays in the project, never `status: "checked"`. Then run
+   `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` →
    `## Dashboard` in place.
 7. **Finish:** a short summary (macros, files, how each point was checked) and the hand-back:
    `agent:teaching/switch` — the Dashboard's `next` shows `:manage-templates {id}`, where the Teaching-Agent
@@ -94,7 +101,7 @@ Use this task when:
 
 ## Notes
 
-- This task writes only: the files in `lia-templates/{id}/`, the fields `__State:__` and `__Folder:__` of the brief `### {id} (in development)`, and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
-- It never writes other brief fields, `__Feedback rounds:__`, the selection line, adopted entries, `import:` lines (header or materials — the adoption by `:manage-templates {id}` sets them), `templates.local.json` or `specs/catalog/templates.json`, and it runs no git command.
+- This task writes only: the files in `lia-templates/{id}/`, the fields `__State:__` and `__Folder:__` of the brief `### {id} (in development)`, the entry `{id}` in `templates.local.json` (step 6), and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
+- It never writes other brief fields, `__Feedback rounds:__`, the selection line, adopted entries, `import:` lines (header or materials — the adoption by `:manage-templates {id}` sets them), other entries of `templates.local.json` or `specs/catalog/templates.json`, and it runs no git command.
 - Develop in the project, never in `specs/` and never in a folder or clone outside the project.
 - Nothing is invented: macros, library versions and APIs only from the library's documentation and what the tests and the preview showed.
