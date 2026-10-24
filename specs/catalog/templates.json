@@ -10,11 +10,11 @@
       "repo": "https://github.com/LiaTemplates/Skulpt",
       "demo": "https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaTemplates/Skulpt/master/README.md",
       "subjects": ["programming", "python", "turtle"],
-      "audiences": ["secondary"],
+      "audiences": ["primary", "secondary"],
       "macros": ["@Skulpt.eval"],
       "status": "checked",
       "checked": "2026-10-24",
-      "note": "The demo (default branch) also shows @Skulpt.terminal, which release 0.0.6 does not contain yet."
+      "note": "The turtle mode (@Skulpt.eval(skulpt_canvas) with a canvas element, as documented in the README) suits younger learners. The demo (default branch) also shows @Skulpt.terminal, which release 0.0.6 does not contain yet."
     },
     {
       "id": "pyodide",
@@ -25,7 +25,7 @@
       "repo": "https://github.com/LiaTemplates/Pyodide",
       "demo": "https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaTemplates/Pyodide/master/README.md",
       "subjects": ["programming", "python"],
-      "audiences": ["secondary", "higher-education"],
+      "audiences": ["secondary", "vocational", "higher-education"],
       "macros": ["@Pyodide.eval", "@Pyodide.exec"],
       "status": "checked",
       "checked": "2026-10-24"
@@ -67,7 +67,7 @@
       "repo": "https://github.com/LiaTemplates/AlaSQL",
       "demo": "https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaTemplates/AlaSQL/master/README.md",
       "subjects": ["databases", "sql"],
-      "audiences": ["secondary", "higher-education"],
+      "audiences": ["secondary", "vocational", "higher-education"],
       "macros": ["@AlaSQL.eval", "@AlaSQL.eval_with_csv"],
       "status": "checked",
       "checked": "2026-10-24",
@@ -82,7 +82,7 @@
       "repo": "https://github.com/LiaTemplates/PGlite",
       "demo": "https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaTemplates/PGlite/main/README.md",
       "subjects": ["databases", "sql", "postgresql"],
-      "audiences": ["secondary", "higher-education"],
+      "audiences": ["secondary", "vocational", "higher-education"],
       "macros": ["@PGlite.eval", "@PGlite.terminal"],
       "status": "checked",
       "checked": "2026-10-24"
@@ -96,7 +96,7 @@
       "repo": "https://github.com/LiaTemplates/DuckDB",
       "demo": "https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaTemplates/DuckDB/main/README.md",
       "subjects": ["databases", "sql", "data-analysis"],
-      "audiences": ["secondary", "higher-education"],
+      "audiences": ["secondary", "vocational", "higher-education"],
       "macros": ["@DuckDB.eval", "@DuckDB.terminal"],
       "status": "checked",
       "checked": "2026-10-24"

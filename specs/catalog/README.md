@@ -62,10 +62,10 @@ Both files hold `{ "version": 1, "templates": [ … ] }`. Each entry has these f
   "repo": "https://github.com/LiaTemplates/Skulpt",
   "demo": "https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaTemplates/Skulpt/master/README.md",
   "subjects": ["programming", "python", "turtle"],
-  "audiences": ["secondary"],
+  "audiences": ["primary", "secondary"],
   "macros": ["@Skulpt.eval"],
   "status": "checked",
   "checked": "2026-10-24",
-  "note": "The demo (default branch) also shows @Skulpt.terminal, which release 0.0.6 does not contain yet."
+  "note": "The turtle mode (@Skulpt.eval(skulpt_canvas) with a canvas element, as documented in the README) suits younger learners. The demo (default branch) also shows @Skulpt.terminal, which release 0.0.6 does not contain yet."
 }
 ```
