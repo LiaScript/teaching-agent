@@ -317,20 +317,31 @@ Run this task automatically after any task that changes project state:
   1. `planned` while `## Didactics` is not saved.
   2. Didactics saved, selection `open` and no brief: the step is `current` and the `next` of the course
      (`agent:teaching/suggest-templates`, command `:suggest-templates`, label "Suggest templates",
-     translated). Once a unit is already being worked on, `next` stays with that unit and the
-     suggestion goes into `explore` (icon ➕).
+     translated). Once the agenda is saved or a unit is being worked on, `next` stays with them and the
+     suggestion goes into `explore` (icon ➕) — also in an existing journal whose selection line is
+     missing, and also when the previous Dashboard's `next` was the agenda: a missing selection line
+     never takes `next` away from work in progress (`validate-journal.mjs` warns once the agenda is saved or a
+     unit is being worked on).
   3. A brief not yet adopted exists — whatever the selection value (`open`, or a `done – …` that does
-     not name it) — and takes precedence over 2: `current`, `result` = "{n} in development"
-     (translated, German "{n} in Entwicklung"), and `next` by the brief's `__State:__` — `brief` or
+     not name it) — and takes precedence over 2: `current`, `result` by the briefs' `__State:__` —
+     "{n} in development" (translated, German "{n} in Entwicklung") for `brief` and `in development`,
+     "{n} ready to test" (German "{n} bereit zum Ausprobieren") for `ready to test`, both joined with
+     " · " when both occur (`validate-journal.mjs` warns about "in development" once every open brief is
+     ready to test) — and `next` by the brief's `__State:__` — `brief` or
      `in development` → `agent:development/develop-template?id={id}` (command `:agent development` →
      `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command
      `:manage-templates {id}`, "Try and adopt", translated). With several briefs the first one in the
-     section. The agenda and the units do not wait for it: their actions stay in their action lines.
+     section. The agenda and the units do not wait for a brief: the agenda step keeps the state it has
+     without the brief (`planned`, `current` while it is being created, `done` once saved), its button
+     stays in the `## Agenda` action line, and while `next` is the brief `:create-agenda` (or the
+     next unit's action) is an `explore` card (icon ➕); the units keep their actions in their
+     action lines.
   4. Selection `done – {ids}` without an open brief: `done`, `result` = the names of the adopted
      templates as `## Templates` shows them; `done – none needed` → `done`, `result` = "none needed"
      (translated).
   **Existing journals:** a Dashboard whose `process.steps` lack this step gets it at the next run,
-  directly after the didactics step, in the state above, and `process.note` gets one appended sentence
+  directly after the didactics step, in the state above (a missing selection line is `open`, but rule 2
+  keeps `next` with an agenda or unit in progress), and `process.note` gets one appended sentence
   (e.g. "New: the step “Templates for activities” – ready-made building blocks for activities, or your
   own.", translated); the definition of "finished" in the note stays as it is.
 - `plan` (provisional planning) only while Outline/Didactics assign content to

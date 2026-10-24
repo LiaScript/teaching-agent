@@ -46,7 +46,8 @@
 .lia-catalog .catalog-problems { margin-top: 1.2em; font-size: .85em; color: var(--catalog-muted); }
 .lia-catalog .catalog-problems summary { cursor: pointer; font-weight: 650; }
 /* Dark colors follow LiaScript's own setting (html.lia-variant-dark), which is independent of the system;
-   the system setting only counts while LiaScript has set neither variant. */
+   the system setting only counts while LiaScript has set neither variant. Keep both blocks identical
+   (check.mjs compares them). */
 html.lia-variant-dark .lia-catalog {
   --catalog-bg: #17211d;
   --catalog-soft: #212e29;

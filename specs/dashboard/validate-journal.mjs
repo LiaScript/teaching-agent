@@ -119,7 +119,7 @@ function fieldsOf(block) {
 }
 function checkTemplates() {
   const text = section("Templates").replace(/<!--[\s\S]*?-->/g, "");
-  const found = { problems: [], hints: [] };
+  const found = { problems: [], hints: [], briefs: [] };
   const entries = text.split(/^(?=### )/m).slice(1).map(block => ({ heading: block.match(/^### (.+?)\s*$/m)?.[1] ?? "", fields: fieldsOf(block.split(/^<\/section>/m)[0]) }));
   const briefs = entries.filter(entry => / \(in development\)$/.test(entry.heading)).map(entry => ({ ...entry, id: entry.heading.replace(/ \(in development\)$/, "") }));
   const selection = text.split(/^<section\b/m)[0].match(/^\s*[*-]\s+__Template selection:__[ \t]*(.*)$/m)?.[1].trim() ?? "open";
@@ -132,6 +132,7 @@ function checkTemplates() {
       found.problems.push(`## Templates: the template selection names "${id}", but ## Templates has no entry with __Catalog id:__ ${id} and no brief "### ${id} (in development)" – adopt it with :manage-templates ${id} or write its brief`);
     }
   }
+  found.briefs = briefs.map(brief => ({ id: brief.id, state: brief.fields.State }));
   const projectDir = dirname(resolve(file));
   for (const brief of briefs) {
     const name = `brief "${brief.heading}"`;
@@ -384,6 +385,19 @@ model.units.filter(unit => unit.href && unit.state === "planned" && !String(unit
 const startNote = notes.find(line => /beginnend mit|starting with/i.test(line));
 const startUnit = startNote?.match(/(?:beginnend mit|starting with)[^.\d]*(\d+)/i)?.[1] ?? String(model.units[0]?.id ?? "1");
 if (startNote && sessionHeadings.includes(startUnit)) warnings.push(`## Sessions note "${startNote.trim().slice(0, 80)}" says the units are created starting with unit ${startUnit}, but "### ${startUnit}." already exists – update the note to the current state`);
+// Template step (tasks/update-dashboard.md → Rules → Template step): once every open brief is ready to test,
+// its result says so, not "in development"; and :suggest-templates never takes next from an agenda that is
+// saved or a unit being worked on (existing journals without the selection line count as open).
+const openBriefs = templateFindings.briefs;
+if (openBriefs.length && openBriefs.every(brief => brief.state === "ready to test")) {
+  model.process?.steps?.filter(step => /\bin (development|Entwicklung)\b/i.test(String(step.result ?? ""))).forEach(step =>
+    warnings.push(`the template step says "${short(step.result, 60)}", but every open brief is ready to test (${openBriefs.map(brief => brief.id).join(", ")}) – write "ready to test" (German "bereit zum Ausprobieren")`));
+}
+if (/^agent:teaching\/suggest-templates\b/.test(String(model.next?.href ?? ""))) {
+  const working = model.units.find(unit => ["current", "draft", "review", "revision"].includes(unit.state));
+  if (working) warnings.push(`next suggests templates although unit ${working.id} is being worked on – next stays with the unit, :suggest-templates goes into explore (icon ➕)`);
+  else if (agendaTableRows) warnings.push("next suggests templates although the agenda is saved – next stays with the agenda and the units, :suggest-templates goes into explore (icon ➕)");
+}
 // The next step of a unit (agent: link with number=n) names that unit's current step: the course
 // step is shown by the process bar, and a second label for the same command reads as a new task.
 const nextUnit = model.units.find(unit => unit.id === String(model.next?.href ?? "").match(/^agent:[^?]*\?(?:[^#]*&)?number=(\d+)/)?.[1]);

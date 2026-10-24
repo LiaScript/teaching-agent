@@ -8,7 +8,8 @@
 // surface – length, build, position, articles and capitals on gap cards, a gap sentence that stands twice); that part
 // needs no browser and is exported as analyseMaterial() for check.mjs, as is the fit arithmetic (fitOnScreen, describeFit).
 // Run from the course project root: node <path>/dashboard/check-material.mjs [README.md] [--viewport WxH …]
-// Exit code 0: no errors · 1: errors in the material · 2: invalid call or the rendered check was not possible.
+// Exit code 0: no errors · 1: errors in the material (also: LiaScript cannot read it) · 2: invalid call or the rendered check was not possible.
+// Stopped from outside: 130 (SIGINT), 143 (SIGTERM), 129 (SIGHUP) – the DevServer of the run is stopped too.
 import { spawn } from "node:child_process";
 import { readdir, access } from "node:fs/promises";
 import { existsSync, readFileSync } from "node:fs";
@@ -35,7 +36,9 @@ the visible area – from the top of an image directly above the question, measu
 with the question or that image at the top). Page photos wider than 500 px (?width=…) are warned
 about from the source, whatever their file size.
 The windows are desktop browser windows of that size, not devices (no touch, no browser bars).
-Exit code 0: no errors · 1: errors in the material · 2: invalid call or rendered check not possible.`;
+Exit code 0: no errors · 1: errors in the material (also: LiaScript cannot read it and shows its
+error course) · 2: invalid call or rendered check not possible (no browser, the DevServer did not
+load the file). Stopped from outside: 130 (SIGINT), 143 (SIGTERM), 129 (SIGHUP); its DevServer stops too.`;
 
 // ---------------------------------------------------------------------------
 // Source analysis (no browser)
@@ -437,14 +440,33 @@ export function freePort() {
   });
 }
 
-// When the material does not load, LiaScript shows its own error course ("🙈 Ups, something went wrong"):
-// that is no rendered check of the material. Returns the reason, or null when the material rendered.
+// When the material does not load or cannot be read, LiaScript shows its own error course: first slide
+// "🙈 Ups, something went wrong", then its help slides ("What is LiaScript?"). Only that course counts – a
+// slide of the material may use the same words. Returns null when the material rendered, else
+// { kind, text }: "not-loaded" (no rendered check, exit 2) or "unreadable" (served, but LiaScript cannot
+// read it – an error in the material, exit 1).
 export function loadFailure({ status, titles }, file) {
-  const errorCourse = titles.some(title => /something went wrong/i.test(title));
+  const errorCourse = /^(🙈\s*)?Ups, something went wrong$/i.test(titles[0] ?? "") && titles.some(title => /^What is LiaScript\?$/i.test(title));
   const ok = status >= 200 && status < 400;
-  if (!errorCourse && (ok || (status === undefined && titles.length))) return null;
-  if (ok) return `LiaScript could not read ${file} (it shows its error page)`;
-  return `the LiaScript DevServer did not load ${file} (${status ? `HTTP ${status}` : errorCourse ? "LiaScript shows its error page" : "no answer"})`;
+  const notLoaded = reason => ({ kind: "not-loaded", text: `the LiaScript DevServer did not load ${file} (${reason})` });
+  if (ok && errorCourse) return { kind: "unreadable", text: `LiaScript could not read ${file}: it shows its own error course instead of the material` };
+  if (ok && !titles.length) return { kind: "not-loaded", text: `the LiaScript DevServer loaded ${file}, but no slide rendered` };
+  if (ok || (status === undefined && titles.length && !errorCourse)) return null;
+  return notLoaded(status ? `HTTP ${status}` : errorCourse ? "LiaScript shows its error page" : "no answer");
+}
+
+// The install hint belongs only to the two reasons that the install offer answers
+// (data/chat-checks.md → Offering the Rendered Check).
+const playwrightMissing = /^(no installed Playwright found|Playwright has no browser of its own)/;
+export function notPossible(reason) {
+  const text = String(reason).split("\n")[0];
+  return `Rendered check not possible: ${text}.${playwrightMissing.test(text) ? ' Install a browser with "npx playwright install chromium" or set CHROMIUM_PATH to Chrome/Chromium.' : ""}`;
+}
+
+// A failure of the rendered part: a plain reason or a loadFailure() result → its exit code.
+export function reportFailure(reason) {
+  const failure = reason && typeof reason === "object" ? reason : { kind: "not-possible", text: String(reason) };
+  return { ...failure, exit: failure.kind === "unreadable" ? 1 : 2 };
 }
 
 async function playwright(root) {
@@ -503,6 +525,7 @@ function reportFit(fit, sizes) {
 
 function report(file, analysis, rendered, reason) {
   const { readAloud, markers, problems, warnings } = analysis;
+  const failure = rendered ? null : reportFailure(reason);
   console.log(`Material: ${file}`);
   if (rendered) {
     const { titles, counts, missing } = rendered;
@@ -532,7 +555,7 @@ function report(file, analysis, rendered, reason) {
   if (rendered) parts.push(`${broken.length} not loaded${broken.length ? `: ${broken.slice(0, 4).map(([src, slide]) => `${short(src, 90)} (slide "${slide}")`).join(", ")}${broken.length > 4 ? " …" : ""}` : ""}`);
   console.log(`Missing images: ${markers.length + files.length + broken.length} (${parts.join("; ")})`);
   if (rendered) warnings.push(...rendered.warnings);
-  const errors = [...problems, ...(rendered ? [...new Set(rendered.errors)] : [])];
+  const errors = [...problems, ...(rendered ? [...new Set(rendered.errors)] : []), ...(failure?.kind === "unreadable" ? [failure.text] : [])];
   console.log(`Errors (without missing images and the known interpreter error fetchError): ${errors.length}`);
   errors.slice(0, 8).forEach(error => console.log(`- ${error}`));
   if (errors.length > 8) console.log(`- … ${errors.length - 8} more`);
@@ -540,8 +563,12 @@ function report(file, analysis, rendered, reason) {
     console.log("Warnings:");
     warnings.forEach(warning => console.log(`- ${warning}`));
   }
-  if (!rendered) {
-    console.log(`Rendered check not possible: ${String(reason).split("\n")[0]}. Install a browser with "npx playwright install chromium" or set CHROMIUM_PATH to Chrome/Chromium.`);
+  if (failure?.kind === "unreadable") {
+    console.log("Exit code: 1 (the source was checked; LiaScript could not show the material)");
+    return 1;
+  }
+  if (failure) {
+    console.log(notPossible(failure.text));
     console.log("Exit code: 2 (the source was checked; slides, buttons and image files were not)");
     return 2;
   }
@@ -589,10 +616,10 @@ async function main() {
   const { origin } = target;
   let serverError = null;
   const server = spawn("liadev", target.args, { cwd: root, stdio: "ignore" });
-  // A run stopped from outside (timeout, Ctrl-C) stops its DevServer too, instead of leaving it on the port.
-  const stop = () => { server.kill(); process.exit(130); };
-  process.once("SIGINT", stop);
-  process.once("SIGTERM", stop);
+  // A run stopped from outside (timeout, Ctrl-C, closed terminal) or ended on any other path stops its
+  // DevServer too, instead of leaving it on the port: 128 + the signal number as exit code.
+  process.on("exit", () => server.kill());
+  for (const [signal, code] of [["SIGINT", 130], ["SIGTERM", 143], ["SIGHUP", 129]]) process.once(signal, () => process.exit(code));
   server.on("error", error => { serverError = error; });
   let browser;
   try {

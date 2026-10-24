@@ -146,6 +146,14 @@ test("the page follows LiaScript's light/dark setting, sizes cards in em and wra
   // LiaScript sets the root font size to 10px: 16rem cards are 160px wide, five in a row.
   assert.doesNotMatch(css, /\d+(\.\d+)?rem/, "rem is 10px in LiaScript – use em");
   assert.match(css, /\.lia-catalog \.catalog-card article \{[^}]*overflow-wrap: anywhere/);
+  // The dark colors stand twice (LiaScript setting, system setting): both blocks must stay identical.
+  const declarations = block => block.split(";").map(item => item.trim()).filter(Boolean).sort();
+  const byVariant = css.match(/html\.lia-variant-dark \.lia-catalog \{([^}]*)\}/)[1];
+  const bySystem = css.match(/html:not\(\.lia-variant-light\):not\(\.lia-variant-dark\) \.lia-catalog \{([^}]*)\}/)[1];
+  assert.equal(declarations(byVariant).length, 11);
+  assert.deepEqual(declarations(bySystem), declarations(byVariant), "keep both dark blocks identical");
+  const button = selector => css.match(new RegExp(`${selector} \\.lia-catalog \\.catalog-button-primary \\{([^}]*)\\}`))[1].trim();
+  assert.equal(button("html:not\\(\\.lia-variant-light\\):not\\(\\.lia-variant-dark\\)"), button("html\\.lia-variant-dark"));
 });
 
 const stub = routes => async url => {

@@ -794,16 +794,35 @@ test("check-material serves the project root, so a material in its own folder lo
   assert.equal(devServer("./README.md", 3041).material, "http://127.0.0.1:3041/README.md");
   assert.equal(devServer("materials/2 Wolken/README.md", 3041).material, "http://127.0.0.1:3041/materials/2%20Wolken/README.md");
   // LiaScript shows its own error course when the material does not load; that is no rendered check.
+  const errorCourse = ["🙈 Ups, something went wrong", "What is LiaScript?", "Get Help?"];
   assert.equal(loadFailure({ status: 200, titles: ["Das Quadrat"] }, "a.md"), null);
   assert.equal(loadFailure({ status: undefined, titles: ["Das Quadrat"] }, "a.md"), null, "a rendered course counts even if its request was not seen");
-  assert.match(loadFailure({ status: 404, titles: ["🙈 Ups, something went wrong", "What is LiaScript?"] }, "materials/1-turtle/README.md"), /did not load materials\/1-turtle\/README\.md \(HTTP 404\)/);
-  assert.match(loadFailure({ status: undefined, titles: ["🙈 Ups, something went wrong"] }, "a.md"), /did not load a\.md/);
-  assert.match(loadFailure({ status: undefined, titles: [] }, "a.md"), /did not load a\.md \(no answer\)/);
+  assert.equal(loadFailure({ status: 200, titles: ["Kurs", "Something went wrong? Debugging", "Zweite Seite"] }, "a.md"), null, "a slide of the material may name the words of the error course");
+  assert.equal(loadFailure({ status: 200, titles: ["Ups, something went wrong", "Lösung"] }, "a.md"), null, "only LiaScript's own error course, with its help slides");
+  assert.deepEqual(loadFailure({ status: 404, titles: errorCourse }, "materials/1-turtle/README.md"), { kind: "not-loaded", text: "the LiaScript DevServer did not load materials/1-turtle/README.md (HTTP 404)" });
+  assert.deepEqual(loadFailure({ status: undefined, titles: errorCourse }, "a.md"), { kind: "not-loaded", text: "the LiaScript DevServer did not load a.md (LiaScript shows its error page)" });
+  assert.deepEqual(loadFailure({ status: undefined, titles: [] }, "a.md"), { kind: "not-loaded", text: "the LiaScript DevServer did not load a.md (no answer)" });
+  assert.deepEqual(loadFailure({ status: 200, titles: [] }, "a.md"), { kind: "not-loaded", text: "the LiaScript DevServer loaded a.md, but no slide rendered" }, "never a pass with Slides: 0");
+  assert.deepEqual(loadFailure({ status: 200, titles: errorCourse }, "a.md"), { kind: "unreadable", text: "LiaScript could not read a.md: it shows its own error course instead of the material" });
 });
 
-test("check-material starts its DevServer on a free port, never on a fixed one a leftover server may hold", async () => {
+test("check-material: a material LiaScript cannot read is an error (exit 1); a check that could not run is exit 2, with the install hint only for Playwright", () => {
+  const { notPossible, reportFailure } = materialChecks;
+  assert.match(notPossible("no installed Playwright found (npx playwright … installs one)"), /^Rendered check not possible: no installed Playwright found .*\. Install a browser with "npx playwright install chromium"/);
+  assert.match(notPossible("Playwright has no browser of its own and no system Chrome/Chromium was found"), /npx playwright install chromium/);
+  assert.equal(notPossible("the LiaScript DevServer did not load a.md (HTTP 404)"), "Rendered check not possible: the LiaScript DevServer did not load a.md (HTTP 404).");
+  assert.doesNotMatch(notPossible("the LiaScript DevServer (liadev) did not start: ENOENT"), /npx playwright/);
+  assert.equal(reportFailure({ kind: "unreadable", text: "x" }).exit, 1);
+  assert.equal(reportFailure({ kind: "not-loaded", text: "x" }).exit, 2);
+  assert.equal(reportFailure("no installed Playwright found").exit, 2);
+  const source = readFileSync(fileURLToPath(new URL("./check-material.mjs", import.meta.url)), "utf8");
+  assert.match(source, /Exit code 0: no errors · 1: errors in the material \(also: LiaScript cannot read it\) · 2: invalid call or the rendered check was not possible/);
+});
+
+test("check-material starts its DevServer on a free port and stops it when the run is stopped from outside", async () => {
   const { freePort } = materialChecks;
   const { createServer } = await import("node:net");
+  const { spawn } = await import("node:child_process");
   const busy = createServer();
   await new Promise(done => busy.listen(0, "127.0.0.1", done));
   const taken = busy.address().port;
@@ -811,8 +830,33 @@ test("check-material starts its DevServer on a free port, never on a fixed one a
   try { port = await freePort(); } finally { busy.close(); }
   assert.ok(Number.isInteger(port) && port > 0 && port !== taken);
   const source = readFileSync(fileURLToPath(new URL("./check-material.mjs", import.meta.url)), "utf8");
-  assert.doesNotMatch(source, /devServer\(file, \d+\)/, "a fixed port reaches a leftover server of another project, which then answers instead");
-  assert.match(source, /process\.once\("SIGTERM"/, "a run stopped from outside also stops its DevServer");
+  assert.match(source, /devServer\(file, await freePort\(\)\)/, "a fixed port reaches a leftover server of another project, which then answers instead");
+  // A fake liadev on PATH that stays alive and a Playwright whose browser never starts: the run waits with its
+  // server up; stopping the run must stop the server too.
+  const dir = mkdtempSync(join(tmpdir(), "dashboard-stop-"));
+  const bin = join(dir, "bin");
+  mkdirSync(bin);
+  writeFileSync(join(bin, "liadev"), `#!${process.execPath}\nrequire("node:fs").writeFileSync(${JSON.stringify(join(dir, "pid"))}, String(process.pid) + " " + process.argv.slice(2).join(" "));\nsetInterval(() => {}, 1000);\n`, { mode: 0o755 });
+  writeFileSync(join(dir, "playwright.cjs"), "module.exports = { chromium: { launch: () => new Promise(() => {}) } };\n");
+  writeFileSync(join(dir, "README.md"), "# A\n\nText.\n");
+  const script = fileURLToPath(new URL("./check-material.mjs", import.meta.url));
+  const alive = pid => { try { process.kill(pid, 0); return true; } catch { return false; } };
+  const wait = async (until, ms = 8000) => { for (let t = 0; t < ms && !until(); t += 50) await new Promise(done => setTimeout(done, 50)); return until(); };
+  try {
+    for (const [signal, code] of [["SIGTERM", 143], ["SIGHUP", 129]]) {
+      rmSync(join(dir, "pid"), { force: true });
+      const run = spawn(process.execPath, [script, "README.md"], { cwd: dir, stdio: "ignore", env: { ...process.env, PATH: `${bin}:${process.env.PATH}`, PLAYWRIGHT_MODULE_PATH: join(dir, "playwright.cjs"), CHROMIUM_PATH: "" } });
+      const exited = new Promise(done => run.on("exit", (status, sig) => done(status ?? sig)));
+      assert.ok(await wait(() => { try { return readFileSync(join(dir, "pid"), "utf8").includes("--port"); } catch { return false; } }), "the fake DevServer started");
+      const [pid, ...args] = readFileSync(join(dir, "pid"), "utf8").split(" ");
+      assert.deepEqual(args.slice(0, 2), ["--input", "."]);
+      run.kill(signal);
+      assert.equal(await exited, code, `${signal} ends the run with ${code}`);
+      const gone = await wait(() => !alive(Number(pid)), 3000);
+      if (!gone) process.kill(Number(pid), "SIGKILL");
+      assert.ok(gone, `${signal}: the DevServer of the stopped run is still alive`);
+    }
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
 test("open points carry their source; group and state texts are readable and follow labels (R8-D3, R8-D4)", () => {
@@ -1542,6 +1586,23 @@ test("a brief ready to test needs __Folder:__ and lia-templates/{id}/README.md n
   const present = validate({ title: "Kurs", next }, withFolder, { "lia-templates/turtle-maze/README.md": "# Turtle maze\n" });
   assert.doesNotMatch(present.output, /\[template-brief\]/, present.output);
   assert.equal(present.status, 0, present.output);
+});
+
+test("the template step says ready to test once every open brief is, and never takes next from a unit at work (e)", () => {
+  const ready = templatesSection.replace("* __State:__ brief", "* __State:__ ready to test").replace("* __Folder:__", "* __Folder:__ lia-templates/turtle-maze/");
+  const files = { "lia-templates/turtle-maze/README.md": "# Turtle maze\n" };
+  const step = result => ({ title: "Kurs", next, process: { steps: [{ title: "Vorlagen für Aktivitäten", state: "current", result }] } });
+  const stale = validate(step("1 in Entwicklung"), ready, files);
+  assert.match(stale.output, /the template step says "1 in Entwicklung", but every open brief is ready to test \(turtle-maze\) – write "ready to test" \(German "bereit zum Ausprobieren"\)/);
+  assert.doesNotMatch(validate(step("1 bereit zum Ausprobieren"), ready, files).output, /every open brief is ready to test/);
+  assert.doesNotMatch(validate(step("1 in Entwicklung"), templatesSection).output, /every open brief is ready to test/, "a brief still in work is in development");
+  const suggest = { title: "Vorlagen für Aktivitäten", why: "W", label: "Vorlagen vorschlagen", href: "agent:teaching/suggest-templates", command: ":suggest-templates" };
+  const unit = state => ({ id: "1", title: "E1", state, statusLabel: "Planungsskizze ✅" });
+  const taken = validate({ title: "Kurs", next: suggest, units: [unit("current")] }, templatesSection);
+  assert.match(taken.output, /next suggests templates although unit 1 is being worked on – next stays with the unit, :suggest-templates goes into explore/);
+  assert.doesNotMatch(validate({ title: "Kurs", next: suggest, units: [unit("planned")] }, templatesSection).output, /next suggests templates although/);
+  const planned = validate({ title: "Kurs", next: suggest, units: [unit("planned")] }, agenda(["1"]) + templatesSection);
+  assert.match(planned.output, /next suggests templates although the agenda is saved – next stays with the agenda and the units, :suggest-templates goes into explore/);
 });
 
 test("the empty journal has the template step after the didactics and the selection line open, without a finding", () => {
