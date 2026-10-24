@@ -398,12 +398,15 @@ if (/^agent:teaching\/suggest-templates\b/.test(String(model.next?.href ?? "")))
   if (working) warnings.push(`next suggests templates although unit ${working.id} is being worked on – next stays with the unit, :suggest-templates goes into explore (icon ➕)`);
   else if (agendaTableRows) warnings.push("next suggests templates although the agenda is saved – next stays with the agenda and the units, :suggest-templates goes into explore (icon ➕)");
 }
-// A brief takes next from a unit being worked on only when its __Used in:__ names that unit.
+// A brief takes next from a unit being worked on only when its __Used in:__ names that unit:
+// by number ("Einheit 1, 3"), by range ("units 2–4", "2-4") or all of them ("alle Einheiten", "all units").
 const briefNext = String(model.next?.href ?? "").match(/^agent:(development\/develop-template\?id|teaching\/manage-templates\?name)=([a-z0-9-]+)/);
 const nextBrief = briefNext && openBriefs.find(brief => brief.id === briefNext[2]);
 if (nextBrief) {
   const working = model.units.find(unit => ["current", "draft", "review", "revision"].includes(unit.state));
-  const names = id => new RegExp(`(^|\\D)${String(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\D|$)`).test(nextBrief.usedIn);
+  const names = id => /\b(all|alle|allen)\b/i.test(nextBrief.usedIn)
+    || [...nextBrief.usedIn.matchAll(/(\d+)\s*[–-]\s*(\d+)/g)].some(([, from, to]) => Number(id) >= Number(from) && Number(id) <= Number(to))
+    || new RegExp(`(^|\\D)${String(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\D|$)`).test(nextBrief.usedIn);
   const command = briefNext[1].startsWith("development") ? ":develop-template" : ":manage-templates";
   if (working && !names(working.id)) warnings.push(`next is the brief "${nextBrief.id}" although unit ${working.id} is being worked on and its __Used in:__ does not name it – next stays with the unit, ${command} ${nextBrief.id} goes into explore (icon ➕)`);
 }

@@ -1619,6 +1619,19 @@ test("a brief takes next from a unit at work only when its __Used in:__ names th
   assert.match(taken.output, /next is the brief "turtle-maze" although unit 1 is being worked on .* :manage-templates turtle-maze goes into explore/);
 });
 
+test("__Used in:__ names units by number, by range (2–4, 2-4) or all of them (alle Einheiten, all units)", () => {
+  const develop = { title: "Vorlagen für Aktivitäten", why: "W", label: "Vorlage entwickeln", href: "agent:development/develop-template?id=turtle-maze", command: ":develop-template turtle-maze" };
+  const at = (usedIn, id) => validate({ title: "Kurs", next: develop, units: [{ id, title: `E${id}`, state: "current", statusLabel: "Planungsskizze ✅" }] },
+    templatesSection.replace("* __Used in:__\n  Einheit 2\n", `* __Used in:__\n  ${usedIn}\n`)).output;
+  assert.notEqual(templatesSection.replace("* __Used in:__\n  Einheit 2\n", ""), templatesSection, "the fixture names unit 2 under __Used in:__");
+  for (const [usedIn, id] of [["Einheit 2–4", "3"], ["units 2-4", "4"], ["Einheiten 2 – 4", "2"], ["Einheit 1, 3", "3"], ["alle Einheiten", "7"], ["all units", "5"], ["in allen Einheiten", "1"]]) {
+    assert.doesNotMatch(at(usedIn, id), /next is the brief/, `${usedIn} names unit ${id}`);
+  }
+  for (const [usedIn, id] of [["Einheit 2–4", "5"], ["units 2-4", "1"], ["Einheit 12", "1"], ["Einheit 1, 3", "2"]]) {
+    assert.match(at(usedIn, id), /next is the brief "turtle-maze" although unit \d+ is being worked on/, `${usedIn} does not name unit ${id}`);
+  }
+});
+
 test("the empty journal has the template step after the didactics and the selection line open, without a finding", () => {
   const template = readFileSync(new URL("../templates/journal.md", import.meta.url), "utf8");
   const steps = JSON.parse(template.match(/```json @Dashboard\.View\n([\s\S]*?)\n```/)[1]).process.steps;

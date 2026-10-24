@@ -34,7 +34,7 @@ JavaScript, charts, animations) are not proposed here.
 
 - `journal.md` → `## Templates`: the line `* __Template selection:__` (`open` | `done – {id}, {id}` | `done – none needed`), adopted entries (through `tasks/manage-templates.md`) and briefs `### {id} (in development)`; on a revision the removed or replaced entry or brief
 - `journal.md` main metadata header: the `import:` line of every adopted template (a removed template's line only when no material uses its macros)
-- `templates.local.json`: one `found` entry per online find the instructor uses (only after "Save")
+- `templates.local.json`: one `found` entry per online find the instructor uses and, on a revision, the removal of a dropped brief's `own` entry `{id}` (only after "Save")
 - `journal.md` → `## Dashboard` updated
 
 ## Steps
@@ -50,8 +50,11 @@ JavaScript, charts, animations) are not proposed here.
    **Revising:** a decided activity may be reopened when the instructor asks (another template, or a brief
    to drop or replace): it gets suggestions like an open activity, and step 5 adds "Keep as it is"
    (translated); any other choice replaces its entry or brief ("None needed" removes it). A removal touches
-   only that entry or brief and its id in the selection line (step 7): a brief's folder
-   `lia-templates/{id}/` and its `templates.local.json` entry stay — name them; an adopted entry's header
+   only that entry or brief and its id in the selection line (step 7); dropping or replacing a brief
+   also removes its `own` entry `{id}` from `templates.local.json` (if there is one) in the same save —
+   otherwise that template could later be adopted without its acceptance check; its folder
+   `lia-templates/{id}/` stays — say so, and that the instructor deletes it themselves if it is no longer
+   wanted (this task deletes no files); an adopted entry's header
    `import:` goes only when no material uses its macros (`tasks/manage-templates.md` → Notes) — name the
    materials that still do. An existing journal may document
    templates without the selection line: an entry without `__Catalog id:__` whose import or repository
@@ -62,7 +65,11 @@ JavaScript, charts, animations) are not proposed here.
 2. **Catalog and project list.** Filter `specs/catalog/templates.json` and `templates.local.json` by
    subject (`subjects`) **and** target group (`audiences`: `primary`, `secondary`, `vocational`,
    `higher-education`, `adult`, from `## Course Context`). An entry that fits the subject but not the
-   target group is mentioned only with that reason.
+   target group is mentioned only with that reason. An `own` entry whose id is an open brief
+   `### {id} (in development)` is not suggested: it is adopted only through `:manage-templates {id}` (the
+   Dashboard's `next`), after its acceptance check — its activity is decided by the brief (step 1). Nor is
+   an `own` entry with the local import `./lia-templates/{id}/README.md` that has neither a brief nor an
+   adopted entry `{id}` (`tasks/manage-templates.md` step 1b refuses it).
 3. **Online search.** Run `node specs/catalog/search.mjs {subject keyword}` (English keyword, e.g.
    `python`, `sql`, `chemistry`; on its own). It lists repositories with the topic `liascript-template`
    that neither list contains. For every hit you want to name, read its README before you name it (the
@@ -94,8 +101,8 @@ JavaScript, charts, animations) are not proposed here.
 7. **Before saving:** prepare every adoption with `tasks/manage-templates.md` (its step 1b for a catalog
    id and step 3: import, macros from the README, examples) and show in one message everything that will
    be written — the header `import:` lines, the adopted entries, the briefs, the selection line, the
-   additions of step 1, what a revision removes or replaces (entry or brief, header `import:`, with the
-   files that stay) and, for a find the instructor uses, its `templates.local.json` entry
+   additions of step 1, what a revision removes or replaces (entry or brief, header `import:`, the `own`
+   entry of a dropped brief in `templates.local.json`, with the files that stay) and, for a find the instructor uses, its `templates.local.json` entry
    (`status: "found"`, with a `note` on the risk) — with "Save" / "Change something" (translated). This is
    the single write confirmation of this task (`data/chat-dialog.md` → Nothing unseen gets saved).
    The selection line: `done – {id}, {id}` once every activity is decided, naming only the ids of entries
@@ -107,7 +114,9 @@ JavaScript, charts, animations) are not proposed here.
    leave `open` as it is — never reopen the other decisions on your own. A revision (step 1 → Revising):
    the removed or replaced id leaves the line and the new one, if any, joins it — the line is
    recomputed in the same write as the removal by the rule above, never left naming a removed entry or
-   brief.
+   brief. A removal without a replacement follows the same rule as `tasks/manage-templates.md` step 5 —
+   whether its activity still needs a template (the step-5 answer: "None needed" is no, an activity left
+   without a decision is yes): yes → `open`; no → its id leaves the line, none left: `done – none needed`.
    **One write, the selection line never first:** the selection line is written in the same write as the
    entries and briefs it names — `validate-journal.mjs` reports a `done – {id}` without its entry or brief
    as a problem, and that blocks the Dashboard write. At most two journal writes: (1) header and
@@ -116,7 +125,8 @@ JavaScript, charts, animations) are not proposed here.
    `validate-journal.mjs` asks for in step 8 goes into one more write; say so.
 8. After "Save": write the adoptions through steps 3–7 of `tasks/manage-templates.md` without its 3b
    (this task's step 7 is the confirmation), the briefs, the removals of a revision and the selection
-   line — all in the one write of step 7; then `templates.local.json` with the file-edit tool (create it as
+   line — all in the one write of step 7; then `templates.local.json` with the file-edit tool, in one edit:
+   the `found` entries of step 7 added, the `own` entries of dropped briefs removed (create it as
    `{ "version": 1, "templates": [ … ] }` if missing; never `status: "checked"`). Run
    `node specs/dashboard/validate-journal.mjs` and fix what it reports before step 9 (in one more write,
    named to the instructor).

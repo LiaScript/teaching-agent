@@ -332,7 +332,7 @@ Run this task automatically after any task that changes project state:
      `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command
      `:manage-templates {id}`, "Try and adopt", translated). With several briefs the first one in the
      section. The brief takes `next` only when no unit is being worked on or the unit being worked on is
-     named in its `__Used in:__`; otherwise `next` stays with that unit and the brief's action
+     named in its `__Used in:__` (by number, by range such as "2–4", or as all units); otherwise `next` stays with that unit and the brief's action
      (`:develop-template {id}` or `:manage-templates {id}`) goes into `explore` (icon ➕) — the step stays
      `current` (`validate-journal.mjs` warns). The agenda and the units do not wait for a brief: the agenda step keeps the state it has
      without the brief (`planned`, `current` while it is being created, `done` once saved), its button

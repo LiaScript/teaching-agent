@@ -251,7 +251,7 @@ project_memory:
     - "`## Dashboard` is DERIVED state: regenerate its JSON data block via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never add HTML, CSS, tables or Mermaid there, never edit it manually, never copy a chat progress summary into it."
     - "`###` subsections under `## Templates` and the agent subsections under `## Agents` (`### Coauthor` … `### Development-Agent`) are wrapped in one `<section>` … `</section>` block per parent section, so they stay on the parent slide and out of the table of contents. `### Learner Personas` stays outside the wrapper (persona entries carry their own `<section>`; never nest `<section>` tags). Keep the wrapper when editing; the heading lines inside it stay literal (`### Teaching-Agent` etc.)."
     - "Template `import:` lines are managed by tasks/manage-templates.md in the metadata header and documented in `## Templates` (rewritten by `publish-template` when an own template is published); keep `import: ./specs/dashboard/README.md` — the Dashboard depends on it."
-    - "`## Templates` ownership (layout: templates/course-templates.yaml): `suggest-templates` writes the line `* __Template selection:__` (the last line before `<section>`; `open` | `done – {id}, {id}` | `done – none needed`) and the briefs `### {id} (in development)`, adoptions going through the steps of `manage-templates`, and — when the instructor reopens a decided activity — removes or replaces its brief or adopted entry, recomputing the selection line in the same write; `manage-templates` writes and removes the adopted entries (`__Catalog id:__`, `__Source:__`), replaces a brief when its template is adopted, keeps the selection line in step (an adopted id joins a `done – …` line that lacks it, `done – none needed` becomes `done – {id}`; a removed entry takes its id out — none left: `done – none needed`, or `open` while its activity still needs a template), and, when its acceptance check fails, sets `__State:__ in development` and records the feedback in `__Feedback rounds:__`; `develop-template` changes only `__State:__` and `__Folder:__`; `publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`. Key lines and field names stay English."
+    - "`## Templates` ownership (layout: templates/course-templates.yaml): `suggest-templates` writes the line `* __Template selection:__` (the last line before `<section>`; `open` | `done – {id}, {id}` | `done – none needed`) and the briefs `### {id} (in development)`, adoptions going through the steps of `manage-templates`, and — when the instructor reopens a decided activity — removes or replaces its brief or adopted entry, recomputing the selection line in the same write (a dropped brief also loses its `own` entry in `templates.local.json`, in the same save); `manage-templates` writes and removes the adopted entries (`__Catalog id:__`, `__Source:__`), replaces a brief when its template is adopted, keeps the selection line in step (an adopted id joins a `done – …` line that lacks it, `done – none needed` becomes `done – {id}`; for a removed entry it asks whether its activity still needs a template — yes → `open`; no → its id leaves the line, none left: `done – none needed`), and, when its acceptance check fails, sets `__State:__ in development` and records the feedback in `__Feedback rounds:__`; `develop-template` changes only `__State:__` and `__Folder:__`; `publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`. Key lines and field names stay English."
   principle: >
     All generated planning, state, review, validation, and note artifacts are stored as
     named sections in `journal.md`. Only final teaching materials (root `README.md` in
@@ -2720,7 +2720,7 @@ Use this task when:
 
 1. Read `journal.md` → `## Course Context`, especially `__LiaScript conventions:__`.
    Without `{name}` and without a template the instructor names: offer the catalog (`:preview specs/catalog/README.md`) and `:suggest-templates`.
-1b. **Catalog id:** If `{name}` is also the id of a brief `### {id} (in development)` in `## Templates` (an own template is listed in `templates.local.json` from `ready to test` on, also after "Back to development"), step 1c decides (acceptance check first) — never adopt it through this step. If `{name}` is a catalog `id` (in `specs/catalog/templates.json` or `templates.local.json`), take `import`, `macros`, `repo` and `demo` from that entry and read the template's README to confirm the macros before writing. Tell the instructor the entry's status in the course language; never present a `found` or `own` entry as checked. If `{name}` matches no `id`, continue as before and point to the catalog (`:preview specs/catalog/README.md`). The entry gets `__Catalog id:__ {id}` and `__Source:__` (`catalog` for the shared list; for the project list `found`, or for an `own` template `lia-templates/{id}/` or its `{repo-url}@{tag}`).
+1b. **Catalog id:** If `{name}` is also the id of a brief `### {id} (in development)` in `## Templates` (an own template is listed in `templates.local.json` from `ready to test` on, also after "Back to development"), step 1c decides (acceptance check first) — never adopt it through this step. If `{name}` is an `own` entry whose import is `./lia-templates/{id}/README.md` and `## Templates` holds neither a brief nor an adopted entry (`__Catalog id:__ {id}`) for it, adopt nothing: say that its brief is gone, so its acceptance check cannot run, offer `:suggest-templates` (a new brief) instead, write nothing and end here. If `{name}` is a catalog `id` (in `specs/catalog/templates.json` or `templates.local.json`), take `import`, `macros`, `repo` and `demo` from that entry and read the template's README to confirm the macros before writing. Tell the instructor the entry's status in the course language; never present a `found` or `own` entry as checked. If `{name}` matches no `id`, continue as before and point to the catalog (`:preview specs/catalog/README.md`). The entry gets `__Catalog id:__ {id}` and `__Source:__` (`catalog` for the shared list; for the project list `found`, or for an `own` template `lia-templates/{id}/` or its `{repo-url}@{tag}`).
 1c. **Brief id:** If `{name}` is the id of a brief `### {id} (in development)` in `## Templates`, act by its `__State:__`:
    - `ready to test`: read `lia-templates/{id}/README.md` and check it against every point of `__Acceptance:__` — run `node --test lia-templates/{id}/check.mjs` if it exists and `node specs/dashboard/check-material.mjs lia-templates/{id}/README.md` (each on its own), and let the instructor try it (`:preview lia-templates/{id}/README.md`). Show the result per point with how it was checked (`data/chat-checks.md` → Say how you checked); a point about what learners see counts as met only once it was tried. 🎛️ "Adopt" (only when every point is met) · "Back to development" (translated).
    - Met and "Adopt": the local import `./lia-templates/{id}/README.md` goes into the header, a normal entry (`template-entry`, `__Catalog id:__ {id}`, `__Source:__ lia-templates/{id}/`) replaces the brief in place, and the selection line follows step 5 (selection line). Then continue with step 3b.
@@ -2750,7 +2750,7 @@ Use this task when:
    - Create one `### {template_name}` subsection per template, inside the section's single `<section>` … `</section>` wrapper (create the wrapper if missing; never remove it)
    - Keep the `### Dashboard` entry — the Dashboard library import is part of every project
    - Replace an existing template subsection if the same template name already exists; an adopted brief (step 1c) is replaced in place by its entry
-   - Selection line (`* __Template selection:__`, `templates/course-templates.yaml`): an adopted entry with `__Catalog id:__ {id}` (catalog card, step 1b, step 1c) adds `{id}` to a `done – …` line that does not name it (`done – none needed` becomes `done – {id}`; `open` stays `open`); removing an entry also takes its id out of a `done – …` line — no id left: `done – none needed`, or `open` when the instructor says its activity still needs a template (then offer `:suggest-templates`). Written in the same write as the entries, never first. Called from `:suggest-templates`, that task sets the line.
+   - Selection line (`* __Template selection:__`, `templates/course-templates.yaml`): an adopted entry with `__Catalog id:__ {id}` (catalog card, step 1b, step 1c) adds `{id}` to a `done – …` line that does not name it (`done – none needed` becomes `done – {id}`; `open` stays `open`). Removing an entry: ask whether its activity still needs a template (before step 3b) — yes → `open`; no → its id leaves the line, none left: `done – none needed` (an `open` line stays `open`); after a yes offer `:suggest-templates`. Written in the same write as the entries, never first. Called from `:suggest-templates`, that task sets the line.
 6. Include runnable examples where useful.
    - For Skulpt regular Python examples, include a Python code block followed by `@Skulpt.eval`
    - For Skulpt turtle examples, include a Python code block followed by `@Skulpt.eval(skulpt_canvas)` and a persistent canvas `<div>`
@@ -3584,7 +3584,7 @@ JavaScript, charts, animations) are not proposed here.
 
 - `journal.md` → `## Templates`: the line `* __Template selection:__` (`open` | `done – {id}, {id}` | `done – none needed`), adopted entries (through `tasks/manage-templates.md`) and briefs `### {id} (in development)`; on a revision the removed or replaced entry or brief
 - `journal.md` main metadata header: the `import:` line of every adopted template (a removed template's line only when no material uses its macros)
-- `templates.local.json`: one `found` entry per online find the instructor uses (only after "Save")
+- `templates.local.json`: one `found` entry per online find the instructor uses and, on a revision, the removal of a dropped brief's `own` entry `{id}` (only after "Save")
 - `journal.md` → `## Dashboard` updated
 
 ## Steps
@@ -3600,8 +3600,11 @@ JavaScript, charts, animations) are not proposed here.
    **Revising:** a decided activity may be reopened when the instructor asks (another template, or a brief
    to drop or replace): it gets suggestions like an open activity, and step 5 adds "Keep as it is"
    (translated); any other choice replaces its entry or brief ("None needed" removes it). A removal touches
-   only that entry or brief and its id in the selection line (step 7): a brief's folder
-   `lia-templates/{id}/` and its `templates.local.json` entry stay — name them; an adopted entry's header
+   only that entry or brief and its id in the selection line (step 7); dropping or replacing a brief
+   also removes its `own` entry `{id}` from `templates.local.json` (if there is one) in the same save —
+   otherwise that template could later be adopted without its acceptance check; its folder
+   `lia-templates/{id}/` stays — say so, and that the instructor deletes it themselves if it is no longer
+   wanted (this task deletes no files); an adopted entry's header
    `import:` goes only when no material uses its macros (`tasks/manage-templates.md` → Notes) — name the
    materials that still do. An existing journal may document
    templates without the selection line: an entry without `__Catalog id:__` whose import or repository
@@ -3612,7 +3615,11 @@ JavaScript, charts, animations) are not proposed here.
 2. **Catalog and project list.** Filter `specs/catalog/templates.json` and `templates.local.json` by
    subject (`subjects`) **and** target group (`audiences`: `primary`, `secondary`, `vocational`,
    `higher-education`, `adult`, from `## Course Context`). An entry that fits the subject but not the
-   target group is mentioned only with that reason.
+   target group is mentioned only with that reason. An `own` entry whose id is an open brief
+   `### {id} (in development)` is not suggested: it is adopted only through `:manage-templates {id}` (the
+   Dashboard's `next`), after its acceptance check — its activity is decided by the brief (step 1). Nor is
+   an `own` entry with the local import `./lia-templates/{id}/README.md` that has neither a brief nor an
+   adopted entry `{id}` (`tasks/manage-templates.md` step 1b refuses it).
 3. **Online search.** Run `node specs/catalog/search.mjs {subject keyword}` (English keyword, e.g.
    `python`, `sql`, `chemistry`; on its own). It lists repositories with the topic `liascript-template`
    that neither list contains. For every hit you want to name, read its README before you name it (the
@@ -3644,8 +3651,8 @@ JavaScript, charts, animations) are not proposed here.
 7. **Before saving:** prepare every adoption with `tasks/manage-templates.md` (its step 1b for a catalog
    id and step 3: import, macros from the README, examples) and show in one message everything that will
    be written — the header `import:` lines, the adopted entries, the briefs, the selection line, the
-   additions of step 1, what a revision removes or replaces (entry or brief, header `import:`, with the
-   files that stay) and, for a find the instructor uses, its `templates.local.json` entry
+   additions of step 1, what a revision removes or replaces (entry or brief, header `import:`, the `own`
+   entry of a dropped brief in `templates.local.json`, with the files that stay) and, for a find the instructor uses, its `templates.local.json` entry
    (`status: "found"`, with a `note` on the risk) — with "Save" / "Change something" (translated). This is
    the single write confirmation of this task (`data/chat-dialog.md` → Nothing unseen gets saved).
    The selection line: `done – {id}, {id}` once every activity is decided, naming only the ids of entries
@@ -3657,7 +3664,9 @@ JavaScript, charts, animations) are not proposed here.
    leave `open` as it is — never reopen the other decisions on your own. A revision (step 1 → Revising):
    the removed or replaced id leaves the line and the new one, if any, joins it — the line is
    recomputed in the same write as the removal by the rule above, never left naming a removed entry or
-   brief.
+   brief. A removal without a replacement follows the same rule as `tasks/manage-templates.md` step 5 —
+   whether its activity still needs a template (the step-5 answer: "None needed" is no, an activity left
+   without a decision is yes): yes → `open`; no → its id leaves the line, none left: `done – none needed`.
    **One write, the selection line never first:** the selection line is written in the same write as the
    entries and briefs it names — `validate-journal.mjs` reports a `done – {id}` without its entry or brief
    as a problem, and that blocks the Dashboard write. At most two journal writes: (1) header and
@@ -3666,7 +3675,8 @@ JavaScript, charts, animations) are not proposed here.
    `validate-journal.mjs` asks for in step 8 goes into one more write; say so.
 8. After "Save": write the adoptions through steps 3–7 of `tasks/manage-templates.md` without its 3b
    (this task's step 7 is the confirmation), the briefs, the removals of a revision and the selection
-   line — all in the one write of step 7; then `templates.local.json` with the file-edit tool (create it as
+   line — all in the one write of step 7; then `templates.local.json` with the file-edit tool, in one edit:
+   the `found` entries of step 7 added, the `own` entries of dropped briefs removed (create it as
    `{ "version": 1, "templates": [ … ] }` if missing; never `status: "checked"`). Run
    `node specs/dashboard/validate-journal.mjs` and fix what it reports before step 9 (in one more write,
    named to the instructor).
@@ -4087,7 +4097,7 @@ Run this task automatically after any task that changes project state:
      `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command
      `:manage-templates {id}`, "Try and adopt", translated). With several briefs the first one in the
      section. The brief takes `next` only when no unit is being worked on or the unit being worked on is
-     named in its `__Used in:__`; otherwise `next` stays with that unit and the brief's action
+     named in its `__Used in:__` (by number, by range such as "2–4", or as all units); otherwise `next` stays with that unit and the brief's action
      (`:develop-template {id}` or `:manage-templates {id}`) goes into `explore` (icon ➕) — the step stays
      `current` (`validate-journal.mjs` warns). The agenda and the units do not wait for a brief: the agenda step keeps the state it has
      without the brief (`planned`, `current` while it is being created, `done` once saved), its button
@@ -4948,7 +4958,7 @@ template:
     - 'Selection line: `* __Template selection:__ {value}` is the last line before `<section>`. Values: `open` | `done – {id}, {id}` | `done – none needed` (en dash, ids in lower case with "-"). A missing line counts as `open`. Every id of `done – …` has an entry with `__Catalog id:__ {id}` or a brief `### {id} (in development)` — `validate-journal.mjs` reports the line otherwise.'
     - 'Adopted entries carry `__Catalog id:__ {id}` (the id of the catalog entry, of the `templates.local.json` entry or of the former brief) and `__Source:__` — `catalog` (shared list `specs/catalog/templates.json`), `found` (an online find, recorded in `templates.local.json`), `lia-templates/{id}/` (an own template developed in the project) or `{repo-url}@{tag}` (an own template published as its own repository).'
     - 'Key lines stay English and are never translated by a language pack: `* __Template selection:__`, `* __State:__` and every field name of the entries and briefs.'
-    - 'Ownership: `:suggest-templates` writes the selection line and the briefs (adoptions go through the steps of `:manage-templates`) and, when the instructor reopens a decided activity, removes or replaces its brief or adopted entry with the selection line recomputed in the same write; `:manage-templates` writes and removes the adopted entries, replaces a brief when its template is adopted, keeps the selection line in step (an adopted id joins a `done – …` line that lacks it, `done – none needed` becomes `done – {id}`; a removed entry takes its id out — none left: `done – none needed`, or `open` while its activity still needs a template), and, when its acceptance check fails, sets `__State:__ in development` and records feedback in `__Feedback rounds:__`; `:develop-template` changes only `__State:__` and `__Folder:__`; `:publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`.'
+    - 'Ownership: `:suggest-templates` writes the selection line and the briefs (adoptions go through the steps of `:manage-templates`) and, when the instructor reopens a decided activity, removes or replaces its brief or adopted entry with the selection line recomputed in the same write (a dropped brief also loses its `own` entry in `templates.local.json`, in the same save); `:manage-templates` writes and removes the adopted entries, replaces a brief when its template is adopted, keeps the selection line in step (an adopted id joins a `done – …` line that lacks it, `done – none needed` becomes `done – {id}`; for a removed entry it asks whether its activity still needs a template — yes → `open`; no → its id leaves the line, none left: `done – none needed`), and, when its acceptance check fails, sets `__State:__ in development` and records feedback in `__Feedback rounds:__`; `:develop-template` changes only `__State:__` and `__Folder:__`; `:publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`.'
     - 'Local templates live in `lia-templates/{id}/`. The import in `## Templates` and in the journal header is `./lia-templates/{id}/README.md`; a multi-file material `materials/{n}-{slug}/README.md` imports it relative to its own folder (`../../lia-templates/{id}/README.md`).'
   sections:
     - id: overview
@@ -5156,7 +5166,7 @@ _Optional – the design assistant fills this in when you want a consistent look
 <!-- class="journal-actions" -->
 [▶️ Suggest templates](agent:teaching/suggest-templates) `:suggest-templates` · [👁 Template catalog](agent:teaching/preview?file=specs/catalog/README.md) `:preview specs/catalog/README.md` · [▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
-<!--- Managed from templates/course-templates.yaml: adopted templates by :manage-templates, the selection line and the briefs of templates in development by :suggest-templates (ownership: agents/teaching-agent.yaml → journal_formatting_rules). --->
+<!--- Managed from templates/course-templates.yaml: adopted templates by :manage-templates, the briefs of templates in development by :suggest-templates, the selection line by both, removals included (ownership: agents/teaching-agent.yaml → journal_formatting_rules). --->
 
 LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 

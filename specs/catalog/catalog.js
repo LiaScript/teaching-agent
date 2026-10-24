@@ -133,7 +133,7 @@
       "status.checked": "✓ geprüft", "status.found": "neu gefunden, nicht geprüft", "status.own": "nur dieses Projekt",
       try: "Ausprobieren", adopt: "In meinen Kurs übernehmen",
       count: (n, total) => `${n} von ${total} Vorlagen`, empty: "Keine Vorlage passt zu dieser Suche.",
-      problems: "Datenhinweise", error: "Der Katalog konnte nicht geladen werden.",
+      problems: "Datenhinweise (auf Englisch)", error: "Der Katalog konnte nicht geladen werden.",
       "audience.primary": "Grundschule", "audience.secondary": "Sekundarstufe", "audience.vocational": "Berufsbildung",
       "audience.higher-education": "Hochschule", "audience.adult": "Erwachsenenbildung"
     },

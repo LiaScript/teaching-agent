@@ -109,7 +109,7 @@ _Optional – the design assistant fills this in when you want a consistent look
 <!-- class="journal-actions" -->
 [▶️ Suggest templates](agent:teaching/suggest-templates) `:suggest-templates` · [👁 Template catalog](agent:teaching/preview?file=specs/catalog/README.md) `:preview specs/catalog/README.md` · [▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
-<!--- Managed from templates/course-templates.yaml: adopted templates by :manage-templates, the selection line and the briefs of templates in development by :suggest-templates (ownership: agents/teaching-agent.yaml → journal_formatting_rules). --->
+<!--- Managed from templates/course-templates.yaml: adopted templates by :manage-templates, the briefs of templates in development by :suggest-templates, the selection line by both, removals included (ownership: agents/teaching-agent.yaml → journal_formatting_rules). --->
 
 LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 

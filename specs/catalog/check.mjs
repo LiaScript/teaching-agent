@@ -136,6 +136,7 @@ test("texts from the data are escaped; English is the fallback language", () => 
 test("data notes appear only when there are problems; an error replaces the grid", () => {
   assert.doesNotMatch(catalog.render("c3", { entries: [], problems: [], lang: "en" }), /Data notes/);
   assert.match(catalog.render("c4", { entries: [], problems: ["x"], lang: "en" }), /Data notes/);
+  assert.match(catalog.render("c4de", { entries: [], problems: ["x"], lang: "de" }), /Datenhinweise \(auf Englisch\)/, "the notes stay in the data language");
   assert.match(catalog.render("c5", { entries: [], problems: [], error: "404", lang: "en" }), /The catalog could not be loaded/);
 });
 
