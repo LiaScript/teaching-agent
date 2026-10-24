@@ -244,7 +244,7 @@ project_memory:
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: regenerate its JSON data block via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never add HTML, CSS, tables or Mermaid there, never edit it manually, never copy a chat progress summary into it."
     - "`###` subsections under `## Templates` and the agent subsections under `## Agents` (`### Coauthor` … `### Development-Agent`) are wrapped in one `<section>` … `</section>` block per parent section, so they stay on the parent slide and out of the table of contents. `### Learner Personas` stays outside the wrapper (persona entries carry their own `<section>`; never nest `<section>` tags). Keep the wrapper when editing; the heading lines inside it stay literal (`### Teaching-Agent` etc.)."
-    - "Template `import:` lines are managed by tasks/manage-templates.md in the metadata header and documented in `## Templates`; keep `import: ./specs/dashboard/README.md` — the Dashboard depends on it."
+    - "Template `import:` lines are managed by tasks/manage-templates.md in the metadata header and documented in `## Templates` (rewritten by `publish-template` when an own template is published); keep `import: ./specs/dashboard/README.md` — the Dashboard depends on it."
     - "`## Templates` ownership (layout: templates/course-templates.yaml): `suggest-templates` writes the line `* __Template selection:__` (the last line before `<section>`; `open` | `done – {id}, {id}` | `done – none needed`) and the briefs `### {id} (in development)`, adoptions going through the steps of `manage-templates`; `manage-templates` writes the adopted entries (`__Catalog id:__`, `__Source:__`), replaces a brief when its template is adopted, and records feedback in `__Feedback rounds:__`; `develop-template` changes only `__State:__` and `__Folder:__`; `publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`. Key lines and field names stay English."
   principle: >
     All generated planning, state, review, validation, and note artifacts are stored as
@@ -3634,11 +3634,12 @@ Run this task automatically after any task that changes project state:
   `## Templates`, layout `templates/course-templates.yaml`) — the line `__Template selection:__`
   (missing = `open`) and the briefs `### {id} (in development)`:
   1. `planned` while `## Didactics` is not saved.
-  2. Didactics saved and selection `open`: the step is `current` and the `next` of the course
+  2. Didactics saved, selection `open` and no brief: the step is `current` and the `next` of the course
      (`agent:teaching/suggest-templates`, command `:suggest-templates`, label "Suggest templates",
      translated). Once a unit is already being worked on, `next` stays with that unit and the
      suggestion goes into `explore` (icon ➕).
-  3. Selection `done – …` and a brief not yet adopted: `current`, `result` = "{n} in development"
+  3. A brief not yet adopted exists — whatever the selection value (`open`, or a `done – …` that does
+     not name it) — and takes precedence over 2: `current`, `result` = "{n} in development"
      (translated, German "{n} in Entwicklung"), and `next` by the brief's `__State:__` — `brief` or
      `in development` → `agent:development/develop-template?id={id}` (command `:agent development` →
      `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command
@@ -3897,7 +3898,7 @@ Rules:
    - Every template documented in `journal.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header — except briefs `### {id} (in development)`, which have no import yet
    - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header (in a multi-file material the relative form `../../lia-templates/{id}/README.md` matches the project's `./lia-templates/{id}/README.md`)
    - Template usage in materials follows the documented examples and constraints in `## Templates`
-   - **Publishing gate — templates:** FAIL if `## Templates` holds a brief `### {id} (in development)` whose `__Used in:__` names a unit (that unit relies on a template that is not adopted yet), or if an `import:` line of the journal header or a material points to a path the course project's `.gitignore` excludes (the published course could not load it — e.g. an outsourced `lia-templates/{id}/` with its own repository: import its published `{repo-url}@{tag}` instead).
+   - **Publishing gate — templates:** FAIL if `## Templates` holds a brief `### {id} (in development)` whose `__Used in:__` names a unit (that unit relies on a template that is not adopted yet), or if an `import:` line of a published document points to a path the course project's `.gitignore` excludes (the published course could not load it — e.g. an outsourced `lia-templates/{id}/` with its own repository: import its published `{repo-url}@{tag}` instead). Published documents are the material headers (multi-file `materials/{n}-{slug}/README.md`, single-file the root `README.md`); the journal header counts only when `journal.md` itself is published (`tasks/create-project.md` step 5) — its `import: ./specs/dashboard/README.md` is no finding while `journal.md` and `specs/` stay unpublished.
 
 5. **Check Agenda** `[if journal.md → ## Agenda has content, or the agenda flag is yes]`:
    - All sessions have title, duration, type, learning objective
@@ -5614,7 +5615,7 @@ template:
 - [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header — briefs `### {id} (in development)` are exempt
 - [ ] [mechanical] Every material using a template macro has the matching `import:` line in its own metadata header (a multi-file material imports a local template as `../../lia-templates/{id}/README.md`; that counts as matching)
 - [ ] [mechanical] Publishing gate: no brief `### {id} (in development)` whose `__Used in:__` names a unit — that unit waits for the template's adoption
-- [ ] [mechanical] Publishing gate: no `import:` line (journal header or material) points to a path the course project's `.gitignore` excludes
+- [ ] [mechanical] Publishing gate: no `import:` line of a published document points to a path the course project's `.gitignore` excludes — the material headers (single-file: the root `README.md`); the journal header only when `journal.md` itself is published
 - [ ] [mechanical] Template usage examples and constraints are documented in `## Templates`
 - [ ] [mechanical] Community discovery link included: https://github.com/topics/liascript-template
 

@@ -1495,6 +1495,12 @@ test("a brief with a missing field or an unknown state is a hint, listed under d
   assert.match(state.output, /- \[template-brief\] brief "turtle-maze \(in development\)": __State:__ "fertig" is none of "brief", "in development", "ready to test"/);
 });
 
+test("an empty ### heading under ## Templates is read without a crash", () => {
+  const result = validate({ title: "Kurs", next }, templatesSection.replace("### Python Turtle", "### "));
+  assert.doesNotMatch(result.output, /TypeError|^\s+at /m, result.output);
+  assert.equal(result.status, 0, `the entry keeps its __Catalog id:__: ${result.output}`);
+});
+
 test("a brief ready to test needs __Folder:__ and lia-templates/{id}/README.md next to the journal (d)", () => {
   const ready = templatesSection.replace("* __State:__ brief", "* __State:__ ready to test");
   const noFolder = validate({ title: "Kurs", next }, ready);

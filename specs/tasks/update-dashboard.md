@@ -314,11 +314,12 @@ Run this task automatically after any task that changes project state:
   `## Templates`, layout `templates/course-templates.yaml`) — the line `__Template selection:__`
   (missing = `open`) and the briefs `### {id} (in development)`:
   1. `planned` while `## Didactics` is not saved.
-  2. Didactics saved and selection `open`: the step is `current` and the `next` of the course
+  2. Didactics saved, selection `open` and no brief: the step is `current` and the `next` of the course
      (`agent:teaching/suggest-templates`, command `:suggest-templates`, label "Suggest templates",
      translated). Once a unit is already being worked on, `next` stays with that unit and the
      suggestion goes into `explore` (icon ➕).
-  3. Selection `done – …` and a brief not yet adopted: `current`, `result` = "{n} in development"
+  3. A brief not yet adopted exists — whatever the selection value (`open`, or a `done – …` that does
+     not name it) — and takes precedence over 2: `current`, `result` = "{n} in development"
      (translated, German "{n} in Entwicklung"), and `next` by the brief's `__State:__` — `brief` or
      `in development` → `agent:development/develop-template?id={id}` (command `:agent development` →
      `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command

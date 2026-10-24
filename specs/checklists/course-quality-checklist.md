@@ -39,7 +39,7 @@
 - [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header — briefs `### {id} (in development)` are exempt
 - [ ] [mechanical] Every material using a template macro has the matching `import:` line in its own metadata header (a multi-file material imports a local template as `../../lia-templates/{id}/README.md`; that counts as matching)
 - [ ] [mechanical] Publishing gate: no brief `### {id} (in development)` whose `__Used in:__` names a unit — that unit waits for the template's adoption
-- [ ] [mechanical] Publishing gate: no `import:` line (journal header or material) points to a path the course project's `.gitignore` excludes
+- [ ] [mechanical] Publishing gate: no `import:` line of a published document points to a path the course project's `.gitignore` excludes — the material headers (single-file: the root `README.md`); the journal header only when `journal.md` itself is published
 - [ ] [mechanical] Template usage examples and constraints are documented in `## Templates`
 - [ ] [mechanical] Community discovery link included: https://github.com/topics/liascript-template
 

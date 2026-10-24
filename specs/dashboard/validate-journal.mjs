@@ -120,7 +120,7 @@ function fieldsOf(block) {
 function checkTemplates() {
   const text = section("Templates").replace(/<!--[\s\S]*?-->/g, "");
   const found = { problems: [], hints: [] };
-  const entries = text.split(/^(?=### )/m).slice(1).map(block => ({ heading: block.match(/^### (.+?)\s*$/m)[1], fields: fieldsOf(block.split(/^<\/section>/m)[0]) }));
+  const entries = text.split(/^(?=### )/m).slice(1).map(block => ({ heading: block.match(/^### (.+?)\s*$/m)?.[1] ?? "", fields: fieldsOf(block.split(/^<\/section>/m)[0]) }));
   const briefs = entries.filter(entry => / \(in development\)$/.test(entry.heading)).map(entry => ({ ...entry, id: entry.heading.replace(/ \(in development\)$/, "") }));
   const selection = text.split(/^<section\b/m)[0].match(/^\s*[*-]\s+__Template selection:__[ \t]*(.*)$/m)?.[1].trim() ?? "open";
   const ids = selection.match(/^done – (.+)$/)?.[1].split(",").map(id => id.trim());
