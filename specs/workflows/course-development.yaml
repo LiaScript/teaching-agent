@@ -20,7 +20,7 @@ workflow:
       role: "Visual identity and image prompts"
     development:
       id: development-agent
-      role: "Version control and publishing"
+      role: "Version control, own templates and publishing"
     learner:
       id: learner-agent
       role: "Learner personas and perspective-based quality review"
@@ -198,6 +198,37 @@ workflow:
         - Includes the community template discovery link: https://github.com/topics/liascript-template
         - Ensures promoted materials include required imports when they use template macros
 
+    - step: develop_template
+      agent: development
+      command: :develop-template {id}
+      output: "lia-templates/{id}/ (README.md with macros and examples, JS/CSS, check.mjs) + the brief's `__State:__` / `__Folder:__`"
+      dependencies: [suggest_templates]
+      optional: true
+      condition: a brief `### {id} (in development)` exists (Dashboard `next`)
+      notes: |
+        Builds an own template from the brief written by :suggest-templates:
+        - Requires the skill `liascript-templates`: missing → installation offered (confirm in terminal); declined → the command ends
+        - Unclear brief points go back to the Teaching-Agent (`agent:teaching/switch`), never invented
+        - Plan confirmed in the chat; model tests `node --test lia-templates/{id}/check.mjs`, `run_in_page` in the preview, rendered check `check-material.mjs`
+        - The instructor tries it in the preview; loop of at most 3 rounds until the `__Acceptance:__` points are confirmed
+        - `__State:__ ready to test` → back to the Teaching-Agent, whose `:manage-templates {id}` checks and adopts it
+        - Changes only `lia-templates/{id}/` and the brief's `__State:__` / `__Folder:__`
+
+    - step: publish_template
+      agent: development
+      command: :publish-template {id}
+      output: "lia-templates/{id}/ as its own git repository (topic liascript-template, tag) + import lines switched to the tag + templates.local.json (own)"
+      dependencies: [develop_template, manage_templates]
+      optional: true
+      condition: the instructor decides to share an adopted own template (`__Source:__ lia-templates/{id}/`)
+      notes: |
+        Optional, only on the instructor's decision (confirm in terminal):
+        - `lia-templates/{id}/` stays in the course project as a nested git repository, ignored by the course `.gitignore` — no submodule, no subtree, no clone outside the project
+        - GitHub repository with the topic `liascript-template`, version tag, documentation in English unless very course-specific
+        - Import lines in the journal header, `## Templates` (`__Source:__ {repo-url}@{tag}`) and every material switched to the raw URL of the tag
+        - Entry in `templates.local.json` (`status: "own"`); optionally a pull request for the shared list
+        - Later changes: new tag, imports switched again
+
     # Phase 4: Session Development
     - step: session_development
       agent: teaching
@@ -355,7 +386,7 @@ workflow:
     - Sections the instructor reads (Course Context, Outline, Didactics, Agenda, unit skeletons, validation reports) use the `layout` of their template: a readable part in the course language, technical keys in `<details>`
     - After a unit check passes, :try-as-learner lets the instructor try the unit as a learner with a learning companion (preview only)
     - Changes after a check go through the change path of :quick-fix
-    - :suggest-templates follows the didactics (templates for the learning activities); own templates go from a brief to the Development-Agent and back to :manage-templates {id}
+    - :suggest-templates follows the didactics (templates for the learning activities); own templates go from a brief to the Development-Agent (:develop-template {id}) and back to :manage-templates {id}; sharing one as its own repository is optional (:publish-template {id})
 
   flow_diagram: |
     ```mermaid
@@ -368,6 +399,8 @@ workflow:
         E -->|order open| F[artist: create-visuals - optional]
         ST -.->|own template: brief| DT[development: develop-template]
         DT -.->|ready to test| MT[teaching: manage-templates id]
+        MT -.->|back to development| DT
+        MT -.->|optional: own repository| PT[development: publish-template id]
         ST --> EP[teaching: create-learner-persona - optional]
         EP --> F
         F --> G[artist: create-logo - optional]
@@ -406,6 +439,8 @@ workflow:
         style LR fill:#e8f4f8,stroke:#0B6E75
         style DT fill:#e8f4f8,stroke:#0B6E75
         style DT stroke-dasharray: 5 5
+        style PT fill:#e8f4f8,stroke:#0B6E75
+        style PT stroke-dasharray: 5 5
         style SR fill:#e8f4f8,stroke:#0B6E75
         style EP stroke-dasharray: 5 5
         style LR stroke-dasharray: 5 5
@@ -512,4 +547,6 @@ workflow:
       - :manage-git
       - :create-project
       - :update-project
+      - :develop-template {id}
+      - :publish-template {id}
       - :preview {file?} {slide?}

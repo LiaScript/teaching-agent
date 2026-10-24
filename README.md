@@ -75,7 +75,7 @@ The **Teaching-Agent** is the coordinator. It knows when to hand off to the othe
 | **Teaching** | 🎓 | Pedagogical structure & content (default) | active on start |
 | **Artist** | 🎨 | Visual identity, logos, image prompts | `:agent artist` |
 | **Learner** | 🧑‍🎓 | Persona-based, learner-perspective review | `:agent learner` |
-| **Development** | 🛠️ | Git, publishing, GitHub Pages | `:agent development` |
+| **Development** | 🛠️ | Git, own templates (build, test, publish), publishing, GitHub Pages | `:agent development` |
 
 The Teaching-Agent proactively suggests a handoff at the right moments — e.g. `:agent artist` after didactics are done, `:agent learner` after a session is validated, or `:agent development` once the course passes validation.
 
@@ -306,6 +306,7 @@ the project only after your consent in the terminal (never globally).
 | `liascript-templates` | 🎓 Teaching | judging templates and writing a brief for an own one in `:suggest-templates`, `:manage-templates` |
 | `creativity` | 🎓 Teaching | optional open ideation in `:create-outline` and `:scaffold` |
 | `liascript-theming` | 🎨 Artist | a LiaScript theme from the visual identity in `:create-visuals` |
+| `liascript-templates` | 🛠️ Development | building and testing an own template in `:develop-template` (required there) |
 | `liascript-exporter` | 🛠️ Development | `project.yaml`, GitHub Actions, exports |
 | `oersi-metadata` | 🛠️ Development | `metadata.yml` to list the course on OERSI |
 
@@ -359,11 +360,17 @@ Details: [`specs/data/skills.md`](specs/data/skills.md).
 
 ### Development-Agent 🛠️
 
+The Git, Templates & Publishing Assistant: version control and publishing, and own LiaScript templates —
+it builds a template from the Teaching-Agent's brief in `lia-templates/{id}/`, tests it with you in the
+preview, hands it back as *ready to test* and, if you decide so, publishes it as its own repository.
+
 | Command | Purpose |
 |---------|---------|
 | `:manage-git` | Stage, commit, push, diff, resolve conflicts |
 | `:create-project` | Multi-file: generate `project.yaml` + GitHub Pages workflow. Single-file: push to GitHub, hand back the LiaScript viewer link (no project.yaml/Pages) |
 | `:update-project` | Multi-file: update publishing config & redeploy. Single-file: push the update (viewer link stays the same) |
+| `:develop-template {id}` | Build and test an own template from its brief in `lia-templates/{id}/` (README with macros and examples, JS/CSS, model tests) until you confirm its acceptance points; needs the skill `liascript-templates` |
+| `:publish-template {id}` | Optional, after the adoption: publish the template as its own GitHub repository (topic `liascript-template`, version tag) and switch the course imports to that tag; confirmed in the terminal |
 
 ---
 

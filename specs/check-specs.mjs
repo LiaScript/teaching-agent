@@ -17,6 +17,8 @@ const required = {
   "tasks/analyze-existing.md": ["8b. **Before saving:**", "written only after \"Save\" in step 8b"],
   "tasks/manage-templates.md": ["3b. **Before saving:**", "is a catalog `id`", "read the template's README to confirm", "ready to test"],
   "tasks/suggest-templates.md": ["never present a `found` or `own` entry as checked", "never write to `specs/catalog/templates.json`", "read its README before", "(in development)"],
+  "tasks/develop-template.md": ["liascript-templates", "Loop:", "ready to test", "**Loop:** Repeat steps 3–5 until the instructor confirms the brief's `__Acceptance:__` points in the preview, or after 3 iterations — whichever comes first. On hitting the cap without meeting the condition: stop and report the remaining points to the instructor instead of continuing.", "Installing a Missing Skill", "Offering the Rendered Check", "agent:teaching/switch", "never invent", "This task writes only:"],
+  "tasks/publish-template.md": ["confirm in the terminal", "liascript-template", "templates.local.json", "The instructor decides", "raw.githubusercontent.com/{owner}/{repo}/{tag}/README.md", "No submodule, no subtree", "`shared: \"not-offered\"`", "This task writes only:", "in **every** material"],
   "tasks/save-notes.md": ["4b. **Before saving:**"],
   "tasks/init-course.md": ["**Language pack first:**", "also for \"mixed\"", "is not saved", "English stay only keys that tasks read", "For a single lesson do not ask", "Ask this only once the time frame (step 4) is known", "never offer an internal threshold", "what the mapped keys change in the material", "builds LiaScript courses only — never ask for a platform", "Accessibility is not asked", "follow the course language in terminal mode too", "are the only writes allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
   "tasks/scaffold-course.md": ["exactly as confirmed — its self-check ran before the draft", "**Language pack first:**", "planning sketch ✅ · material open", "Teaching style and difficulty level are not asked", "**Checks before the draft is shown,**", "plus \"Self-check before saving\" (`tasks/create-session-skeleton.md` step 7)", "Guiding figure / instructor persona", "No agenda — decided with the course frame", "8b. Set `language:`", "Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
@@ -103,6 +105,25 @@ test("the workflow quick reference lists every agent command with its signature"
   }
 });
 
+test("the Development-Agent builds and publishes own templates: commands, tiers, triggers, hand-back", () => {
+  const agent = read("agents/development-agent.yaml");
+  assert.match(agent, /^  title: Git, Templates & Publishing Assistant$/m);
+  for (const key of [":develop-template {id}", ":publish-template {id}"]) assert.ok(agent.includes(`  ${key}: "run task \`tasks/${key.slice(1).split(" ")[0]}.md\``), `development-agent.yaml lacks ${key}`);
+  assert.ok(agent.includes("agent:teaching/switch"), "development-agent.yaml does not hand back with agent:teaching/switch");
+  const tiers = read("data/agent-links.md").split("\n");
+  assert.ok(tiers.find(line => line.startsWith("| **confirm in chat**"))?.includes("`develop-template`"), "develop-template is not confirm in chat");
+  assert.ok(tiers.find(line => line.startsWith("| **confirm in terminal**"))?.includes("`publish-template`"), "publish-template is not confirm in terminal");
+  const triggers = read("tasks/update-dashboard.md").split("## Automatic Trigger")[1]?.split("\n## ")[0] ?? "";
+  for (const task of ["develop-template", "publish-template"]) {
+    assert.ok(read(`tasks/${task}.md`).includes("tasks/update-dashboard.md"), `${task} does not run update-dashboard`);
+    assert.ok(triggers.includes(`:${task}`), `${task} is missing in the update-dashboard trigger list`);
+  }
+  assert.match(read("agents/teaching-agent.yaml"), /`gh repo create`[^"]*`:publish-template`/, "shell list lacks the git/gh calls of publish-template");
+  const readme = read("../README.md");
+  for (const key of [":develop-template {id}", ":publish-template {id}"]) assert.ok(readme.includes(`\`${key}\``), `README.md lacks ${key}`);
+  assert.match(readme, /\| `liascript-templates` \| 🛠️ Development \|[^\n]*`:develop-template`/, "README.md skills table lacks the Development row");
+});
+
 test("preview is a navigation command of every agent", () => {
   for (const agent of ["teaching", "artist", "learner", "development"]) {
     assert.match(read(`agents/${agent}-agent.yaml`), /^  :preview \{file\?\} \{slide\?\}:/m, `${agent} has no :preview`);
@@ -158,7 +179,7 @@ test("cheat sheet quiz examples put the attribute comment above the options and 
 });
 
 test("skills are detected by their installed names; old names only as aliases", () => {
-  const files = ["data/skills.md", "agents/teaching-agent.yaml", "agents/development-agent.yaml", "tasks/create-project.md", "tasks/update-project.md", "tasks/manage-templates.md", "tasks/suggest-templates.md"];
+  const files = ["data/skills.md", "agents/teaching-agent.yaml", "agents/development-agent.yaml", "tasks/create-project.md", "tasks/update-project.md", "tasks/manage-templates.md", "tasks/suggest-templates.md", "tasks/develop-template.md", "tasks/publish-template.md"];
   for (const file of files) {
     for (const old of ["exporter-workflow", "template-development"]) {
       const lines = read(file).split("\n").filter(line => line.includes(old) && !/older name/.test(line));
