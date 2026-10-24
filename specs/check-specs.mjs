@@ -135,6 +135,17 @@ test("preview is a navigation command of every agent", () => {
   }
 });
 
+test("open-chat is a navigation command of every agent and opens a collapsed chat", () => {
+  for (const agent of ["teaching", "artist", "learner", "development"]) {
+    assert.match(read(`agents/${agent}-agent.yaml`), /^  :open-chat: "run task `tasks\/open-chat\.md`/m, `${agent} has no :open-chat`);
+  }
+  const task = read("tasks/open-chat.md");
+  assert.match(task, /A `chat` message also unfolds a collapsed\s+chat/);
+  assert.match(task, /Do not start\s+a server yourself/);
+  assert.match(task, /never writes `journal\.md`/);
+  assert.match(read("data/agent-links.md"), /\| \*\*run\*\* \|[^\n]*`open-chat`/);
+});
+
 test("Artist tasks that write journal.md refresh the dashboard and are listed as its triggers", () => {
   const triggers = read("tasks/update-dashboard.md").split("## Automatic Trigger")[1]?.split("\n## ")[0] ?? "";
   for (const task of ["create-visuals", "create-logo", "create-image", "generate-image"]) {

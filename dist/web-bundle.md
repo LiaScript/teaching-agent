@@ -325,6 +325,7 @@ commands:
   :manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports (by name, catalog id or brief id) in the project header and document usage in `journal.md` → `## Templates`"
   :update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
   :preview {file?} {slide?}: "run task `tasks/preview.md` — show a course file (default `journal.md`) in the LiaScript DevServer preview via the `liascript` MCP"
+  :open-chat: "run task `tasks/open-chat.md` — open the browser chat of the LiaScript DevServer preview (opens the preview if needed) and greet with the next step; runs in this persona"
   :create-session {number} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   :promote-session {number}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   :validate-syntax {number}: "run task `tasks/validate-syntax.md` — full LiaScript syntax check for one session; also called internally by validate-course, quick-fix, build-session"
@@ -357,6 +358,7 @@ dependencies:
     - manage-templates.md
     - update-dashboard.md
     - preview.md
+    - open-chat.md
     - create-session-skeleton.md
     - promote-session.md
     - validate-syntax.md
@@ -492,6 +494,7 @@ commands:
   :review-as-persona {name} {number}: "run task `tasks/review-as-persona.md` — agent embodies a learner persona, reviews a session material from the learner's perspective, saves the report under that session's `#### Persona Reviews`, and stays in persona for interactive follow-up chat"
   :list-learners: "list all personas defined in `journal.md` → `## Agents` → `### Learner Personas`; read only persona headings and one-line overview snippets"
   :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
+  :open-chat: "run task `tasks/open-chat.md` — navigation only: open the browser chat of the LiaScript DevServer preview and greet with the next step; runs in this persona, never switches the agent"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -501,6 +504,7 @@ dependencies:
   tasks:
     - review-as-persona.md
     - preview.md
+    - open-chat.md
 
 fuzzy-matching:
   - 85% confidence threshold
@@ -633,6 +637,7 @@ commands:
     With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via the image route — own image tool, or the browser (`tasks/generate-image.md` Phase 0).
     Without slug: show mode selection (single / sequential batch / automated batch) over all pending image entries across the sessions' `#### Images` blocks.
   :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
+  :open-chat: "run task `tasks/open-chat.md` — navigation only: open the browser chat of the LiaScript DevServer preview and greet with the next step; runs in this persona, never switches the agent"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -645,6 +650,7 @@ dependencies:
     - create-image.md
     - generate-image.md
     - preview.md
+    - open-chat.md
   templates:
     - visuals.yaml
 
@@ -778,6 +784,7 @@ commands:
   :develop-template {id}: "run task `tasks/develop-template.md` — build and test an own template from its brief in `lia-templates/{id}/`, then hand it to the Teaching-Agent as ready to test"
   :publish-template {id}: "run task `tasks/publish-template.md` — publish an adopted own template as its own repository (topic `liascript-template`, version tag) and switch the course imports to it"
   :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
+  :open-chat: "run task `tasks/open-chat.md` — navigation only: open the browser chat of the LiaScript DevServer preview and greet with the next step; runs in this persona, never switches the agent"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -791,6 +798,7 @@ dependencies:
     - develop-template.md
     - publish-template.md
     - preview.md
+    - open-chat.md
   data:
     - liascript-workflows.md
     - skills.md
@@ -2770,6 +2778,64 @@ Use this task when:
 - Never write to `specs/catalog/templates.json`; it is replaced on every update of the Teaching-Agent. Project entries go into `templates.local.json` (status `found` or `own`, never `checked`).
 
 ==================== END: specs/tasks/manage-templates.md ====================
+
+
+==================== START: specs/tasks/open-chat.md ====================
+
+# Task: open-chat
+
+## Purpose
+
+Opens the chat of the LiaScript DevServer preview so the instructor can talk to
+the agent in the browser: opens the preview if no browser is connected, connects
+this session to the browser (roster, events, saved chat) and posts one short
+greeting with the next step. Used when the instructor asks for the chat or
+works in the terminal and wants to move to the browser.
+
+## Command
+
+`:open-chat`
+
+## Inputs
+
+- `journal.md` → header `language:`, `## Course Context`, the Dashboard `next`
+  (read with the file-reading tool).
+- `data/agent-links.md` (core: MCP gate, Agent Roster, Chat Offers) and
+  `data/chat-wording.md`, read once per session as the re-read rule says.
+
+## Steps
+
+1. **MCP gate closed** (the `liascript` tools `get_state`, `goto` and `chat` are
+   not available, `data/agent-links.md` → MCP Gate): say in the terminal that
+   the chat needs the LiaScript DevServer with `--mcp` and how to connect it
+   (`data/agent-links.md` → MCP Gate → Setup for the instructor). Do not start
+   a server yourself. Stop.
+2. **Browser:** call `get_state`. If no browser is connected (`connected: false`),
+   open the preview: with visible browser automation open `get_state.url`;
+   otherwise call `goto` without `file` (the journal) — it opens the default
+   browser. An explicit `:open-chat` is the instructor's request, so this also
+   applies after a `connection` event with `connected: false`.
+3. **Connect this session** — only the parts of the start order of
+   `CLAUDE.md` → Agent Links that have not run in this session yet: `set_agent`
+   with the roster (`data/agent-links.md` → Agent Roster), the event
+   subscription, `read_chat`. An open message or form in `read_chat` is answered
+   first; then skip step 4.
+4. **Greeting:** post one `chat` message, signed by the active agent, in the
+   course language: one sentence that the chat is open, plus exactly the
+   Dashboard's next action as the one way to start (`data/chat-wording.md` →
+   First contact, One way to start). A `chat` message also unfolds a collapsed
+   chat; `get_state.chat` only says that a chat exists, not that it is unfolded.
+5. Say in the terminal in one line that the chat is open in the browser.
+
+## Rules
+
+- Navigation and connection only: never writes `journal.md` or material files.
+- Command of every agent, like `preview`: it runs in the active persona and
+  never switches the agent (`data/agent-links.md` → URI Convention).
+- Never start a second event subscription; never open a second preview tab
+  when a browser is connected (`get_state.connected`).
+
+==================== END: specs/tasks/open-chat.md ====================
 
 
 ==================== START: specs/tasks/preview.md ====================
@@ -6249,7 +6315,8 @@ agent:<agent>/<command>?<placeholder>=<value>&<placeholder>=<value>
 - **`preview` belongs to every agent:** it is a navigation command in each
   agent's `commands:` map. An agent offers its own `agent:{itself}/preview…`
   (the Artist `agent:artist/preview?file=…`), never another agent's, and
-  running `preview` never changes the active persona (Handling step 4).
+  running `preview` never changes the active persona (Handling step 4). The
+  same holds for `open-chat` (`tasks/open-chat.md`), which opens the browser chat.
 - Required parameters may be left out on purpose (e.g. `agent:teaching/quick-fix?number=3`
   without `description`): the handler then asks for them in the chat.
 
@@ -6260,7 +6327,7 @@ page content (and course scripts) can forge any link.
 
 | Tier | Commands | Behavior |
 |---|---|---|
-| **run** | `switch`, `help`, `list-agents`, `list-learners`, `agent`, `preview`, `update-dashboard`, `validate-syntax`, `validate-course {number}` (session mode only; its fix during the check asks in the chat first, its concerns are decided one at a time in the chat) | Run immediately. Read-only, navigation, or derived state only — the dashboard, a check report and the Done / status it sets; never material or anything the instructor wrote. |
+| **run** | `switch`, `help`, `list-agents`, `list-learners`, `agent`, `preview`, `open-chat`, `update-dashboard`, `validate-syntax`, `validate-course {number}` (session mode only; its fix during the check asks in the chat first, its concerns are decided one at a time in the chat) | Run immediately. Read-only, navigation, or derived state only — the dashboard, a check report and the Done / status it sets; never material or anything the instructor wrote. |
 | **start interview** | `init-course`, `scaffold`, `coauthor-materials`, `try-as-learner`, `create-outline`, `create-didactics`, `create-agenda`, `create-learner-persona`, `configure-agent`, `save-notes`, `save-decision`, and every other task whose file shows what it will write and asks "Save" (or its own scope confirmation) before the first write: `create-session`, `quick-fix`, `analyze-existing`, `suggest-templates`, `manage-templates`, `promote-session` with existing material | Start the dialog immediately, without a start confirmation. The task's own **save confirmation** (summary of what will be written + "Save" / "Change something") is the single write confirmation; if the task file has no such step, insert it before the first write. Nothing is written before it — with two exceptions, both setup without any content from the instructor: `init-course` may create `journal.md` as a byte-for-byte copy of `templates/journal.md` before the first question (so the preview can show it during the interview), and the language switch of `data/chat-language.md` → Language before the frame (header `language:`, the journal's own fixed texts). |
 | **confirm in chat** | every other command that only writes inside the project (`journal.md`, `materials/`, `assets/`, root `README.md`, `lia-templates/`, `templates.local.json`), e.g. `develop-template` (its plan question is this confirmation) | Ask in the preview chat (see Handling step 3) before running. |
 | **confirm in terminal** | `manage-git`, `create-project`, `update-project`, `publish-template`, `generate-image` on the browser route, skill and Playwright installs (`data/skills.md`, `data/chat-checks.md`) (also inside `build-session`: one confirmation before its image step; with the agent's own image tool it is "confirm in chat") | Runs git, publishing, installations, or external browser sessions. Post a chat note that confirmation is waiting in the terminal, then ask there. |
@@ -10206,6 +10273,7 @@ workflow:
       - :manage-templates {name?}
       - :update-dashboard
       - :preview {file?} {slide?}
+      - :open-chat
       - :create-session {number} {title?}
       - :promote-session {number}
       - :validate-syntax {number}
@@ -10222,6 +10290,7 @@ workflow:
       - :review-as-persona {name} {number}
       - :list-learners
       - :preview {file?} {slide?}
+      - :open-chat
 
     artist_agent_commands:
       - :create-visuals
@@ -10229,6 +10298,7 @@ workflow:
       - :create-image {number?} {description?}
       - :generate-image {slug?}
       - :preview {file?} {slide?}
+      - :open-chat
 
     development_agent_commands:
       - :manage-git
@@ -10237,6 +10307,7 @@ workflow:
       - :develop-template {id}
       - :publish-template {id}
       - :preview {file?} {slide?}
+      - :open-chat
 ```
 
 ==================== END: specs/workflows/course-development.yaml ====================

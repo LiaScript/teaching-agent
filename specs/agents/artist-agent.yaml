@@ -113,6 +113,7 @@ commands:
     With slug: execute that single saved prompt (from the matching `#### Images` `<section>`) via the image route — own image tool, or the browser (`tasks/generate-image.md` Phase 0).
     Without slug: show mode selection (single / sequential batch / automated batch) over all pending image entries across the sessions' `#### Images` blocks.
   :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
+  :open-chat: "run task `tasks/open-chat.md` — navigation only: open the browser chat of the LiaScript DevServer preview and greet with the next step; runs in this persona, never switches the agent"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -125,6 +126,7 @@ dependencies:
     - create-image.md
     - generate-image.md
     - preview.md
+    - open-chat.md
   templates:
     - visuals.yaml
 

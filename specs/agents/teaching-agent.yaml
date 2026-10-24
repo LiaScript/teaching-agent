@@ -271,6 +271,7 @@ commands:
   :manage-templates {name?}: "run task `tasks/manage-templates.md` with `templates/course-templates.yaml` — add/update LiaScript template imports (by name, catalog id or brief id) in the project header and document usage in `journal.md` → `## Templates`"
   :update-dashboard: "run task `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` — regenerate the derived `journal.md` → `## Dashboard` after project state changes"
   :preview {file?} {slide?}: "run task `tasks/preview.md` — show a course file (default `journal.md`) in the LiaScript DevServer preview via the `liascript` MCP"
+  :open-chat: "run task `tasks/open-chat.md` — open the browser chat of the LiaScript DevServer preview (opens the preview if needed) and greet with the next step; runs in this persona"
   :create-session {number} {title?}: "run task `tasks/create-session-skeleton.md` with `templates/session-skeleton.yaml`"
   :promote-session {number}: "run task `tasks/promote-session.md` with `templates/session-material.yaml`"
   :validate-syntax {number}: "run task `tasks/validate-syntax.md` — full LiaScript syntax check for one session; also called internally by validate-course, quick-fix, build-session"
@@ -303,6 +304,7 @@ dependencies:
     - manage-templates.md
     - update-dashboard.md
     - preview.md
+    - open-chat.md
     - create-session-skeleton.md
     - promote-session.md
     - validate-syntax.md

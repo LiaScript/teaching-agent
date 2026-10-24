@@ -99,6 +99,7 @@ commands:
   :develop-template {id}: "run task `tasks/develop-template.md` — build and test an own template from its brief in `lia-templates/{id}/`, then hand it to the Teaching-Agent as ready to test"
   :publish-template {id}: "run task `tasks/publish-template.md` — publish an adopted own template as its own repository (topic `liascript-template`, version tag) and switch the course imports to it"
   :preview {file?} {slide?}: "run task `tasks/preview.md` — navigation only: show a course file in the LiaScript DevServer preview; runs in this persona, never switches the agent (`data/agent-links.md` → URI Convention)"
+  :open-chat: "run task `tasks/open-chat.md` — navigation only: open the browser chat of the LiaScript DevServer preview and greet with the next step; runs in this persona, never switches the agent"
   :agent {character}: "take over the persona of agents/{character}-agent.yaml"
   :list-agents: "Show available agent personas"
   :help: "Show available actions"
@@ -112,6 +113,7 @@ dependencies:
     - develop-template.md
     - publish-template.md
     - preview.md
+    - open-chat.md
   data:
     - liascript-workflows.md
     - skills.md

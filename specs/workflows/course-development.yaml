@@ -519,6 +519,7 @@ workflow:
       - :manage-templates {name?}
       - :update-dashboard
       - :preview {file?} {slide?}
+      - :open-chat
       - :create-session {number} {title?}
       - :promote-session {number}
       - :validate-syntax {number}
@@ -535,6 +536,7 @@ workflow:
       - :review-as-persona {name} {number}
       - :list-learners
       - :preview {file?} {slide?}
+      - :open-chat
 
     artist_agent_commands:
       - :create-visuals
@@ -542,6 +544,7 @@ workflow:
       - :create-image {number?} {description?}
       - :generate-image {slug?}
       - :preview {file?} {slide?}
+      - :open-chat
 
     development_agent_commands:
       - :manage-git
@@ -550,3 +553,4 @@ workflow:
       - :develop-template {id}
       - :publish-template {id}
       - :preview {file?} {slide?}
+      - :open-chat

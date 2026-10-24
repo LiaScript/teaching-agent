@@ -283,7 +283,8 @@ found in the tandem tests against regressions (and scenario data leaking into th
      (Codex: raise `tool_timeout_sec`, a confirmation waits for your click). They receive
      clicks through the `wait_for_event` tool.
 4. `:preview` opens `journal.md` in the browser; `:preview materials/03-…/README.md` shows a
-   session's material.
+   session's material. `:open-chat` opens the browser chat (and the preview, if no browser is
+   connected) and greets you there with the next step.
 
 What happens in the browser ends up as a prompt for your agent. The agent therefore only runs
 commands from its own command list, confirms every change in the chat, and asks in the
@@ -332,6 +333,7 @@ Details: [`specs/data/skills.md`](specs/data/skills.md).
 | `:manage-templates {name?}` | Add & document LiaScript template imports (also by catalog id, or adopt an own template once it is ready to test) |
 | `:update-dashboard` | Regenerate the derived `## Dashboard` and the action links in `journal.md` |
 | `:preview {file?} {slide?}` | Show `journal.md` or a material file in the LiaScript DevServer preview |
+| `:open-chat` | Open the browser chat of the DevServer preview (every agent) |
 | `:create-session {n} {title?}` | Create a session skeleton |
 | `:promote-session {n}` | Expand skeleton into a material document (`materials/{n}-{slug}/README.md` in multi-file mode, or a `##` chapter in root `README.md` in single-file mode — see `specs/data/file-structure-modes.md`) |
 | `:coauthor-materials` | Interactive content co-authoring in persona |

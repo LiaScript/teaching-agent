@@ -55,6 +55,7 @@ Some tasks describe a bounded "repeat until condition" loop directly in their ow
 | `:manage-templates {name?}` | `specs/tasks/manage-templates.md` | add/update LiaScript template imports (by name, catalog id or brief id) in th… |
 | `:update-dashboard` | `specs/tasks/update-dashboard.md` | regenerate the derived `journal.md` → `## Dashboard` after project state changes |
 | `:preview {file?} {slide?}` | `specs/tasks/preview.md` | show a course file (default `journal.md`) in the LiaScript DevServer preview … |
+| `:open-chat` | `specs/tasks/open-chat.md` | open the browser chat of the LiaScript DevServer preview (opens the preview i… |
 | `:create-session {number} {title?}` | `specs/tasks/create-session-skeleton.md` | — |
 | `:promote-session {number}` | `specs/tasks/promote-session.md` | — |
 | `:validate-syntax {number}` | `specs/tasks/validate-syntax.md` | full LiaScript syntax check for one session; also called internally by valida… |
