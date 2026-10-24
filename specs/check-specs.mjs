@@ -166,6 +166,18 @@ test("skills are detected by their installed names; old names only as aliases", 
   assert.match(read("data/skills.md"), /`liascript-exporter`/);
 });
 
+test("skills and Playwright are installed only after consent, project-local, asked once", () => {
+  const skills = read("data/skills.md");
+  for (const phrase of ["ask once per\nconversation", "never `-g`", "npx -y skills add LiaScript/skills --skill <name>", "confirm in terminal", ".gitignore"]) assert.ok(skills.includes(phrase), `data/skills.md lost: ${phrase}`);
+  const checks = read("data/chat-checks.md");
+  for (const phrase of ["no installed Playwright found", "has no browser of its own", "npm i -D playwright", "npx playwright install chromium", "npm init -y", "`--with-deps`"]) assert.ok(checks.includes(phrase), `data/chat-checks.md lost: ${phrase}`);
+  for (const file of ["agents/teaching-agent.yaml", "agents/development-agent.yaml", "agents/artist-agent.yaml"]) assert.match(read(file), /Installing a Missing Skill/, `${file} does not point to the install rule`);
+  for (const file of ["tasks/coauthor-materials.md", "tasks/quick-fix.md", "tasks/validate-course.md", "tasks/build-session.md"]) assert.match(read(file), /Offering the Rendered Check/, `${file} does not point to the Playwright offer`);
+  assert.match(read("agents/teaching-agent.yaml"), /npm i -D playwright/, "shell list lacks the installs");
+  assert.match(read("data/agent-links.md"), /skill and Playwright installs/, "tier table lacks the installs");
+  for (const file of ["data/skills.md", "agents/teaching-agent.yaml", "agents/development-agent.yaml", "agents/artist-agent.yaml", "tasks/create-project.md", "tasks/update-project.md", "../README.md"]) assert.doesNotMatch(read(file), /never install|Never install|never install a skill/i, `${file} still forbids installing`);
+});
+
 test("authoring notes in the journal template are <!--- … ---> so LiaScript ignores them", () => {
   const journal = read("templates/journal.md");
   const plain = [...journal.matchAll(/<!--(?!-)([\s\S]*?)-->/g)].slice(1)

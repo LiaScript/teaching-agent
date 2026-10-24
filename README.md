@@ -295,8 +295,9 @@ terminal before anything touches git or publishing.
 
 The agents use the [LiaScript skills](https://github.com/LiaScript/skills) when they are
 installed — in the project (`.claude/skills/`, `.agents/skills/`, …) or for your user
-(`~/.claude/skills/`, `~/.agents/skills/`, …). They never install a skill themselves and
-work without them, too.
+(`~/.claude/skills/`, `~/.agents/skills/`, …). They work without them, too; if a missing
+skill clearly helps the current step, they ask once per conversation and install it into
+the project only after your consent in the terminal (never globally).
 
 | Skill | Used by | Where |
 |---|---|---|
@@ -308,7 +309,7 @@ work without them, too.
 | `liascript-exporter` | 🛠️ Development | `project.yaml`, GitHub Actions, exports |
 | `oersi-metadata` | 🛠️ Development | `metadata.yml` to list the course on OERSI |
 
-Install them yourself if you want them, e.g. `npx skills add LiaScript/skills`.
+You can also install them yourself, e.g. `npx -y skills add LiaScript/skills --skill liascript-syntax`.
 Details: [`specs/data/skills.md`](specs/data/skills.md).
 
 ---

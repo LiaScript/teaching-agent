@@ -2,9 +2,10 @@
 
 The [LiaScript skills](https://github.com/LiaScript/skills) are optional
 [Agent Skills](https://agentskills.io) that add deep, maintained knowledge to
-single steps of this workflow. The agents **use a skill only if it is already
-installed** — locally in the project or globally for the user. They never
-install a skill themselves and never assume one is present.
+single steps of this workflow. The agents **use a skill only if it is
+installed** — locally in the project or globally for the user. They install a
+missing one only after the instructor's consent (see Installing a Missing Skill)
+and never assume one is present.
 
 ## Detection
 
@@ -28,14 +29,32 @@ counts as available if **either** holds:
 
 Only check for file existence, with the agent's file-search tool (glob) or, without
 one, by reading `SKILL.md` at each known path with the file-reading tool — not with shell commands (`ls`), see the shell rule in `CLAUDE.md` → Agent
-Links; never download, clone, or run `npx skills`. In a web chat without file access, nothing is detectable: treat
+Links; detection never downloads, clones or installs anything. In a web chat without file access, nothing is detectable: treat
 all skills as unavailable.
 
-If nothing is found, the step runs exactly as before with the built-in specs.
-Mention a missing skill at most once per session, and only when it would clearly
-help the current step — as a hint with the install command
-(`npx skills add LiaScript/skills --skill <name>`), never as a requirement, and
-never run it.
+If nothing is found, the step runs exactly as before with the built-in specs;
+a skill is never a requirement (one exception: the table marks it *required*).
+
+## Installing a Missing Skill
+
+If a skill that clearly helps the **current** step is missing, ask once per
+conversation whether you may install it: the benefit in one sentence and the
+command. This is the canonical rule; tasks and agents point here.
+
+- **Consent first, tier confirm in terminal** — also when the request came from
+  the preview chat (post a chat note that the confirmation waits in the terminal).
+  Without consent nothing is installed.
+- **Command, project-local:**
+  `npx -y skills add LiaScript/skills --skill <name> --agent <agent> --yes` —
+  never `-g`; `<agent>` is the id of the running agent in the tool's own
+  naming (e.g. `claude-code`), `--yes` skips the tool's prompts.
+- **Afterwards** detect the skill again through its `SKILL.md` path (Detection,
+  item 2) — the runtime list may lack it until the agent restarts.
+- **Declined:** do not ask again in this conversation; the step runs without the
+  skill, as before.
+- **No shell** (web chat): only name the command.
+- **`.gitignore`:** add the installed skill folders (`.claude/skills/`,
+  `.agents/skills/`, …) to the course project's `.gitignore`.
 
 ## Where the Workflow Uses Them
 
@@ -44,7 +63,8 @@ never run it.
 | `liascript-syntax` | Teaching | `promote-session`, `coauthor-materials`, `quick-fix` | Authoring reference for every LiaScript construct (quizzes, surveys, effects, TTS, code execution, charts, presentation pattern), in addition to `data/liascript-cheat-sheet.md` |
 | `liascript-syntax` | Teaching | `validate-syntax`, `validate-course` | Second reference for constructs the cheat sheet does not cover and for unclear findings |
 | `reference-checker` | Teaching | `validate-course` (session and course mode), `coauthor-materials` when sources are added, `save-notes` for research notes | Verify the `References` / sources of a session; requires web access |
-| `liascript-templates` (older name: `template-development`) | Teaching | `manage-templates` | When the instructor needs a macro or template that does not exist yet (own template, JS library integration) |
+| `liascript-templates` (older name: `template-development`) | Teaching | `suggest-templates`, `manage-templates` | When the instructor needs a macro or template that does not exist yet (own template, JS library integration) |
+| `liascript-templates` (older name: `template-development`) | Development | `develop-template` (**required**: without it the command offers the installation and otherwise stops) | Build and test a new template |
 | `creativity` | Teaching | `create-outline`, `scaffold`, `coauthor-materials` (narrative courses) | Optional exploratory ideation (Emergent Creativity Protocol) before the structured step — only on the instructor's request |
 | `liascript-theming` | Artist | `create-visuals` | Turn the website palette and typography into a tested LiaScript theme header (`link:` + `@style` + `@custom`), or apply a bundled design by name |
 | `liascript-exporter` (older name: `exporter-workflow`) | Development | `create-project`, `update-project` | `project.yaml`, GitHub Actions, `liaex` exports (PDF, SCORM, ePub, …), in addition to `data/liascript-workflows.md` |

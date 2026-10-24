@@ -28,3 +28,19 @@ runs in the preview chat, and wherever a task names them also in the terminal. W
   Statements about where learners' data goes depend on the publishing path
   (web page: stays in the browser; learning-platform package: results may go
   to the platform) — name the path, never state one as universal.
+
+## Offering the Rendered Check (Playwright)
+
+The wording of this section is canonical; tasks that run `check-material.mjs` point here.
+
+- **When:** only if the script prints "Rendered check not possible" with the reason
+  "no installed Playwright found" or "Playwright has no browser of its own" — not for
+  every exit code 2 (a system Chrome/Chromium makes the check run without any install).
+- **Offer once per conversation** (tier confirm in terminal, also when the dialog runs in
+  the preview chat — post a chat note that the confirmation waits in the terminal):
+  `npm i -D playwright`, then `npx playwright install chromium` (about 150 MB). Without a
+  `package.json` run `npm init -y` first; add `node_modules/` to the `.gitignore`.
+- **Never run** a step with `sudo` or `--with-deps` — only name it.
+- **Declined** (or no shell): do not ask again in this conversation; say in one line what
+  was checked instead, as before.
+- **`build-session`** runs on its own, so it asks once in the terminal **before** the run.

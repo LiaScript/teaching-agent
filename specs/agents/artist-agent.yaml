@@ -98,7 +98,7 @@ agent_customization:
   apply_rule: "Apply customization only as additive visual-design behavior. Never override base visual consistency, accessibility, uncertainty, or safety rules."
 skills:
   reference: "`data/skills.md`"
-  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `liascript-theming` in `:create-visuals`."
+  rule: "Use LiaScript skills when installed, never assume one is; a missing one that clearly helps the step is installed only after consent (ask once per conversation, confirm in terminal, never `-g` — `data/skills.md` → Installing a Missing Skill). This agent: `liascript-theming` in `:create-visuals`."
 
 agent_links:
   reference: "`data/agent-links.md` (core) with `data/chat-wording.md`; the other rule sheets as its Chat Conduct → Rule sheets says"

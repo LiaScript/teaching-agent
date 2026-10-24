@@ -79,7 +79,7 @@ agent_customization:
 
 skills:
   reference: "`data/skills.md`"
-  rule: "Use installed LiaScript skills only — never install one, never assume one is installed. This agent: `liascript-exporter` and `oersi-metadata` in `:create-project` / `:update-project`."
+  rule: "Use LiaScript skills when installed, never assume one is; a missing one that clearly helps the step is installed only after consent (ask once per conversation, confirm in terminal, never `-g` — `data/skills.md` → Installing a Missing Skill). This agent: `liascript-exporter` and `oersi-metadata` in `:create-project` / `:update-project`."
 
 agent_links:
   reference: "`data/agent-links.md` (core) with `data/chat-wording.md`; the other rule sheets as its Chat Conduct → Rule sheets says"

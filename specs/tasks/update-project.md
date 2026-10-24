@@ -22,7 +22,7 @@ Publishes new or changed content. Behavior branches hard on `journal.md` → `##
 
 ## Optional Skills
 
-Only if installed (see `data/skills.md`) — never install them:
+Only if installed (see `data/skills.md`); a missing one is offered once per conversation (`data/skills.md` → Installing a Missing Skill):
 
 - `liascript-exporter` — use it next to `data/liascript-workflows.md` for `project.yaml`, the GitHub Actions workflow, and additional exports (PDF, SCORM, ePub, …). The rules of this task (e.g. `force_orphan: true`, confirmation before changes) stay binding.
 - `oersi-metadata` — 🎛️ offer once to add a `metadata.yml` so the course can be indexed as OER on OERSI (1. yes · 2. no). It is committed together with the other publishing files via `:manage-git`.
