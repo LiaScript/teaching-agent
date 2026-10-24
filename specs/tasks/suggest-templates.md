@@ -66,8 +66,8 @@ JavaScript, charts, animations) are not proposed here.
 4. **Suggestions.** Per activity 1–3 templates, each with its reason (subject, target group, activity) in
    the course language and, with several, the difference that matters for these learners (e.g. for
    children a Python with turtle drawing such as Skulpt versus a full Python such as Pyodide, which suits
-   older learners). Mark each by its status: `checked` → "checked {date}"; an online find → "newly
-   found, not checked" with a short risk note (e.g. "import without a fixed version", "last changed
+   older learners). Mark each by its status: `checked` → "checked {date}"; an online find of this run
+   or a `found` entry of `templates.local.json` → "newly found, not checked" with a short risk note (e.g. "import without a fixed version", "last changed
    {year}", "macros only from its README", translated — `data/chat-checks.md` → Say how you checked:
    *read in the documentation*); `own` → "only this project". When nothing fits, say so — the activity
    may still need no template.
@@ -89,20 +89,25 @@ JavaScript, charts, animations) are not proposed here.
    additions of step 1 and, for a find the instructor uses, its `templates.local.json` entry
    (`status: "found"`, with a `note` on the risk) — with "Save" / "Change something" (translated). This is
    the single write confirmation of this task (`data/chat-dialog.md` → Nothing unseen gets saved).
-   The selection line: `done – {id}, {id}` with the ids of all adopted templates and briefs once every
-   activity is decided, `done – none needed` when none needs a template, otherwise `open`. With
+   The selection line: `done – {id}, {id}` once every activity is decided, naming only the ids of entries
+   with `__Catalog id:__ {id}` and of briefs `### {id} (in development)` — an existing entry without
+   `__Catalog id:__` (the instructor declined the offer of step 1) counts as decided but is not named, and
+   when no id is left to name the line is `done – none needed`; also `done – none needed` when no activity
+   needs a template, otherwise `open`. With
    `{activity}` add the new id to an existing `done – …` (`done – none needed` becomes `done – {id}`) and
    leave `open` as it is — never reopen the other decisions.
    **One write, the selection line never first:** the selection line is written in the same write as the
    entries and briefs it names — `validate-journal.mjs` reports a `done – {id}` without its entry or brief
    as a problem, and that blocks the Dashboard write. At most two journal writes: (1) header and
    `## Templates` in one map for `node specs/dashboard/localize-journal.mjs <map.json>`
-   (`data/chat-dialog.md` → Changing another section), then (2) the Dashboard.
+   (`data/chat-dialog.md` → Changing another section), then (2) the Dashboard. A fix that
+   `validate-journal.mjs` asks for in step 8 goes into one more write; say so.
 8. After "Save": write the adoptions through steps 3–7 of `tasks/manage-templates.md` without its 3b
    (this task's step 7 is the confirmation), the briefs and the selection line — all in the one write of
    step 7; then `templates.local.json` with the file-edit tool (create it as
    `{ "version": 1, "templates": [ … ] }` if missing; never `status: "checked"`). Run
-   `node specs/dashboard/validate-journal.mjs` and fix what it reports before step 9.
+   `node specs/dashboard/validate-journal.mjs` and fix what it reports before step 9 (in one more write,
+   named to the instructor).
 9. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` →
    `## Dashboard` in place.
 10. **Finish:** a short summary (adopted, in development, none needed) and 1–3 next steps. After a brief,

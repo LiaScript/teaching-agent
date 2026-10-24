@@ -365,10 +365,11 @@ workflow:
         B -->|new course| D[teaching: create-outline]
         D --> E[teaching: create-didactics]
         E --> ST[teaching: suggest-templates]
+        E -->|order open| F[artist: create-visuals - optional]
         ST -.->|own template: brief| DT[development: develop-template]
         DT -.->|ready to test| MT[teaching: manage-templates id]
         ST --> EP[teaching: create-learner-persona - optional]
-        EP --> F[artist: create-visuals - optional]
+        EP --> F
         F --> G[artist: create-logo - optional]
         G --> H[teaching: create-agenda - if planned]
         EP --> H
