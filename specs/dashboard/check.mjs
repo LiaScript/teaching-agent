@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, rmSync, symlinkSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import "./dashboard.js";
@@ -377,11 +377,15 @@ test("the course counter adds the material steps while the material is produced 
 });
 
 // Runs validate-journal.mjs on a minimal journal with the given Dashboard data.
-// `sections`: further Markdown sections inserted before ## Dashboard.
-function validate(data, sections = "") {
+// `sections`: further Markdown sections inserted before ## Dashboard; `files`: further project files {path: text}.
+function validate(data, sections = "", files = {}) {
   const dir = mkdtempSync(join(tmpdir(), "dashboard-check-"));
   const file = join(dir, "journal.md");
-  writeFileSync(file, `<!--\nlanguage: de\n-->\n\n# Kurs\n\n## Outline\n\nText\n\n${sections}## Dashboard\n\n\`\`\`json @Dashboard.View\n${JSON.stringify(data, null, 2)}\n\`\`\`\n`);
+  for (const [path, text] of Object.entries(files)) {
+    mkdirSync(dirname(join(dir, path)), { recursive: true });
+    writeFileSync(join(dir, path), text);
+  }
+  writeFileSync(file,`<!--\nlanguage: de\n-->\n\n# Kurs\n\n## Outline\n\nText\n\n${sections}## Dashboard\n\n\`\`\`json @Dashboard.View\n${JSON.stringify(data, null, 2)}\n\`\`\`\n`);
   const run = spawnSync(process.execPath, [fileURLToPath(new URL("./validate-journal.mjs", import.meta.url)), file], { encoding: "utf8" });
   rmSync(dir, { recursive: true, force: true });
   return { status: run.status, output: run.stdout + run.stderr };
@@ -1443,5 +1447,78 @@ test("the line replacer warns at the 6th write of a project within ten minutes",
       if (i < 5) assert.doesNotMatch(output, /Warning: \d+th write/, `run ${i + 1}`);
     }
     assert.match(output, /Warning: 6th write within 10 minutes \(6 × localize-journal\)/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+// ## Templates (templates/course-templates.yaml): the selection line before <section>, adopted entries with
+// `__Catalog id:__`, and briefs `### {id} (in development)` of templates still being developed.
+const templatesSection = readFileSync(new URL("./fixtures/templates-section.md", import.meta.url), "utf8");
+const briefDecision = { key: "template-brief-turtle-maze", kind: "decide", title: "Eigene Vorlage: Steckbrief ergänzen", how: "Im Abschnitt Vorlagen die fehlenden Angaben nachtragen", label: "Vorlagen ansehen", href: "#templates-–-vorlagen" };
+
+test("validate-journal reads the template selection line: open, done – none needed or done – ids (a)", () => {
+  const selection = value => templatesSection.replace("* __Template selection:__ done – python-turtle, turtle-maze", `* __Template selection:__ ${value}`);
+  for (const value of ["open", "done – none needed", "done – python-turtle", "done – python-turtle, turtle-maze"]) {
+    const result = validate({ title: "Kurs", next }, selection(value));
+    assert.equal(result.status, 0, `${value}: ${result.output}`);
+  }
+  const missing = validate({ title: "Kurs", next }, templatesSection.replace(/^\* __Template selection:__.*\n\n/m, ""));
+  assert.equal(missing.status, 0, `no selection line counts as open: ${missing.output}`);
+  for (const value of ["offen", "done", "done – ", "done - python-turtle", "done – Python Turtle", "done – python-turtle,"]) {
+    const result = validate({ title: "Kurs", next }, selection(value));
+    assert.equal(result.status, 2, `${value}: ${result.output}`);
+    assert.match(result.output, /__Template selection:__ .* is none of "open", "done – none needed", "done – \{id\}, \{id\}"/, value);
+  }
+});
+
+test("every id of a done template selection has an entry with its catalog id or a brief in development (b)", () => {
+  const unknown = validate({ title: "Kurs", next }, templatesSection.replace("done – python-turtle, turtle-maze", "done – python-turtle, sql-runner"));
+  assert.equal(unknown.status, 2, unknown.output);
+  assert.match(unknown.output, /template selection names "sql-runner", but ## Templates has no entry with __Catalog id:__ sql-runner and no brief "### sql-runner \(in development\)"/);
+  assert.doesNotMatch(unknown.output, /names "python-turtle"/);
+  const inCode = validate({ title: "Kurs", next }, templatesSection.replace("* __Catalog id:__ python-turtle", "* __Catalog id:__ `python-turtle`"));
+  assert.equal(inCode.status, 0, inCode.output);
+  const translated = validate({ title: "Kurs", next }, templatesSection.replace("## Templates – Vorlagen", "## Templates"));
+  assert.equal(translated.status, 0, `the heading is matched by its start: ${translated.output}`);
+});
+
+test("a brief with a missing field or an unknown state is a hint, listed under decisions as template-brief (c)", () => {
+  const clean = validate({ title: "Kurs", next }, templatesSection);
+  assert.doesNotMatch(clean.output, /\[template-brief\]/, clean.output);
+  const lacking = templatesSection.replace(/^\* __Acceptance:__\n(?:  \d\..*\n)+/m, "* __Acceptance:__\n").replace(/^\* __Audience:__\n.*\n/m, "");
+  const hint = validate({ title: "Kurs", next }, lacking);
+  assert.equal(hint.status, 2, hint.output);
+  assert.match(hint.output, /- \[template-brief\] brief "turtle-maze \(in development\)" lacks __Audience:__, __Acceptance:__/);
+  assert.match(hint.output, /hint "template-brief" is missing in decisions/);
+  const listed = validate({ title: "Kurs", next, decisions: [briefDecision] }, lacking);
+  assert.equal(listed.status, 0, `a hint, never a problem of its own: ${listed.output}`);
+  const state = validate({ title: "Kurs", next }, templatesSection.replace("* __State:__ brief", "* __State:__ fertig"));
+  assert.match(state.output, /- \[template-brief\] brief "turtle-maze \(in development\)": __State:__ "fertig" is none of "brief", "in development", "ready to test"/);
+});
+
+test("a brief ready to test needs __Folder:__ and lia-templates/{id}/README.md next to the journal (d)", () => {
+  const ready = templatesSection.replace("* __State:__ brief", "* __State:__ ready to test");
+  const noFolder = validate({ title: "Kurs", next }, ready);
+  assert.match(noFolder.output, /- \[template-brief\] brief "turtle-maze \(in development\)" is ready to test, but __Folder:__ is empty/);
+  const withFolder = ready.replace("* __Folder:__", "* __Folder:__ lia-templates/turtle-maze/");
+  const missing = validate({ title: "Kurs", next }, withFolder);
+  assert.match(missing.output, /- \[template-brief\] brief "turtle-maze \(in development\)" is ready to test, but lia-templates\/turtle-maze\/README\.md does not exist/);
+  const present = validate({ title: "Kurs", next }, withFolder, { "lia-templates/turtle-maze/README.md": "# Turtle maze\n" });
+  assert.doesNotMatch(present.output, /\[template-brief\]/, present.output);
+  assert.equal(present.status, 0, present.output);
+});
+
+test("the empty journal has the template step after the didactics and the selection line open, without a finding", () => {
+  const template = readFileSync(new URL("../templates/journal.md", import.meta.url), "utf8");
+  const steps = JSON.parse(template.match(/```json @Dashboard\.View\n([\s\S]*?)\n```/)[1]).process.steps;
+  const at = steps.findIndex(step => step.title === "Didactics");
+  assert.equal(steps[at + 1]?.state, "planned", "the step after the didactics is planned");
+  assert.doesNotMatch(`${steps[at + 1]?.title} ${steps[at + 1]?.why}`, /\{\{/);
+  assert.match(template, /^\* __Template selection:__ open\n\n<section>\n\n### Dashboard$/m, "the selection line is the last line before <section>");
+  const dir = mkdtempSync(join(tmpdir(), "empty-templates-"));
+  try {
+    writeFileSync(join(dir, "journal.md"), template);
+    const run = spawnSync(process.execPath, [validatorScript, join(dir, "journal.md")], { encoding: "utf8" });
+    assert.equal(run.status, 0, run.stdout + run.stderr);
+    assert.doesNotMatch(run.stdout + run.stderr, /Hints:|Warnings:/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

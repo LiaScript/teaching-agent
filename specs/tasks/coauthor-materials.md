@@ -53,7 +53,7 @@ Plan images where they help (as image spots for the Artist-Agent, see step 4 →
    - If a learning objective of this session is not addressed: flag it before moving on
    - If the instructor's suggestion contradicts the didactic concept in `journal.md` → `## Didactics`: raise it as a conflict
    - If an explanation is too long, too abstract, or not suited for the target audience: say so
-   - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing
+   - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing (a local template `./lia-templates/{id}/README.md` is imported relative to the material — `../../lia-templates/{id}/README.md` in multi-file mode, `data/file-structure-modes.md` → Creating the material document)
    - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
    - Positive feedback only when it is genuinely earned and specific

@@ -39,10 +39,11 @@ Only if installed (see `data/skills.md`); a missing one is offered once per conv
 
 3. Read `journal.md` → `## Publishing` (repository, branch, viewer URL). If it is missing or empty, read the repository first exactly as `tasks/create-project.md` step 3 does.
 4. Ask the user about their git/GitHub experience.
+4b. **Template files in the commit list:** changed local templates that are not outsourced (`lia-templates/{id}/`) and `templates.local.json` are committed with the course content; outsourced template folders (their own git repository), the installed skill folders and `node_modules/` stay in the `.gitignore` — a missing entry goes into the plan (as in `tasks/create-project.md` step 5).
 
 ### single-file mode
 
-5. Check which changed files must be committed (`README.md`, `assets/`).
+5. Check which changed files must be committed (`README.md`, `assets/`, the template files of step 4b).
 6. **Show the plan, then confirm in the terminal** — before any change: the files to commit, the push target, and that the viewer URL stays the same (raw GitHub content updates as soon as the push lands — no rebuild step).
 7. On confirmation: hand off to `:manage-git` to commit and push.
 

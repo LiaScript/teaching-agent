@@ -239,12 +239,13 @@ project_memory:
     - "In every mode (terminal and preview): change `journal.md` and material files only in the ways the shell rule under `agent_links` names (file-edit tool, the line replacer, `read_section` + `write_section`), and re-read a task file completely on every command. The shell only as that rule lists it."
     - "Tasks replace ONLY the content of their own `## Section`; sections whose task has not run yet keep their one-line note (\"still empty – …\"); never write `{{…}}` skeletons — `validate-journal.mjs` rejects visible ones, and older journals are moved to the current layout with `migrate-journal.mjs`."
     - "Every `## Section` stays FLAT: no `###` sub-headings inside a section (in LiaScript every heading becomes its own slide); its content follows the `layout` of its template — `* __Label:__` bullets, and where the layout says so a summary table or a `<details>` block."
-    - "Exceptions to the flat rule: `## Dashboard` (one JSON code block annotated with `@Dashboard.View`, no headings), `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews` / `#### Images`; never `#####` — use bold labels instead), `## Templates` (one `### {template-name}` per template), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
+    - "Exceptions to the flat rule: `## Dashboard` (one JSON code block annotated with `@Dashboard.View`, no headings), `## Sessions` (one `### {n}. {title}` per session, optional `#### Validation Report` / `#### Persona Reviews` / `#### Images`; never `#####` — use bold labels instead), `## Templates` (one `### {template-name}` per adopted template, one `### {id} (in development)` brief per template in development), `## Agents` (direct `### Coauthor`, `### Teaching-Agent`, `### Artist-Agent`, `### Development-Agent`, and `### Learner Personas`; learner personas use one `#### Persona: {icon} {name}` per persona), `## Validation` (a single `### Latest Validation Summary` — the publishing gate anchor), `## Notes Backup` (one `### {Type}: {Descriptive Title} ({YYYY-MM-DD})` per note)."
     - "Never use `#` or `##` headings inside any section — they would terminate it."
     - "The `title:` fields of sections inside the YAML templates are internal structure only — do NOT render them as headings."
     - "`## Dashboard` is DERIVED state: regenerate its JSON data block via tasks/update-dashboard.md + templates/project-dashboard.yaml after every state change. Never add HTML, CSS, tables or Mermaid there, never edit it manually, never copy a chat progress summary into it."
     - "`###` subsections under `## Templates` and the agent subsections under `## Agents` (`### Coauthor` … `### Development-Agent`) are wrapped in one `<section>` … `</section>` block per parent section, so they stay on the parent slide and out of the table of contents. `### Learner Personas` stays outside the wrapper (persona entries carry their own `<section>`; never nest `<section>` tags). Keep the wrapper when editing; the heading lines inside it stay literal (`### Teaching-Agent` etc.)."
     - "Template `import:` lines are managed by tasks/manage-templates.md in the metadata header and documented in `## Templates`; keep `import: ./specs/dashboard/README.md` — the Dashboard depends on it."
+    - "`## Templates` ownership (layout: templates/course-templates.yaml): `suggest-templates` writes the line `* __Template selection:__` (the last line before `<section>`; `open` | `done – {id}, {id}` | `done – none needed`) and the briefs `### {id} (in development)`, adoptions going through the steps of `manage-templates`; `manage-templates` writes the adopted entries (`__Catalog id:__`, `__Source:__`), replaces a brief when its template is adopted, and records feedback in `__Feedback rounds:__`; `develop-template` changes only `__State:__` and `__Folder:__`; `publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`. Key lines and field names stay English."
   principle: >
     All generated planning, state, review, validation, and note artifacts are stored as
     named sections in `journal.md`. Only final teaching materials (root `README.md` in
@@ -1074,7 +1075,7 @@ Plan images where they help (as image spots for the Artist-Agent, see step 4 →
    - If a learning objective of this session is not addressed: flag it before moving on
    - If the instructor's suggestion contradicts the didactic concept in `journal.md` → `## Didactics`: raise it as a conflict
    - If an explanation is too long, too abstract, or not suited for the target audience: say so
-   - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing
+   - If content uses a template macro (e.g. `@Skulpt.eval`) but the material header lacks the matching `import:` line from `## Templates`: flag it before editing (a local template `./lia-templates/{id}/README.md` is imported relative to the material — `../../lia-templates/{id}/README.md` in multi-file mode, `data/file-structure-modes.md` → Creating the material document)
    - If the instructor agrees too quickly or gives a one-word answer: ask a follow-up question
    - **Do not just confirm** — a response that only agrees without adding a question or observation is not enough
    - Positive feedback only when it is genuinely earned and specific
@@ -1864,7 +1865,7 @@ Only if installed (see `data/skills.md`); a missing one is offered once per conv
 
 3. **Read the repository before anything changes** (read-only git): the `origin` remote and the current branch. Derive `{owner}/{repo}` and the viewer URL for the mode — single-file: `https://liascript.github.io/course/?https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md`; multi-file: `https://{owner}.github.io/{repo}/` (GitHub Pages). This is a stable LiaScript / GitHub convention — recommend the instructor spot-check it once (epistemic rules: never assert unverified syntax as certain). Without a remote: ask whether to create the GitHub repository via `:manage-git` first, or stop.
 4. Ask the user about their git/GitHub experience.
-5. Decide which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` and never the assistant's own files (`CLAUDE.md`, `AGENTS.md`, `.mcp.json`) unless the planning is published too; the `.gitignore` itself is committed (propose one with `.cache/`). A repository without a first commit gets it from `:manage-git`.
+5. Decide which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` and never the assistant's own files (`CLAUDE.md`, `AGENTS.md`, `.mcp.json`) unless the planning is published too; the `.gitignore` itself is committed (propose one with `.cache/`, `node_modules/`, the installed skill folders of `data/skills.md` and every outsourced template folder `lia-templates/{id}/` that is its own git repository). Local templates that are not outsourced (`lia-templates/{id}/`) and `templates.local.json` are committed with the course content — its imports load them. A repository without a first commit gets it from `:manage-git`.
 6. **Show the plan, then confirm in the terminal** (tier "confirm in terminal", `data/agent-links.md`) — before any change: single-file publishes by pushing to GitHub directly, no `project.yaml`, no workflow, no GitHub Pages step (see `data/file-structure-modes.md` → "Publishing"); the files to commit, the push target, the viewer URL, the header lines (`email:` from the contact address, `version:`), and the `## Publishing` entries that will be written. On "cancel" nothing is written — say that the contact address was not saved either.
 7. On confirmation: write `journal.md` → `## Publishing` (`__Repository:__`, `__Branch:__`, `__Viewer URL:__`, `__State:__ not published`), then hand off to `:manage-git` to commit and push.
 8. Once pushed: set `__State:__ published on {date} (commit {short hash})`, present the viewer URL, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -1875,7 +1876,7 @@ Only if installed (see `data/skills.md`); a missing one is offered once per conv
 4. Ask the user about their git/GitHub experience and if they know how to activate GitHub Pages.
 5. Build the `collection:` entries: one entry per `materials/{number}-{slug}/README.md`, in session order; ask the user if any session should be excluded.
 6. Read color and style information from `journal.md` → `## Visual Identity` for project.yaml styling, and review the internal reference for the latest workflow and publishing best practices.
-7. **Show the plan, then confirm in the terminal** — before any change (a complete `project.yaml` pattern: `data/example-project.yaml`): the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the header lines (`email:` from the contact address, `version:`), the files to commit (decided as in the single-file branch: which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` and never the assistant's own files (`CLAUDE.md`, `AGENTS.md`, `.mcp.json`) unless the planning is published too; the `.gitignore` itself is committed (propose one with `.cache/`). A repository without a first commit gets it from `:manage-git`.), the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
+7. **Show the plan, then confirm in the terminal** — before any change (a complete `project.yaml` pattern: `data/example-project.yaml`): the `project.yaml` outline (cards in order, styling), the GitHub Actions workflow (export, deployment that always overwrites gh-pages completely, e.g. `force_orphan: true`), the header lines (`email:` from the contact address, `version:`), the files to commit (decided as in the single-file branch: which files to commit: the course content (`README.md` or `materials/`, and `assets/`) always; `journal.md` and `specs/` (the planning and the assistant) only if the instructor wants the planning in the public repository — ask; never `.cache/` and never the assistant's own files (`CLAUDE.md`, `AGENTS.md`, `.mcp.json`) unless the planning is published too; the `.gitignore` itself is committed (propose one with `.cache/`, `node_modules/`, the installed skill folders of `data/skills.md` and every outsourced template folder `lia-templates/{id}/` that is its own git repository). Local templates that are not outsourced (`lia-templates/{id}/`) and `templates.local.json` are committed with the course content — its imports load them. A repository without a first commit gets it from `:manage-git`.), the push target, the GitHub Pages URL, and the `## Publishing` entries that will be written.
    On "cancel" nothing is written — say that the contact address was not saved either.
 8. On confirmation: generate `project.yaml` in the root folder and the workflow file, write the header lines, write `journal.md` → `## Publishing` (`__State:__ not published`), then hand off to `:manage-git` to commit and push.
 9. Once pushed: set `__State:__ published on {date} (commit {short hash}) – GitHub Pages builds after the workflow run`, remind the instructor to activate GitHub Pages if it is not active yet, and run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
@@ -2723,7 +2724,7 @@ Converts a **Session** into a detailed **Session Material**.
    - If the skill `liascript-syntax` is available (see `data/skills.md`), use it as authoring reference for every LiaScript construct in the material; otherwise use `data/liascript-cheat-sheet.md`.
    - Produce the tasks the skeleton names, with their task type — a different type is the instructor's decision (`tasks/quick-fix.md` → "When to use").
    - Answer options and gap cards follow `data/liascript-cheat-sheet.md` → Quizzes for young learners → **No surface cues** (read it completely), and every hint or page text that names something in a picture matches that picture.
-9. Save the material as described in `data/file-structure-modes.md` → "Creating the material document": path (reuse the path recorded in the agenda), metadata header (author, language, theme, template imports) and the overview update (Material ✅ with its status line).
+9. Save the material as described in `data/file-structure-modes.md` → "Creating the material document": path (reuse the path recorded in the agenda), metadata header (author, language, theme, template imports — a local `./lia-templates/{id}/README.md` rewritten relative to the material, e.g. `../../lia-templates/{id}/README.md` in multi-file mode) and the overview update (Material ✅ with its status line).
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
 
 ==================== END: specs/tasks/promote-session.md ====================
@@ -3332,7 +3333,8 @@ The dashboard is **derived state**. It is never the source of truth.
 - `journal.md` main metadata header (`language:`, template `import:` lines)
 - `journal.md` → `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`,
   `## Sessions` (overview table, `#### Validation Report`, `#### Persona Reviews`),
-  `## Templates`, `## Validation` → `### Latest Validation Summary`,
+  `## Templates` (the line `__Template selection:__` and the briefs `### {id} (in development)` —
+  the template step of the course process, Rules → Template step), `## Validation` → `### Latest Validation Summary`,
   `## Publishing` (repository, viewer URL, state — for the publishing step of the course process)
 - `journal.md` → `## Agents` → `### Learner Personas` — headings only, for actions
 - `templates/project-dashboard.yaml` — semantic data shape
@@ -3460,9 +3462,14 @@ Run this task automatically after any task that changes project state:
    - Preparation tasks for the instructor recorded in a section (equipment, printouts, accounts).
    - Agenda phases led by the instructor outside the material (opening, closing,
      one-to-one talks, checklists to print) → `prepare`, with `how`.
+   - A brief under `## Templates` (`### {id} (in development)`) that lacks a required field, has an
+     unknown `__State:__`, or is `ready to test` without its folder `lia-templates/{id}/README.md`
+     (hint `template-brief` of the validation script) → `decide`, key `template-brief-{id}`; `how` says
+     what is missing and who completes it (the brief together with the instructor, the folder through the
+     development assistant). Plain words: German "Vorlage" or "Baustein", never "Template".
    Never fix foreign sections silently — listing them is this task's job. Every
    item gets a unique `key` (the hint key printed by the validation script, e.g.
-   `provisional`, `slug`, `type-name`, `preparation`, `file-structure`; several items for one
+   `provisional`, `slug`, `type-name`, `preparation`, `file-structure`, `template-brief`; several items for one
    hint use `{hint}-{topic}`; open priority issues of a persona review use `review-{unit}-{n}`
    (`decide`), prompt-only images and open `own` image spots `image-{unit}-{slug}` (`prepare`: create
    the image elsewhere or with `:generate-image` once an image route exists; for `own`: provide the
@@ -3621,6 +3628,29 @@ Run this task automatically after any task that changes project state:
   removed with a `note` (no). The last step, publishing, stays `optional` until the
   publishing gate is PASS, then `planned`, and `done` once `## Publishing` →
   `__State:__` starts with `published` (an English key, never translated). Never let the number of steps change without a `note`.
+- **Template step:** the global step "Templates for activities" (translated, German "Vorlagen für
+  Aktivitäten" — never "Template" in a German text for the instructor) stands between the didactics and
+  the agenda and is counted. Its state comes from `## Templates` (the line that starts with
+  `## Templates`, layout `templates/course-templates.yaml`) — the line `__Template selection:__`
+  (missing = `open`) and the briefs `### {id} (in development)`:
+  1. `planned` while `## Didactics` is not saved.
+  2. Didactics saved and selection `open`: the step is `current` and the `next` of the course
+     (`agent:teaching/suggest-templates`, command `:suggest-templates`, label "Suggest templates",
+     translated). Once a unit is already being worked on, `next` stays with that unit and the
+     suggestion goes into `explore` (icon ➕).
+  3. Selection `done – …` and a brief not yet adopted: `current`, `result` = "{n} in development"
+     (translated, German "{n} in Entwicklung"), and `next` by the brief's `__State:__` — `brief` or
+     `in development` → `agent:development/develop-template?id={id}` (command `:agent development` →
+     `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command
+     `:manage-templates {id}`, "Try and adopt", translated). With several briefs the first one in the
+     section. The agenda and the units do not wait for it: their actions stay in their action lines.
+  4. Selection `done – {ids}` without an open brief: `done`, `result` = the names of the adopted
+     templates as `## Templates` shows them; `done – none needed` → `done`, `result` = "none needed"
+     (translated).
+  **Existing journals:** a Dashboard whose `process.steps` lack this step gets it at the next run,
+  directly after the didactics step, in the state above, and `process.note` gets one appended sentence
+  (e.g. "New: the step “Templates for activities” – ready-made building blocks for activities, or your
+  own.", translated); the definition of "finished" in the note stays as it is.
 - `plan` (provisional planning) only while Outline/Didactics assign content to
   lessons and no `## Agenda` exists yet. As soon as the agenda is confirmed, every
   agenda row is a unit (`planned`, progress 0 of N) — even before `## Sessions`
@@ -3703,10 +3733,11 @@ Only if installed (see `data/skills.md`); a missing one is offered once per conv
 
 3. Read `journal.md` → `## Publishing` (repository, branch, viewer URL). If it is missing or empty, read the repository first exactly as `tasks/create-project.md` step 3 does.
 4. Ask the user about their git/GitHub experience.
+4b. **Template files in the commit list:** changed local templates that are not outsourced (`lia-templates/{id}/`) and `templates.local.json` are committed with the course content; outsourced template folders (their own git repository), the installed skill folders and `node_modules/` stay in the `.gitignore` — a missing entry goes into the plan (as in `tasks/create-project.md` step 5).
 
 ### single-file mode
 
-5. Check which changed files must be committed (`README.md`, `assets/`).
+5. Check which changed files must be committed (`README.md`, `assets/`, the template files of step 4b).
 6. **Show the plan, then confirm in the terminal** — before any change: the files to commit, the push target, and that the viewer URL stays the same (raw GitHub content updates as soon as the push lands — no rebuild step).
 7. On confirmation: hand off to `:manage-git` to commit and push.
 
@@ -3817,8 +3848,8 @@ Rules:
 
    **Template checks** `[if `journal.md` → `## Templates` exists or the material uses template macros]`:
    - [ ] Every template macro used in the material is documented in `journal.md` → `## Templates`
-   - [ ] The material metadata header includes the matching `import: {url}` line for every used template
-   - [ ] The project metadata header includes the matching `import: {url}` line for every documented template
+   - [ ] The material metadata header includes the matching `import: {url}` line for every used template (a local template `./lia-templates/{id}/README.md` matches in a multi-file material as `../../lia-templates/{id}/README.md`, relative to its folder)
+   - [ ] The project metadata header includes the matching `import: {url}` line for every documented template — briefs `### {id} (in development)` are exempt: they have no import yet
    - [ ] Template use follows the examples and constraints documented in `## Templates`
 
 4b. **Fix during the check** (session mode; not when called from `:build-session`, whose loop fixes mechanical items): before setting the result, offer in **one** chat confirmation to fix every `[mechanical]` finding that needs no content decision (one targeted change each, `tasks/quick-fix.md` steps 2–3, all in one material write; then `check-material` again). Fixed items no longer count (result rule 0) and are listed as fixed during the check. One round, no loop; declined or not cleanly fixed items count as found.
@@ -3863,9 +3894,10 @@ Rules:
    - `journal.md` → `## Agents` exists and contains scoped `### Coauthor` and `### Learner Personas` containers
 
 4b. **Check Templates** `[if `journal.md` → `## Templates` exists or material files use template macros]`:
-   - Every template documented in `journal.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header
-   - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header
+   - Every template documented in `journal.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header — except briefs `### {id} (in development)`, which have no import yet
+   - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header (in a multi-file material the relative form `../../lia-templates/{id}/README.md` matches the project's `./lia-templates/{id}/README.md`)
    - Template usage in materials follows the documented examples and constraints in `## Templates`
+   - **Publishing gate — templates:** FAIL if `## Templates` holds a brief `### {id} (in development)` whose `__Used in:__` names a unit (that unit relies on a template that is not adopted yet), or if an `import:` line of the journal header or a material points to a path the course project's `.gitignore` excludes (the published course could not load it — e.g. an outsourced `lia-templates/{id}/` with its own repository: import its published `{repo-url}@{tag}` instead).
 
 5. **Check Agenda** `[if journal.md → ## Agenda has content, or the agenda flag is yes]`:
    - All sessions have title, duration, type, learning objective
@@ -4459,21 +4491,33 @@ template:
     section: Templates
   title: 'Templates'
   notes:
-    - 'All template entries sit inside one `<section>` … `</section>` wrapper directly after the overview text, so they stay on the `## Templates` slide and out of the table of contents. Add new entries inside the wrapper; never remove it.'
-    - 'The `### Dashboard` entry (`import: ./specs/dashboard/README.md`) is part of every project and stays documented here.'
+    - 'All template entries — adopted templates (`template-entry`) and briefs of templates in development (`template-brief`) — sit inside one `<section>` … `</section>` wrapper directly after the overview text and its selection line, so they stay on the `## Templates` slide and out of the table of contents. Add new entries inside the wrapper; never remove it.'
+    - 'The `### Dashboard` entry (`import: ./specs/dashboard/README.md`) is part of every project and stays documented here; it has no `__Catalog id:__`.'
+    - '`## Templates` records only the templates the course actually uses. Candidates and finds of a search are not written here; the two exceptions are the selection line and the briefs.'
+    - 'Selection line: `* __Template selection:__ {value}` is the last line before `<section>`. Values: `open` | `done – {id}, {id}` | `done – none needed` (en dash, ids in lower case with "-"). A missing line counts as `open`. Every id of `done – …` has an entry with `__Catalog id:__ {id}` or a brief `### {id} (in development)` — `validate-journal.mjs` reports the line otherwise.'
+    - 'Adopted entries carry `__Catalog id:__ {id}` (the id of the catalog entry, of the `templates.local.json` entry or of the former brief) and `__Source:__` — `catalog` (shared list `specs/catalog/templates.json`), `found` (an online find, recorded in `templates.local.json`), `lia-templates/{id}/` (an own template developed in the project) or `{repo-url}@{tag}` (an own template published as its own repository).'
+    - 'Key lines stay English and are never translated by a language pack: `* __Template selection:__`, `* __State:__` and every field name of the entries and briefs.'
+    - 'Ownership: `:suggest-templates` writes the selection line and the briefs (adoptions go through the steps of `:manage-templates`); `:manage-templates` writes the adopted entries, replaces a brief when its template is adopted, and records feedback in `__Feedback rounds:__`; `:develop-template` changes only `__State:__` and `__Folder:__`; `:publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`.'
+    - 'Local templates live in `lia-templates/{id}/`. The import in `## Templates` and in the journal header is `./lia-templates/{id}/README.md`; a multi-file material `materials/{n}-{slug}/README.md` imports it relative to its own folder (`../../lia-templates/{id}/README.md`).'
   sections:
     - id: overview
       title: Overview
       template: |
         LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
-        More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
+        Checked templates are listed in the template catalog (`specs/catalog/README.md`); more community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template. A template that is still being developed is described here by a brief until it is adopted.
+
+        * __Template selection:__ {{selection}}
 
     - id: template-entry
       title: Template Entry
       repeatable: true
       template: |
         ### {{template_name}}
+
+        * __Catalog id:__ {{catalog_id}}
+
+        * __Source:__ {{source}}
 
         * __Import:__
           `{{import_url}}`
@@ -4513,6 +4557,36 @@ template:
           1. {{special_usage_1}}
           2. {{special_usage_2}}
           3. {{special_usage_3}}
+
+    - id: template-brief
+      title: Template Brief (in development)
+      repeatable: true
+      notes:
+        - 'One brief per template that has to be developed because no catalog entry or online find fits. The heading is the id plus the literal suffix ` (in development)`; the field values are written in the course language, the field names stay English.'
+        - 'Required (a missing one is a hint `template-brief` of `validate-journal.mjs`, listed in the overview under `decisions`): `__State:__`, `__Learners do:__`, `__Feedback:__`, `__Learning objective:__`, `__Audience:__`, `__Used in:__`, `__Acceptance:__`, `__Why not existing:__`. `__Folder:__` and `__Feedback rounds:__` stay empty until Development or the first test round fills them.'
+        - '`__State:__` is one of `brief` (written, not started) | `in development` | `ready to test` (then `__Folder:__` names `lia-templates/{id}/` and its `README.md` exists).'
+        - 'Once the template is adopted (`:manage-templates {id}`), a `template-entry` with `__Catalog id:__ {id}` replaces the brief.'
+      template: |
+        ### {{id}} (in development)
+
+        * __State:__ brief
+        * __Learners do:__
+          {{what the learners do with it, one or two sentences}}
+        * __Feedback:__
+          {{what the learners see or get back after an action}}
+        * __Learning objective:__
+          {{the objective from ## Outline it serves}}
+        * __Audience:__
+          {{target group from ## Course Context}}
+        * __Used in:__
+          {{units that will use it, or none yet}}
+        * __Acceptance:__
+          1. {{checkable point}}
+          2. {{checkable point}}
+        * __Why not existing:__
+          {{catalog and online candidates that were checked, and why none fits}}
+        * __Folder:__
+        * __Feedback rounds:__
 ```
 
 ==================== END: specs/templates/course-templates.yaml ====================
@@ -4558,6 +4632,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
       {"title": "Set the frame", "state": "current", "why": "Topic, target group, format and language shape everything that follows.", "next": "Click “Start course” and answer the questions."},
       {"title": "Outline and learning objectives", "state": "planned", "why": "Clear objectives say what learners can do at the end."},
       {"title": "Didactics", "state": "planned", "why": "Methods, task formats and support that fit the objectives."},
+      {"title": "Templates for activities", "state": "planned", "why": "Ready-made building blocks such as turtle Python or SQL – or your own if nothing fits."},
       {"title": "Agenda", "state": "optional", "why": "Decided with the frame: order and duration of the units."},
       {"title": "Create material", "state": "planned", "why": "Explanations, tasks and self-checks grow out of the planning."},
       {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."},
@@ -4630,11 +4705,13 @@ _Optional – the design assistant fills this in when you want a consistent look
 <!-- class="journal-actions" -->
 [▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
-<!--- Managed by :manage-templates from templates/course-templates.yaml. --->
+<!--- Managed from templates/course-templates.yaml: adopted templates by :manage-templates, the selection line and the briefs of templates in development by :suggest-templates (ownership: agents/teaching-agent.yaml → journal_formatting_rules). --->
 
 LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
-More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
+Checked templates are listed in the template catalog (`specs/catalog/README.md`); more community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template. A template that is still being developed is described here by a brief until it is adopted.
+
+* __Template selection:__ open
 
 <section>
 
@@ -5024,7 +5101,7 @@ template:
               statusLabel: 'Optional: plain-language refinement of the state'
           note: 'Optional: loops back or special cases'
     selected: 'Optional: id of the recommended unit; empty string "" opens the whole-course view'
-    process: 'Global course process with the same shape — always present, also once units exist'
+    process: 'Global course process with the same shape — always present, also once units exist; its steps as in `templates/journal.md`, including the template step after the didactics (`tasks/update-dashboard.md` → Rules → Template step; a Dashboard without it gets it with one sentence appended to `note`)'
     next:
       icon: 'Action symbol as in Markdown labels (`▶️` run, `✏️` revise, `🔍` check, `👁` preview, `🚀` publish only, agent icon for a switch); default `▶️`'
       title: 'What we do next'
@@ -5531,11 +5608,13 @@ template:
 - [ ] [mechanical] Session Types defined, each with slug, criterion, and required-elements checklist (see `data/session-types.md`)
 - [ ] [mechanical] Didactic Framework and Default Session Method declared (the latter may explicitly be `none`) — see `data/didactic-methods.md`
 
-## Templates `[only if a template is documented in ## Templates or a material uses a template macro — an empty template section does not count]`
+## Templates `[only if a template or a brief is documented in ## Templates or a material uses a template macro — an empty template section or the selection line alone does not count]`
 
 - [ ] [mechanical] `journal.md` → `## Templates` exists
-- [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header
-- [ ] [mechanical] Every material using a template macro has the matching `import:` line in its own metadata header
+- [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header — briefs `### {id} (in development)` are exempt
+- [ ] [mechanical] Every material using a template macro has the matching `import:` line in its own metadata header (a multi-file material imports a local template as `../../lia-templates/{id}/README.md`; that counts as matching)
+- [ ] [mechanical] Publishing gate: no brief `### {id} (in development)` whose `__Used in:__` names a unit — that unit waits for the template's adoption
+- [ ] [mechanical] Publishing gate: no `import:` line (journal header or material) points to a path the course project's `.gitignore` excludes
 - [ ] [mechanical] Template usage examples and constraints are documented in `## Templates`
 - [ ] [mechanical] Community discovery link included: https://github.com/topics/liascript-template
 
@@ -6939,7 +7018,7 @@ Each session/unit is its own LiaScript document in its own folder.
 The same rules apply to every task that creates a session's material document — `:promote-session` (generated material) and `:coauthor-materials` (material worked out in the dialog):
 
 1. **Path:** reuse the path recorded in the technical table of `## Agenda` if there is one; otherwise derive it as above (multi-file: `materials/{number}-{slug}/README.md`, the `assets/` subfolder only on demand; single-file: the `##` chapter for this session inside root `/README.md`, chapters in session-number order; back-matter chapters (image credits, glossary) stay last — a new unit chapter is inserted before them).
-2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `email:` from Conventions → Contact if set, `version: 0.1.0` for a new document, `language:` from the course language, `narrator:` a voice for that language (e.g. `Deutsch Female`, `UK English Female`), the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses.
+2. **Metadata header** (multi-file: the new file's own header; single-file: the shared root `README.md` header, each line only if not already present): `author:` from `## Course Context` → Conventions → Author, `email:` from Conventions → Contact if set, `version: 0.1.0` for a new document, `language:` from the course language, `narrator:` a voice for that language (e.g. `Deutsch Female`, `UK English Female`), the `__LiaScript Theme:__` block from `## Visual Identity` if present, and one `import: {url}` line per macro template from `## Templates` the material uses. **Local templates** (`./lia-templates/{id}/README.md` in `## Templates` and the journal header) are imported relative to the material: multi-file `materials/{n}-{slug}/README.md` → `import: ../../lia-templates/{id}/README.md`; single-file root `README.md` → `import: ./lia-templates/{id}/README.md`. A brief `### {id} (in development)` has no import yet — nothing is copied for it.
 3. **Images:** for every entry in the session's `#### Images` block, put the neutral marker of `tasks/create-image.md` step 12 (open entries: `wanted`, `candidate`, `selected`, `prompt-ready`) or the image itself (`generated`, `inserted`) at the place it belongs; entries with status `prompt-only` get nothing. Image credits go into the back-matter chapter of `tasks/create-image.md` → Free photos; learners can page on to it, so the credit line of an image used in a question repeats its alt text (what is visible) and never names the answer. Old markers without a slug are rewritten to the current form in the same write (`tasks/create-image.md` → Command).
 4. **Title slide (single-file, first unit):** under the `#` course title, a short introduction for the learners — 2–3 sentences: what it is about, what they will be able to do, how to start — in the learners' address and readable aloud; never an empty slide. The unit's own `##` chapter slide then starts the lesson: what we do today, in a few steps — not a second introduction.
 5. **Overview:** set Material ✅ for the session and rewrite its status line in the same write (`templates/session-skeleton.yaml` → `section_layout.overview`).

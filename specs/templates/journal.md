@@ -36,6 +36,7 @@ This is where your course plan grows. You bring your teaching idea; the assistan
       {"title": "Set the frame", "state": "current", "why": "Topic, target group, format and language shape everything that follows.", "next": "Click “Start course” and answer the questions."},
       {"title": "Outline and learning objectives", "state": "planned", "why": "Clear objectives say what learners can do at the end."},
       {"title": "Didactics", "state": "planned", "why": "Methods, task formats and support that fit the objectives."},
+      {"title": "Templates for activities", "state": "planned", "why": "Ready-made building blocks such as turtle Python or SQL – or your own if nothing fits."},
       {"title": "Agenda", "state": "optional", "why": "Decided with the frame: order and duration of the units."},
       {"title": "Create material", "state": "planned", "why": "Explanations, tasks and self-checks grow out of the planning."},
       {"title": "Check and revise", "state": "planned", "why": "Clarity and fit to the objectives are checked before the material is used."},
@@ -108,11 +109,13 @@ _Optional – the design assistant fills this in when you want a consistent look
 <!-- class="journal-actions" -->
 [▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
-<!--- Managed by :manage-templates from templates/course-templates.yaml. --->
+<!--- Managed from templates/course-templates.yaml: adopted templates by :manage-templates, the selection line and the briefs of templates in development by :suggest-templates (ownership: agents/teaching-agent.yaml → journal_formatting_rules). --->
 
 LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
-More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
+Checked templates are listed in the template catalog (`specs/catalog/README.md`); more community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template. A template that is still being developed is described here by a brief until it is adopted.
+
+* __Template selection:__ open
 
 <section>
 

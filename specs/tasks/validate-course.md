@@ -83,8 +83,8 @@ Rules:
 
    **Template checks** `[if `journal.md` → `## Templates` exists or the material uses template macros]`:
    - [ ] Every template macro used in the material is documented in `journal.md` → `## Templates`
-   - [ ] The material metadata header includes the matching `import: {url}` line for every used template
-   - [ ] The project metadata header includes the matching `import: {url}` line for every documented template
+   - [ ] The material metadata header includes the matching `import: {url}` line for every used template (a local template `./lia-templates/{id}/README.md` matches in a multi-file material as `../../lia-templates/{id}/README.md`, relative to its folder)
+   - [ ] The project metadata header includes the matching `import: {url}` line for every documented template — briefs `### {id} (in development)` are exempt: they have no import yet
    - [ ] Template use follows the examples and constraints documented in `## Templates`
 
 4b. **Fix during the check** (session mode; not when called from `:build-session`, whose loop fixes mechanical items): before setting the result, offer in **one** chat confirmation to fix every `[mechanical]` finding that needs no content decision (one targeted change each, `tasks/quick-fix.md` steps 2–3, all in one material write; then `check-material` again). Fixed items no longer count (result rule 0) and are listed as fixed during the check. One round, no loop; declined or not cleanly fixed items count as found.
@@ -129,9 +129,10 @@ Rules:
    - `journal.md` → `## Agents` exists and contains scoped `### Coauthor` and `### Learner Personas` containers
 
 4b. **Check Templates** `[if `journal.md` → `## Templates` exists or material files use template macros]`:
-   - Every template documented in `journal.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header
-   - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header
+   - Every template documented in `journal.md` → `## Templates` has a matching `import: {url}` line in the main project metadata header — except briefs `### {id} (in development)`, which have no import yet
+   - Every material file using a documented template macro has the matching `import: {url}` line in its own LiaScript metadata header (in a multi-file material the relative form `../../lia-templates/{id}/README.md` matches the project's `./lia-templates/{id}/README.md`)
    - Template usage in materials follows the documented examples and constraints in `## Templates`
+   - **Publishing gate — templates:** FAIL if `## Templates` holds a brief `### {id} (in development)` whose `__Used in:__` names a unit (that unit relies on a template that is not adopted yet), or if an `import:` line of the journal header or a material points to a path the course project's `.gitignore` excludes (the published course could not load it — e.g. an outsourced `lia-templates/{id}/` with its own repository: import its published `{repo-url}@{tag}` instead).
 
 5. **Check Agenda** `[if journal.md → ## Agenda has content, or the agenda flag is yes]`:
    - All sessions have title, duration, type, learning objective

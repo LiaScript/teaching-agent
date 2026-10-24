@@ -53,7 +53,7 @@ template:
               statusLabel: 'Optional: plain-language refinement of the state'
           note: 'Optional: loops back or special cases'
     selected: 'Optional: id of the recommended unit; empty string "" opens the whole-course view'
-    process: 'Global course process with the same shape — always present, also once units exist'
+    process: 'Global course process with the same shape — always present, also once units exist; its steps as in `templates/journal.md`, including the template step after the didactics (`tasks/update-dashboard.md` → Rules → Template step; a Dashboard without it gets it with one sentence appended to `note`)'
     next:
       icon: 'Action symbol as in Markdown labels (`▶️` run, `✏️` revise, `🔍` check, `👁` preview, `🚀` publish only, agent icon for a switch); default `▶️`'
       title: 'What we do next'

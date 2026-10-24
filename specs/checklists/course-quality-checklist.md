@@ -33,11 +33,13 @@
 - [ ] [mechanical] Session Types defined, each with slug, criterion, and required-elements checklist (see `data/session-types.md`)
 - [ ] [mechanical] Didactic Framework and Default Session Method declared (the latter may explicitly be `none`) — see `data/didactic-methods.md`
 
-## Templates `[only if a template is documented in ## Templates or a material uses a template macro — an empty template section does not count]`
+## Templates `[only if a template or a brief is documented in ## Templates or a material uses a template macro — an empty template section or the selection line alone does not count]`
 
 - [ ] [mechanical] `journal.md` → `## Templates` exists
-- [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header
-- [ ] [mechanical] Every material using a template macro has the matching `import:` line in its own metadata header
+- [ ] [mechanical] Every template in `## Templates` has a matching `import:` line in the main metadata header — briefs `### {id} (in development)` are exempt
+- [ ] [mechanical] Every material using a template macro has the matching `import:` line in its own metadata header (a multi-file material imports a local template as `../../lia-templates/{id}/README.md`; that counts as matching)
+- [ ] [mechanical] Publishing gate: no brief `### {id} (in development)` whose `__Used in:__` names a unit — that unit waits for the template's adoption
+- [ ] [mechanical] Publishing gate: no `import:` line (journal header or material) points to a path the course project's `.gitignore` excludes
 - [ ] [mechanical] Template usage examples and constraints are documented in `## Templates`
 - [ ] [mechanical] Community discovery link included: https://github.com/topics/liascript-template
 

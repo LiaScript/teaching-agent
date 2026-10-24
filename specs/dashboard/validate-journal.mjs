@@ -98,7 +98,54 @@ function markReports(text) {
 // Heuristic hints. Every hint must appear in the Dashboard under `decisions`
 // with the same `key` (or `{key}-{topic}`), or be resolved in the source sections.
 // Older journals used German keys; they are accepted as aliases.
-const aliases = { "file-structure": ["dateistruktur"], provisional: ["vorgemerkt"], preparation: ["vorbereitung"], slug: [], "type-name": [] };
+const aliases = { "file-structure": ["dateistruktur"], provisional: ["vorgemerkt"], preparation: ["vorbereitung"], slug: [], "type-name": [], "template-brief": [] };
+
+// ## Templates (templates/course-templates.yaml; the heading may carry a translated suffix): the selection line
+// `__Template selection:__` before <section> (missing = open), adopted entries with `__Catalog id:__ {id}` and
+// briefs `### {id} (in development)` of templates still being developed. A wrong selection is a problem; a brief
+// that is not complete yet is a hint (key template-brief), so the overview lists it instead of blocking the write.
+const templateId = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const briefStates = ["brief", "in development", "ready to test"];
+const briefFields = ["State", "Learners do", "Feedback", "Learning objective", "Audience", "Used in", "Acceptance", "Why not existing"];
+function fieldsOf(block) {
+  const fields = {};
+  let name = null;
+  for (const line of block.split("\n")) {
+    const field = line.match(/^\s*[*-]\s+__([^_\n]+):__[ \t]*(.*)$/);
+    if (field) fields[name = field[1].trim()] = field[2].trim();
+    else if (name && line.trim()) fields[name] = `${fields[name]}\n${line.trim()}`.trim();
+  }
+  return fields;
+}
+function checkTemplates() {
+  const text = section("Templates").replace(/<!--[\s\S]*?-->/g, "");
+  const found = { problems: [], hints: [] };
+  const entries = text.split(/^(?=### )/m).slice(1).map(block => ({ heading: block.match(/^### (.+?)\s*$/m)[1], fields: fieldsOf(block.split(/^<\/section>/m)[0]) }));
+  const briefs = entries.filter(entry => / \(in development\)$/.test(entry.heading)).map(entry => ({ ...entry, id: entry.heading.replace(/ \(in development\)$/, "") }));
+  const selection = text.split(/^<section\b/m)[0].match(/^\s*[*-]\s+__Template selection:__[ \t]*(.*)$/m)?.[1].trim() ?? "open";
+  const ids = selection.match(/^done – (.+)$/)?.[1].split(",").map(id => id.trim());
+  if (selection !== "open" && selection !== "done – none needed" && !(ids && ids.every(id => templateId.test(id)))) {
+    found.problems.push(`## Templates: __Template selection:__ "${short(selection)}" is none of "open", "done – none needed", "done – {id}, {id}" (ids in lower case with "-", as in the catalog)`);
+  } else if (ids && selection !== "done – none needed") {
+    const catalogIds = entries.map(entry => (entry.fields["Catalog id"] ?? "").replace(/`/g, "").trim());
+    for (const id of ids.filter(id => !catalogIds.includes(id) && !briefs.some(brief => brief.id === id))) {
+      found.problems.push(`## Templates: the template selection names "${id}", but ## Templates has no entry with __Catalog id:__ ${id} and no brief "### ${id} (in development)" – adopt it with :manage-templates ${id} or write its brief`);
+    }
+  }
+  const projectDir = dirname(resolve(file));
+  for (const brief of briefs) {
+    const name = `brief "${brief.heading}"`;
+    if (!templateId.test(brief.id)) found.hints.push({ key: "template-brief", text: `${name}: the heading names no id (lower case with "-", e.g. "### turtle-maze (in development)")` });
+    const lacking = briefFields.filter(field => !brief.fields[field]);
+    if (lacking.length) found.hints.push({ key: "template-brief", text: `${name} lacks ${lacking.map(field => `__${field}:__`).join(", ")}` });
+    const state = brief.fields.State;
+    if (state && !briefStates.includes(state)) found.hints.push({ key: "template-brief", text: `${name}: __State:__ "${short(state, 30)}" is none of ${briefStates.map(item => `"${item}"`).join(", ")}` });
+    if (state === "ready to test" && !brief.fields.Folder) found.hints.push({ key: "template-brief", text: `${name} is ready to test, but __Folder:__ is empty` });
+    else if (state === "ready to test" && !existsSync(join(projectDir, "lia-templates", brief.id, "README.md"))) found.hints.push({ key: "template-brief", text: `${name} is ready to test, but lia-templates/${brief.id}/README.md does not exist next to the journal` });
+  }
+  return found;
+}
+const templateFindings = checkTemplates();
 
 function findHints() {
   const hints = [];
@@ -133,6 +180,7 @@ function findHints() {
   if (/Hinweis für die Lehrkraft|besorgen|vorbereiten:|note for the instructor|to prepare:|instructor must prepare/i.test(sources)) {
     hints.push({ key: "preparation", kind: "prepare", text: "A section records a preparation task for the instructor" });
   }
+  hints.push(...templateFindings.hints);
   return hints;
 }
 
@@ -159,7 +207,7 @@ if (shownGroups.length) console.log(`Groups (as shown): ${shownGroups.map(group 
 if (shownTexts.states.length) console.log(`States (as shown): ${shownTexts.states.map(text => `"${text}"`).join(" · ")}`);
 if (shownTexts.usable.length) console.log(`Usable (as shown): ${shownTexts.usable.map(item => `${item.id} "${item.text}"`).join(" · ")}`);
 
-const problems = [];
+const problems = [...templateFindings.problems];
 if (!String(model.title ?? "").trim()) problems.push("Dashboard has no title – write the course title (or \"New course\", translated) into title; without it the page shows an empty heading");
 const hints = findHints();
 if (hints.length) {

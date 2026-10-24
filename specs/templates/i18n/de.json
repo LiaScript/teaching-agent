@@ -94,8 +94,8 @@
    "Die LiaScript-Vorlagen dieses Projekts werden im Kopf ganz oben in `journal.md` eingebunden und auch in jeder Materialdatei, die sie nutzt."
   ],
   [
-   "More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.",
-   "Weitere Vorlagen der Gemeinschaft gibt es unter [topics/liascript-template](https://github.com/topics/liascript-template). Eine ausgewählte Vorlage wird mit ihrer `import:`-Zeile in den Projektkopf eingetragen, hier beschrieben und im Material genauso eingebunden."
+   "Checked templates are listed in the template catalog (`specs/catalog/README.md`); more community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template. A template that is still being developed is described here by a brief until it is adopted.",
+   "Geprüfte Vorlagen stehen im Vorlagenkatalog (`specs/catalog/README.md`); weitere Vorlagen der Gemeinschaft gibt es unter [topics/liascript-template](https://github.com/topics/liascript-template). Eine ausgewählte Vorlage wird mit ihrer `import:`-Zeile in den Projektkopf eingetragen, hier beschrieben und im Material genauso eingebunden. Eine Vorlage, die noch entwickelt wird, steht hier mit einem Steckbrief, bis sie übernommen ist."
   ],
   [
    "  Renders the project overview (next step, units, work process, open points) from one JSON data block.",
@@ -270,6 +270,11 @@
      "title": "Didaktik",
      "state": "planned",
      "why": "Methoden, Aufgabenformen und Unterstützung, die zu den Lernzielen passen."
+    },
+    {
+     "title": "Vorlagen für Aktivitäten",
+     "state": "planned",
+     "why": "Fertige Bausteine wie Turtle-Python oder SQL – oder ein eigener, wenn nichts passt."
     },
     {
      "title": "Ablaufplan",

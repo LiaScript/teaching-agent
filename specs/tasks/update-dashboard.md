@@ -13,7 +13,8 @@ The dashboard is **derived state**. It is never the source of truth.
 - `journal.md` main metadata header (`language:`, template `import:` lines)
 - `journal.md` → `## Course Context`, `## Outline`, `## Didactics`, `## Agenda`,
   `## Sessions` (overview table, `#### Validation Report`, `#### Persona Reviews`),
-  `## Templates`, `## Validation` → `### Latest Validation Summary`,
+  `## Templates` (the line `__Template selection:__` and the briefs `### {id} (in development)` —
+  the template step of the course process, Rules → Template step), `## Validation` → `### Latest Validation Summary`,
   `## Publishing` (repository, viewer URL, state — for the publishing step of the course process)
 - `journal.md` → `## Agents` → `### Learner Personas` — headings only, for actions
 - `templates/project-dashboard.yaml` — semantic data shape
@@ -141,9 +142,14 @@ Run this task automatically after any task that changes project state:
    - Preparation tasks for the instructor recorded in a section (equipment, printouts, accounts).
    - Agenda phases led by the instructor outside the material (opening, closing,
      one-to-one talks, checklists to print) → `prepare`, with `how`.
+   - A brief under `## Templates` (`### {id} (in development)`) that lacks a required field, has an
+     unknown `__State:__`, or is `ready to test` without its folder `lia-templates/{id}/README.md`
+     (hint `template-brief` of the validation script) → `decide`, key `template-brief-{id}`; `how` says
+     what is missing and who completes it (the brief together with the instructor, the folder through the
+     development assistant). Plain words: German "Vorlage" or "Baustein", never "Template".
    Never fix foreign sections silently — listing them is this task's job. Every
    item gets a unique `key` (the hint key printed by the validation script, e.g.
-   `provisional`, `slug`, `type-name`, `preparation`, `file-structure`; several items for one
+   `provisional`, `slug`, `type-name`, `preparation`, `file-structure`, `template-brief`; several items for one
    hint use `{hint}-{topic}`; open priority issues of a persona review use `review-{unit}-{n}`
    (`decide`), prompt-only images and open `own` image spots `image-{unit}-{slug}` (`prepare`: create
    the image elsewhere or with `:generate-image` once an image route exists; for `own`: provide the
@@ -302,6 +308,29 @@ Run this task automatically after any task that changes project state:
   removed with a `note` (no). The last step, publishing, stays `optional` until the
   publishing gate is PASS, then `planned`, and `done` once `## Publishing` →
   `__State:__` starts with `published` (an English key, never translated). Never let the number of steps change without a `note`.
+- **Template step:** the global step "Templates for activities" (translated, German "Vorlagen für
+  Aktivitäten" — never "Template" in a German text for the instructor) stands between the didactics and
+  the agenda and is counted. Its state comes from `## Templates` (the line that starts with
+  `## Templates`, layout `templates/course-templates.yaml`) — the line `__Template selection:__`
+  (missing = `open`) and the briefs `### {id} (in development)`:
+  1. `planned` while `## Didactics` is not saved.
+  2. Didactics saved and selection `open`: the step is `current` and the `next` of the course
+     (`agent:teaching/suggest-templates`, command `:suggest-templates`, label "Suggest templates",
+     translated). Once a unit is already being worked on, `next` stays with that unit and the
+     suggestion goes into `explore` (icon ➕).
+  3. Selection `done – …` and a brief not yet adopted: `current`, `result` = "{n} in development"
+     (translated, German "{n} in Entwicklung"), and `next` by the brief's `__State:__` — `brief` or
+     `in development` → `agent:development/develop-template?id={id}` (command `:agent development` →
+     `:develop-template {id}`), `ready to test` → `agent:teaching/manage-templates?name={id}` (command
+     `:manage-templates {id}`, "Try and adopt", translated). With several briefs the first one in the
+     section. The agenda and the units do not wait for it: their actions stay in their action lines.
+  4. Selection `done – {ids}` without an open brief: `done`, `result` = the names of the adopted
+     templates as `## Templates` shows them; `done – none needed` → `done`, `result` = "none needed"
+     (translated).
+  **Existing journals:** a Dashboard whose `process.steps` lack this step gets it at the next run,
+  directly after the didactics step, in the state above, and `process.note` gets one appended sentence
+  (e.g. "New: the step “Templates for activities” – ready-made building blocks for activities, or your
+  own.", translated); the definition of "finished" in the note stays as it is.
 - `plan` (provisional planning) only while Outline/Didactics assign content to
   lessons and no `## Agenda` exists yet. As soon as the agenda is confirmed, every
   agenda row is a unit (`planned`, progress 0 of N) — even before `## Sessions`

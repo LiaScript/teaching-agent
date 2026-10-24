@@ -8,21 +8,33 @@ template:
     section: Templates
   title: 'Templates'
   notes:
-    - 'All template entries sit inside one `<section>` … `</section>` wrapper directly after the overview text, so they stay on the `## Templates` slide and out of the table of contents. Add new entries inside the wrapper; never remove it.'
-    - 'The `### Dashboard` entry (`import: ./specs/dashboard/README.md`) is part of every project and stays documented here.'
+    - 'All template entries — adopted templates (`template-entry`) and briefs of templates in development (`template-brief`) — sit inside one `<section>` … `</section>` wrapper directly after the overview text and its selection line, so they stay on the `## Templates` slide and out of the table of contents. Add new entries inside the wrapper; never remove it.'
+    - 'The `### Dashboard` entry (`import: ./specs/dashboard/README.md`) is part of every project and stays documented here; it has no `__Catalog id:__`.'
+    - '`## Templates` records only the templates the course actually uses. Candidates and finds of a search are not written here; the two exceptions are the selection line and the briefs.'
+    - 'Selection line: `* __Template selection:__ {value}` is the last line before `<section>`. Values: `open` | `done – {id}, {id}` | `done – none needed` (en dash, ids in lower case with "-"). A missing line counts as `open`. Every id of `done – …` has an entry with `__Catalog id:__ {id}` or a brief `### {id} (in development)` — `validate-journal.mjs` reports the line otherwise.'
+    - 'Adopted entries carry `__Catalog id:__ {id}` (the id of the catalog entry, of the `templates.local.json` entry or of the former brief) and `__Source:__` — `catalog` (shared list `specs/catalog/templates.json`), `found` (an online find, recorded in `templates.local.json`), `lia-templates/{id}/` (an own template developed in the project) or `{repo-url}@{tag}` (an own template published as its own repository).'
+    - 'Key lines stay English and are never translated by a language pack: `* __Template selection:__`, `* __State:__` and every field name of the entries and briefs.'
+    - 'Ownership: `:suggest-templates` writes the selection line and the briefs (adoptions go through the steps of `:manage-templates`); `:manage-templates` writes the adopted entries, replaces a brief when its template is adopted, and records feedback in `__Feedback rounds:__`; `:develop-template` changes only `__State:__` and `__Folder:__`; `:publish-template` changes only `import:` lines (journal header, `## Templates`, materials) and `__Source:__`.'
+    - 'Local templates live in `lia-templates/{id}/`. The import in `## Templates` and in the journal header is `./lia-templates/{id}/README.md`; a multi-file material `materials/{n}-{slug}/README.md` imports it relative to its own folder (`../../lia-templates/{id}/README.md`).'
   sections:
     - id: overview
       title: Overview
       template: |
         LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.
 
-        More community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template.
+        Checked templates are listed in the template catalog (`specs/catalog/README.md`); more community templates can be found at [topics/liascript-template](https://github.com/topics/liascript-template). When a useful template is selected, add its `import:` line to the project header, document it here, and use the same import in materials that need the template. A template that is still being developed is described here by a brief until it is adopted.
+
+        * __Template selection:__ {{selection}}
 
     - id: template-entry
       title: Template Entry
       repeatable: true
       template: |
         ### {{template_name}}
+
+        * __Catalog id:__ {{catalog_id}}
+
+        * __Source:__ {{source}}
 
         * __Import:__
           `{{import_url}}`
@@ -62,3 +74,33 @@ template:
           1. {{special_usage_1}}
           2. {{special_usage_2}}
           3. {{special_usage_3}}
+
+    - id: template-brief
+      title: Template Brief (in development)
+      repeatable: true
+      notes:
+        - 'One brief per template that has to be developed because no catalog entry or online find fits. The heading is the id plus the literal suffix ` (in development)`; the field values are written in the course language, the field names stay English.'
+        - 'Required (a missing one is a hint `template-brief` of `validate-journal.mjs`, listed in the overview under `decisions`): `__State:__`, `__Learners do:__`, `__Feedback:__`, `__Learning objective:__`, `__Audience:__`, `__Used in:__`, `__Acceptance:__`, `__Why not existing:__`. `__Folder:__` and `__Feedback rounds:__` stay empty until Development or the first test round fills them.'
+        - '`__State:__` is one of `brief` (written, not started) | `in development` | `ready to test` (then `__Folder:__` names `lia-templates/{id}/` and its `README.md` exists).'
+        - 'Once the template is adopted (`:manage-templates {id}`), a `template-entry` with `__Catalog id:__ {id}` replaces the brief.'
+      template: |
+        ### {{id}} (in development)
+
+        * __State:__ brief
+        * __Learners do:__
+          {{what the learners do with it, one or two sentences}}
+        * __Feedback:__
+          {{what the learners see or get back after an action}}
+        * __Learning objective:__
+          {{the objective from ## Outline it serves}}
+        * __Audience:__
+          {{target group from ## Course Context}}
+        * __Used in:__
+          {{units that will use it, or none yet}}
+        * __Acceptance:__
+          1. {{checkable point}}
+          2. {{checkable point}}
+        * __Why not existing:__
+          {{catalog and online candidates that were checked, and why none fits}}
+        * __Folder:__
+        * __Feedback rounds:__
