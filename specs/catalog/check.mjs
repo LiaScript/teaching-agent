@@ -147,3 +147,44 @@ test("the shared catalog is valid, checked, unique and covers the minimum subjec
   }
   for (const e of entries) assert.match(e.import, /^https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/README\.md$/, e.id);
 });
+
+const { searchTemplates } = await import("./search.mjs");
+const repoItem = (over = {}) => ({ html_url: "https://github.com/Example/Chem", name: "Chem", description: "Chemistry.",
+  full_name: "Example/Chem", default_branch: "main", stargazers_count: 7, pushed_at: "2026-01-02T03:04:05Z", ...over });
+const searchStub = (status, body, seen = []) => async (url, options) => {
+  seen.push({ url: String(url), options });
+  if (body instanceof Error) throw body;
+  return { ok: status >= 200 && status < 300, status, json: async () => body };
+};
+
+test("search hits are mapped, with the README URL built from full_name and default branch", async () => {
+  const { hits, error } = await searchTemplates({ query: "chem", fetchFn: searchStub(200, { items: [repoItem()] }) });
+  assert.equal(error, undefined);
+  assert.deepEqual(hits, [{ repo: "https://github.com/Example/Chem", name: "Chem", description: "Chemistry.",
+    readme: "https://raw.githubusercontent.com/Example/Chem/main/README.md", stars: 7, pushed: "2026-01-02T03:04:05Z" }]);
+});
+
+test("a known repo drops out, with a trailing slash and in other case too", async () => {
+  const items = [repoItem(), repoItem({ html_url: "https://github.com/Example/Other", full_name: "Example/Other" })];
+  const { hits } = await searchTemplates({ fetchFn: searchStub(200, { items }), known: ["HTTPS://github.com/example/chem/"] });
+  assert.deepEqual(hits.map(h => h.repo), ["https://github.com/Example/Other"]);
+});
+
+test("HTTP 403 is a rate limit note with no hits", async () => {
+  const result = await searchTemplates({ fetchFn: searchStub(403, {}) });
+  assert.match(result.error, /rate limit/i);
+  assert.deepEqual(result.hits, []);
+});
+
+test("a network error is an error with no hits", async () => {
+  const result = await searchTemplates({ fetchFn: searchStub(0, new Error("offline")) });
+  assert.match(result.error, /offline/);
+  assert.deepEqual(result.hits, []);
+});
+
+test("the query is URL-encoded in the request", async () => {
+  const seen = [];
+  await searchTemplates({ query: "a b&c", fetchFn: searchStub(200, { items: [] }, seen) });
+  assert.match(seen[0].url, /^https:\/\/api\.github\.com\/search\/repositories\?q=topic:liascript-template\+a%20b%26c&per_page=50$/);
+  assert.equal(seen[0].options.headers.Accept, "application/vnd.github+json");
+});
