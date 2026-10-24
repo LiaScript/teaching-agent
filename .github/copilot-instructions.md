@@ -935,8 +935,8 @@ Orchestrates the full pipeline for one session — skeleton → generated materi
 - The start confirmation of `:build-session` (tier "confirm in chat", `data/agent-links.md`) covers every write **inside the project** during this run: generated material, validation reports, mechanical fixes, persona reports, image prompts. Sub-procedures called by this task do not ask again — `quick-fix` skips its scope and save confirmations, `validate-course` skips its closing question, `review-as-persona` runs report-only, `create-image` (Free photos) skips its "go" per batch and its choice form — the start decision on who chooses replaces them.
 - Sub-procedures called by this task do not refresh the dashboard themselves; Step 4 runs `tasks/update-dashboard.md` once, also when the run stops early. The one exception is the small overview patch of step 0, so that the journal stays valid during the run.
 - Nothing stays unseen: the closing summary lists every applied fix with page title and before → after.
-- **Outside the project** it covers nothing: if Step 3 takes the browser route of `tasks/generate-image.md` (no own image tool), ask **once in the terminal** (tier "confirm in terminal") for all images of this run **before the run starts**, right after the start confirmation — not at step 3, when the instructor may no longer look at the terminal. Without that confirmation, skip Step 3 and say so in the closing summary.
-- **Rendered check:** the loop runs `check-material.mjs` on its own, so if no Playwright or browser is installed (reasons "no installed Playwright found" / "has no browser of its own"), ask once in the terminal **before the run starts** (`data/chat-checks.md` → Offering the Rendered Check); a refusal means the run continues with the source checks and says so in the closing summary. With the agent's own image tool, the start confirmation covers Step 3.
+- **Outside the project** it covers nothing: if Step 3 takes the browser route of `tasks/generate-image.md` (no own image tool), ask **once in the terminal** (tier "confirm in terminal") for all images of this run **before the run starts**, right after the start confirmation — not at step 3, when the instructor may no longer look at the terminal. Without that confirmation, skip Step 3 and say so in the closing summary. With the agent's own image tool, the start confirmation covers Step 3.
+- **Rendered check:** the loop runs `check-material.mjs` on its own. Before the start confirmation run `node specs/dashboard/check-material.mjs <an existing material file or README.md>` once; only its "Rendered check not possible: …" reason line counts. If that reason is "no installed Playwright found" or "has no browser of its own", ask once in the terminal **before the run starts** (`data/chat-checks.md` → Offering the Rendered Check); a refusal means the run continues with the source checks and says so in the closing summary.
 
 ## Steps
 
@@ -9098,7 +9098,7 @@ command. This is the canonical rule; tasks and agents point here.
   skill, as before.
 - **No shell** (web chat): only name the command.
 - **`.gitignore`:** add the installed skill folders (`.claude/skills/`,
-  `.agents/skills/`, …) to the course project's `.gitignore`.
+  `.agents/skills/`, …) and `skills-lock.json` to the course project's `.gitignore`.
 
 ## Where the Workflow Uses Them
 

@@ -54,7 +54,7 @@ command. This is the canonical rule; tasks and agents point here.
   skill, as before.
 - **No shell** (web chat): only name the command.
 - **`.gitignore`:** add the installed skill folders (`.claude/skills/`,
-  `.agents/skills/`, …) to the course project's `.gitignore`.
+  `.agents/skills/`, …) and `skills-lock.json` to the course project's `.gitignore`.
 
 ## Where the Workflow Uses Them
 
