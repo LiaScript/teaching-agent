@@ -2811,10 +2811,13 @@ works in the terminal and wants to move to the browser.
    (`data/agent-links.md` → MCP Gate → Setup for the instructor). Do not start
    a server yourself. Stop.
 2. **Browser:** call `get_state`. If no browser is connected (`connected: false`),
-   open the preview: with visible browser automation open `get_state.url`;
-   otherwise call `goto` without `file` (the journal) — it opens the default
-   browser. An explicit `:open-chat` is the instructor's request, so this also
-   applies after a `connection` event with `connected: false`.
+   open the preview in the instructor's own browser: call `goto` with
+   `file: journal.md` — without a connected browser it opens the instructor's
+   default browser. Do not open it in a browser-automation window instead: the
+   instructor would not see it as their browser. Then call `get_state` again; if
+   `connected` is still `false`, give `get_state.url` in the terminal as the link
+   to open, and stop. An explicit `:open-chat` is the instructor's request, so
+   this also applies after a `connection` event with `connected: false`.
 3. **Connect this session** — only the parts of the start order of
    `CLAUDE.md` → Agent Links that have not run in this session yet: `set_agent`
    with the roster (`data/agent-links.md` → Agent Roster), the event

@@ -143,6 +143,9 @@ test("open-chat is a navigation command of every agent and opens a collapsed cha
   assert.match(task, /A `chat` message also unfolds a collapsed\s+chat/);
   assert.match(task, /Do not start\s+a server yourself/);
   assert.match(task, /never writes `journal\.md`/);
+  assert.match(task, /opens the instructor's\s+default browser/);
+  assert.match(task, /Do not open it in a browser-automation window instead/);
+  assert.match(task, /if\s+`connected` is still `false`, give `get_state\.url` in the terminal/);
   assert.match(read("data/agent-links.md"), /\| \*\*run\*\* \|[^\n]*`open-chat`/);
 });
 
