@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import "./catalog.js";
 
 const catalog = globalThis.LiaCatalog;
@@ -133,4 +134,16 @@ test("a broken local list is a data note; a missing shared list is an error", as
   const missing = await catalog.load(base, stub({}));
   assert.ok(missing.error);
   assert.deepEqual(missing.entries, []);
+});
+
+test("the shared catalog is valid, checked, unique and covers the minimum subjects", () => {
+  const list = JSON.parse(readFileSync(new URL("./templates.json", import.meta.url), "utf8"));
+  const { entries, problems } = catalog.normalize(list, "shared");
+  assert.deepEqual(problems, []);
+  assert.equal(entries.length, list.templates.length);
+  assert.equal(new Set(entries.map(e => e.id)).size, entries.length);
+  for (const subject of ["python", "sql", "chemistry"]) {
+    assert.ok(entries.some(e => e.subjects.includes(subject)), `no checked template for ${subject}`);
+  }
+  for (const e of entries) assert.match(e.import, /^https:\/\/raw\.githubusercontent\.com\/[^/]+\/[^/]+\/[^/]+\/README\.md$/, e.id);
 });

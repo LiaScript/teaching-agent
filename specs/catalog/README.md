@@ -54,17 +54,18 @@ Both files hold `{ "version": 1, "templates": [ … ] }`. Each entry has these f
 
 ```json
 {
-  "id": "python-turtle",
+  "id": "skulpt",
   "name": "Skulpt",
   "icon": "🐢",
-  "description": "Python with turtle graphics.",
-  "import": "https://raw.githubusercontent.com/LiaTemplates/Skulpt/0.0.1/README.md",
+  "description": "Executable Python blocks run by the Skulpt interpreter in the browser, with turtle graphics drawn on a canvas.",
+  "import": "https://raw.githubusercontent.com/LiaTemplates/Skulpt/0.0.6/README.md",
   "repo": "https://github.com/LiaTemplates/Skulpt",
   "demo": "https://liascript.github.io/course/?https://raw.githubusercontent.com/LiaTemplates/Skulpt/master/README.md",
-  "subjects": ["programming", "python"],
-  "audiences": ["primary"],
+  "subjects": ["programming", "python", "turtle"],
+  "audiences": ["secondary"],
   "macros": ["@Skulpt.eval"],
   "status": "checked",
-  "checked": "2026-10-23"
+  "checked": "2026-10-24",
+  "note": "The demo (default branch) also shows @Skulpt.terminal, which release 0.0.6 does not contain yet."
 }
 ```
