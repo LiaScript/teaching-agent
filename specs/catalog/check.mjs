@@ -67,3 +67,34 @@ test("normalize never mutates its input and the global is frozen", () => {
   assert.ok(Object.isFrozen(catalog));
   assert.deepEqual(catalog.AUDIENCES, ["primary", "secondary", "vocational", "higher-education", "adult"]);
 });
+
+test("cards show status, both buttons and the readable command", () => {
+  const model = catalog.merge(catalog.normalize({ version: 1, templates: [valid()] }, "shared"), { entries: [], problems: [] });
+  const html = catalog.render("c1", { ...model, lang: "de" });
+  assert.match(html, /✓ geprüft/);
+  assert.match(html, /href="agent:teaching\/manage-templates\?name=python-turtle"/);
+  assert.match(html, /<code[^>]*>:manage-templates python-turtle<\/code>/);
+  assert.match(html, /target="_blank" rel="noopener"/);
+  assert.match(html, /Grundschule/);
+});
+
+test("texts from the data are escaped; English is the fallback language", () => {
+  const model = catalog.normalize({ version: 1, templates: [valid({ name: '<img src=x onerror="alert(1)">', note: "<b>x</b>" })] }, "shared");
+  const html = catalog.render("c2", { ...model, lang: "fr" });
+  assert.doesNotMatch(html, /<img|<b>/);
+  assert.match(html, /&lt;img/);
+  assert.match(html, /Add to my course/);
+});
+
+test("data notes appear only when there are problems; an error replaces the grid", () => {
+  assert.doesNotMatch(catalog.render("c3", { entries: [], problems: [], lang: "en" }), /Data notes/);
+  assert.match(catalog.render("c4", { entries: [], problems: ["x"], lang: "en" }), /Data notes/);
+  assert.match(catalog.render("c5", { entries: [], problems: [], error: "404", lang: "en" }), /The catalog could not be loaded/);
+});
+
+test("filter options come from the tags that exist", () => {
+  const model = catalog.normalize({ version: 1, templates: [valid()] }, "shared");
+  const html = catalog.render("c6", { ...model, lang: "en" });
+  assert.match(html, /<option value="python">/);
+  assert.doesNotMatch(html, /<option value="sql">/);
+});

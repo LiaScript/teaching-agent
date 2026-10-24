@@ -123,5 +123,113 @@
     });
   }
 
-  global.LiaCatalog = Object.freeze({ AUDIENCES, normalize, merge, filter });
+  const TEXT = {
+    de: {
+      search: "Templates durchsuchen", subject: "Fach", audience: "Zielgruppe", status: "Status", all: "Alle",
+      "status.checked": "✓ geprüft", "status.found": "neu gefunden, nicht geprüft", "status.own": "nur dieses Projekt",
+      try: "Ausprobieren", adopt: "In meinen Kurs übernehmen",
+      count: (n, total) => `${n} von ${total} Templates`, empty: "Kein Template passt zu dieser Suche.",
+      problems: "Datenhinweise", error: "Der Katalog konnte nicht geladen werden.",
+      "audience.primary": "Grundschule", "audience.secondary": "Sekundarstufe", "audience.vocational": "Berufsbildung",
+      "audience.higher-education": "Hochschule", "audience.adult": "Erwachsenenbildung"
+    },
+    en: {
+      search: "Search templates", subject: "Subject", audience: "Audience", status: "Status", all: "All",
+      "status.checked": "✓ checked", "status.found": "newly found, not checked", "status.own": "this project only",
+      try: "Try it", adopt: "Add to my course",
+      count: (n, total) => `${n} of ${total} templates`, empty: "No template matches this search.",
+      problems: "Data notes", error: "The catalog could not be loaded.",
+      "audience.primary": "Primary school", "audience.secondary": "Secondary school", "audience.vocational": "Vocational training",
+      "audience.higher-education": "Higher education", "audience.adult": "Adult education"
+    }
+  };
+
+  const views = new Map();
+
+  function useLanguage(lang) {
+    const raw = lang || (typeof navigator !== "undefined" && navigator.language) || "";
+    const code = String(raw).slice(0, 2).toLowerCase();
+    return code === "de" ? "de" : "en";
+  }
+
+  const escape = value => String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[c]);
+
+  const translator = lang => (key, ...args) => {
+    const value = TEXT[lang][key];
+    return typeof value === "function" ? value(...args) : value;
+  };
+
+  function card(entry, t) {
+    const tags = [
+      ...entry.subjects.map(s => `<li class="catalog-tag">${escape(s)}</li>`),
+      ...entry.audiences.map(a => `<li class="catalog-tag catalog-tag-audience">${escape(t(`audience.${a}`))}</li>`)
+    ].join("");
+    return `<li class="catalog-card"><article>
+      <h3><span class="catalog-icon" aria-hidden="true">${escape(entry.icon)}</span> ${escape(entry.name)}</h3>
+      <p><span class="catalog-status catalog-status-${escape(entry.status)}">${escape(t(`status.${entry.status}`))}</span></p>
+      <p class="catalog-description">${escape(entry.description)}</p>
+      <ul class="catalog-tags">${tags}</ul>
+      ${entry.note ? `<p class="catalog-note">${escape(entry.note)}</p>` : ""}
+      <p class="catalog-macros">${entry.macros.map(m => `<code>${escape(m)}</code>`).join(" ")}</p>
+      <p class="catalog-actions"><a class="catalog-button" href="${escape(entry.demo)}" target="_blank" rel="noopener"><span aria-hidden="true">👁</span> ${escape(t("try"))}</a>
+      <a class="catalog-button catalog-button-primary" href="agent:teaching/manage-templates?name=${encodeURIComponent(entry.id)}"><span aria-hidden="true">▶️</span> ${escape(t("adopt"))}</a>
+      <code class="catalog-command">:manage-templates ${escape(entry.id)}</code></p>
+    </article></li>`;
+  }
+
+  function results(entries, shown, t) {
+    const list = shown.length
+      ? `<ul class="catalog-grid">${shown.map(e => card(e, t)).join("")}</ul>`
+      : `<p class="catalog-empty">${escape(t("empty"))}</p>`;
+    return `<p class="catalog-count" aria-live="polite">${escape(t("count", shown.length, entries.length))}</p>${list}`;
+  }
+
+  function select(name, label, values, t) {
+    const options = values.map(([value, text]) => `<option value="${escape(value)}">${escape(text)}</option>`).join("");
+    return `<label class="catalog-field">${escape(label)}<select data-catalog-filter="${name}"><option value="">${escape(t("all"))}</option>${options}</select></label>`;
+  }
+
+  function render(id, model) {
+    const lang = useLanguage(model && model.lang);
+    const t = translator(lang);
+    const entries = (model && model.entries) || [];
+    const problems = (model && model.problems) || [];
+    views.set(id, { entries, lang });
+    const head = `<article class="lia-catalog" data-catalog-view="${escape(id)}">`;
+    if (model && model.error) return `${head}<p class="catalog-error" role="alert">${escape(t("error"))}</p></article>`;
+
+    const unique = list => [...new Set(list)].sort();
+    const subjects = unique(entries.flatMap(e => e.subjects)).map(s => [s, s]);
+    const audiences = AUDIENCES.filter(a => entries.some(e => e.audiences.includes(a))).map(a => [a, t(`audience.${a}`)]);
+    const statuses = STATUSES.filter(s => entries.some(e => e.status === s)).map(s => [s, t(`status.${s}`)]);
+    const notes = problems.length
+      ? `<details class="catalog-problems"><summary>${escape(t("problems"))}</summary><ul>${problems.map(p => `<li>${escape(p)}</li>`).join("")}</ul></details>`
+      : "";
+    return `${head}<div class="catalog-filters">
+      <label class="catalog-field catalog-field-search">${escape(t("search"))}<input type="search" data-catalog-filter="query" autocomplete="off"></label>
+      ${select("subject", t("subject"), subjects, t)}${select("audience", t("audience"), audiences, t)}${select("status", t("status"), statuses, t)}
+    </div><div data-catalog-results>${results(entries, entries, t)}</div>${notes}</article>`;
+  }
+
+  if (typeof document !== "undefined") {
+    const update = event => {
+      const target = event.target;
+      if (!target || !target.closest) return;
+      const field = target.closest("[data-catalog-filter]");
+      const root = field && field.closest("[data-catalog-view]");
+      const view = root && views.get(root.getAttribute("data-catalog-view"));
+      if (!view) return;
+      const criteria = {};
+      root.querySelectorAll("[data-catalog-filter]").forEach(el => { criteria[el.getAttribute("data-catalog-filter")] = el.value; });
+      const box = root.querySelector("[data-catalog-results]");
+      if (box) box.innerHTML = results(view.entries, filter(view.entries, criteria), translator(view.lang));
+    };
+    document.addEventListener("input", update);
+    document.addEventListener("change", update);
+  }
+
+  global.LiaCatalog = Object.freeze({ AUDIENCES, normalize, merge, filter, render, useLanguage });
+  if (typeof document !== "undefined" && typeof CustomEvent !== "undefined") document.dispatchEvent(new CustomEvent("lia-catalog-ready"));
 })(typeof globalThis !== "undefined" ? globalThis : this);

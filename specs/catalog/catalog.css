@@ -1,0 +1,63 @@
+.lia-catalog {
+  --catalog-bg: #ffffff;
+  --catalog-soft: #f5f7f6;
+  --catalog-ink: #253c35;
+  --catalog-muted: #566c63;
+  --catalog-border: #dce5e0;
+  --catalog-accent: #245f48;
+  --catalog-accent-soft: #e8f3ed;
+  --catalog-warn: #79551c;
+  --catalog-warn-soft: #fff4df;
+  --catalog-own: #2f4f7a;
+  --catalog-own-soft: #e8eff8;
+  color: var(--catalog-ink);
+  line-height: 1.5;
+  max-width: 1100px;
+  margin: 1.2em auto;
+  display: block;
+}
+.lia-catalog *, .lia-catalog *::before, .lia-catalog *::after { box-sizing: border-box; }
+.lia-catalog .catalog-filters { display: flex; flex-wrap: wrap; gap: .8em; margin-bottom: 1em; }
+.lia-catalog .catalog-field { display: flex; flex-direction: column; gap: .25em; font-size: .85em; color: var(--catalog-muted); font-weight: 650; }
+.lia-catalog .catalog-field-search { flex: 1 1 14rem; }
+.lia-catalog input, .lia-catalog select { font: inherit; color: var(--catalog-ink); background: var(--catalog-bg); border: 1px solid var(--catalog-border); border-radius: 7px; padding: .45em .6em; }
+.lia-catalog .catalog-count { color: var(--catalog-muted); font-size: .9em; margin: .4em 0; }
+.lia-catalog .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 1em; list-style: none; padding: 0; margin: 0; }
+.lia-catalog .catalog-card { margin: 0; padding: 0; }
+.lia-catalog .catalog-card article { height: 100%; padding: 1em; background: var(--catalog-bg); border: 1px solid var(--catalog-border); border-radius: 12px; }
+.lia-catalog h3 { font-size: 1.1em; margin: 0 0 .4em; line-height: 1.35; }
+.lia-catalog p { margin: .45em 0; }
+.lia-catalog .catalog-status { display: inline-block; font-size: .78em; font-weight: 650; padding: .15em .6em; border-radius: 99px; }
+.lia-catalog .catalog-status-checked { color: var(--catalog-accent); background: var(--catalog-accent-soft); }
+.lia-catalog .catalog-status-found { color: var(--catalog-warn); background: var(--catalog-warn-soft); border: 1px solid var(--catalog-warn); }
+.lia-catalog .catalog-status-own { color: var(--catalog-own); background: var(--catalog-own-soft); }
+.lia-catalog .catalog-description { font-size: .92em; }
+.lia-catalog .catalog-tags { display: flex; flex-wrap: wrap; gap: .3em; list-style: none; padding: 0; margin: .5em 0; }
+.lia-catalog .catalog-tag { margin: 0; padding: .1em .55em; font-size: .75em; color: var(--catalog-muted); background: var(--catalog-soft); border-radius: 4px; }
+.lia-catalog .catalog-tag-audience { color: var(--catalog-accent); background: var(--catalog-accent-soft); }
+.lia-catalog .catalog-note { font-size: .85em; color: var(--catalog-warn); }
+.lia-catalog .catalog-macros code, .lia-catalog .catalog-command { font-size: .75em; color: var(--catalog-muted); background: var(--catalog-soft); padding: .15em .4em; border-radius: 4px; overflow-wrap: anywhere; }
+.lia-catalog .catalog-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5em; margin-top: .8em; }
+.lia-catalog .catalog-button { display: inline-flex; align-items: center; gap: .3em; border: 1px solid var(--catalog-accent); border-radius: 7px; padding: .4em .8em; color: var(--catalog-accent); background: var(--catalog-bg); text-decoration: none; font-weight: 650; font-size: .88em; }
+.lia-catalog .catalog-button-primary { color: #fff; background: var(--catalog-accent); }
+.lia-catalog .catalog-button:hover { text-decoration: underline; text-underline-offset: .2em; }
+.lia-catalog .catalog-empty, .lia-catalog .catalog-error { padding: 1em; border: 1px dashed var(--catalog-border); border-radius: 8px; color: var(--catalog-muted); }
+.lia-catalog .catalog-error { color: var(--catalog-warn); border-color: var(--catalog-warn); background: var(--catalog-warn-soft); }
+.lia-catalog .catalog-problems { margin-top: 1.2em; font-size: .85em; color: var(--catalog-muted); }
+.lia-catalog .catalog-problems summary { cursor: pointer; font-weight: 650; }
+@media (prefers-color-scheme: dark) {
+  .lia-catalog {
+    --catalog-bg: #17211d;
+    --catalog-soft: #212e29;
+    --catalog-ink: #e3eee8;
+    --catalog-muted: #a6b9b0;
+    --catalog-border: #34463f;
+    --catalog-accent: #7cc9a3;
+    --catalog-accent-soft: #1f3a2f;
+    --catalog-warn: #f0c27a;
+    --catalog-warn-soft: #3b2f18;
+    --catalog-own: #9dbfec;
+    --catalog-own-soft: #1f2d42;
+  }
+  .lia-catalog .catalog-button-primary { color: #0f1a15; }
+}
