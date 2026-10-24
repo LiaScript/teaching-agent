@@ -19,7 +19,7 @@ Use this task when:
 - `journal.md` → `## Templates` → only the entry with `__Catalog id:__ {id}` (its `__Source:__`, `__Import:__`, `__Header entry:__`) and the `import:` lines of the main metadata header
 - `journal.md` → `## Course Context` (language, subject, target group, `__File Structure:__`)
 - `lia-templates/{id}/` (its `README.md` header: `version:`, macros)
-- The material files that import the template (found with `node specs/dashboard/find.mjs "lia-templates/{id}/README.md" journal.md materials`, in single-file mode `… journal.md README.md`)
+- The files that import the template, found with `node specs/dashboard/find.mjs <pattern> journal.md materials` (in single-file mode `… journal.md README.md`): for the first publication the pattern `"lia-templates/{id}/README.md"` (the local import); once published (`__Source:__ https://github.com/{owner}/{repo}@{tag}`) the pattern `"raw.githubusercontent.com/{owner}/{repo}/"` with owner and repository taken from `__Source:__` — every import then names the old tag's URL, never the local path
 - `templates.local.json` in the project root (created if missing) and the course project's `.gitignore`
 - Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
@@ -68,8 +68,11 @@ Use this task when:
    - the import changes of step 3 (every file and line, old → new) and the `templates.local.json` entry of
      step 4
    Cancel: nothing is written or run.
-3. **Publish and switch the imports.** On confirmation run the commands of step 2, each on its own; on
-   any error stop, report it and change nothing in the journal or the materials. Once the tag is pushed,
+3. **Publish and switch the imports.** On confirmation, in this order: (1) the README edits of the plan —
+   documentation in English, `version:` set — with the file-edit tool; (2) then the commands of step 2,
+   each on its own, starting with `gh auth status` and `git init`, so that `git add` / `git commit` already
+   carry the edited README; on any error stop, report it and change nothing in the journal or the
+   materials. Once the tag is pushed,
    switch every import of the template to `https://raw.githubusercontent.com/{owner}/{repo}/{tag}/README.md`:
    the journal header (`import: ./lia-templates/{id}/README.md`), the entry in `## Templates`
    (`__Import:__`, `__Header entry:__`, and `__Source:__ https://github.com/{owner}/{repo}@{tag}`) and in
@@ -96,7 +99,10 @@ Use this task when:
    commands, each on its own: `gh repo fork LiaScript/teaching-agent --clone=false`,
    `gh repo clone {user}/teaching-agent .cache/catalog-pr`, a branch `add-template-{id}` there, the entry
    added to `.cache/catalog-pr/specs/catalog/templates.json`, commit, push,
-   `gh pr create --repo LiaScript/teaching-agent --head {user}:add-template-{id}`. Pull request opened →
+   `gh pr create --repo LiaScript/teaching-agent --head {user}:add-template-{id}`, and afterwards (also
+   after an error) `rm -r .cache/catalog-pr` — the clone is never left in the course project. Before the
+   clone, the course `.gitignore` gets `.cache/` if it lacks it, so the clone can never become a gitlink of
+   the course repository (part of this plan). Pull request opened →
    `shared: "pull-request"`; confirmed but not opened (cancelled, error) → `shared: "offered"`. `checked`
    exists only in the pull request's entry — the project entry in `templates.local.json` stays
    `status: "own"` — and this project's own `specs/catalog/templates.json` is never written.
@@ -107,7 +113,10 @@ Use this task when:
    `git -C lia-templates/{id} push`, `git -C lia-templates/{id} tag {new tag}`,
    `git -C lia-templates/{id} push origin {new tag}` — and switch every import as in step 3 (header,
    `## Templates` with `__Source:__`, **every** material) plus `import` and `demo` in `templates.local.json`
-   to the new tag. The decision of step 1 is not asked again.
+   to the new tag. Find the files by the old tag's URL, not by the local path:
+   `node specs/dashboard/find.mjs "raw.githubusercontent.com/{owner}/{repo}/" journal.md materials`
+   (owner and repository from `__Source:__`; single-file `… journal.md README.md`) — every hit with the old
+   `{tag}` becomes `{new tag}`. The decision of step 1 is not asked again.
    No submodule, no subtree, and no clone of the template outside the project.
 7. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` →
    `## Dashboard` in place. **Finish:** a short summary (repository, tag, which files import the new URL,
@@ -116,6 +125,6 @@ Use this task when:
 
 ## Notes
 
-- This task writes only: the files and the git repository in `lia-templates/{id}/` (documentation, `version:`), the `import:` lines of the journal header, of the entry in `## Templates` (`__Import:__`, `__Header entry:__`) and of the materials, the entry's `__Source:__`, the entry `{id}` in `templates.local.json` (`import`, `repo`, `demo`, `shared`), the course `.gitignore`, the clone in `.cache/catalog-pr/` of step 5, and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
+- This task writes only: the files and the git repository in `lia-templates/{id}/` (documentation, `version:`), the `import:` lines of the journal header, of the entry in `## Templates` (`__Import:__`, `__Header entry:__`) and of the materials, the entry's `__Source:__`, the entry `{id}` in `templates.local.json` (`import`, `repo`, `demo`, `shared`), the course `.gitignore` (`lia-templates/{id}/`, `.cache/`), the temporary clone in `.cache/catalog-pr/` of step 5 (removed after the pull request), and `journal.md` → `## Dashboard` (through `tasks/update-dashboard.md`).
 - Every git and `gh` command runs only after the confirmation in the terminal, each on its own, inside the project.
 - Never write to `specs/catalog/templates.json` of this project; it is replaced on every update of the Teaching-Agent.

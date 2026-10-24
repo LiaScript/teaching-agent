@@ -31,7 +31,7 @@
     if (!isText(raw.description)) return { error: "has no description" };
     // An own template that stays in the project (local list only) imports ./lia-templates/{id}/README.md;
     // its repo and demo are optional then, but https when present. Everything else is https-only.
-    const inProject = source !== "shared" && raw.status === "own" && raw.import === `./lia-templates/${raw.id}/README.md`;
+    const inProject = source === "local" && raw.status === "own" && raw.import === `./lia-templates/${raw.id}/README.md`;
     for (const field of ["import", "repo", "demo"]) {
       if (inProject && (field === "import" || raw[field] === undefined)) continue;
       if (!isHttps(raw[field])) return { error: `needs an https URL in "${field}"` };

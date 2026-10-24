@@ -71,6 +71,8 @@ test("a relative import is only for own local entries whose path names their own
   assert.equal(reject([ownLocal({ status: "checked" })]), 0, "a local checked entry is treated as found");
   assert.equal(reject([{ ...ownLocal(), status: "checked", checked: "2026-10-23" }], "shared"), 0, "the shared list stays https-only");
   assert.equal(reject([valid({ status: "found", demo: undefined })]), 0, "a found entry still needs its demo");
+  assert.equal(reject([ownLocal()], "other"), 0, "only the local list may hold a relative import (fail closed)");
+  assert.equal(reject([ownLocal()], null), 0, "a list without a source stays https-only");
 });
 
 test("a card without a demo has no 👁 button", () => {

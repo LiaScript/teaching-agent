@@ -201,7 +201,7 @@ workflow:
     - step: develop_template
       agent: development
       command: :develop-template {id}
-      output: "lia-templates/{id}/ (README.md with macros and examples, JS/CSS, check.mjs) + the brief's `__State:__` / `__Folder:__`"
+      output: "lia-templates/{id}/ (README.md with macros and examples, JS/CSS, check.mjs) + the brief's `__State:__` / `__Folder:__` + templates.local.json entry (status own, import ./lia-templates/{id}/README.md)"
       dependencies: [suggest_templates]
       optional: true
       condition: a brief `### {id} (in development)` exists (Dashboard `next`)
@@ -211,8 +211,8 @@ workflow:
         - Unclear brief points go back to the Teaching-Agent (`agent:teaching/switch`), never invented
         - Plan confirmed in the chat; model tests `node --test lia-templates/{id}/check.mjs`, `run_in_page` in the preview, rendered check `check-material.mjs`
         - The instructor tries it in the preview; loop of at most 3 rounds until the `__Acceptance:__` points are confirmed
-        - `__State:__ ready to test` → back to the Teaching-Agent, whose `:manage-templates {id}` checks and adopts it
-        - Changes only `lia-templates/{id}/` and the brief's `__State:__` / `__Folder:__`
+        - `__State:__ ready to test` → `templates.local.json` gets the entry `{id}` (`status: "own"`, local import `./lia-templates/{id}/README.md`, no repo/demo) → back to the Teaching-Agent, whose `:manage-templates {id}` checks and adopts it
+        - Changes only `lia-templates/{id}/`, the brief's `__State:__` / `__Folder:__` and its own entry in `templates.local.json`
 
     - step: publish_template
       agent: development
