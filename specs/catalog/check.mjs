@@ -98,3 +98,39 @@ test("filter options come from the tags that exist", () => {
   assert.match(html, /<option value="python">/);
   assert.doesNotMatch(html, /<option value="sql">/);
 });
+
+const stub = routes => async url => {
+  const hit = routes[String(url)];
+  if (hit === undefined) return { ok: false, status: 404, json: async () => { throw new Error("404"); } };
+  return { ok: true, status: 200, json: async () => (typeof hit === "string" ? JSON.parse(hit) : hit) };
+};
+const base = "http://example.org/specs/catalog/README.md";
+
+test("the course URL comes from the search part, without the slide hash", () => {
+  assert.equal(catalog.courseUrl("?" + encodeURIComponent(base) + "#3"), base);
+  assert.equal(catalog.courseUrl(""), null);
+});
+
+test("both lists load relative to the course; a missing local list is silent", async () => {
+  const model = await catalog.load(base, stub({ "http://example.org/specs/catalog/templates.json": { version: 1, templates: [valid()] } }));
+  assert.equal(model.entries.length, 1);
+  assert.deepEqual(model.problems, []);
+});
+
+test("the local list is read from the project root", async () => {
+  const model = await catalog.load(base, stub({
+    "http://example.org/specs/catalog/templates.json": { version: 1, templates: [valid()] },
+    "http://example.org/templates.local.json": { version: 1, templates: [valid({ id: "own-quiz", status: "own" })] }
+  }));
+  assert.deepEqual(model.entries.map(e => e.id), ["python-turtle", "own-quiz"]);
+});
+
+test("a broken local list is a data note; a missing shared list is an error", async () => {
+  const broken = await catalog.load(base, stub({ "http://example.org/specs/catalog/templates.json": { version: 1, templates: [valid()] },
+    "http://example.org/templates.local.json": "{ not json" }));
+  assert.equal(broken.entries.length, 1);
+  assert.match(broken.problems.join("\n"), /templates\.local\.json/);
+  const missing = await catalog.load(base, stub({}));
+  assert.ok(missing.error);
+  assert.deepEqual(missing.entries, []);
+});

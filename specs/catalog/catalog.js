@@ -230,6 +230,41 @@
     document.addEventListener("change", update);
   }
 
-  global.LiaCatalog = Object.freeze({ AUDIENCES, normalize, merge, filter, render, useLanguage });
+  // The course URL is the search part of the page address (without the slide hash), or null.
+  function courseUrl(search = global.location && global.location.search) {
+    const text = String(search || "").split("#")[0].replace(/^\?/, "");
+    if (!text) return null;
+    try { return decodeURIComponent(text); } catch (error) { return text; }
+  }
+
+  // Loads the shared list (required) and the project list (optional) relative to the course URL.
+  async function load(course, fetchFn = global.fetch) {
+    const failed = error => ({ entries: [], problems: [], error });
+    let sharedUrl;
+    let localUrl;
+    try {
+      sharedUrl = new URL("templates.json", course);
+      localUrl = new URL("../../templates.local.json", course);
+    } catch (error) { return failed(`Invalid course URL: ${course}`); }
+
+    let shared;
+    try {
+      const response = await fetchFn(sharedUrl);
+      if (!response.ok) return failed(`The shared template list could not be loaded (HTTP ${response.status}).`);
+      shared = normalize(await response.json(), "shared");
+    } catch (error) { return failed(`The shared template list could not be loaded: ${error.message}`); }
+
+    let local = { entries: [], problems: [] };
+    let response = null;
+    try { response = await fetchFn(localUrl); } catch (error) { response = null; }
+    if (response && response.ok) {
+      try { local = normalize(await response.json(), "local"); } catch (error) {
+        local = { entries: [], problems: [`templates.local.json: ${error.message}`] };
+      }
+    }
+    return merge(shared, local);
+  }
+
+  global.LiaCatalog = Object.freeze({ AUDIENCES, normalize, merge, filter, render, useLanguage, courseUrl, load });
   if (typeof document !== "undefined" && typeof CustomEvent !== "undefined") document.dispatchEvent(new CustomEvent("lia-catalog-ready"));
 })(typeof globalThis !== "undefined" ? globalThis : this);
