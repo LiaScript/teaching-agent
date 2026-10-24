@@ -19,12 +19,12 @@
 .lia-catalog *, .lia-catalog *::before, .lia-catalog *::after { box-sizing: border-box; }
 .lia-catalog .catalog-filters { display: flex; flex-wrap: wrap; gap: .8em; margin-bottom: 1em; }
 .lia-catalog .catalog-field { display: flex; flex-direction: column; gap: .25em; font-size: .85em; color: var(--catalog-muted); font-weight: 650; }
-.lia-catalog .catalog-field-search { flex: 1 1 14rem; }
+.lia-catalog .catalog-field-search { flex: 1 1 14em; }
 .lia-catalog input, .lia-catalog select { font: inherit; color: var(--catalog-ink); background: var(--catalog-bg); border: 1px solid var(--catalog-border); border-radius: 7px; padding: .45em .6em; }
 .lia-catalog .catalog-count { color: var(--catalog-muted); font-size: .9em; margin: .4em 0; }
-.lia-catalog .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 1em; list-style: none; padding: 0; margin: 0; }
+.lia-catalog .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16em, 1fr)); gap: 1em; list-style: none; padding: 0; margin: 0; }
 .lia-catalog .catalog-card { margin: 0; padding: 0; }
-.lia-catalog .catalog-card article { height: 100%; padding: 1em; background: var(--catalog-bg); border: 1px solid var(--catalog-border); border-radius: 12px; }
+.lia-catalog .catalog-card article { height: 100%; overflow-wrap: anywhere; padding: 1em; background: var(--catalog-bg); border: 1px solid var(--catalog-border); border-radius: 12px; }
 .lia-catalog h3 { font-size: 1.1em; margin: 0 0 .4em; line-height: 1.35; }
 .lia-catalog p { margin: .45em 0; }
 .lia-catalog .catalog-status { display: inline-block; font-size: .78em; font-weight: 650; padding: .15em .6em; border-radius: 99px; }
@@ -45,8 +45,24 @@
 .lia-catalog .catalog-error { color: var(--catalog-warn); border-color: var(--catalog-warn); background: var(--catalog-warn-soft); }
 .lia-catalog .catalog-problems { margin-top: 1.2em; font-size: .85em; color: var(--catalog-muted); }
 .lia-catalog .catalog-problems summary { cursor: pointer; font-weight: 650; }
+/* Dark colors follow LiaScript's own setting (html.lia-variant-dark), which is independent of the system;
+   the system setting only counts while LiaScript has set neither variant. */
+html.lia-variant-dark .lia-catalog {
+  --catalog-bg: #17211d;
+  --catalog-soft: #212e29;
+  --catalog-ink: #e3eee8;
+  --catalog-muted: #a6b9b0;
+  --catalog-border: #34463f;
+  --catalog-accent: #7cc9a3;
+  --catalog-accent-soft: #1f3a2f;
+  --catalog-warn: #f0c27a;
+  --catalog-warn-soft: #3b2f18;
+  --catalog-own: #9dbfec;
+  --catalog-own-soft: #1f2d42;
+}
+html.lia-variant-dark .lia-catalog .catalog-button-primary { color: #0f1a15; }
 @media (prefers-color-scheme: dark) {
-  .lia-catalog {
+  html:not(.lia-variant-light):not(.lia-variant-dark) .lia-catalog {
     --catalog-bg: #17211d;
     --catalog-soft: #212e29;
     --catalog-ink: #e3eee8;
@@ -59,5 +75,5 @@
     --catalog-own: #9dbfec;
     --catalog-own-soft: #1f2d42;
   }
-  .lia-catalog .catalog-button-primary { color: #0f1a15; }
+  html:not(.lia-variant-light):not(.lia-variant-dark) .lia-catalog .catalog-button-primary { color: #0f1a15; }
 }

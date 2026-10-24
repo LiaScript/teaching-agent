@@ -136,6 +136,18 @@ test("filter options come from the tags that exist", () => {
   assert.doesNotMatch(html, /<option value="sql">/);
 });
 
+test("the page follows LiaScript's light/dark setting, sizes cards in em and wraps long words", () => {
+  const css = readFileSync(new URL("./catalog.css", import.meta.url), "utf8");
+  // LiaScript keeps its own setting (html.lia-variant-dark / -light), independent of the system: dark colors
+  // only with the system setting would put light labels on LiaScript's white page, and the reverse.
+  assert.match(css, /html\.lia-variant-dark \.lia-catalog\s*\{[^}]*--catalog-bg:\s*#17211d/);
+  assert.match(css, /@media \(prefers-color-scheme: dark\)\s*\{\s*html:not\(\.lia-variant-light\):not\(\.lia-variant-dark\) \.lia-catalog/);
+  assert.match(css, /html\.lia-variant-dark \.lia-catalog \.catalog-button-primary/);
+  // LiaScript sets the root font size to 10px: 16rem cards are 160px wide, five in a row.
+  assert.doesNotMatch(css, /\d+(\.\d+)?rem/, "rem is 10px in LiaScript – use em");
+  assert.match(css, /\.lia-catalog \.catalog-card article \{[^}]*overflow-wrap: anywhere/);
+});
+
 const stub = routes => async url => {
   const hit = routes[String(url)];
   if (hit === undefined) return { ok: false, status: 404, json: async () => { throw new Error("404"); } };
