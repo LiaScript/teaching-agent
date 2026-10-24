@@ -97,7 +97,7 @@ Write exactly the confirmed draft — no additions, no silently filled details. 
 3. Replace the content of `journal.md` → `## Outline`.
 4. Replace the content of `journal.md` → `## Didactics` — including the **Persona Voice Sample** bullet and the confirmed Session Types.
 4b. Synchronize `journal.md` → `## Agents` → `### Coauthor` exactly as `tasks/create-didactics.md` step 10 does (role, behavior, interaction style, project rules, voice sample; `__Customization Status:__ active`), so later tasks do not fall back to `## Didactics`.
-5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`.
+5. If template imports were provided, run `tasks/manage-templates.md` and update `journal.md` → `## Templates`. Leave `* __Template selection:__ open` as it is — `:suggest-templates` after the scaffold makes the selection and recognises the templates documented here.
 6. Replace the content of `journal.md` → `## Agenda` (if agenda = no: replace its placeholders with one line in the course language, "No agenda — decided with the course frame", and keep its action line for planning one later).
 7. Replace the content of `journal.md` → `## Sessions` with:
    - The overview directly below `## Sessions` as defined in `templates/session-skeleton.yaml` → `section_layout.overview`: one status line per session ("{number}. {title} – planning sketch ✅ · material open", translated — the fixed word for skeleton, `templates/session-skeleton.yaml`) and one table row per session (`| {number} | {title} | {type} | ✅ | ❌ | ❌ | |`, plus the Method column if a method is in use)

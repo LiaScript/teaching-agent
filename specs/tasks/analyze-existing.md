@@ -14,6 +14,7 @@ Offers two paths for each missing core section:
 - `journal.md` → `## Course Context` (created by `:init-course`, mandatory)
 - Existing `journal.md` sections: `## Outline`, `## Didactics`, `## Templates`, `## Agenda`, `## Visual Identity`, `## Sessions`, `## Agents`
 - Existing folder: `materials/`
+- `import:` lines of the journal header and the material headers; `tasks/manage-templates.md` and `templates/course-templates.yaml` for documenting them (step 6d)
 - Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
@@ -76,6 +77,8 @@ Offers two paths for each missing core section:
    - Remove the legacy top-level `## Learner Personas` section after migration to avoid duplicate persona sources.
    - Do not read or merge Coauthor or specialist agent customization sections unless this task is explicitly checking the `## Agents` section shape.
 
+6d. Document existing template imports — prepared here, written only after "Save" in step 8b: every `import:` line of the journal header or of a material header that `## Templates` does not document yet gets its entry as `tasks/manage-templates.md` steps 3–5 describe (its 3b is covered by step 8b). `* __Template selection:__` stays `open`; `:suggest-templates` later recognises the documented templates and asks only about the remaining activities.
+
 7. After all missing sections are handled, list **improvement opportunities** in the existing content:
    - Sessions without materials
    - Materials without session subsections
@@ -87,7 +90,7 @@ Offers two paths for each missing core section:
 
 8. Suggest a prioritized action list and the recommended next step (usually `:coauthor-materials`).
 
-8b. **Before saving:** show in one message everything this task will still write — the detected File Structure (step 1), the reconstructed `## Sessions` overview (6b), the `## Agents` changes including the removal of a legacy `## Learner Personas` section (6c), and the status overview (step 9) — with "Save" / "Change something" (translated). This is the single write confirmation of these steps; drafts saved in step 5 had their own.
+8b. **Before saving:** show in one message everything this task will still write — the detected File Structure (step 1), the reconstructed `## Sessions` overview (6b), the `## Agents` changes including the removal of a legacy `## Learner Personas` section (6c), the template entries and header imports (6d), and the status overview (step 9) — with "Save" / "Change something" (translated). This is the single write confirmation of these steps; drafts saved in step 5 had their own.
 
-9. After "Save": write the File Structure, the `## Sessions` overview, the `## Agents` changes and the full status overview as `journal.md` → `## Analysis Status` — one write per section.
+9. After "Save": write the File Structure, the `## Sessions` overview, the `## Agents` changes, the template entries with their header imports and the full status overview as `journal.md` → `## Analysis Status` — one write per section.
 10. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.

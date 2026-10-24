@@ -35,6 +35,7 @@ BUNDLE_ORDER = [
     ("checklists", True),
     ("data", True),
     ("workflows", True),
+    ("catalog/templates.json", False),
 ]
 
 TARGETS = {
@@ -88,6 +89,8 @@ def _read_file_bundle(file: Path, name: str) -> str:
 
     if name.endswith(".yaml"):
         content = f"```yaml\n{content}\n```"
+    elif name.endswith(".json"):
+        content = f"```json\n{content}\n```"
 
     if name.startswith("agents/"):
         generic = "".join([
@@ -255,12 +258,14 @@ def _nav_content(target_key: str, target: dict, agent: dict) -> str:
     suggest_learner = coord.get("suggest_learner_when") or []
     suggest_dev     = coord.get("suggest_development_when") or []
     suggest_try     = coord.get("suggest_try_as_learner_when") or []
-    if suggest_artist or suggest_learner or suggest_dev or suggest_try:
+    suggest_tpl     = coord.get("suggest_templates_when") or []
+    if suggest_artist or suggest_learner or suggest_dev or suggest_try or suggest_tpl:
         lines += ["## Agent Coordination", ""]
         for label, items in [
             ("Suggest `:agent artist`", suggest_artist),
             ("Suggest `:agent learner`", suggest_learner),
             ("Suggest `:agent development`", suggest_dev),
+            ("Offer `:suggest-templates`", suggest_tpl),
             ("Offer `:try-as-learner`", suggest_try),
         ]:
             if items:
@@ -292,8 +297,11 @@ def _nav_content(target_key: str, target: dict, agent: dict) -> str:
         "specs/agents/      ← agent personas    (read on :agent switch)",
         "specs/checklists/  ← quality checks    (read during :validate-course)",
         "specs/data/        ← LiaScript data    (read when working with LiaScript)",
+        "specs/catalog/     ← template catalog  (templates.json read-only; search.mjs; page README.md)",
         "journal.md         ← current project state  (read on activation)",
         "materials/         ← generated course materials",
+        "lia-templates/     ← own templates in development (one folder per template)",
+        "templates.local.json ← project template list (found / own entries)",
         "```",
         "",
     ]

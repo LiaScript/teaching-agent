@@ -115,6 +115,22 @@ workflow:
         - Framework, method, teaching style and difficulty are chosen by the agent and shown in plain words — no technical questions to the instructor
         - Session Types (slug in the course language, criterion, required elements — see data/session-types.md)
         - Saved with the readable layout of `templates/course-didactics.yaml` (technical fields in `<details>`)
+        - One sentence on which kinds of templates the catalog has for the subject (a hint only, no selection)
+
+    # Phase 1a: Templates for the learning activities
+    - step: suggest_templates
+      agent: teaching
+      command: :suggest-templates {activity?}
+      output: "journal.md → ## Templates (`__Template selection:__`, adopted entries, briefs) + header imports"
+      dependencies: [create_didactics]
+      notes: |
+        Dashboard step "Templates for activities" between the didactics and the agenda:
+        - Learning activities from `## Didactics` that need a template (never LiaScript's own quizzes, surveys, charts)
+        - Catalog (`specs/catalog/templates.json`) and project list (`templates.local.json`) filtered by subject and target group, plus `node specs/catalog/search.mjs` (finds shown as "newly found, not checked")
+        - Per activity: adopt · try first (demo) · develop one ourselves (brief `### {id} (in development)`) · none needed
+        - One save confirmation; the selection line is written in the same write as the entries and briefs it names
+        - Repeatable without reopening the didactics; with {activity} from :coauthor-materials only that activity
+        - The order relative to the Artist's :create-visuals stays open
 
     # Phase 1b: Learner Personas (optional)
     - step: create_learner_personas
@@ -177,6 +193,8 @@ workflow:
         Available whenever a LiaScript template is needed:
         - Adds `import: {url}` lines to the main project metadata header
         - Documents template purpose, examples, and usage rules in `## Templates`
+        - {name} may be a catalog id (catalog card "Adopt into my course"): import, macros and demo from the entry, confirmed against the README
+        - Own templates: brief written by :suggest-templates → Development-Agent builds it in `lia-templates/{id}/` (Dashboard `next`) → `:manage-templates {id}` checks it against `__Acceptance:__` once `__State:__ ready to test` and adopts it, or sends it back with feedback
         - Includes the community template discovery link: https://github.com/topics/liascript-template
         - Ensures promoted materials include required imports when they use template macros
 
@@ -337,6 +355,7 @@ workflow:
     - Sections the instructor reads (Course Context, Outline, Didactics, Agenda, unit skeletons, validation reports) use the `layout` of their template: a readable part in the course language, technical keys in `<details>`
     - After a unit check passes, :try-as-learner lets the instructor try the unit as a learner with a learning companion (preview only)
     - Changes after a check go through the change path of :quick-fix
+    - :suggest-templates follows the didactics (templates for the learning activities); own templates go from a brief to the Development-Agent and back to :manage-templates {id}
 
   flow_diagram: |
     ```mermaid
@@ -345,7 +364,10 @@ workflow:
         B -->|improve-existing| C[teaching: analyze-existing]
         B -->|new course| D[teaching: create-outline]
         D --> E[teaching: create-didactics]
-        E --> EP[teaching: create-learner-persona - optional]
+        E --> ST[teaching: suggest-templates]
+        ST -.->|own template: brief| DT[development: develop-template]
+        DT -.->|ready to test| MT[teaching: manage-templates id]
+        ST --> EP[teaching: create-learner-persona - optional]
         EP --> F[artist: create-visuals - optional]
         F --> G[artist: create-logo - optional]
         G --> H[teaching: create-agenda - if planned]
@@ -381,6 +403,8 @@ workflow:
         style TL fill:#e8f4f8,stroke:#0B6E75
         style TL stroke-dasharray: 5 5
         style LR fill:#e8f4f8,stroke:#0B6E75
+        style DT fill:#e8f4f8,stroke:#0B6E75
+        style DT stroke-dasharray: 5 5
         style SR fill:#e8f4f8,stroke:#0B6E75
         style EP stroke-dasharray: 5 5
         style LR stroke-dasharray: 5 5
@@ -428,22 +452,22 @@ workflow:
   quick_reference:
     course_type_paths:
       lecture-series:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-agenda", ":create-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":suggest-templates", ":create-agenda", ":create-session", ":coauthor-materials", ":validate-course"]
         publishing: "optional: :create-project when ready to share"
       self-paced:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":suggest-templates", ":create-session", ":coauthor-materials", ":validate-course"]
         note: "Agenda optional — decided at :init-course"
         publishing: "optional: :create-project when ready to share"
       workshop:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-agenda", ":create-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":suggest-templates", ":create-agenda", ":create-session", ":coauthor-materials", ":validate-course"]
         publishing: "optional: :create-project when ready to share"
       single-lesson:
-        sequence: [":init-course", ":create-outline", ":create-didactics", ":create-session", ":coauthor-materials", ":validate-course"]
+        sequence: [":init-course", ":create-outline", ":create-didactics", ":suggest-templates", ":create-session", ":coauthor-materials", ":validate-course"]
         note: "No agenda needed; one session only"
         publishing: "usually not needed for a single lesson"
       improve-existing:
-        sequence: [":init-course", ":analyze-existing", ":coauthor-materials", ":validate-course"]
-        note: ":analyze-existing scans for missing `journal.md` sections and offers to auto-generate or create them interactively"
+        sequence: [":init-course", ":analyze-existing", ":suggest-templates", ":coauthor-materials", ":validate-course"]
+        note: ":analyze-existing scans for missing `journal.md` sections and offers to auto-generate or create them interactively; it documents existing template imports, and :suggest-templates asks only about the remaining activities"
         publishing: "optional: :update-project if project.yaml already exists"
 
     teaching_agent_commands:
@@ -455,6 +479,7 @@ workflow:
       - :create-learner-persona {name?}
       - :configure-agent {agent}
       - :create-agenda
+      - :suggest-templates {activity?}
       - :manage-templates {name?}
       - :update-dashboard
       - :preview {file?} {slide?}

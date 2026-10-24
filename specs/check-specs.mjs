@@ -15,7 +15,8 @@ const read = path => readFileSync(join(specs, path), "utf8");
 // File → sentences that must stay (one key phrase per rule).
 const required = {
   "tasks/analyze-existing.md": ["8b. **Before saving:**", "written only after \"Save\" in step 8b"],
-  "tasks/manage-templates.md": ["3b. **Before saving:**"],
+  "tasks/manage-templates.md": ["3b. **Before saving:**", "is a catalog `id`", "read the template's README to confirm", "ready to test"],
+  "tasks/suggest-templates.md": ["never present a `found` or `own` entry as checked", "never write to `specs/catalog/templates.json`", "read its README before", "(in development)"],
   "tasks/save-notes.md": ["4b. **Before saving:**"],
   "tasks/init-course.md": ["**Language pack first:**", "also for \"mixed\"", "is not saved", "English stay only keys that tasks read", "For a single lesson do not ask", "Ask this only once the time frame (step 4) is known", "never offer an internal threshold", "what the mapped keys change in the material", "builds LiaScript courses only — never ask for a platform", "Accessibility is not asked", "follow the course language in terminal mode too", "are the only writes allowed before the save confirmation", "Reuse what is known", "No unfounded recommendations", "two short questions in the instructor's own terms", "file structure as a **teacher question**", "Audience override", "only what the instructor answered"],
   "tasks/scaffold-course.md": ["exactly as confirmed — its self-check ran before the draft", "**Language pack first:**", "planning sketch ✅ · material open", "Teaching style and difficulty level are not asked", "**Checks before the draft is shown,**", "plus \"Self-check before saving\" (`tasks/create-session-skeleton.md` step 7)", "Guiding figure / instructor persona", "No agenda — decided with the course frame", "8b. Set `language:`", "Draft before saving", "never compute a middle value", "grounding question", "step 10 does"],
@@ -50,7 +51,7 @@ const required = {
   "data/chat-dialog.md": ["The write\n  scripts count their writes (`.cache/writes.json`)", "**What the instructor does not want saved**","except a status that says you are waiting for the instructor","`\"append\"` adds lines at the end of the file","Reuse what is known","Tables in the chat","Changing another section","header\n  comment like the material header","what the instructor may do now"],
   "data/chat-checks.md": ["`--viewport` with the window size of the learners' device","**Layout and devices:**","A missing warning is no proof","Say how you checked","*search result\n  only*","*looked at*","*read as an extract*"],
   "data/chat-companion.md": ["**Workaround for DevServer 1.2.19 (N63):**","replaces the server's general \"stay silent\"","| wrong, `trial` 2 (before `help`) |","| `solved` after at least one wrong check |","On the self-check","with a \"Back to\n  planning\" button"],
-  "data/journal-links.md": ["checked ✅ → 👁 `preview`","check: correction needed → ✏️ `quick-fix?number={n}&description=…`","let it be prepared after a short sketch","**Learners' view:**","never \"To unit {n}\""],
+  "data/journal-links.md": ["preview?file=specs/catalog/README.md", "checked ✅ → 👁 `preview`","check: correction needed → ✏️ `quick-fix?number={n}&description=…`","let it be prepared after a short sketch","**Learners' view:**","never \"To unit {n}\""],
   "data/liascript-cheat-sheet.md": ["### Link targets", "A pair of `$` starts math everywhere outside code", "**The comment goes directly above the first answer line, not above the question.**", "**Matrix Quiz (graded, for matching tasks)**", "data-text-solved", "Each `#`, `##` and `###` heading **always starts a new slide**", "data-solution-button=\"false\"", "**Encode link targets.**", "**Image size.**", "`- [[?]] {|>}{Hint text}`", "A `vh` limit does not guarantee the fit", "**Controls as learners see them**", "never \"speaker\", \"loudspeaker\"", "A hint appears only when the learner taps the light bulb", "**No surface cues:**"],
   "templates/course-context.yaml": ["layout:", "Target Group"],
   "templates/course-outline.yaml": ["__Session Overview:__", "layout:"],
@@ -60,7 +61,7 @@ const required = {
   "templates/project-dashboard.yaml": ["`source: {check: n, date?}`", "One ranking of the three measures", "Every unit with material gets `view`", "usable: 'Once a check report exists", "view: 'Once the material exists"],
   "templates/session-material.yaml": ["heading_levels:", "its parts are `###`"],
   "templates/session-validation.yaml": ["Counts take the form of their number", "\"the point corrected\"", "also in units created later", "could not be verified", "the heading stays outside", "counts as accepted in every unit", "passed with concerns – your decision needed", "so it never blocks Done", "<section data-key=\"validation-report\">", "correction needed ({n})", "Usable with learners now", "Changed after the check", "Unit entry (journal)", "Each fact is reported once", "Never move an item between", "Accepted concerns", "never a blanket", "**Method Consistency:**", "**Duration (advisory):**", "**Reference Check:**", "**Templates:**", "passed – still missing: {what}", "never a command or step name as subject", "One wording per state", "short re-check open", "\"correction needed: {open} of {n} points open\"", "`outdatedTerms`", "`units[].usable`"],
-  "templates/journal.md": ["\"title\": \"Publish\"", "journal-start", "## Publishing", "Still empty", "__Template selection:__ open"],
+  "templates/journal.md": ["\"title\": \"Publish\"", "journal-start", "## Publishing", "Still empty", "__Template selection:__ open", "agent:teaching/suggest-templates", "agent:teaching/preview?file=specs/catalog/README.md"],
   "templates/course-templates.yaml": ["template-brief", "(in development)", "__Template selection:__", "__Catalog id:__", "__Source:__"],
   "templates/course-outline.yaml": ["Session Overview"],
   "templates/course-agenda.yaml": ["Time Budget"],
@@ -157,7 +158,7 @@ test("cheat sheet quiz examples put the attribute comment above the options and 
 });
 
 test("skills are detected by their installed names; old names only as aliases", () => {
-  const files = ["data/skills.md", "agents/teaching-agent.yaml", "agents/development-agent.yaml", "tasks/create-project.md", "tasks/update-project.md", "tasks/manage-templates.md"];
+  const files = ["data/skills.md", "agents/teaching-agent.yaml", "agents/development-agent.yaml", "tasks/create-project.md", "tasks/update-project.md", "tasks/manage-templates.md", "tasks/suggest-templates.md"];
   for (const file of files) {
     for (const old of ["exporter-workflow", "template-development"]) {
       const lines = read(file).split("\n").filter(line => line.includes(old) && !/older name/.test(line));
@@ -506,15 +507,18 @@ test("outdated state wordings are recognised, never recommended; the current ter
 });
 
 
-test("every helper script in specs/dashboard is on the shell list of the YAML and of the built CLAUDE.md", () => {
+test("every helper script in specs/dashboard and specs/catalog is on the shell list of the YAML and of the built CLAUDE.md", () => {
   const yaml = read("agents/teaching-agent.yaml");
   const built = readFileSync(join(specs, "..", "CLAUDE.md"), "utf8");
   // Modules of the scripts declare themselves in their first line ("// Module for …") and are no commands.
-  const scripts = readdirSync(join(specs, "dashboard")).filter(name => name.endsWith(".mjs") && name !== "check.mjs" && !/^\/\/ Module for /.test(read(`dashboard/${name}`)));
-  for (const name of scripts) {
-    assert.ok(yaml.includes(`\`node specs/dashboard/${name}`), `agents/teaching-agent.yaml: ${name} is missing from the shell list`);
-    assert.ok(built.includes(`\`node specs/dashboard/${name}`), `CLAUDE.md: ${name} is missing – run python specs/build.py`);
+  for (const folder of ["dashboard", "catalog"]) {
+    const scripts = readdirSync(join(specs, folder)).filter(name => name.endsWith(".mjs") && name !== "check.mjs" && !/^\/\/ Module for /.test(read(`${folder}/${name}`)));
+    for (const name of scripts) {
+      assert.ok(yaml.includes(`\`node specs/${folder}/${name}`), `agents/teaching-agent.yaml: ${name} is missing from the shell list`);
+      assert.ok(built.includes(`\`node specs/${folder}/${name}`), `CLAUDE.md: ${name} is missing – run python specs/build.py`);
+    }
   }
+  assert.ok(yaml.includes("`node --test lia-templates/{id}/check.mjs`"), "agents/teaching-agent.yaml: the test of an own template is missing from the shell list");
 });
 
 test("older journals: the validator's migration hint leads to a confirmed migration in update-dashboard (R11-D2)", () => {

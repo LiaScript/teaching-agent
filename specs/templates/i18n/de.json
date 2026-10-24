@@ -86,8 +86,8 @@
    "## Templates – Vorlagen"
   ],
   [
-   "[▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`",
-   "[▶️ Vorlagen verwalten](agent:teaching/manage-templates) `:manage-templates`"
+   "[▶️ Suggest templates](agent:teaching/suggest-templates) `:suggest-templates` · [👁 Template catalog](agent:teaching/preview?file=specs/catalog/README.md) `:preview specs/catalog/README.md` · [▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`",
+   "[▶️ Vorlagen vorschlagen](agent:teaching/suggest-templates) `:suggest-templates` · [👁 Vorlagenkatalog](agent:teaching/preview?file=specs/catalog/README.md) `:preview specs/catalog/README.md` · [▶️ Vorlagen verwalten](agent:teaching/manage-templates) `:manage-templates`"
   ],
   [
    "LiaScript templates used by this project are imported in the main metadata header at the top of `journal.md` and should also be imported in any standalone material file that uses their macros.",

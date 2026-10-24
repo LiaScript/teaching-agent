@@ -107,7 +107,7 @@ _Optional – the design assistant fills this in when you want a consistent look
 ## Templates
 
 <!-- class="journal-actions" -->
-[▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
+[▶️ Suggest templates](agent:teaching/suggest-templates) `:suggest-templates` · [👁 Template catalog](agent:teaching/preview?file=specs/catalog/README.md) `:preview specs/catalog/README.md` · [▶️ Manage templates](agent:teaching/manage-templates) `:manage-templates`
 
 <!--- Managed from templates/course-templates.yaml: adopted templates by :manage-templates, the selection line and the briefs of templates in development by :suggest-templates (ownership: agents/teaching-agent.yaml → journal_formatting_rules). --->
 

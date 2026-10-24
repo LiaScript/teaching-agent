@@ -36,7 +36,7 @@ Run this task automatically after any task that changes project state:
 
 - `:init-course`, `:scaffold`, `:analyze-existing`
 - `:create-outline`, `:create-didactics`, `:create-agenda`
-- `:configure-agent`, `:manage-templates`, `:create-learner-persona`
+- `:configure-agent`, `:suggest-templates`, `:manage-templates`, `:create-learner-persona`
 - `:create-session`, `:promote-session`, `:build-session`
 - `:coauthor-materials` after approval, `:quick-fix`
 - `:validate-course`, `:review-as-persona`

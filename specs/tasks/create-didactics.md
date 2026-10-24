@@ -13,6 +13,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
 - Learning objectives from `journal.md` → `## Outline`
 - Course type & conventions from `journal.md` → `## Course Context`
 - `data/didactic-methods.md` — course frameworks, session methods, and their default suggestions by course type
+- `specs/catalog/templates.json` — only for the one-sentence template hint of step 3
 - Rule sheets, read completely with this task (`data/agent-links.md` → Chat Conduct → Rule sheets): `data/chat-dialog.md`, `data/journal-links.md`
 
 ## Output
@@ -30,6 +31,7 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
    - **self-paced**: modular, learner-driven, self-check oriented
    - **workshop**: activity-driven, collaborative, time-boxed
    - **single-lesson**: focused, compact, single arc
+   - **Template hint:** when catalog entries fit the subject (`subjects`), say in one sentence which kinds of templates exist for it, because the tool can shape the method (e.g. "programming by drawing" with a turtle) — a hint only, no selection; the choice follows in `:suggest-templates` after this task.
 3a. Choose a **Didactic Framework** from `data/didactic-methods.md` → "Course Frameworks" yourself, based on course type. It is documentation only: do **not** ask the instructor; name it only inside the technical details. Ask only if the instructor uses such terms themselves.
 3b. Define `__Session Types:__` (see `data/session-types.md` for the full mechanism):
    - **single-lesson**: default to one type, named after what the lesson mainly is (from the grounding answer, e.g. "introduction with practice"); skip the discussion of types unless the instructor wants to split the lesson into sub-types. The grounding check below still applies, in its short form: "Your lesson is mainly … — right?"
@@ -57,4 +59,4 @@ Builds on the outline to ensure a consistent teaching strategy aligned with the 
     - Set `* __Project-Specific Rules:__` from course type, time format, and material constraints (the platform is always LiaScript)
     - Set `* __Persona Voice Sample:__` from `## Didactics` → `__Persona Voice Sample:__`
     - Preserve `* __Boundaries / Never:__` and keep it additive-only; never override workflow gates, validation rules, safety rules, or epistemic rules
-11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place.
+11. Run `tasks/update-dashboard.md` with `templates/project-dashboard.yaml` to update `journal.md` → `## Dashboard` in place. The next step is then `:suggest-templates` (the Dashboard's `next`: templates for the learning activities); the visual identity (`agent:artist/switch`) can come before or after it.

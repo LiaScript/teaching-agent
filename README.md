@@ -303,7 +303,7 @@ the project only after your consent in the terminal (never globally).
 |---|---|---|
 | `liascript-syntax` | 🎓 Teaching | writing, fixing and validating materials |
 | `reference-checker` | 🎓 Teaching | checking a session's references during validation |
-| `liascript-templates` | 🎓 Teaching | building your own template in `:manage-templates` |
+| `liascript-templates` | 🎓 Teaching | judging templates and writing a brief for an own one in `:suggest-templates`, `:manage-templates` |
 | `creativity` | 🎓 Teaching | optional open ideation in `:create-outline` and `:scaffold` |
 | `liascript-theming` | 🎨 Artist | a LiaScript theme from the visual identity in `:create-visuals` |
 | `liascript-exporter` | 🛠️ Development | `project.yaml`, GitHub Actions, exports |
@@ -327,7 +327,8 @@ Details: [`specs/data/skills.md`](specs/data/skills.md).
 | `:create-didactics` | Teaching concept, instructor persona, difficulty |
 | `:create-learner-persona {name?}` | Build an evidence-based learner persona |
 | `:create-agenda` | Structure sessions / modules |
-| `:manage-templates {name?}` | Add & document LiaScript template imports |
+| `:suggest-templates {activity?}` | After the didactics: templates for the learning activities from the catalog and an online search — adopt, try, or write a brief for an own one |
+| `:manage-templates {name?}` | Add & document LiaScript template imports (also by catalog id, or adopt an own template once it is ready to test) |
 | `:update-dashboard` | Regenerate the derived `## Dashboard` and the action links in `journal.md` |
 | `:preview {file?} {slide?}` | Show `journal.md` or a material file in the LiaScript DevServer preview |
 | `:create-session {n} {title?}` | Create a session skeleton |
@@ -379,9 +380,12 @@ specs/
   checklists/          ← quality checks (used by :validate-course)
   data/                ← LiaScript cheat-sheet & workflow reference
   workflows/           ← course-development.yaml (the master workflow)
+  catalog/             ← template catalog: page README.md, templates.json (shared list), search.mjs (online search)
 
 journal.md             ← project state (single source of truth)
 materials/             ← generated LiaScript course materials (multi-file mode only)
+lia-templates/         ← own templates in development, one folder per template
+templates.local.json   ← project template list (found / own entries; never overwritten by updates)
 assets/                ← generated visual assets & prompts (single-file mode; nested per session under materials/ in multi-file mode)
 
 CLAUDE.md              ← generated: Claude Code config
